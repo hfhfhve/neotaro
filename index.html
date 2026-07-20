@@ -478,16 +478,30 @@
       .nl-card::before { content: ''; position: absolute; top: 0; left: 24px; right: 24px; height: 1px; background: linear-gradient(90deg, transparent, rgba(251,191,36,.5), transparent); }
       .nl-card h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; color: #fff; letter-spacing: .04em; margin-bottom: 10px; }
       .nl-card p.nl-sub { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,.55); margin-bottom: 24px; }
-      #tg-login-mount { display: flex; justify-content: center; align-items: center; min-height: 48px; margin-bottom: 14px; }
-      #tg-login-placeholder { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 22px; border-radius: 14px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); color: rgba(255,255,255,.4); font-size: 13px; animation: nl-pulse 1.6s ease-in-out infinite; }
-      #tg-login-placeholder.nl-hidden { display: none; }
+      #tg-login-btn { position: relative; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; height: 52px; margin-bottom: 14px; border: none; cursor: pointer; border-radius: 15px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: .02em; color: #241536; background: linear-gradient(118deg, #fde68a 0%, #fbbf24 42%, #f3cf7d 72%, #dcb0f5 118%); box-shadow: 0 12px 32px rgba(251,191,36,.22), inset 0 1px 0 rgba(255,255,255,.6); transition: transform .18s ease, box-shadow .18s ease, filter .18s ease; overflow: hidden; }
+      #tg-login-btn::after { content: ''; position: absolute; top: 0; bottom: 0; left: -70%; width: 45%; background: linear-gradient(105deg, transparent, rgba(255,255,255,.55), transparent); transform: skewX(-20deg); animation: nl-sheen 3.4s ease-in-out infinite; }
+      @keyframes nl-sheen { 0%, 55% { left: -70%; } 100% { left: 135%; } }
+      #tg-login-btn:hover { transform: translateY(-1px); filter: brightness(1.05); box-shadow: 0 16px 40px rgba(251,191,36,.32), inset 0 1px 0 rgba(255,255,255,.6); }
+      #tg-login-btn:active { transform: translateY(0); }
+      #tg-login-btn:disabled { opacity: .55; cursor: default; }
+      #tg-login-btn.nl-hidden { display: none; }
+      #web-login-status { display: none; margin-bottom: 14px; }
+      #web-login-status.nl-active { display: block; }
+      .nl-wait { display: flex; flex-direction: column; align-items: center; gap: 11px; padding: 20px 16px 16px; border-radius: 15px; background: rgba(255,255,255,.035); border: 1px solid rgba(251,191,36,.18); }
+      .nl-spin { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(251,191,36,.18); border-top-color: #fbbf24; animation: nl-spinrot .9s linear infinite; }
+      @keyframes nl-spinrot { to { transform: rotate(360deg); } }
+      .nl-wait-t { font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,.85); }
+      .nl-wait-s { font-size: 12px; line-height: 1.6; color: rgba(255,255,255,.45); }
+      .nl-open { display: inline-block; font-size: 13px; font-weight: 600; color: #fbbf24; text-decoration: none; border: 1px solid rgba(251,191,36,.35); border-radius: 10px; padding: 8px 20px; margin-top: 2px; }
+      .nl-cancel { font-size: 12px; color: rgba(251,191,36,.75); background: none; border: none; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+      .nl-err { font-size: 12.5px; color: #fda4af; padding: 10px 0 2px; }
       @keyframes nl-pulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
       #web-login-status { min-height: 16px; font-size: 11px; color: rgba(251,191,36,.75); letter-spacing: .02em; margin-bottom: 6px; }
       .nl-note { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11px; color: rgba(255,255,255,.35); }
       .nl-note svg { flex: none; }
       .nl-foot { margin-top: 28px; max-width: 100%; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.22); text-align: center; }
       .nl-foot span { color: rgba(251,191,36,.45); padding: 0 8px; }
-      @media (prefers-reduced-motion: reduce) { .nl-starfield, .nl-emblem, .nl-ring--dash, #tg-login-placeholder { animation: none; } }
+      @media (prefers-reduced-motion: reduce) { .nl-starfield, .nl-emblem, .nl-ring--dash, .nl-spin, #tg-login-btn::after { animation: none; } }
       @media (max-width: 380px) { .nl-word { font-size: 32px; } }
     </style>
     <div class="nl-starfield"></div>
@@ -506,9 +520,10 @@
       <div class="nl-card">
         <h2>Вход в пространство</h2>
         <p class="nl-sub">Продолжите через Telegram — ваша энергия, расклады и история сохранятся и будут с вами на любом устройстве.</p>
-        <div id="tg-login-mount">
-          <div id="tg-login-placeholder">Подключаем Telegram…</div>
-        </div>
+        <button id="tg-login-btn" type="button">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="#241536"><path d="M21.9 4.6 18.6 20c-.2 1-.9 1.2-1.8.8l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.2-8.3c.4-.4-.1-.6-.6-.2L6 13.5 1.1 12c-1-.3-1-1 .2-1.5L20.5 3c.9-.3 1.7.2 1.4 1.6z"/></svg>
+          <span>Войти через Telegram</span>
+        </button>
         <div id="web-login-status"></div>
         <div class="nl-note">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" stroke="rgba(255,255,255,.4)" stroke-width="1.6"/><path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="rgba(255,255,255,.4)" stroke-width="1.6"/></svg>
@@ -3861,60 +3876,70 @@
     
         const API_URL = "https://api.neotaro.ru/api"; 
 
-        // ==================== 🌐 ВХОД С САЙТА ЧЕРЕЗ TELEGRAM LOGIN WIDGET ====================
+        // ==================== 🌐 ВХОД С САЙТА ЧЕРЕЗ БОТА TELEGRAM ====================
+        let nlPollTimer = null;
+
         function showWebLogin() {
             const loader = document.getElementById('app-loading-screen');
             if (loader) loader.classList.add('hidden');
             const screen = document.getElementById('web-login-screen');
             if (!screen) return;
             screen.classList.remove('hidden');
-            const mount = document.getElementById('tg-login-mount');
-            if (mount && !mount.dataset.mounted) {
-                mount.dataset.mounted = "1";
-                const s = document.createElement('script');
-                s.async = true;
-                s.src = "https://telegram.org/js/telegram-widget.js?22";
-                s.setAttribute('data-telegram-login', 'tarot_neurobot');
-                s.setAttribute('data-size', 'large');
-                s.setAttribute('data-radius', '14');
-                s.setAttribute('data-onauth', 'onTelegramAuth(user)');
-                s.setAttribute('data-request-access', 'write');
-                s.onload = () => {
-                    setTimeout(() => {
-                        const ph = document.getElementById('tg-login-placeholder');
-                        if (ph) ph.classList.add('nl-hidden');
-                    }, 400);
-                };
-                mount.appendChild(s);
+            const btn = document.getElementById('tg-login-btn');
+            if (btn && !btn.dataset.bound) {
+                btn.dataset.bound = "1";
+                btn.addEventListener('click', startWebLogin);
             }
         }
 
-        window.onTelegramAuth = async function(user) {
+        function nlResetLogin(errText) {
+            if (nlPollTimer) { clearInterval(nlPollTimer); nlPollTimer = null; }
             const status = document.getElementById('web-login-status');
-            if (status) status.textContent = "Открываем портал…";
-            try {
-                const response = await fetch(`${API_URL}/auth/telegram`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(user)
-                });
-                const data = await response.json();
-                if (data && data.success && data.token) {
-                    localStorage.setItem('neotaro_token', data.token);
-                    localStorage.setItem('neotaro_user', JSON.stringify({
-                        id: user.id,
-                        first_name: user.first_name,
-                        username: user.username,
-                        photo_url: user.photo_url
-                    }));
-                    location.reload();
-                } else {
-                    if (status) status.textContent = "Не получилось войти. Попробуйте ещё раз.";
-                }
-            } catch (e) {
-                if (status) status.textContent = "Ошибка сети. Попробуйте ещё раз.";
+            const btn = document.getElementById('tg-login-btn');
+            if (status) {
+                status.classList.remove('nl-active');
+                status.innerHTML = errText ? '<div class="nl-err">' + errText + '</div>' : '';
+                if (errText) status.classList.add('nl-active');
             }
-        };
+            if (btn) { btn.classList.remove('nl-hidden'); btn.disabled = false; }
+        }
+        window.nlResetLogin = nlResetLogin;
+
+        async function startWebLogin() {
+            const btn = document.getElementById('tg-login-btn');
+            const status = document.getElementById('web-login-status');
+            if (btn) btn.disabled = true;
+            try {
+                const r = await fetch(`${API_URL}/auth/web-code`, { method: 'POST' });
+                const data = await r.json();
+                if (!data || !data.code || !data.url) throw new Error('no code');
+                if (btn) btn.classList.add('nl-hidden');
+                if (status) {
+                    status.innerHTML = '<div class="nl-wait"><div class="nl-spin"></div><div class="nl-wait-t">Подтвердите вход в Telegram</div><div class="nl-wait-s">Мы открыли чат с ботом — нажмите там кнопку «Подтвердить вход» и вернитесь сюда.</div><a class="nl-open" href="' + data.url + '" target="_blank" rel="noopener">Открыть Telegram</a><button class="nl-cancel" onclick="nlResetLogin()">Отмена</button></div>';
+                    status.classList.add('nl-active');
+                }
+                window.open(data.url, '_blank');
+                let ticks = 0;
+                nlPollTimer = setInterval(async () => {
+                    ticks++;
+                    if (ticks > 150) { nlResetLogin('Время вышло. Попробуйте ещё раз.'); return; }
+                    try {
+                        const pr = await fetch(`${API_URL}/auth/web-poll`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: data.code }) });
+                        const pd = await pr.json();
+                        if (pd && pd.status === 'ok' && pd.token) {
+                            clearInterval(nlPollTimer); nlPollTimer = null;
+                            localStorage.setItem('neotaro_token', pd.token);
+                            localStorage.setItem('neotaro_user', JSON.stringify(pd.user || {}));
+                            location.reload();
+                        } else if (pd && pd.status === 'expired') {
+                            nlResetLogin('Ссылка устарела. Попробуйте ещё раз.');
+                        }
+                    } catch (e) { /* сеть мигнула — продолжаем опрос */ }
+                }, 2000);
+            } catch (e) {
+                nlResetLogin('Не получилось связаться с сервером. Попробуйте ещё раз.');
+            }
+        }
     
         // Хранилище сообщений
         const chatMessages = { oracle: [] }; // Оставляем пустым, загрузим из базы
