@@ -303,7 +303,7 @@
     
     .card-slot.filled {
         border: 1px solid rgba(168, 85, 247, 0.5);
-        background: url('https://tarot.waifubot.website/static/card_back.webp') center/cover;
+        background: url('https://api.neotaro.ru/static/card_back.webp') center/cover;
         box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
         animation: dropIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -860,9 +860,9 @@
                 <div class="absolute inset-0 rounded-full bg-neon-purple/20 blur-3xl animate-pulse-slow"></div>
                 
                 <!-- Анимация трех карт (добавлено inset-0 m-auto для жесткого центрирования на ПК) -->
-                <div class="absolute inset-0 m-auto w-20 h-32 rounded-xl bg-[url('https://tarot.waifubot.website/static/card_back.webp')] bg-cover bg-center border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] animate-shuffle-1 z-[1]"></div>
-                <div class="absolute inset-0 m-auto w-20 h-32 rounded-xl bg-[url('https://tarot.waifubot.website/static/card_back.webp')] bg-cover bg-center border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] animate-shuffle-2 z-[2]"></div>
-                <div class="absolute inset-0 m-auto w-20 h-32 rounded-xl bg-[url('https://tarot.waifubot.website/static/card_back.webp')] bg-cover bg-center border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] animate-shuffle-3 z-[3]"></div>
+                <div class="absolute inset-0 m-auto w-20 h-32 rounded-xl bg-[url('https://api.neotaro.ru/static/card_back.webp')] bg-cover bg-center border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] animate-shuffle-1 z-[1]"></div>
+                <div class="absolute inset-0 m-auto w-20 h-32 rounded-xl bg-[url('https://api.neotaro.ru/static/card_back.webp')] bg-cover bg-center border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] animate-shuffle-2 z-[2]"></div>
+                <div class="absolute inset-0 m-auto w-20 h-32 rounded-xl bg-[url('https://api.neotaro.ru/static/card_back.webp')] bg-cover bg-center border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] animate-shuffle-3 z-[3]"></div>
             </div>
             <!-- Добавлено w-full text-center -->
             <h3 class="w-full text-center text-2xl font-mystic text-white font-bold mb-2 animate-pulse" data-i18n="shuffling">Тасую колоду...</h3>
@@ -3769,7 +3769,7 @@
         // Создаем глобальный объект моста
         const bridge = new AppBridge();
     
-        const API_URL = "https://tarot.waifubot.website/api"; 
+        const API_URL = "https://api.neotaro.ru/api"; 
     
         // Хранилище сообщений
         const chatMessages = { oracle: [] }; // Оставляем пустым, загрузим из базы
@@ -5996,7 +5996,7 @@
             const cardsDisplay = document.getElementById('result-cards-display');
             cardsDisplay.innerHTML = '';
             currentSpread.pickedCards.forEach((cardId, index) => {
-                const imgUrl = `https://tarot.waifubot.website/static/cards/${cardId}.webp`;
+                const imgUrl = `https://api.neotaro.ru/static/cards/${cardId}.webp`;
                 cardsDisplay.innerHTML += `
                     <div class="relative result-card-item" style="z-index: ${index}">
                         <img src="${imgUrl}" class="w-[85px] sm:w-[100px] rounded-[10px] shadow-[0_5px_15px_rgba(0,0,0,0.8)] border border-white/10" alt="Карта ${cardId}">
