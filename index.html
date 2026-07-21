@@ -567,119 +567,6 @@
   </div>
   <div class="fixed inset-0 stars-bg opacity-60 pointer-events-none"></div>
 
-  <!-- ==================== 🖥 ДЕСКТОПНЫЙ САЙДБАР (только сайт, экран ≥ 1024px) ==================== -->
-  <aside id="desktop-sidebar">
-    <style>
-      #desktop-sidebar { display: none; }
-      @media (min-width: 1024px) {
-        body.is-web #desktop-sidebar { display: flex; flex-direction: column; position: fixed; left: 28px; top: 50%; transform: translateY(-50%); width: 218px; padding: 22px 14px 16px; z-index: 40; background: linear-gradient(170deg, rgba(22,17,48,.78), rgba(8,6,24,.82)); border: 1px solid rgba(168,85,247,.22); border-radius: 24px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 46px rgba(168,85,247,.08); }
-        body.is-web #bottom-nav-wrapper { display: none !important; }
-      }
-      .ds-logo { display: flex; align-items: center; justify-content: center; gap: 9px; padding: 2px 0 4px; }
-      .ds-logo span { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 21px; letter-spacing: .22em; margin-right: -.22em; background: linear-gradient(100deg, #fde68a 0%, #fef9ec 45%, #c4b5fd 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-      .ds-sep { height: 1px; margin: 14px 6px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.13), transparent); }
-      .ds-nav { display: flex; flex-direction: column; gap: 4px; }
-      #desktop-sidebar .nav-btn { display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 12px; width: 100%; padding: 11px 14px; border-radius: 14px; background: transparent; border: none; cursor: pointer; color: rgba(255,255,255,.55); font-size: 14px; font-weight: 500; letter-spacing: .01em; transition: background .15s ease, color .15s ease; }
-      #desktop-sidebar .nav-btn i { font-size: 20px; line-height: 1; }
-      #desktop-sidebar .nav-btn span { font-size: 14px; }
-      #desktop-sidebar .nav-btn:hover { background: rgba(255,255,255,.05); color: #fff; }
-      #desktop-sidebar .nav-btn.active { background: linear-gradient(120deg, rgba(168,85,247,.20), rgba(34,211,238,.10)); color: #fff; box-shadow: inset 0 0 0 1px rgba(168,85,247,.32); }
-      #desktop-sidebar .nav-btn.active i { color: #e879f9; }
-      #ds-logout { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 14px; border-radius: 14px; background: transparent; border: none; cursor: pointer; color: rgba(255,255,255,.35); font-size: 13.5px; transition: background .15s ease, color .15s ease; }
-      #ds-logout i { font-size: 18px; }
-      #ds-logout:hover { background: rgba(244,63,94,.10); color: #fda4af; }
-      .ds-domain { text-align: center; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.20); margin-top: 10px; }
-    </style>
-    <div class="ds-logo">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M10.5 4.5a7.5 7.5 0 1 0 9 9 6 6 0 1 1-9-9Z" stroke="#fbbf24" stroke-width="1.2" stroke-linejoin="round" fill="rgba(251,191,36,.09)"/><path d="M17 4.5l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6z" fill="#fde68a"/></svg>
-      <span>NEOTARO</span>
-    </div>
-    <div class="ds-sep"></div>
-    <nav class="ds-nav">
-      <button onclick="navigateTo('home')" class="nav-btn active" data-tab="home"><i class="ph-fill ph-house"></i><span data-i18n="nav_home">Главная</span></button>
-      <button onclick="navigateTo('spreads')" class="nav-btn" data-tab="spreads"><i class="ph-fill ph-cards"></i><span data-i18n="nav_spreads">Расклады</span></button>
-      <button onclick="navigateTo('chats')" class="nav-btn" data-tab="chats"><i class="ph-fill ph-chat-circle"></i><span data-i18n="nav_chats">Чаты</span></button>
-      <button onclick="navigateTo('shop')" class="nav-btn" data-tab="shop"><i class="ph-fill ph-shopping-bag"></i><span data-i18n="nav_shop">Магазин</span></button>
-      <button onclick="navigateTo('profile')" class="nav-btn" data-tab="profile"><i class="ph-fill ph-user-circle"></i><span data-i18n="nav_profile">Профиль</span></button>
-    </nav>
-    <div class="ds-sep"></div>
-    <button id="ds-logout" onclick="nlLogout()"><i class="ph-fill ph-sign-out"></i><span>Выйти</span></button>
-    <div class="ds-domain">neotaro.ru</div>
-  </aside>
-
-  <!-- ==================== 🖥 ДЕСКТОПНАЯ ВЕРСИЯ САЙТА (≥ 1024px) ==================== -->
-  <style id="desktop-css">
-  @media (min-width: 1024px) {
-
-    /* ---------- Сайдбар: панель во всю высоту ---------- */
-    body.is-web #desktop-sidebar { left: 0; top: 0; bottom: 0; transform: none; height: 100vh; width: 248px; border-radius: 0; border: 0; border-right: 1px solid rgba(168,85,247,.16); padding: 30px 16px 22px; background: linear-gradient(180deg, rgba(16,12,38,.85), rgba(5,4,16,.94)); box-shadow: 8px 0 40px rgba(0,0,0,.35); }
-    body.is-web #desktop-sidebar .ds-nav { flex: 1; }
-    body.is-web #desktop-sidebar .nav-btn { padding: 13px 16px; }
-
-    /* ---------- Каркас приложения: во весь экран ---------- */
-    body.is-web #app { max-width: none; margin: 0 0 0 248px; border: 0; box-shadow: none; background: transparent; }
-    body.is-web .screen { scroll-behavior: smooth; }
-
-    /* ---------- ГЛАВНАЯ: герой + две колонки + сетка возможностей ---------- */
-    body.is-web #screen-home { display: grid; grid-template-columns: 1.04fr .96fr; gap: 0 32px; align-items: start; align-content: start; max-width: 1200px; width: 100%; margin: 0 auto; padding: 52px 56px 110px; }
-    body.is-web #screen-home > div { padding-left: 0; padding-right: 0; }
-    body.is-web #screen-home > div:nth-child(1) { grid-column: 1 / -1; padding-top: 0; margin-bottom: 34px; }
-    body.is-web #screen-home > div:nth-child(2) { grid-column: 1; margin-bottom: 0; }
-    body.is-web #screen-home > div:nth-child(3) { grid-column: 2; margin-bottom: 0; }
-    body.is-web #screen-home > div:nth-child(3) > div:first-child { margin-top: 4px; }
-    body.is-web #screen-home > div:nth-child(4) { grid-column: 1 / -1; margin-top: 44px; }
-    body.is-web #screen-home h1 { font-size: 47px; line-height: 1.08; }
-    body.is-web #current-date-display { font-size: 12px; }
-    body.is-web #screen-home > div:nth-child(1) button { padding: 12px 20px; border-radius: 18px; }
-    body.is-web #star-balance { font-size: 17px; }
-    body.is-web #home-daily-thumb { width: 92px; height: 138px; border-radius: 14px; }
-    body.is-web #home-daily-title { font-size: 25px; }
-    body.is-web #home-daily-subtitle { font-size: 13px; }
-    body.is-web #screen-home div[class*="grid-cols-2"] { grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    body.is-web #screen-home div[class*="grid-cols-2"] > button { padding: 20px; border-radius: 22px; min-height: 148px; }
-    body.is-web #screen-home div[class*="grid-cols-2"] > button p[class*="text-sm"] { font-size: 16px; }
-    body.is-web #screen-home div[class*="grid-cols-2"] > button p[class*="text-[10px]"] { font-size: 12px; }
-    body.is-web #daily-bonus-btn { padding-top: 18px; padding-bottom: 18px; }
-
-    /* ---------- РАСКЛАДЫ: сетка в две колонки ---------- */
-    body.is-web #screen-spreads > div { max-width: 1120px; width: 100%; margin: 0 auto; padding: 52px 56px 90px; }
-    body.is-web #screen-spreads h1 { font-size: 45px; }
-    body.is-web #screen-spreads p[data-i18n="spreads_subtitle"] { font-size: 16px; max-width: 560px; }
-    body.is-web #screen-spreads button[onclick="navigateTo('home')"] { display: none; }
-    body.is-web #spreads-dynamic-container > div:not([class]) { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    body.is-web #spreads-dynamic-container > div:not([class]) > button { margin: 0 !important; height: 100%; }
-
-    /* ---------- МАГАЗИН: сетка товаров ---------- */
-    body.is-web #screen-shop > div[class*="px-5"] { max-width: 980px; width: 100%; margin-left: auto; margin-right: auto; padding-left: 40px; padding-right: 40px; }
-    body.is-web #screen-shop h1 { font-size: 45px; }
-    body.is-web #shop-items-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-    body.is-web #shop-items-container > * { margin: 0 !important; height: 100%; }
-    body.is-web #shop-items-container > #shop-starter-offer { grid-column: 1 / -1; }
-
-    /* ---------- ПРОФИЛЬ: широкая центральная колонна ---------- */
-    body.is-web #screen-profile > div { max-width: 700px; width: 100%; margin: 0 auto; padding: 52px 0 90px; }
-
-    /* ---------- ЧАТ: широкая лента по центру ---------- */
-    body.is-web #screen-chats > div[class*="h-[85px]"] { padding-left: max(28px, calc((100% - 940px) / 2)); padding-right: max(28px, calc((100% - 940px) / 2)); }
-    body.is-web #chat-scroll-wrapper { padding-left: max(28px, calc((100% - 940px) / 2)); padding-right: max(28px, calc((100% - 940px) / 2)); }
-    body.is-web #screen-chats div[class*="max-w-[500px]"] { max-width: 760px; }
-    body.is-web [class*="message-bubble"] { max-width: 580px; }
-
-    /* ---------- ПОДЭКРАНЫ (астро, сны, календарь, матрица) ---------- */
-    body.is-web #screen-astro > div[class*="px-5"], body.is-web #screen-dream > div[class*="px-5"], body.is-web #screen-calendar > div[class*="px-5"], body.is-web #screen-matrix > div[class*="px-5"] { max-width: 780px; width: 100%; margin-left: auto; margin-right: auto; }
-    body.is-web #screen-dream > div[class*="px-5"]:first-of-type, body.is-web #screen-calendar > div[class*="px-5"]:first-of-type { padding-top: 48px; }
-
-    /* ---------- МОДАЛКИ: вместо шторок снизу — по центру ---------- */
-    body.is-web .bottom-sheet { left: calc(248px + (100vw - 248px) / 2); right: auto; bottom: auto; top: 50%; max-width: 500px; transform: translate(-50%, -46%) scale(.97); opacity: 0; pointer-events: none; transition: transform .35s cubic-bezier(.16,1,.3,1), opacity .28s ease; }
-    body.is-web .bottom-sheet.active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
-    body.is-web .bottom-sheet > div:first-of-type { border-radius: 28px !important; border: 1px solid rgba(255,255,255,.09); box-shadow: 0 40px 120px rgba(0,0,0,.65), 0 0 60px rgba(168,85,247,.07); }
-
-    /* ---------- Живость: подъём карточек при наведении ---------- */
-    body.is-web #screen-home > div:nth-child(2) button, body.is-web #screen-home > div:nth-child(3) button, body.is-web #screen-home > div:nth-child(4) button, body.is-web #spreads-dynamic-container button, body.is-web #shop-items-container > * { transition: transform .22s ease, box-shadow .22s ease, border-color .2s ease, background-color .2s ease; will-change: transform; }
-    body.is-web #screen-home > div:nth-child(2) button:hover, body.is-web #screen-home > div:nth-child(3) button:hover, body.is-web #screen-home > div:nth-child(4) button:hover, body.is-web #spreads-dynamic-container button:hover, body.is-web #shop-items-container > *:hover { transform: translateY(-4px); box-shadow: 0 16px 44px rgba(0,0,0,.4), 0 0 24px rgba(168,85,247,.10); cursor: pointer; }
-  }
-  </style>
-
   <!-- Главный контейнер (мобильный вид) -->
   <div id="app" class="relative max-w-md mx-auto min-h-screen bg-space-900 border-x border-neon-purple/20 shadow-[0_0_50px_rgba(168,85,247,0.15)] overflow-hidden flex flex-col">
     
@@ -4018,14 +3905,6 @@
         }
         window.nlResetLogin = nlResetLogin;
 
-        window.nlLogout = function() {
-            try {
-                localStorage.removeItem('neotaro_token');
-                localStorage.removeItem('neotaro_user');
-            } catch (e) {}
-            location.reload();
-        };
-
         async function startWebLogin() {
             const btn = document.getElementById('tg-login-btn');
             const status = document.getElementById('web-login-status');
@@ -4382,9 +4261,6 @@
         let activeSynastryStatus = "partner"; // Внутренний ключ (partner, friend, business)
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // 🖥 САЙТ: включаем десктопную оболочку (сайдбар на широких экранах)
-            if (bridge.isWeb) { document.body.classList.add('is-web'); }
-
             // 🌐 САЙТ: если человек не в TG/VK и ещё не входил через Telegram — экран входа
             if (bridge.isWeb && !bridge.webToken) {
                 showWebLogin();
