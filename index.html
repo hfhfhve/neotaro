@@ -607,6 +607,79 @@
     <div class="ds-domain">neotaro.ru</div>
   </aside>
 
+  <!-- ==================== 🖥 ДЕСКТОПНАЯ ВЕРСИЯ САЙТА (≥ 1024px) ==================== -->
+  <style id="desktop-css">
+  @media (min-width: 1024px) {
+
+    /* ---------- Сайдбар: панель во всю высоту ---------- */
+    body.is-web #desktop-sidebar { left: 0; top: 0; bottom: 0; transform: none; height: 100vh; width: 248px; border-radius: 0; border: 0; border-right: 1px solid rgba(168,85,247,.16); padding: 30px 16px 22px; background: linear-gradient(180deg, rgba(16,12,38,.85), rgba(5,4,16,.94)); box-shadow: 8px 0 40px rgba(0,0,0,.35); }
+    body.is-web #desktop-sidebar .ds-nav { flex: 1; }
+    body.is-web #desktop-sidebar .nav-btn { padding: 13px 16px; }
+
+    /* ---------- Каркас приложения: во весь экран ---------- */
+    body.is-web #app { max-width: none; margin: 0 0 0 248px; border: 0; box-shadow: none; background: transparent; }
+    body.is-web .screen { scroll-behavior: smooth; }
+
+    /* ---------- ГЛАВНАЯ: герой + две колонки + сетка возможностей ---------- */
+    body.is-web #screen-home { display: grid; grid-template-columns: 1.04fr .96fr; gap: 0 32px; align-items: start; align-content: start; max-width: 1200px; width: 100%; margin: 0 auto; padding: 52px 56px 110px; }
+    body.is-web #screen-home > div { padding-left: 0; padding-right: 0; }
+    body.is-web #screen-home > div:nth-child(1) { grid-column: 1 / -1; padding-top: 0; margin-bottom: 34px; }
+    body.is-web #screen-home > div:nth-child(2) { grid-column: 1; margin-bottom: 0; }
+    body.is-web #screen-home > div:nth-child(3) { grid-column: 2; margin-bottom: 0; }
+    body.is-web #screen-home > div:nth-child(3) > div:first-child { margin-top: 4px; }
+    body.is-web #screen-home > div:nth-child(4) { grid-column: 1 / -1; margin-top: 44px; }
+    body.is-web #screen-home h1 { font-size: 47px; line-height: 1.08; }
+    body.is-web #current-date-display { font-size: 12px; }
+    body.is-web #screen-home > div:nth-child(1) button { padding: 12px 20px; border-radius: 18px; }
+    body.is-web #star-balance { font-size: 17px; }
+    body.is-web #home-daily-thumb { width: 92px; height: 138px; border-radius: 14px; }
+    body.is-web #home-daily-title { font-size: 25px; }
+    body.is-web #home-daily-subtitle { font-size: 13px; }
+    body.is-web #screen-home div[class*="grid-cols-2"] { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    body.is-web #screen-home div[class*="grid-cols-2"] > button { padding: 20px; border-radius: 22px; min-height: 148px; }
+    body.is-web #screen-home div[class*="grid-cols-2"] > button p[class*="text-sm"] { font-size: 16px; }
+    body.is-web #screen-home div[class*="grid-cols-2"] > button p[class*="text-[10px]"] { font-size: 12px; }
+    body.is-web #daily-bonus-btn { padding-top: 18px; padding-bottom: 18px; }
+
+    /* ---------- РАСКЛАДЫ: сетка в две колонки ---------- */
+    body.is-web #screen-spreads > div { max-width: 1120px; width: 100%; margin: 0 auto; padding: 52px 56px 90px; }
+    body.is-web #screen-spreads h1 { font-size: 45px; }
+    body.is-web #screen-spreads p[data-i18n="spreads_subtitle"] { font-size: 16px; max-width: 560px; }
+    body.is-web #screen-spreads button[onclick="navigateTo('home')"] { display: none; }
+    body.is-web #spreads-dynamic-container > div:not([class]) { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    body.is-web #spreads-dynamic-container > div:not([class]) > button { margin: 0 !important; height: 100%; }
+
+    /* ---------- МАГАЗИН: сетка товаров ---------- */
+    body.is-web #screen-shop > div[class*="px-5"] { max-width: 980px; width: 100%; margin-left: auto; margin-right: auto; padding-left: 40px; padding-right: 40px; }
+    body.is-web #screen-shop h1 { font-size: 45px; }
+    body.is-web #shop-items-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    body.is-web #shop-items-container > * { margin: 0 !important; height: 100%; }
+    body.is-web #shop-items-container > #shop-starter-offer { grid-column: 1 / -1; }
+
+    /* ---------- ПРОФИЛЬ: широкая центральная колонна ---------- */
+    body.is-web #screen-profile > div { max-width: 700px; width: 100%; margin: 0 auto; padding: 52px 0 90px; }
+
+    /* ---------- ЧАТ: широкая лента по центру ---------- */
+    body.is-web #screen-chats > div[class*="h-[85px]"] { padding-left: max(28px, calc((100% - 940px) / 2)); padding-right: max(28px, calc((100% - 940px) / 2)); }
+    body.is-web #chat-scroll-wrapper { padding-left: max(28px, calc((100% - 940px) / 2)); padding-right: max(28px, calc((100% - 940px) / 2)); }
+    body.is-web #screen-chats div[class*="max-w-[500px]"] { max-width: 760px; }
+    body.is-web [class*="message-bubble"] { max-width: 580px; }
+
+    /* ---------- ПОДЭКРАНЫ (астро, сны, календарь, матрица) ---------- */
+    body.is-web #screen-astro > div[class*="px-5"], body.is-web #screen-dream > div[class*="px-5"], body.is-web #screen-calendar > div[class*="px-5"], body.is-web #screen-matrix > div[class*="px-5"] { max-width: 780px; width: 100%; margin-left: auto; margin-right: auto; }
+    body.is-web #screen-dream > div[class*="px-5"]:first-of-type, body.is-web #screen-calendar > div[class*="px-5"]:first-of-type { padding-top: 48px; }
+
+    /* ---------- МОДАЛКИ: вместо шторок снизу — по центру ---------- */
+    body.is-web .bottom-sheet { left: calc(248px + (100vw - 248px) / 2); right: auto; bottom: auto; top: 50%; max-width: 500px; transform: translate(-50%, -46%) scale(.97); opacity: 0; pointer-events: none; transition: transform .35s cubic-bezier(.16,1,.3,1), opacity .28s ease; }
+    body.is-web .bottom-sheet.active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+    body.is-web .bottom-sheet > div:first-of-type { border-radius: 28px !important; border: 1px solid rgba(255,255,255,.09); box-shadow: 0 40px 120px rgba(0,0,0,.65), 0 0 60px rgba(168,85,247,.07); }
+
+    /* ---------- Живость: подъём карточек при наведении ---------- */
+    body.is-web #screen-home > div:nth-child(2) button, body.is-web #screen-home > div:nth-child(3) button, body.is-web #screen-home > div:nth-child(4) button, body.is-web #spreads-dynamic-container button, body.is-web #shop-items-container > * { transition: transform .22s ease, box-shadow .22s ease, border-color .2s ease, background-color .2s ease; will-change: transform; }
+    body.is-web #screen-home > div:nth-child(2) button:hover, body.is-web #screen-home > div:nth-child(3) button:hover, body.is-web #screen-home > div:nth-child(4) button:hover, body.is-web #spreads-dynamic-container button:hover, body.is-web #shop-items-container > *:hover { transform: translateY(-4px); box-shadow: 0 16px 44px rgba(0,0,0,.4), 0 0 24px rgba(168,85,247,.10); cursor: pointer; }
+  }
+  </style>
+
   <!-- Главный контейнер (мобильный вид) -->
   <div id="app" class="relative max-w-md mx-auto min-h-screen bg-space-900 border-x border-neon-purple/20 shadow-[0_0_50px_rgba(168,85,247,0.15)] overflow-hidden flex flex-col">
     
