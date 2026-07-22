@@ -7,6 +7,7 @@
   <title>Космическое Таро</title>   
   <script src="https://telegram.org/js/telegram-web-app.js"></script> 
   <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.min.css">
@@ -5996,6 +5997,70 @@
                 });
             } catch (e) {
                 resultsContainer.innerHTML = `<div class="text-center text-red-400 text-xs py-3">Ошибка сети. Попробуйте позже.</div>`;
+            }
+        }
+
+        // Твой Client ID из Google Console
+        const GOOGLE_CLIENT_ID = "ТВОЙ_CLIENT_ID.apps.googleusercontent.com";
+        
+        window.onload = function () {
+            // Инициализируем Google SDK
+            if (window.google) {
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleGoogleResponse
+                });
+            }
+        };
+        
+        // Вешаем вызов Гугла на нашу кастомную красивую кнопку
+        document.getElementById('google-login-btn').addEventListener('click', () => {
+            google.accounts.id.prompt(); // Показывает всплывашку "Войти с Google" (One Tap)
+            // Либо принудительно открываем окно выбора аккаунта, если One Tap закрыли:
+            // google.accounts.id.renderButton() - но мы используем кастомную кнопку, поэтому проще так:
+            // Для кастомной кнопки нужно просто запросить флоу авторизации:
+            
+            // Альтернативный и более надежный вызов для кастомной кнопки:
+            const client = google.accounts.oauth2.initTokenClient({
+                client_id: GOOGLE_CLIENT_ID,
+                scope: 'email profile',
+                callback: (response) => {
+                    if (response.access_token) {
+                        // Если юзаешь tokenClient, отправляем access_token на бэк
+                        verifyGoogleTokenOnBackend(response.access_token);
+                    }
+                },
+            });
+            client.requestAccessToken();
+        });
+        
+        // Отправляем токен на твой FastAPI бэкенд
+        async function verifyGoogleTokenOnBackend(googleAccessToken) {
+            const status = document.getElementById('web-login-status');
+            status.classList.add('nl-active');
+            status.innerHTML = `<div class="text-neon-cyan text-xs mt-3 text-center animate-pulse">Звезды узнают тебя...</div>`;
+        
+            try {
+                const response = await fetch(`${API_URL}/auth/google`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: googleAccessToken })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.token) {
+                    // Сохраняем НАШ JWT токен, как мы делали с ТГ-входом
+                    localStorage.setItem('neotaro_token', data.token);
+                    localStorage.setItem('neotaro_user', JSON.stringify(data.user || {}));
+                    
+                    // Перезагружаем страницу, AppBridge подхватит токен и пустит в App
+                    location.reload(); 
+                } else {
+                    status.innerHTML = `<div class="nl-err">Ошибка входа через Google. Попробуйте еще раз.</div>`;
+                }
+            } catch (e) {
+                status.innerHTML = `<div class="nl-err">Ошибка сети.</div>`;
             }
         }
         
