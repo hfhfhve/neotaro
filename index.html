@@ -505,71 +505,50 @@
       
       <div class="nl-card" id="auth-card">
         
-        <!-- ТАБЫ (Вход / Регистрация) -->
-        <div class="flex bg-black/40 rounded-2xl p-1.5 mb-6 border border-white/5 relative">
-            <div id="tab-slider" class="absolute top-1.5 bottom-1.5 left-1.5 w-[calc(50%-6px)] bg-white/10 rounded-xl transition-all duration-300 ease-out shadow-sm border border-white/10"></div>
+        <h2 class="text-white font-mystic text-3xl font-bold mb-2 text-center drop-shadow-md">Вход в пространство</h2>
+        <p class="text-white/50 text-xs text-center mb-8">Выберите удобный способ авторизации. Ваш прогресс и расклады будут синхронизированы.</p>
+
+        <!-- Кнопки соцсетей (Грид 2x2) -->
+        <div class="grid grid-cols-2 gap-3 mb-2">
             
-            <button id="tab-login" class="flex-1 py-2.5 text-white text-xs font-bold relative z-10 transition-colors" onclick="switchAuthTab('login')">Вход</button>
-            <button id="tab-register" class="flex-1 py-2.5 text-white/50 text-xs font-bold relative z-10 transition-colors hover:text-white" onclick="switchAuthTab('register')">Регистрация</button>
-        </div>
-
-        <form id="auth-form" onsubmit="event.preventDefault(); submitAuthForm();">
-            
-            <h2 id="auth-title" class="text-white font-mystic text-2xl font-bold mb-4 text-center">С возвращением</h2>
-
-            <!-- Поле Email -->
-            <div class="mb-4 relative">
-                <i class="ph-fill ph-envelope absolute left-4 top-1/2 -translate-y-1/2 text-white/30 text-lg"></i>
-                <input type="email" id="auth-email" required class="w-full bg-space-900/60 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white text-sm outline-none focus:border-neon-fuchsia/50 transition-colors placeholder-white/30 shadow-inner" placeholder="Твой email">
-            </div>
-
-            <!-- Поле Пароль -->
-            <div class="mb-2 relative">
-                <i class="ph-fill ph-lock-key absolute left-4 top-1/2 -translate-y-1/2 text-white/30 text-lg"></i>
-                <input type="password" id="auth-password" required class="w-full bg-space-900/60 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white text-sm outline-none focus:border-neon-fuchsia/50 transition-colors placeholder-white/30 shadow-inner" placeholder="Пароль">
-            </div>
-            
-            <!-- Забыли пароль? (Видно только при логине) -->
-            <div id="forgot-password-link" class="text-right mb-5">
-                <a href="#" class="text-[10px] text-white/40 hover:text-white/70 transition-colors tracking-wide">Забыли пароль?</a>
-            </div>
-
-            <!-- Главная кнопка -->
-            <button type="submit" id="auth-main-btn" class="w-full bg-gradient-to-r from-neon-indigo to-neon-fuchsia text-white font-bold py-3.5 rounded-xl shadow-[0_5px_20px_rgba(232,121,249,0.3)] active:scale-95 transition-transform text-sm tracking-wide mb-6">
-                ВОЙТИ В ПРОСТРАНСТВО
-            </button>
-        </form>
-
-        <!-- Разделитель -->
-        <div class="flex items-center gap-3 mb-6 opacity-60">
-            <div class="h-px flex-1 bg-gradient-to-r from-transparent to-white/30"></div>
-            <span class="text-[9px] uppercase tracking-widest font-bold text-white">Или через</span>
-            <div class="h-px flex-1 bg-gradient-to-l from-transparent to-white/30"></div>
-        </div>
-
-        <!-- Кнопки соцсетей -->
-        <div class="grid grid-cols-2 gap-3">
             <!-- Telegram -->
-            <button id="tg-login-btn" type="button" class="flex items-center justify-center gap-2 bg-[#2AABEE]/10 border border-[#2AABEE]/30 hover:bg-[#2AABEE]/20 hover:border-[#2AABEE]/50 rounded-xl py-3 active:scale-95 transition-all group">
-                <i class="ph-fill ph-telegram-logo text-xl text-[#2AABEE] group-hover:scale-110 transition-transform"></i>
-                <span class="text-white text-xs font-bold">Telegram</span>
+            <button id="tg-login-btn" type="button" class="flex items-center justify-center gap-2.5 bg-[#2AABEE]/10 border border-[#2AABEE]/30 hover:bg-[#2AABEE]/20 hover:border-[#2AABEE]/50 rounded-xl py-3.5 active:scale-95 transition-all group">
+                <i class="ph-fill ph-telegram-logo text-2xl text-[#2AABEE] group-hover:scale-110 transition-transform"></i>
+                <span class="text-white text-sm font-bold tracking-wide">Telegram</span>
             </button>
+            
             <!-- Google -->
-            <button id="google-login-btn" type="button" class="flex items-center justify-center gap-2 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 rounded-xl py-3 active:scale-95 transition-all group">
-                <svg class="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+            <button id="google-login-btn" type="button" class="flex items-center justify-center gap-2.5 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 rounded-xl py-3.5 active:scale-95 transition-all group">
+                <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
-                <span class="text-white text-xs font-bold">Google</span>
+                <span class="text-white text-sm font-bold tracking-wide">Google</span>
             </button>
+
+            <!-- Yandex -->
+            <button id="yandex-login-btn" type="button" class="flex items-center justify-center gap-2.5 bg-[#FC3F1D]/10 border border-[#FC3F1D]/30 hover:bg-[#FC3F1D]/20 hover:border-[#FC3F1D]/50 rounded-xl py-3.5 active:scale-95 transition-all group">
+                <div class="w-6 h-6 rounded-full bg-[#FC3F1D] flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <span class="text-white font-black text-sm leading-none font-sans" style="margin-top: 1px;">Я</span>
+                </div>
+                <span class="text-white text-sm font-bold tracking-wide">Яндекс</span>
+            </button>
+
+            <!-- VKontakte -->
+            <button id="vk-login-btn" type="button" class="flex items-center justify-center gap-2.5 bg-[#0077FF]/10 border border-[#0077FF]/30 hover:bg-[#0077FF]/20 hover:border-[#0077FF]/50 rounded-xl py-3.5 active:scale-95 transition-all group">
+                <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.6262 17.5C7.2023 17.5 3.32421 13.0694 3.14175 5.5H6.55995C6.68581 10.9634 9.17726 13.2562 11.0827 13.7317V5.5H14.3313V10.2018C16.1977 10.0003 18.2531 7.89679 18.9467 5.5H22.1953C21.6159 8.32479 19.5303 10.4283 18.0698 11.4862C19.5303 12.3582 21.9446 14.237 22.8466 17.5H19.284C18.5996 15.2284 16.653 13.4936 14.3313 13.2562V17.5H13.6262Z" fill="#0077FF"/>
+                </svg>
+                <span class="text-white text-sm font-bold tracking-wide">ВКонтакте</span>
+            </button>
+            
         </div>
         
-        <div id="web-login-status"></div>
+        <div id="web-login-status" class="mt-4 text-center min-h-[20px]"></div>
 
       </div>
-      <div class="nl-foot">Карта дня <span>✦</span> Расклады <span>✦</span> Матрица судьбы</div>
     </div>
   </div>
   <div id="app-loading-screen" class="fixed inset-0 z-[10000] bg-[#03030b] flex flex-col items-center justify-center transition-opacity duration-500 pointer-events-auto">
@@ -6092,66 +6071,101 @@
         }
 
         // Твой Client ID из Google Console
-        const GOOGLE_CLIENT_ID = "67067405192-tfq2sj5kdk7no312f76lg4fenac49k08.apps.googleusercontent.com";
+        // --- ТВОИ КЛЮЧИ ---
+        const YANDEX_CLIENT_ID = "ВСТАВЬ_ЯНДЕКС_ID";
+        const VK_CLIENT_ID = "ВСТАВЬ_ВК_ID";
+        const GOOGLE_CLIENT_ID = "ВСТАВЬ_GOOGLE_ID.apps.googleusercontent.com";
         
+        const REDIRECT_URI = window.location.origin; // https://neotaro.ru
+        
+        // 1. Инициализация Google (One Tap + кнопка)
         window.onload = function () {
-            // Инициализируем Google SDK
             if (window.google) {
                 google.accounts.id.initialize({
                     client_id: GOOGLE_CLIENT_ID,
-                    callback: handleGoogleResponse
+                    callback: (response) => {
+                        if (response.credential) verifyTokenOnBackend('/auth/google', { token: response.credential });
+                    }
                 });
             }
         };
         
-        // Вешаем вызов Гугла на нашу кастомную красивую кнопку
+        // 2. Обработчики кнопок
         document.getElementById('google-login-btn').addEventListener('click', () => {
-            google.accounts.id.prompt(); // Показывает всплывашку "Войти с Google" (One Tap)
-            // Либо принудительно открываем окно выбора аккаунта, если One Tap закрыли:
-            // google.accounts.id.renderButton() - но мы используем кастомную кнопку, поэтому проще так:
-            // Для кастомной кнопки нужно просто запросить флоу авторизации:
-            
-            // Альтернативный и более надежный вызов для кастомной кнопки:
+            // Вызываем нативное окно выбора аккаунта Google
             const client = google.accounts.oauth2.initTokenClient({
                 client_id: GOOGLE_CLIENT_ID,
                 scope: 'email profile',
                 callback: (response) => {
-                    if (response.access_token) {
-                        // Если юзаешь tokenClient, отправляем access_token на бэк
-                        verifyGoogleTokenOnBackend(response.access_token);
-                    }
+                    if (response.access_token) verifyTokenOnBackend('/auth/google', { token: response.access_token });
                 },
             });
             client.requestAccessToken();
         });
         
-        // Отправляем токен на твой FastAPI бэкенд
-        async function verifyGoogleTokenOnBackend(googleAccessToken) {
+        document.getElementById('yandex-login-btn').addEventListener('click', () => {
+            // Перекидываем на Яндекс
+            const url = `https://oauth.yandex.ru/authorize?response_type=token&client_id=${YANDEX_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=yandex`;
+            window.location.href = url;
+        });
+        
+        document.getElementById('vk-login-btn').addEventListener('click', () => {
+            // Перекидываем на ВК
+            const url = `https://oauth.vk.com/authorize?client_id=${VK_CLIENT_ID}&display=page&redirect_uri=${REDIRECT_URI}&scope=email&response_type=token&v=5.131&state=vk`;
+            window.location.href = url;
+        });
+        
+        // 3. Перехват токенов от Яндекса и ВК после возвращения на сайт
+        window.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const params = new URLSearchParams(hash);
+                const token = params.get('access_token');
+                const state = params.get('state');
+                const email = params.get('email'); // ВК передает email прям в URL
+                const vkUserId = params.get('user_id');
+        
+                if (token && state === 'yandex') {
+                    window.history.replaceState(null, null, window.location.pathname); // Очищаем URL от мусора
+                    verifyTokenOnBackend('/auth/yandex', { token: token });
+                } else if (token && state === 'vk') {
+                    window.history.replaceState(null, null, window.location.pathname);
+                    verifyTokenOnBackend('/auth/vk', { token: token, email: email, user_id: vkUserId });
+                }
+            }
+        });
+        
+        // 4. Универсальная функция отправки на бэкенд
+        async function verifyTokenOnBackend(endpoint, bodyData) {
             const status = document.getElementById('web-login-status');
-            status.classList.add('nl-active');
-            status.innerHTML = `<div class="text-neon-cyan text-xs mt-3 text-center animate-pulse">Звезды узнают тебя...</div>`;
+            const authCard = document.getElementById('auth-card');
+            
+            if (status) {
+                status.innerHTML = `<div class="text-neon-cyan text-sm mt-3 font-bold animate-pulse text-center">Синхронизация со звездами...</div>`;
+            }
+            // Блокируем кнопки, чтобы не кликали дважды
+            if (authCard) authCard.style.pointerEvents = 'none';
         
             try {
-                const response = await fetch(`${API_URL}/auth/google`, {
+                const response = await fetch(`${API_URL}${endpoint}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: googleAccessToken })
+                    body: JSON.stringify(bodyData)
                 });
                 
                 const data = await response.json();
                 
                 if (data.success && data.token) {
-                    // Сохраняем НАШ JWT токен, как мы делали с ТГ-входом
                     localStorage.setItem('neotaro_token', data.token);
                     localStorage.setItem('neotaro_user', JSON.stringify(data.user || {}));
-                    
-                    // Перезагружаем страницу, AppBridge подхватит токен и пустит в App
-                    location.reload(); 
+                    location.reload(); // Перезагружаем - и юзер внутри!
                 } else {
-                    status.innerHTML = `<div class="nl-err">Ошибка входа через Google. Попробуйте еще раз.</div>`;
+                    if (status) status.innerHTML = `<div class="text-red-400 text-xs mt-3 text-center">Ошибка авторизации. Попробуйте еще раз.</div>`;
+                    if (authCard) authCard.style.pointerEvents = 'auto';
                 }
             } catch (e) {
-                status.innerHTML = `<div class="nl-err">Ошибка сети.</div>`;
+                if (status) status.innerHTML = `<div class="text-red-400 text-xs mt-3 text-center">Ошибка сети.</div>`;
+                if (authCard) authCard.style.pointerEvents = 'auto';
             }
         }
         
