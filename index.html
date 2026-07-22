@@ -4861,17 +4861,65 @@
         }
         
         // Заглушка отправки формы (пока нет бэкенда)
-        function submitAuthForm() {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-password').value;
-            
-            // Пока просто выводим, что кнопка нажата
-            console.log(`Режим: ${currentAuthMode}, Email: ${email}, Пароль: ${pass}`);
-            
-            // Здесь мы потом подключим запрос к твоему FastAPI бэкенду
+        async function submitAuthForm() {
+            const email = document.getElementById('auth-email').value.trim();
+            const pass = document.getElementById('auth-password').value.trim();
             const status = document.getElementById('web-login-status');
+            const btn = document.getElementById('auth-main-btn');
+            
+            // Базовая валидация
+            if (!email || !pass) {
+                status.classList.add('nl-active');
+                status.innerHTML = `<div class="nl-err">Пожалуйста, заполните все поля</div>`;
+                return;
+            }
+            if (pass.length < 6) {
+                status.classList.add('nl-active');
+                status.innerHTML = `<div class="nl-err">Пароль должен содержать минимум 6 символов</div>`;
+                return;
+            }
+        
+            // Блокируем кнопку от спама и показываем лоадер
+            btn.disabled = true;
             status.classList.add('nl-active');
-            status.innerHTML = `<div class="text-neon-cyan text-xs mt-3 text-center animate-pulse">Ожидаем подключение бэкенда...</div>`;
+            status.innerHTML = `<div class="text-neon-fuchsia text-xs mt-3 text-center animate-pulse">Связываемся со звездами...</div>`;
+        
+            // Выбираем, куда стучаться на бэкенде
+            const endpoint = currentAuthMode === 'login' ? '/auth/login' : '/auth/register';
+            
+            try {
+                const response = await fetch(`${API_URL}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, password: pass })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.token) {
+                    // УСПЕХ! Сохраняем токен и перезагружаем страницу
+                    localStorage.setItem('neotaro_token', data.token);
+                    localStorage.setItem('neotaro_user', JSON.stringify(data.user || {}));
+                    
+                    // Скрипт при загрузке сам найдет токен и откроет Onboarding
+                    location.reload(); 
+                } else {
+                    // ОБРАБОТКА ОШИБОК
+                    btn.disabled = false;
+                    let errorMsg = "Ошибка входа. Проверьте введенные данные.";
+                    
+                    if (data.message === "email_exists") {
+                        errorMsg = "Этот Email уже зарегистрирован! Переключитесь на «Вход».";
+                    } else if (data.message === "invalid_credentials") {
+                        errorMsg = "Неверный Email или пароль. Попробуйте еще раз.";
+                    }
+                    
+                    status.innerHTML = `<div class="nl-err">${errorMsg}</div>`;
+                }
+            } catch (e) {
+                btn.disabled = false;
+                status.innerHTML = `<div class="nl-err">Ошибка сети. Сервер временно недоступен.</div>`;
+            }
         }
     
         // ==================== LUNAR CALENDAR ====================
