@@ -443,100 +443,102 @@
         color: #e879f9;
     }
     @media (min-width: 1024px) {
-        /* 1. Расширяем главный контейнер на весь экран */
+        /* 1. Главный контейнер (Сдвигаем вправо на ширину меню) */
         #app {
             max-width: 100% !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding-left: 280px !important;
             border: none !important;
             box-shadow: none !important;
-            padding-left: 280px; /* Оставляем место слева под сайдбар */
+            border-radius: 0 !important;
         }
 
-        /* 2. Превращаем нижнее меню в левый сайдбар */
+        /* 2. Центрируем контент внутри (чтобы не был растянут на 2 метра) */
+        .screen {
+            align-items: center !important;
+            padding-top: 40px !important;
+        }
+        .screen > div {
+            width: 100% !important;
+            max-width: 800px !important; /* Удобная ширина для чтения */
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+        /* 3. Делаем левый сайдбар из нижнего меню */
         .bottom-nav-container {
-            bottom: auto !important;
-            top: 0;
-            left: 0;
-            transform: none !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            bottom: 0 !important;
             width: 280px !important;
             max-width: 280px !important;
-            height: 100vh;
-            background: #03030b;
-            border-right: 1px solid rgba(255,255,255,0.05);
-            border-radius: 0;
+            height: 100vh !important;
+            transform: none !important; /* Убиваем мобильное центрирование */
+            background: #03030b !important;
+            border-right: 1px solid rgba(255,255,255,0.05) !important;
+            z-index: 100 !important;
+            padding: 0 !important;
         }
 
         .glass-nav {
-            flex-direction: column;
+            flex-direction: column !important;
+            justify-content: center !important;
+            height: 100% !important;
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
-            padding: 40px 20px;
-            gap: 12px;
-            align-items: stretch;
-            height: 100%;
+            padding: 20px !important;
+            border-radius: 0 !important;
+            gap: 12px !important;
         }
 
-        /* Кнопки меню горизонтальные и красивые */
+        /* Красивые горизонтальные кнопки в сайдбаре */
         .nav-btn {
-            width: 100%;
-            flex-direction: row;
-            justify-content: flex-start;
-            gap: 16px;
-            padding: 16px 20px;
-            height: auto;
-            border-radius: 16px;
+            width: 100% !important;
+            height: 56px !important;
+            flex-direction: row !important;
+            justify-content: flex-start !important;
+            padding: 0 24px !important;
+            gap: 16px !important;
+            border-radius: 16px !important;
         }
-        .nav-btn i { font-size: 24px; margin-bottom: 0; }
-        .nav-btn span { font-size: 15px; font-weight: 600; }
+        .nav-btn i { font-size: 24px !important; margin: 0 !important; }
+        .nav-btn span { font-size: 15px !important; display: block !important; }
 
-        /* 3. Центрируем контент внутри экранов, чтобы не растягивался на 3 метра */
-        .screen {
-            padding: 40px 0 !important;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* 4. Центрируем модалки (pop-ups) */
+        .overlay {
+            position: fixed !important;
         }
-        .screen > div {
-            width: 100%;
-            max-width: 900px; /* Идеальная ширина для чтения на ПК */
-        }
-
-        /* 4. Адаптация сеток (Гриды) на главной */
-        /* Сетка возможностей (Таро, Сны и тд) - 4 в ряд вместо 2 */
-        #screen-home .grid-cols-2 {
-            grid-template-columns: repeat(4, 1fr);
-        }
-        /* Блок совместимости растягиваем на половину, а не на всю ширину */
-        #screen-home .col-span-2 {
-            grid-column: span 2;
-        }
-
-        /* 5. Модальные окна (Bottom Sheets) превращаем в Pop-up по центру */
+        
         .bottom-sheet {
-            top: 50%;
-            left: 50%;
-            bottom: auto;
-            transform: translate(-50%, -40%) scale(0.95);
+            position: fixed !important;
+            top: 50% !important;
+            /* Вычисляем центр с учетом того, что 280px слева съело меню */
+            left: calc(50% + 140px) !important; 
+            bottom: auto !important;
+            transform: translate(-50%, -40%) scale(0.95) !important;
             width: 450px !important;
-            max-height: 85vh;
+            max-height: 85vh !important;
             border-radius: 32px !important;
         }
         .bottom-sheet.active {
-            transform: translate(-50%, -50%) scale(1);
-        }
-        /* Закругляем модалки снизу (на мобилках они плоские прилипают ко дну) */
-        .bottom-sheet > div, .bottom-sheet .glass-strong {
-            border-radius: 32px !important; 
+            transform: translate(-50%, -50%) scale(1) !important;
         }
 
-        /* 6. Чат на ПК */
+        /* 5. Чат и другие сетки */
         #screen-chats {
-            left: 280px; /* Сдвигаем вправо от сайдбара */
-            width: calc(100% - 280px);
+            position: fixed !important;
+            left: 280px !important;
+            width: calc(100% - 280px) !important;
         }
-        /* Поле ввода в чате не растягиваем на весь экран */
-        #screen-chats .w-\[calc\(100\%-32px\)\] {
-            max-width: 800px;
+        
+        #screen-home .grid-cols-2 {
+            grid-template-columns: repeat(4, 1fr) !important;
+        }
+        #screen-home .col-span-2 {
+            grid-column: span 2 !important;
         }
     }
   </style>
