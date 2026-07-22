@@ -506,44 +506,57 @@
       <div class="nl-card" id="auth-card">
         
         <h2 class="text-white font-mystic text-3xl font-bold mb-2 text-center drop-shadow-md">Вход в пространство</h2>
-        <p class="text-white/50 text-xs text-center mb-8">Выберите удобный способ авторизации. Ваш прогресс и расклады будут синхронизированы.</p>
+        <p class="text-white/50 text-xs text-center mb-6 leading-relaxed">Выберите способ авторизации. Ваш прогресс и энергия всегда будут с вами.</p>
 
-        <!-- Кнопки соцсетей (Грид 2x2) -->
-        <div class="grid grid-cols-2 gap-3 mb-2">
+        <div class="space-y-4">
             
-            <!-- Telegram -->
-            <button id="tg-login-btn" type="button" class="flex items-center justify-center gap-2.5 bg-[#2AABEE]/10 border border-[#2AABEE]/30 hover:bg-[#2AABEE]/20 hover:border-[#2AABEE]/50 rounded-xl py-3.5 active:scale-95 transition-all group">
-                <i class="ph-fill ph-telegram-logo text-2xl text-[#2AABEE] group-hover:scale-110 transition-transform"></i>
-                <span class="text-white text-sm font-bold tracking-wide">Telegram</span>
-            </button>
-            
-            <!-- Google -->
-            <button id="google-login-btn" type="button" class="flex items-center justify-center gap-2.5 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 rounded-xl py-3.5 active:scale-95 transition-all group">
-                <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                <span class="text-white text-sm font-bold tracking-wide">Google</span>
+            <!-- Telegram (Главная кнопка в стиле приложения) -->
+            <button id="tg-login-btn" type="button" class="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-neon-indigo to-neon-purple border border-neon-indigo/50 hover:border-neon-fuchsia shadow-[0_0_20px_rgba(99,102,241,0.3)] rounded-2xl py-4 active:scale-95 transition-all group relative overflow-hidden">
+                <!-- Анимация блика -->
+                <div class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%)] bg-[length:250%_250%,100%_100%] animate-[bg-shift_2s_linear_infinite] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                
+                <i class="ph-fill ph-telegram-logo text-2xl text-white relative z-10 group-hover:scale-110 transition-transform"></i>
+                <span class="text-white text-sm font-bold tracking-wide relative z-10">Войти через Telegram</span>
             </button>
 
-            <!-- Yandex -->
-            <button id="yandex-login-btn" type="button" class="flex items-center justify-center gap-2.5 bg-[#FC3F1D]/10 border border-[#FC3F1D]/30 hover:bg-[#FC3F1D]/20 hover:border-[#FC3F1D]/50 rounded-xl py-3.5 active:scale-95 transition-all group">
-                <div class="w-6 h-6 rounded-full bg-[#FC3F1D] flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <span class="text-white font-black text-sm leading-none font-sans" style="margin-top: 1px;">Я</span>
-                </div>
-                <span class="text-white text-sm font-bold tracking-wide">Яндекс</span>
-            </button>
+            <!-- Разделитель -->
+            <div class="flex items-center gap-3 my-2 opacity-60">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent to-white/30"></div>
+                <span class="text-[9px] uppercase tracking-widest font-bold text-white">Или через</span>
+                <div class="h-px flex-1 bg-gradient-to-l from-transparent to-white/30"></div>
+            </div>
 
-            <!-- VKontakte -->
-            <button id="vk-login-btn" type="button" class="flex items-center justify-center gap-2.5 bg-[#0077FF]/10 border border-[#0077FF]/30 hover:bg-[#0077FF]/20 hover:border-[#0077FF]/50 rounded-xl py-3.5 active:scale-95 transition-all group">
-                <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13.6262 17.5C7.2023 17.5 3.32421 13.0694 3.14175 5.5H6.55995C6.68581 10.9634 9.17726 13.2562 11.0827 13.7317V5.5H14.3313V10.2018C16.1977 10.0003 18.2531 7.89679 18.9467 5.5H22.1953C21.6159 8.32479 19.5303 10.4283 18.0698 11.4862C19.5303 12.3582 21.9446 14.237 22.8466 17.5H19.284C18.5996 15.2284 16.653 13.4936 14.3313 13.2562V17.5H13.6262Z" fill="#0077FF"/>
-                </svg>
-                <span class="text-white text-sm font-bold tracking-wide">ВКонтакте</span>
-            </button>
-            
+            <!-- Второстепенные соцсети (Аккуратные стеклянные плитки) -->
+            <div class="grid grid-cols-3 gap-3">
+                
+                <!-- Google -->
+                <button id="google-login-btn" type="button" class="flex flex-col items-center justify-center gap-2 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 rounded-2xl py-3.5 active:scale-95 transition-all group">
+                    <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <span class="text-white/70 text-[10px] font-bold tracking-wider">Google</span>
+                </button>
+
+                <!-- Yandex -->
+                <button id="yandex-login-btn" type="button" class="flex flex-col items-center justify-center gap-2 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 rounded-2xl py-3.5 active:scale-95 transition-all group">
+                    <div class="w-6 h-6 rounded-full bg-[#FC3F1D] flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <span class="text-white font-black text-sm leading-none font-sans" style="margin-top: 1px;">Я</span>
+                    </div>
+                    <span class="text-white/70 text-[10px] font-bold tracking-wider">Яндекс</span>
+                </button>
+
+                <!-- VKontakte -->
+                <button id="vk-login-btn" type="button" class="flex flex-col items-center justify-center gap-2 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 rounded-2xl py-3.5 active:scale-95 transition-all group">
+                    <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.6262 17.5C7.2023 17.5 3.32421 13.0694 3.14175 5.5H6.55995C6.68581 10.9634 9.17726 13.2562 11.0827 13.7317V5.5H14.3313V10.2018C16.1977 10.0003 18.2531 7.89679 18.9467 5.5H22.1953C21.6159 8.32479 19.5303 10.4283 18.0698 11.4862C19.5303 12.3582 21.9446 14.237 22.8466 17.5H19.284C18.5996 15.2284 16.653 13.4936 14.3313 13.2562V17.5H13.6262Z" fill="#0077FF"/>
+                    </svg>
+                    <span class="text-white/70 text-[10px] font-bold tracking-wider">ВКонтакте</span>
+                </button>
+                
+            </div>
         </div>
         
         <div id="web-login-status" class="mt-4 text-center min-h-[20px]"></div>
