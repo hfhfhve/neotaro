@@ -1825,6 +1825,13 @@
                     </div>
                     <i class="ph-bold ph-caret-right text-white/30 text-sm"></i>
                 </button>
+                <button id="profile-logout-btn" onclick="openModal('logout')" class="hidden w-full flex items-center justify-between p-4 active:bg-white/5 transition-colors border-t border-white/5 mt-2">
+                    <div class="flex items-center gap-3 text-red-400">
+                        <div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20 shadow-inner"><i class="ph-fill ph-sign-out"></i></div>
+                        <span class="text-sm font-medium">Выйти из аккаунта</span>
+                    </div>
+                    <i class="ph-bold ph-caret-right text-red-400/50 text-sm"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -2600,6 +2607,27 @@
         <div class="relative z-10 flex items-center justify-center gap-5 bg-white/10 px-12 py-6 rounded-full border border-white/20 backdrop-blur-md">
             <i class="ph-fill ph-telegram-logo text-5xl text-[#00aaff]"></i>
             <span class="text-3xl font-bold text-white tracking-wide">@tarot_neurobot</span>
+        </div>
+    </div>
+
+    <div id="modal-logout" class="bottom-sheet fixed bottom-0 w-full max-w-md z-[60]">
+        <div class="glass-strong rounded-t-[32px] pb-6 flex flex-col">
+            <div class="flex justify-center pt-4 pb-3">
+                <div class="w-12 h-1.5 bg-white/20 rounded-full"></div>
+            </div>
+            <div class="p-6 text-center">
+                <div class="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-4 border border-red-500/20 shadow-inner">
+                    <i class="ph-fill ph-sign-out text-3xl text-red-400 drop-shadow-[0_0_10px_rgba(248,113,113,0.5)]"></i>
+                </div>
+                <h3 class="text-white font-bold text-xl mb-2">Выйти из пространства?</h3>
+                <p class="text-white/50 text-sm mb-6">Тебе придется заново войти по Email или через Google, чтобы продолжить общение с Оракулом.</p>
+                <div class="flex gap-3">
+                    <!-- Отмена -->
+                    <button onclick="closeAllModals()" class="flex-1 py-3.5 rounded-2xl bg-white/5 text-white font-bold active:scale-95 transition-transform border border-white/10 shadow-sm">Отмена</button>
+                    <!-- Подтверждение выхода -->
+                    <button onclick="executeLogout()" class="flex-1 py-3.5 rounded-2xl bg-red-500/10 text-red-400 font-bold active:scale-95 transition-transform border border-red-500/30 shadow-[0_5px_15px_rgba(248,113,113,0.15)]">Выйти</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -5281,6 +5309,12 @@
                             createdAtEl.textContent = `${t('prof_with_us')} ${dateStr}`;
                         }
                     }
+                    if (bridge.isWeb && bridge.webToken) {
+                        const logoutBtn = document.getElementById('profile-logout-btn');
+                        if (logoutBtn) {
+                            logoutBtn.classList.remove('hidden');
+                        }
+                    }
                     if (data.hasOwnProperty('notifications_enabled')) {
                         const notifToggle = document.getElementById('notif-toggle');
                         if (notifToggle) notifToggle.checked = data.notifications_enabled;
@@ -5753,6 +5787,15 @@
                 time: `${startHour}:00 -<br>${endHour}:30`
             };
         }
+
+        function executeLogout() {
+            // Удаляем токены и данные пользователя из кэша браузера
+            localStorage.removeItem('neotaro_token');
+            localStorage.removeItem('neotaro_user');
+            
+            // Перезагружаем страницу - скрипт сам перекинет юзера на экран входа
+            location.reload();
+        }
     
         function openDailyCardModal() {
             const modal = document.getElementById('modal-daily-card');
@@ -6001,7 +6044,7 @@
         }
 
         // Твой Client ID из Google Console
-        const GOOGLE_CLIENT_ID = "ТВОЙ_CLIENT_ID.apps.googleusercontent.com";
+        const GOOGLE_CLIENT_ID = "67067405192-tfq2sj5kdk7no312f76lg4fenac49k08.apps.googleusercontent.com";
         
         window.onload = function () {
             // Инициализируем Google SDK
