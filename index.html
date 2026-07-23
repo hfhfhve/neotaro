@@ -1,12 +1,17 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta name="yandex-verification" content="4829483e1c30ff58" />
-  <meta name="theme-color" content="#03030b">
-  <meta charset="UTF-8"> 
+  <meta name="theme-color" content="#0B0F1E">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Космическое Таро</title>   
-  <script src="https://telegram.org/js/telegram-web-app.js"></script> 
+  <title>NEOTARO — Таро, астрология и матрица судьбы онлайн</title>
+  <meta name="description" content="Расклады Таро с ИИ‑толкователем, натальная карта, матрица судьбы, совместимость пары и лунный календарь. Вход за 10 секунд, карта дня — бесплатно.">
+  <meta property="og:title" content="NEOTARO — Карты уже знают. Осталось спросить.">
+  <meta property="og:description" content="Ночной кабинет гаданий: расклады Таро с ИИ‑толкователем, натальная карта, матрица судьбы и лунный календарь.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://neotaro.ru/">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,38 +21,42 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Prata&display=swap">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.min.css">
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="data.js?v=6"></script>
-  
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
             space: {
-              900: '#03030b',
-              800: '#0a0a1a',
-              700: '#12122a',
-              600: '#1a1a3e',
-              500: '#252550',
+              900: '#0B0F1E',
+              800: '#121829',
+              700: '#1A2138',
+              600: '#232C47',
+              500: '#2E3A5C',
             },
             neon: {
-              indigo: '#6366f1',
-              fuchsia: '#e879f9',
-              amber: '#fbbf24',
-              purple: '#a855f7',
-              cyan: '#22d3ee',
-              rose: '#fb7185',
-              emerald: '#34d399',
-            }
+              indigo: '#8FA3DE',
+              fuchsia: '#C9A0DC',
+              amber: '#D9AE5F',
+              purple: '#A78FD6',
+              cyan: '#87B7C6',
+              rose: '#C4899B',
+              emerald: '#93B9A0',
+            },
+            white: '#F2EDE0',
           },
           fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            mystic: ['Cormorant Garamond', 'serif'],
+            sans: ['Manrope', 'Inter', 'system-ui', 'sans-serif'],
+            mystic: ['Prata', 'Cormorant Garamond', 'serif'],
           },
           animation: {
             'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -57,7 +66,6 @@
             'fade-in': 'fadeIn 0.2s ease-out',
             'stars': 'stars 100s linear infinite',
             'flip': 'flip 0.6s ease-in-out',
-            /* --- НОВЫЕ АНИМАЦИИ ДЛЯ ОРБИТ --- */
             'spin-slow': 'spin 15s linear infinite',
             'spin-reverse-slow': 'spinReverse 15s linear infinite',
             'spin-slower': 'spin 25s linear infinite',
@@ -69,8 +77,8 @@
               '50%': { transform: 'translateY(-10px)' },
             },
             glow: {
-              '0%': { boxShadow: '0 0 5px rgba(99, 102, 241, 0.3)' },
-              '100%': { boxShadow: '0 0 20px rgba(99, 102, 241, 0.6), 0 0 40px rgba(168, 85, 247, 0.3)' },
+              '0%': { boxShadow: '0 0 5px rgba(217, 174, 95, 0.25)' },
+              '100%': { boxShadow: '0 0 20px rgba(217, 174, 95, 0.5), 0 0 40px rgba(167, 143, 214, 0.3)' },
             },
             slideUp: {
               '0%': { transform: 'translateY(100%)' },
@@ -84,7 +92,6 @@
               '0%': { transform: 'translateY(0)' },
               '100%': { transform: 'translateY(-100%)' },
             },
-            /* --- НОВЫЙ КЕЙФРЕЙМ ДЛЯ ОБРАТНОГО ВРАЩЕНИЯ ИКОНОК --- */
             spinReverse: {
               '0%': { transform: 'translate(-50%, -50%) rotate(0deg)' },
               '100%': { transform: 'translate(-50%, -50%) rotate(-360deg)' }
@@ -94,7 +101,8 @@
       }
     }
   </script>
-  
+
+  <!-- Базовые стили компонентов (из исходной версии) -->
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -447,129 +455,600 @@
         color: #e879f9;
     }
   </style>
+  <style>
+    /* ==================== 🌌 NIGHT ATLAS: ОБОЛОЧКА ДЛЯ ПК ==================== */
+
+    :focus-visible { outline: 2px solid rgba(217, 174, 95, .65); outline-offset: 2px; }
+
+    body {
+      background:
+        radial-gradient(1200px 800px at 80% -10%, rgba(143, 163, 222, .07), transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, rgba(167, 143, 214, .06), transparent 55%),
+        #0B0F1E;
+    }
+
+    .atlas-sidebar { display: none; }
+
+    @media (min-width: 1024px) {
+      #bottom-nav-wrapper { display: none !important; }
+
+      .atlas-sidebar {
+        display: flex; flex-direction: column;
+        position: fixed; top: 0; bottom: 0; left: 0; width: 252px; z-index: 60;
+        padding: 22px 14px 18px;
+        background: linear-gradient(180deg, #0D1324, #0A0E1C);
+        border-right: 1px solid rgba(217, 174, 95, .14);
+        overflow-y: auto;
+      }
+      .as-brand {
+        display: flex; align-items: center; gap: 10px;
+        padding: 8px 12px 18px; border: none; background: none; cursor: pointer;
+        font-family: 'Prata', serif; font-size: 15px; letter-spacing: .28em;
+        color: #E9D9AC; text-align: left;
+      }
+      .as-group {
+        padding: 18px 12px 8px;
+        font-size: 10px; font-weight: 800; letter-spacing: .26em; text-transform: uppercase;
+        color: rgba(242, 237, 224, .32);
+      }
+      .atlas-sidebar .as-link {
+        display: flex; flex-direction: row; align-items: center; gap: 12px;
+        width: 100%; padding: 10px 12px; margin: 1px 0; border: none; border-radius: 11px;
+        background: none; cursor: pointer; text-align: left;
+        font-family: 'Manrope', 'Inter', sans-serif; font-size: 13.5px; font-weight: 600;
+        color: rgba(242, 237, 224, .66);
+        transition: background .15s ease, color .15s ease;
+        transform: none;
+      }
+      .atlas-sidebar .as-link:hover { background: rgba(242, 237, 224, .05); color: #F2EDE0; }
+      .atlas-sidebar .as-link i { font-size: 19px; color: rgba(217, 174, 95, .72); transform: none; transition: none; }
+      .atlas-sidebar .as-link span { font-size: 13.5px; font-weight: 600; letter-spacing: 0; color: inherit; }
+      .atlas-sidebar .nav-btn.active { background: linear-gradient(120deg, rgba(217, 174, 95, .16), rgba(217, 174, 95, .07)); color: #F0DDB0; }
+      .atlas-sidebar .nav-btn.active i { color: #D9AE5F; transform: none; }
+      .atlas-sidebar .nav-btn.active span { color: #F0DDB0; font-weight: 700; font-size: 13.5px; }
+      .atlas-sidebar .as-soon { opacity: .55; }
+      .atlas-sidebar .as-soon em {
+        margin-left: auto; font-style: normal;
+        font-size: 9px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase;
+        color: #D9AE5F; border: 1px solid rgba(217, 174, 95, .4); border-radius: 99px; padding: 2px 7px;
+      }
+      .as-balance {
+        margin-top: auto; display: flex; align-items: center; gap: 9px;
+        padding: 12px 14px; border-radius: 12px;
+        background: rgba(217, 174, 95, .07); border: 1px solid rgba(217, 174, 95, .22);
+        font-size: 14px; font-weight: 800; color: #F0DDB0;
+      }
+      .as-balance i { color: #D9AE5F; font-size: 17px; }
+      .as-balance-label { margin-left: auto; font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: rgba(242, 237, 224, .38); }
+
+      /* Приложение занимает всю ширину справа от панели */
+      #app {
+        margin-left: 252px !important;
+        max-width: none !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      .screen { max-width: 1024px; margin-left: auto; margin-right: auto; width: 100%; }
+      #screen-home { max-width: 880px; }
+      #messages-container { max-width: 860px; margin-left: auto; margin-right: auto; width: 100%; }
+
+      /* Списки в две колонки на широком экране */
+      #spreads-dynamic-container, #shop-items-container, #referrals-list {
+        display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: stretch;
+      }
+      #spreads-dynamic-container > *, #shop-items-container > *, #referrals-list > * { margin-top: 0 !important; }
+
+      /* Нижние шторки — по центру, а не на всю ширину */
+      .bottom-sheet {
+        left: 50% !important; right: auto !important;
+        width: min(620px, 94vw) !important;
+        transform: translate(-50%, 102%) !important;
+      }
+      .bottom-sheet.active { transform: translate(-50%, 0) !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      html { scroll-behavior: auto !important; }
+      #web-login-screen { scroll-behavior: auto; }
+    }
+
+  </style>
 </head>
 <body class="bg-space-900 min-h-screen">
-
-  <!-- ==================== 🌐 ЭКРАН ВХОДА С САЙТА (neotaro.ru) ==================== -->
+  <!-- ==================== 🌌 NIGHT ATLAS: ЛЕНДИНГ + ВХОД (neotaro.ru) ==================== -->
   <div id="web-login-screen" class="hidden">
     <style>
-      #web-login-screen { position: fixed; inset: 0; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; background:
-          radial-gradient(1100px 700px at 15% -10%, rgba(124,58,237,.20), transparent 60%),
-          radial-gradient(900px 650px at 110% 115%, rgba(34,211,238,.12), transparent 55%),
-          radial-gradient(650px 480px at 85% 15%, rgba(232,121,249,.09), transparent 60%),
-          #03030b; }
+      /* ---------- Каркас лендинга ---------- */
+      #web-login-screen {
+        position: fixed; inset: 0; z-index: 10000;
+        overflow-y: auto; overflow-x: hidden;
+        font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+        color: #F2EDE0;
+        background: #0B0F1E;
+        scroll-behavior: smooth;
+      }
       #web-login-screen.hidden { display: none; }
-      .nl-starfield { position: absolute; inset: 0; pointer-events: none;
-          background-image:
-              radial-gradient(1px 1px at 25px 35px, rgba(255,255,255,.55) 50%, transparent 51%),
-              radial-gradient(1px 1px at 120px 90px, rgba(255,255,255,.35) 50%, transparent 51%),
-              radial-gradient(1.5px 1.5px at 200px 40px, rgba(255,255,255,.5) 50%, transparent 51%),
-              radial-gradient(1px 1px at 80px 160px, rgba(255,255,255,.3) 50%, transparent 51%),
-              radial-gradient(1px 1px at 170px 140px, rgba(255,255,255,.45) 50%, transparent 51%);
-          background-size: 240px 200px; opacity: .7; animation: nl-drift 90s linear infinite; }
-      .nl-starfield--far { background-size: 320px 280px; opacity: .35; animation-duration: 160s; }
-      @keyframes nl-drift { from { transform: translateY(0); } to { transform: translateY(-200px); } }
-      .nl-inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 380px; }
-      .nl-emblem { position: relative; width: 84px; height: 84px; margin-bottom: 24px; animation: nl-float 7s ease-in-out infinite; }
-      .nl-emblem::before { content: ''; position: absolute; inset: -16px; border-radius: 50%; background: radial-gradient(circle, rgba(232,121,249,.15), rgba(124,58,237,.10) 45%, transparent 70%); filter: blur(6px); }
-      .nl-ring { position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(232,121,249,.3); box-shadow: 0 0 24px rgba(232,121,249,.1), inset 0 0 18px rgba(232,121,249,.05); }
-      .nl-ring--dash { inset: 7px; border: 1px dashed rgba(255,255,255,.15); box-shadow: none; animation: nl-spin 40s linear infinite; }
-      .nl-emblem svg { position: absolute; inset: 0; margin: auto; display: block; }
-      @keyframes nl-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-      @keyframes nl-spin { to { transform: rotate(360deg); } }
-      .nl-word { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 36px; line-height: 1; letter-spacing: .32em; margin-right: -.32em; background: linear-gradient(100deg, #f7e7b8 0%, #fdfaf2 35%, #d9c1ff 75%, #9db8ff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 10px; text-align: center; }
-      .nl-tagline { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,.38); font-size: 9px; font-weight: 600; letter-spacing: .34em; margin-right: -.34em; text-transform: uppercase; margin-bottom: 30px; white-space: nowrap; max-width: 100%; }
-      .nl-tagline::before, .nl-tagline::after { content: ''; height: 1px; width: 34px; flex: 0 1 34px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.25)); }
-      .nl-tagline::after { background: linear-gradient(90deg, rgba(255,255,255,.25), transparent); }
-      
-      .nl-card { position: relative; w-full; border-radius: 28px; padding: 24px; background: linear-gradient(165deg, rgba(255,255,255,.05), rgba(255,255,255,.01)); border: 1px solid rgba(255,255,255,.08); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); box-shadow: 0 30px 70px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.05); width: 100%; }
-      .nl-card::before { content: ''; position: absolute; top: 0; left: 40px; right: 40px; height: 1px; background: linear-gradient(90deg, transparent, rgba(168,85,247,.5), transparent); }
-      
-      .nl-foot { margin-top: 28px; max-width: 100%; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.22); text-align: center; }
-      .nl-foot span { color: rgba(168,85,247,.4); padding: 0 8px; }
-      
-      /* Статусы и лоадеры */
-      #web-login-status { min-height: 16px; font-size: 11px; margin-bottom: 6px; text-align: center; }
+
+      .lp-sky {
+        position: fixed; inset: 0; pointer-events: none; z-index: 0;
+        background:
+          radial-gradient(1100px 720px at 78% -12%, rgba(143,163,222,.10), transparent 60%),
+          radial-gradient(860px 640px at -8% 108%, rgba(167,143,214,.08), transparent 55%),
+          radial-gradient(640px 460px at 92% 78%, rgba(217,174,95,.05), transparent 60%);
+      }
+      .lp-stars {
+        position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .5;
+        background-image:
+          radial-gradient(1px 1px at 25px 35px, rgba(242,237,224,.5) 50%, transparent 51%),
+          radial-gradient(1px 1px at 120px 90px, rgba(242,237,224,.3) 50%, transparent 51%),
+          radial-gradient(1.4px 1.4px at 200px 40px, rgba(233,217,172,.45) 50%, transparent 51%),
+          radial-gradient(1px 1px at 80px 160px, rgba(242,237,224,.25) 50%, transparent 51%),
+          radial-gradient(1px 1px at 170px 140px, rgba(242,237,224,.4) 50%, transparent 51%);
+        background-size: 260px 220px;
+      }
+      .lp-wrap { position: relative; z-index: 2; max-width: 1140px; margin: 0 auto; padding: 0 32px; }
+
+      /* ---------- Шапка ---------- */
+      .lp-top {
+        display: flex; align-items: center; gap: 32px;
+        padding: 26px 0 22px;
+        border-bottom: 1px solid rgba(217,174,95,.14);
+      }
+      .lp-brand {
+        display: flex; align-items: center; gap: 11px;
+        font-family: 'Prata', serif; font-size: 17px; letter-spacing: .3em;
+        color: #E9D9AC; text-decoration: none; margin-right: auto;
+      }
+      .lp-nav { display: flex; gap: 28px; }
+      .lp-nav a {
+        color: rgba(242,237,224,.6); text-decoration: none;
+        font-size: 12px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+        transition: color .18s ease;
+      }
+      .lp-nav a:hover { color: #F0DDB0; }
+      .lp-top-cta {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 10px 22px; border-radius: 12px; text-decoration: none;
+        font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
+        box-shadow: 0 6px 24px rgba(217,174,95,.25);
+        transition: transform .18s ease, box-shadow .18s ease;
+      }
+      .lp-top-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(217,174,95,.35); }
+
+      /* ---------- Герой ---------- */
+      .lp-hero {
+        display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+        gap: 48px; align-items: center;
+        padding: 84px 0 96px;
+      }
+      .lp-eyebrow {
+        display: flex; align-items: center; gap: 14px;
+        font-size: 11px; font-weight: 700; letter-spacing: .32em; text-transform: uppercase;
+        color: rgba(217,174,95,.75); margin-bottom: 26px; white-space: nowrap;
+      }
+      .lp-eyebrow::before { content: ''; width: 44px; height: 1px; background: linear-gradient(90deg, rgba(217,174,95,.7), transparent); }
+      .lp-h1 {
+        font-family: 'Prata', serif; font-weight: 400;
+        font-size: clamp(40px, 4.6vw, 62px); line-height: 1.12;
+        color: #F2EDE0; margin: 0 0 24px;
+      }
+      .lp-h1 em { font-style: normal; color: #E9C87E; }
+      .lp-lede {
+        font-size: 16.5px; line-height: 1.65; font-weight: 500;
+        color: rgba(242,237,224,.62);
+        max-width: 520px; margin: 0 0 36px;
+      }
+      .lp-cta-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+      .lp-cta {
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 16px 30px; border-radius: 14px; text-decoration: none;
+        font-size: 14px; font-weight: 800; letter-spacing: .06em;
+        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
+        box-shadow: 0 10px 34px rgba(217,174,95,.28);
+        transition: transform .18s ease, box-shadow .18s ease;
+      }
+      .lp-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 44px rgba(217,174,95,.38); }
+      .lp-cta-ghost {
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 16px 26px; border-radius: 14px; text-decoration: none;
+        font-size: 14px; font-weight: 700;
+        color: rgba(242,237,224,.75);
+        border: 1px solid rgba(242,237,224,.18);
+        transition: border-color .18s ease, color .18s ease;
+      }
+      .lp-cta-ghost:hover { border-color: rgba(217,174,95,.5); color: #F0DDB0; }
+      .lp-hint { font-size: 12px; color: rgba(242,237,224,.38); letter-spacing: .04em; }
+
+      /* ---------- Сигнатура: веер карт ---------- */
+      .lp-fan { position: relative; height: 460px; }
+      .lp-ring {
+        position: absolute; top: 50%; left: 50%; width: 420px; height: 420px;
+        transform: translate(-50%, -50%); border-radius: 50%;
+        border: 1px solid rgba(217,174,95,.18); pointer-events: none;
+      }
+      .lp-ring::before {
+        content: ''; position: absolute; inset: 18px; border-radius: 50%;
+        border: 1px dashed rgba(143,163,222,.2);
+      }
+      .lp-card {
+        position: absolute; left: 50%; top: 50%;
+        width: 148px; height: 248px; margin: -124px 0 0 -74px;
+        border-radius: 13px;
+        background: linear-gradient(160deg, #161D33, #0E1425);
+        border: 1px solid rgba(217,174,95,.4);
+        box-shadow: 0 24px 48px rgba(4,6,14,.65);
+        transition: transform .35s cubic-bezier(.2,.9,.3,1.2);
+      }
+      .lp-card::before {
+        content: ''; position: absolute; inset: 7px; border-radius: 8px;
+        border: 1px solid rgba(217,174,95,.25);
+        background:
+          radial-gradient(1px 1px at 22% 18%, rgba(233,217,172,.6) 50%, transparent 51%),
+          radial-gradient(1px 1px at 70% 32%, rgba(233,217,172,.45) 50%, transparent 51%),
+          radial-gradient(1.4px 1.4px at 42% 60%, rgba(233,217,172,.5) 50%, transparent 51%),
+          radial-gradient(1px 1px at 80% 78%, rgba(233,217,172,.4) 50%, transparent 51%),
+          radial-gradient(1px 1px at 28% 84%, rgba(233,217,172,.35) 50%, transparent 51%);
+      }
+      .lp-card::after {
+        content: '✦'; position: absolute; inset: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 30px; color: rgba(217,174,95,.55);
+      }
+      .lp-c1 { transform: rotate(-26deg) translateY(34px); }
+      .lp-c2 { transform: rotate(-13deg) translateY(9px); }
+      .lp-c4 { transform: rotate(13deg) translateY(9px); }
+      .lp-c5 { transform: rotate(26deg) translateY(34px); }
+      .lp-c1:hover { transform: rotate(-26deg) translateY(18px); }
+      .lp-c2:hover { transform: rotate(-13deg) translateY(-7px); }
+      .lp-c4:hover { transform: rotate(13deg) translateY(-7px); }
+      .lp-c5:hover { transform: rotate(26deg) translateY(18px); }
+
+      .lp-face {
+        z-index: 3; transform: rotate(0deg) translateY(-14px);
+        background: linear-gradient(165deg, #F2E9CF, #E4D3A8);
+        border: 1px solid #C7A254;
+        animation: lp-float 7s ease-in-out infinite;
+      }
+      .lp-face::before { content: none; }
+      .lp-face::after { content: none; }
+      .lp-face:hover { transform: rotate(0deg) translateY(-26px); }
+      @keyframes lp-float {
+        0%, 100% { transform: rotate(0deg) translateY(-14px); }
+        50% { transform: rotate(0deg) translateY(-24px); }
+      }
+      .lp-face-inner {
+        position: absolute; inset: 8px; border-radius: 8px;
+        border: 1px solid rgba(122,94,38,.5);
+        display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+        padding: 14px 10px; color: #6B5320;
+      }
+      .lp-face-num { font-family: 'Prata', serif; font-size: 15px; letter-spacing: .3em; margin-right: -.3em; }
+      .lp-face-inner svg { display: block; }
+      .lp-face-name {
+        font-size: 10px; font-weight: 800; letter-spacing: .34em; margin-right: -.34em;
+        text-transform: uppercase;
+      }
+
+      /* ---------- Секции ---------- */
+      .lp-sec { padding: 72px 0; border-top: 1px solid rgba(217,174,95,.12); }
+      .lp-sec-head { max-width: 560px; margin-bottom: 44px; }
+      .lp-kicker {
+        display: flex; align-items: center; gap: 14px;
+        font-size: 11px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase;
+        color: rgba(217,174,95,.7); margin-bottom: 16px;
+      }
+      .lp-kicker::before { content: ''; width: 34px; height: 1px; background: rgba(217,174,95,.55); }
+      .lp-h2 { font-family: 'Prata', serif; font-weight: 400; font-size: 32px; line-height: 1.25; color: #F2EDE0; margin: 0; }
+      .lp-sub { font-size: 15px; line-height: 1.6; color: rgba(242,237,224,.55); margin: 14px 0 0; }
+
+      .lp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+      .lp-tile {
+        position: relative; border-radius: 16px; padding: 26px 24px;
+        background: linear-gradient(165deg, rgba(242,237,224,.045), rgba(242,237,224,.012));
+        border: 1px solid rgba(217,174,95,.16);
+        transition: border-color .2s ease, transform .2s ease;
+      }
+      .lp-tile:hover { border-color: rgba(217,174,95,.42); transform: translateY(-3px); }
+      .lp-tile i { font-size: 26px; color: #D9AE5F; }
+      .lp-tile h3 { font-family: 'Prata', serif; font-weight: 400; font-size: 18px; color: #F2EDE0; margin: 16px 0 8px; }
+      .lp-tile p { font-size: 13.5px; line-height: 1.6; color: rgba(242,237,224,.52); margin: 0; }
+      .lp-tile .lp-badge {
+        position: absolute; top: 18px; right: 18px;
+        font-size: 9px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase;
+        color: #D9AE5F; border: 1px solid rgba(217,174,95,.45); border-radius: 99px; padding: 3px 9px;
+      }
+      .lp-tile.lp-soon { opacity: .72; }
+
+      /* ---------- Ритуал ---------- */
+      .lp-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+      .lp-step { border-top: 1px solid rgba(217,174,95,.3); padding-top: 22px; }
+      .lp-step-num { font-family: 'Prata', serif; font-size: 15px; letter-spacing: .34em; color: #D9AE5F; display: block; margin-bottom: 14px; }
+      .lp-step h3 { font-family: 'Prata', serif; font-weight: 400; font-size: 19px; color: #F2EDE0; margin: 0 0 10px; }
+      .lp-step p { font-size: 13.5px; line-height: 1.65; color: rgba(242,237,224,.52); margin: 0; }
+
+      /* ---------- Вход ---------- */
+      .lp-auth-sec { padding: 84px 0 96px; border-top: 1px solid rgba(217,174,95,.12); display: flex; justify-content: center; }
+      .lp-auth-card {
+        position: relative; width: 100%; max-width: 460px;
+        border-radius: 22px; padding: 38px 36px 30px;
+        background: linear-gradient(165deg, rgba(242,237,224,.05), rgba(242,237,224,.015));
+        border: 1px solid rgba(217,174,95,.28);
+        box-shadow: 0 40px 90px rgba(4,6,14,.6);
+      }
+      .lp-auth-card::before {
+        content: ''; position: absolute; top: 0; left: 48px; right: 48px; height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(233,200,126,.7), transparent);
+      }
+      .lp-auth-card h2 { font-family: 'Prata', serif; font-weight: 400; font-size: 24px; color: #F2EDE0; margin: 0 0 10px; text-align: center; }
+      .lp-auth-card > p { font-size: 13.5px; line-height: 1.6; color: rgba(242,237,224,.55); text-align: center; margin: 0 0 26px; }
+
+      .lp-tg-btn {
+        display: flex; align-items: center; justify-content: center; gap: 11px;
+        width: 100%; padding: 16px 20px; border-radius: 14px; border: none; cursor: pointer;
+        font-family: inherit; font-size: 14.5px; font-weight: 800; letter-spacing: .04em;
+        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
+        box-shadow: 0 10px 30px rgba(217,174,95,.25);
+        transition: transform .18s ease, box-shadow .18s ease;
+      }
+      .lp-tg-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 38px rgba(217,174,95,.35); }
+      .lp-tg-btn:disabled { opacity: .6; cursor: wait; transform: none; }
+      .lp-tg-btn i { font-size: 20px; }
+      .lp-tg-btn.nl-hidden { display: none; }
+
+      .lp-div { display: flex; align-items: center; gap: 14px; margin: 22px 0; color: rgba(242,237,224,.35); font-size: 10px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; }
+      .lp-div::before, .lp-div::after { content: ''; height: 1px; flex: 1; background: rgba(242,237,224,.12); }
+
+      .lp-socials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .lp-soc {
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+        padding: 14px 8px; border-radius: 13px; cursor: pointer;
+        background: rgba(242,237,224,.04); border: 1px solid rgba(242,237,224,.1);
+        font-family: inherit; color: rgba(242,237,224,.7);
+        font-size: 10px; font-weight: 700; letter-spacing: .1em;
+        transition: border-color .18s ease, background .18s ease;
+      }
+      .lp-soc:hover { background: rgba(242,237,224,.07); border-color: rgba(217,174,95,.4); }
+      .lp-soc svg { width: 22px; height: 22px; }
+      .lp-ya { width: 22px; height: 22px; border-radius: 50%; background: #FC3F1D; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 12px; }
+
+      /* ---------- Статус входа (используется JS-логикой) ---------- */
+      #web-login-status { min-height: 16px; margin-top: 18px; font-size: 12px; text-align: center; display: none; }
       #web-login-status.nl-active { display: block; }
-      .nl-err { color: #fda4af; padding: 10px 0 2px; }
+      .nl-hidden { display: none !important; }
+      .nl-err { color: #C4899B; padding: 8px 0 2px; font-weight: 600; }
+      .nl-wait { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 6px 0; }
+      .nl-spin {
+        width: 26px; height: 26px; border-radius: 50%;
+        border: 2px solid rgba(217,174,95,.25); border-top-color: #D9AE5F;
+        animation: nl-rot 1s linear infinite;
+      }
+      @keyframes nl-rot { to { transform: rotate(360deg); } }
+      .nl-wait-t { font-size: 14px; font-weight: 800; color: #F0DDB0; }
+      .nl-wait-s { font-size: 12px; line-height: 1.6; color: rgba(242,237,224,.55); max-width: 300px; }
+      .nl-open {
+        display: inline-block; margin-top: 4px; padding: 10px 22px; border-radius: 11px;
+        background: linear-gradient(120deg, #E9C87E, #D9AE5F); color: #0B0F1E;
+        font-weight: 800; font-size: 12.5px; text-decoration: none;
+      }
+      .nl-cancel { margin-top: 6px; background: none; border: none; color: rgba(242,237,224,.4); font-size: 11.5px; cursor: pointer; text-decoration: underline; font-family: inherit; }
+
+      /* ---------- Подвал ---------- */
+      .lp-foot {
+        padding: 30px 0 40px; border-top: 1px solid rgba(217,174,95,.12);
+        display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
+        font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+        color: rgba(242,237,224,.3); text-align: center;
+      }
+      .lp-foot a { color: rgba(217,174,95,.65); text-decoration: none; }
+      .lp-foot a:hover { color: #F0DDB0; }
+      .lp-foot i { color: rgba(217,174,95,.4); font-style: normal; }
+
+      /* ---------- Адаптив лендинга ---------- */
+      @media (max-width: 900px) {
+        .lp-hero { grid-template-columns: 1fr; padding: 56px 0 64px; gap: 40px; }
+        .lp-fan { height: 380px; }
+        .lp-nav { display: none; }
+        .lp-grid, .lp-steps { grid-template-columns: 1fr; }
+        .lp-wrap { padding: 0 20px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .lp-face { animation: none; }
+      }
     </style>
 
-    <div class="nl-starfield"></div>
-    <div class="nl-starfield nl-starfield--far"></div>
-    
-    <div class="nl-inner">
-      <div class="nl-emblem">
-        <span class="nl-ring"></span>
-        <span class="nl-ring nl-ring--dash"></span>
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
-          <path d="M10.5 4.5a7.5 7.5 0 1 0 9 9 6 6 0 1 1-9-9Z" stroke="#e879f9" stroke-width="1.2" stroke-linejoin="round" fill="rgba(232,121,249,.09)"/>
-          <path d="M17 4.5l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6z" fill="#fbcfe8"/>
-        </svg>
-      </div>
-      <h1 class="nl-word">NEOTARO</h1>
-      <div class="nl-tagline">Таро · Астрология · Сонник</div>
-      
-      <div class="nl-card" id="auth-card">
-        
-        <h2 class="text-white font-mystic text-3xl font-bold mb-2 text-center drop-shadow-md">Вход в пространство</h2>
-        <p class="text-white/50 text-xs text-center mb-6 leading-relaxed">Выберите способ авторизации. Ваш прогресс и энергия всегда будут с вами.</p>
+    <div class="lp-sky" aria-hidden="true"></div>
+    <div class="lp-stars" aria-hidden="true"></div>
 
-        <div class="space-y-4">
-            
-            <!-- Telegram (Главная кнопка в стиле приложения) -->
-            <button id="tg-login-btn" type="button" class="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-neon-indigo to-neon-purple border border-neon-indigo/50 hover:border-neon-fuchsia shadow-[0_0_20px_rgba(99,102,241,0.3)] rounded-2xl py-4 active:scale-95 transition-all group relative overflow-hidden">
-                <!-- Анимация блика -->
-                <div class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%)] bg-[length:250%_250%,100%_100%] animate-[bg-shift_2s_linear_infinite] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                
-                <i class="ph-fill ph-telegram-logo text-2xl text-white relative z-10 group-hover:scale-110 transition-transform"></i>
-                <span class="text-white text-sm font-bold tracking-wide relative z-10">Войти через Telegram</span>
-            </button>
+    <div class="lp-wrap">
 
-            <!-- Разделитель -->
-            <div class="flex items-center gap-3 my-2 opacity-60">
-                <div class="h-px flex-1 bg-gradient-to-r from-transparent to-white/30"></div>
-                <span class="text-[9px] uppercase tracking-widest font-bold text-white">Или через</span>
-                <div class="h-px flex-1 bg-gradient-to-l from-transparent to-white/30"></div>
-            </div>
+      <header class="lp-top">
+        <a class="lp-brand" href="#">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M10.5 4.5a7.5 7.5 0 1 0 9 9 6 6 0 1 1-9-9Z" stroke="#D9AE5F" stroke-width="1.2" stroke-linejoin="round" fill="rgba(217,174,95,.1)"/>
+            <path d="M17 4.5l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6z" fill="#F0DDB0"/>
+          </svg>
+          NEOTARO
+        </a>
+        <nav class="lp-nav">
+          <a href="#lp-tools">Что внутри</a>
+          <a href="#lp-ritual">Ритуал</a>
+          <a href="#lp-soon">Библиотека</a>
+        </nav>
+        <a class="lp-top-cta" href="#lp-auth">Войти</a>
+      </header>
 
-            <!-- Второстепенные соцсети (Аккуратные стеклянные плитки) -->
-            <div class="grid grid-cols-3 gap-3">
-                
-                <!-- Google -->
-                <button id="google-login-btn" type="button" class="flex flex-col items-center justify-center gap-2 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 rounded-2xl py-3.5 active:scale-95 transition-all group">
-                    <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                    </svg>
-                    <span class="text-white/70 text-[10px] font-bold tracking-wider">Google</span>
-                </button>
-
-                <!-- Yandex -->
-                <button id="yandex-login-btn" type="button" class="flex flex-col items-center justify-center gap-2 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 rounded-2xl py-3.5 active:scale-95 transition-all group">
-                    <div class="w-6 h-6 rounded-full bg-[#FC3F1D] flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <span class="text-white font-black text-sm leading-none font-sans" style="margin-top: 1px;">Я</span>
-                    </div>
-                    <span class="text-white/70 text-[10px] font-bold tracking-wider">Яндекс</span>
-                </button>
-
-                <!-- VKontakte -->
-                <button id="vk-login-btn" type="button" class="flex flex-col items-center justify-center gap-2 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 rounded-2xl py-3.5 active:scale-95 transition-all group">
-                    <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13.6262 17.5C7.2023 17.5 3.32421 13.0694 3.14175 5.5H6.55995C6.68581 10.9634 9.17726 13.2562 11.0827 13.7317V5.5H14.3313V10.2018C16.1977 10.0003 18.2531 7.89679 18.9467 5.5H22.1953C21.6159 8.32479 19.5303 10.4283 18.0698 11.4862C19.5303 12.3582 21.9446 14.237 22.8466 17.5H19.284C18.5996 15.2284 16.653 13.4936 14.3313 13.2562V17.5H13.6262Z" fill="#0077FF"/>
-                    </svg>
-                    <span class="text-white/70 text-[10px] font-bold tracking-wider">ВКонтакте</span>
-                </button>
-                
-            </div>
+      <section class="lp-hero">
+        <div>
+          <div class="lp-eyebrow">Таро · Астрология · Матрица судьбы</div>
+          <h1 class="lp-h1">Карты уже знают.<br><em>Осталось спросить.</em></h1>
+          <p class="lp-lede">NEOTARO — ночной кабинет гаданий: расклады Таро с ИИ‑толкователем, натальная карта, матрица судьбы, совместимость и лунный календарь. Без эзотерического тумана — только вы, вопрос и колода.</p>
+          <div class="lp-cta-row">
+            <a class="lp-cta" href="#lp-auth"><i class="ph-fill ph-sparkle" aria-hidden="true"></i>Войти и вытянуть карту дня</a>
+            <a class="lp-cta-ghost" href="#lp-ritual">Как проходит ритуал</a>
+          </div>
+          <div class="lp-hint">Вход через Telegram, Google, Яндекс или VK — около 10 секунд. Карта дня — бесплатно, каждый день.</div>
         </div>
-        
-        <div id="web-login-status" class="mt-4 text-center min-h-[20px]"></div>
+        <div class="lp-fan" aria-hidden="true">
+          <div class="lp-ring"></div>
+          <div class="lp-card lp-c1"></div>
+          <div class="lp-card lp-c2"></div>
+          <div class="lp-card lp-c4"></div>
+          <div class="lp-card lp-c5"></div>
+          <div class="lp-card lp-face">
+            <div class="lp-face-inner">
+              <span class="lp-face-num">XVII</span>
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                <circle cx="32" cy="32" r="22" stroke="#8A6B29" stroke-width="1"/>
+                <path d="M32 12l3.2 16.8L52 32l-16.8 3.2L32 52l-3.2-16.8L12 32l16.8-3.2L32 12z" fill="#8A6B29" fill-opacity=".85"/>
+                <circle cx="32" cy="32" r="3.4" fill="#F2E9CF"/>
+              </svg>
+              <span class="lp-face-name">Звезда</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      </div>
+      <section class="lp-sec" id="lp-tools">
+        <div class="lp-sec-head">
+          <div class="lp-kicker">Что внутри</div>
+          <h2 class="lp-h2">Семь инструментов одного атласа</h2>
+          <p class="lp-sub">Каждый отвечает на свой тип вопроса — от «что меня ждёт» до «почему мы вместе».</p>
+        </div>
+        <div class="lp-grid">
+          <div class="lp-tile">
+            <i class="ph-fill ph-cards" aria-hidden="true"></i>
+            <h3>Расклады Таро</h3>
+            <p>От одной карты до кельтского креста. ИИ‑толкователь читает расклад под ваш вопрос, а не по шаблону.</p>
+          </div>
+          <div class="lp-tile">
+            <i class="ph-fill ph-chat-circle" aria-hidden="true"></i>
+            <h3>Оракул</h3>
+            <p>Живой диалог о том, что показали карты. Задавайте уточняющие вопросы — Оракул помнит ваш расклад.</p>
+          </div>
+          <div class="lp-tile">
+            <i class="ph-fill ph-flower-lotus" aria-hidden="true"></i>
+            <h3>Матрица судьбы</h3>
+            <p>17 позиций по дате рождения: предназначение, кармический хвост, энергия и финансы.</p>
+          </div>
+          <div class="lp-tile">
+            <i class="ph-fill ph-planet" aria-hidden="true"></i>
+            <h3>Натальная карта</h3>
+            <p>Солнце, Луна и асцендент по месту и времени рождения — с человеческим разбором, а не таблицей.</p>
+          </div>
+          <div class="lp-tile">
+            <i class="ph-fill ph-intersect" aria-hidden="true"></i>
+            <h3>Совместимость</h3>
+            <p>Синастрия двух дат: процент совпадения, сильные стороны пары и точки роста.</p>
+          </div>
+          <div class="lp-tile">
+            <i class="ph-fill ph-moon-stars" aria-hidden="true"></i>
+            <h3>Сонник и лунный календарь</h3>
+            <p>Толкование снов по символам и фаза Луны на сегодня: что начинать, а что отложить.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="lp-sec" id="lp-ritual">
+        <div class="lp-sec-head">
+          <div class="lp-kicker">Ритуал</div>
+          <h2 class="lp-h2">Три шага до ответа</h2>
+        </div>
+        <div class="lp-steps">
+          <div class="lp-step">
+            <span class="lp-step-num">I</span>
+            <h3>Задайте вопрос</h3>
+            <p>Сформулируйте его своими словами — про отношения, работу или выбор, который не даёт покоя.</p>
+          </div>
+          <div class="lp-step">
+            <span class="lp-step-num">II</span>
+            <h3>Вытяните карты</h3>
+            <p>Колода перемешивается на ваших глазах — вы сами выбираете карты и выкладываете их на стол.</p>
+          </div>
+          <div class="lp-step">
+            <span class="lp-step-num">III</span>
+            <h3>Прочтите послание</h3>
+            <p>Оракул толкует расклад целиком и остаётся рядом: обсудите детали в чате, пока не станет ясно.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="lp-sec" id="lp-soon">
+        <div class="lp-sec-head">
+          <div class="lp-kicker">Библиотека</div>
+          <h2 class="lp-h2">Атлас пополняется</h2>
+          <p class="lp-sub">Разделы, которые скоро откроются для всех странников.</p>
+        </div>
+        <div class="lp-grid">
+          <div class="lp-tile lp-soon">
+            <span class="lp-badge">скоро</span>
+            <i class="ph-fill ph-book-open-text" aria-hidden="true"></i>
+            <h3>Энциклопедия 78 карт</h3>
+            <p>Значение каждого аркана: прямое, перевёрнутое и в сочетаниях с другими картами.</p>
+          </div>
+          <div class="lp-tile lp-soon">
+            <span class="lp-badge">скоро</span>
+            <i class="ph-fill ph-scroll" aria-hidden="true"></i>
+            <h3>Гримуар</h3>
+            <p>Статьи и гайды: как задавать вопрос колоде, что такое перевёрнутые карты и с чего начать.</p>
+          </div>
+          <div class="lp-tile lp-soon">
+            <span class="lp-badge">скоро</span>
+            <i class="ph-fill ph-star" aria-hidden="true"></i>
+            <h3>Гороскопы</h3>
+            <p>Ежедневный прогноз по знакам зодиака — коротко и по делу, без воды.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="lp-auth-sec" id="lp-auth">
+        <div id="auth-card" class="lp-auth-card">
+          <h2>Вход в пространство</h2>
+          <p>Энергия, история раскладов и карта дня сохраняются в вашем кабинете.</p>
+          <button id="tg-login-btn" type="button" class="lp-tg-btn">
+            <i class="ph-fill ph-telegram-logo" aria-hidden="true"></i>
+            <span>Войти через Telegram</span>
+          </button>
+          <div class="lp-div">или через</div>
+          <div class="lp-socials">
+            <button id="google-login-btn" type="button" class="lp-soc">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              <span>Google</span>
+            </button>
+            <button id="yandex-login-btn" type="button" class="lp-soc">
+              <span class="lp-ya">Я</span>
+              <span>Яндекс</span>
+            </button>
+            <button id="vk-login-btn" type="button" class="lp-soc">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M13.6262 17.5C7.2023 17.5 3.32421 13.0694 3.14175 5.5H6.55995C6.68581 10.9634 9.17726 13.2562 11.0827 13.7317V5.5H14.3313V10.2018C16.1977 10.0003 18.2531 7.89679 18.9467 5.5H22.1953C21.6159 8.32479 19.5303 10.4283 18.0698 11.4862C19.5303 12.3582 21.9446 14.237 22.8466 17.5H19.284C18.5996 15.2284 16.653 13.4936 14.3313 13.2562V17.5H13.6262Z" fill="#0077FF"/>
+              </svg>
+              <span>ВКонтакте</span>
+            </button>
+          </div>
+          <div id="web-login-status"></div>
+        </div>
+      </section>
+
+      <footer class="lp-foot">
+        <span>NEOTARO</span><i>✦</i>
+        <span>Сервис носит развлекательный характер</span><i>✦</i>
+        <a href="https://t.me/neurotarot_supportbot" target="_blank" rel="noopener">Поддержка</a>
+      </footer>
+
     </div>
   </div>
+
   <div id="app-loading-screen" class="fixed inset-0 z-[10000] bg-[#03030b] flex flex-col items-center justify-center transition-opacity duration-500 pointer-events-auto">
     <div class="fixed inset-0 stars-bg opacity-40 pointer-events-none"></div>
     
@@ -586,7 +1065,7 @@
     </div>
     
     <div class="text-center">
-      <p class="text-white font-mystic text-xl font-bold tracking-widest mb-1 italic">Neuro Tarot</p>
+      <p class="text-white font-mystic text-xl font-bold tracking-widest mb-1 italic">NEOTARO</p>
       <p id="loading-status-text" class="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold animate-pulse" data-i18n="loading">Синхронизация со звездами...</p>
     </div>
   </div>
@@ -605,6 +1084,42 @@
   <div class="fixed inset-0 stars-bg opacity-60 pointer-events-none"></div>
 
   <!-- Главный контейнер (мобильный вид) -->
+  <!-- ==================== 🧭 NIGHT ATLAS: БОКОВАЯ НАВИГАЦИЯ (ПК) ==================== -->
+  <aside id="atlas-sidebar" class="atlas-sidebar" aria-label="Навигация">
+    <button type="button" class="as-brand" onclick="navigateTo('home')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M10.5 4.5a7.5 7.5 0 1 0 9 9 6 6 0 1 1-9-9Z" stroke="#D9AE5F" stroke-width="1.2" stroke-linejoin="round" fill="rgba(217,174,95,.1)"/>
+        <path d="M17 4.5l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6z" fill="#F0DDB0"/>
+      </svg>
+      <span>NEOTARO</span>
+    </button>
+
+    <div class="as-group">Пространство</div>
+    <button type="button" class="as-link nav-btn" data-tab="home" onclick="navigateTo('home')"><i class="ph-fill ph-house" aria-hidden="true"></i><span>Главная</span></button>
+    <button type="button" class="as-link nav-btn" data-tab="spreads" onclick="navigateTo('spreads')"><i class="ph-fill ph-cards" aria-hidden="true"></i><span>Расклады</span></button>
+    <button type="button" class="as-link nav-btn" data-tab="chats" onclick="navigateTo('chats')"><i class="ph-fill ph-chat-circle" aria-hidden="true"></i><span>Оракул</span></button>
+    <button type="button" class="as-link nav-btn" data-tab="shop" onclick="navigateTo('shop')"><i class="ph-fill ph-storefront" aria-hidden="true"></i><span>Магазин</span></button>
+    <button type="button" class="as-link nav-btn" data-tab="profile" onclick="navigateTo('profile')"><i class="ph-fill ph-user" aria-hidden="true"></i><span>Профиль</span></button>
+
+    <div class="as-group">Практики</div>
+    <button type="button" class="as-link" onclick="openMatrix()"><i class="ph-fill ph-flower-lotus" aria-hidden="true"></i><span>Матрица судьбы</span></button>
+    <button type="button" class="as-link" onclick="openAstro()"><i class="ph-fill ph-planet" aria-hidden="true"></i><span>Натальная карта</span></button>
+    <button type="button" class="as-link" onclick="openSynastryModal()"><i class="ph-fill ph-intersect" aria-hidden="true"></i><span>Совместимость</span></button>
+    <button type="button" class="as-link nav-btn" data-tab="dream" onclick="navigateTo('dream')"><i class="ph-fill ph-moon-stars" aria-hidden="true"></i><span>Сонник</span></button>
+    <button type="button" class="as-link nav-btn" data-tab="calendar" onclick="navigateTo('calendar')"><i class="ph-fill ph-calendar-heart" aria-hidden="true"></i><span>Лунный календарь</span></button>
+
+    <div class="as-group">Библиотека</div>
+    <button type="button" class="as-link as-soon" onclick="showToast('Энциклопедия 78 карт скоро откроется', 'ph-hourglass')"><i class="ph-fill ph-book-open-text" aria-hidden="true"></i><span>Энциклопедия карт</span><em>скоро</em></button>
+    <button type="button" class="as-link as-soon" onclick="showToast('Гримуар скоро откроется', 'ph-hourglass')"><i class="ph-fill ph-scroll" aria-hidden="true"></i><span>Гримуар</span><em>скоро</em></button>
+    <button type="button" class="as-link as-soon" onclick="showToast('Гороскопы скоро откроются', 'ph-hourglass')"><i class="ph-fill ph-star" aria-hidden="true"></i><span>Гороскопы</span><em>скоро</em></button>
+
+    <div class="as-balance">
+      <i class="ph-fill ph-star" aria-hidden="true"></i>
+      <span id="sidebar-balance">—</span>
+      <span class="as-balance-label">энергия</span>
+    </div>
+  </aside>
+
   <div id="app" class="relative max-w-md mx-auto min-h-screen bg-space-900 border-x border-neon-purple/20 shadow-[0_0_50px_rgba(168,85,247,0.15)] overflow-hidden flex flex-col">
     
     <!-- ==================== 1. ГЛАВНЫЙ ЭКРАН ==================== -->
@@ -7138,5 +7653,47 @@
           if (e.target.closest('.bottom-sheet')) return;
         }, { passive: true });
     </script>
+  <!-- ==================== 🌌 NIGHT ATLAS: СЛУЖЕБНЫЙ СКРИПТ ОБОЛОЧКИ ==================== -->
+  <script>
+    (function () {
+      // Синхронизация баланса энергии в боковой панели
+      function syncSidebarBalance() {
+        var src = document.getElementById('star-balance');
+        var dst = document.getElementById('sidebar-balance');
+        if (src && dst && dst.textContent !== src.textContent) {
+          dst.textContent = src.textContent;
+        }
+      }
+      function initShell() {
+        syncSidebarBalance();
+        var src = document.getElementById('star-balance');
+        if (src && window.MutationObserver) {
+          new MutationObserver(syncSidebarBalance).observe(src, { childList: true, characterData: true, subtree: true });
+        }
+        setInterval(syncSidebarBalance, 3000);
+
+        // Плавный скролл по якорям внутри лендинга
+        var lp = document.getElementById('web-login-screen');
+        if (lp) {
+          lp.addEventListener('click', function (e) {
+            var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+            if (!a) return;
+            var id = a.getAttribute('href').slice(1);
+            var el = id ? document.getElementById(id) : null;
+            if (el) {
+              e.preventDefault();
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        }
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initShell);
+      } else {
+        initShell();
+      }
+    })();
+  </script>
+
 </body>
 </html>
