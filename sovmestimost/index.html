@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Совместимость знаков зодиака — все 78 пар | NeoTaro</title>
+<meta name="description" content="Интерактивная таблица совместимости всех знаков зодиака. Любовь, секс, брак, дружба и работа — узнайте процент совместимости с любым партнёром прямо сейчас.">
+<link rel="canonical" href="https://neotaro.ru/sovmestimost/">
+<meta property="og:title" content="Совместимость знаков зодиака | NeoTaro">
+<meta property="og:description" content="78 пар, 5 сфер жизни. Найдите свою совместимость.">
+<meta property="og:url" content="https://neotaro.ru/sovmestimost/">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Совместимость знаков зодиака",
+  "url": "https://neotaro.ru/sovmestimost/",
+  "description": "Полная таблица совместимости всех 12 знаков зодиака по 5 сферам жизни",
+  "publisher": { "@type": "Organization", "name": "NeoTaro", "url": "https://neotaro.ru" }
+}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#03030b;
+  --surface:#080813;
+  --surface2:#0d0d20;
+  --border:rgba(255,255,255,.07);
+  --indigo:#6366f1;
+  --indigo-dim:#4f52c7;
+  --fuchsia:#e879f9;
+  --amber:#fbbf24;
+  --text:#e8e9f1;
+  --text-dim:rgba(232,233,241,.55);
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',system-ui,sans-serif;
+  line-height:1.6;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+
+/* ── NOISE OVERLAY ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+
+/* ── AURORA ── */
+.aurora{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.aurora span{
+  position:absolute;border-radius:50%;filter:blur(120px);opacity:.18;
+  animation:drift 20s ease-in-out infinite alternate;
+}
+.aurora span:nth-child(1){width:600px;height:600px;background:var(--indigo);top:-200px;left:-100px;animation-delay:0s}
+.aurora span:nth-child(2){width:500px;height:500px;background:var(--fuchsia);bottom:-150px;right:-100px;animation-delay:-7s}
+.aurora span:nth-child(3){width:400px;height:400px;background:#06b6d4;top:40%;left:60%;animation-delay:-14s;opacity:.1}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(40px,30px) scale(1.1)}}
+
+/* ── HEADER ── */
+header{
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  background:rgba(3,3,11,.8);
+}
+header .wrap{
+  display:flex;justify-content:space-between;align-items:center;
+  height:60px;padding:0 24px;max-width:1200px;margin:0 auto;
+}
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:700;font-size:22px;
+}
+.logo em{color:var(--fuchsia);font-style:normal}
+nav a{
+  font-size:14px;color:var(--text-dim);
+  margin-left:24px;transition:color .2s;
+}
+nav a:hover{color:var(--text)}
+
+/* ── HERO ── */
+.hero{
+  position:relative;z-index:1;
+  text-align:center;
+  padding:100px 24px 60px;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(99,102,241,.3);
+  background:rgba(99,102,241,.08);
+  border-radius:100px;padding:6px 16px;
+  font-size:13px;color:var(--indigo);
+  margin-bottom:28px;
+  animation:fadeup .6s ease both;
+}
+.hero-badge::before{content:'✦';color:var(--fuchsia)}
+.hero h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(40px,8vw,84px);
+  font-weight:700;line-height:1.08;
+  letter-spacing:-.02em;
+  animation:fadeup .6s .1s ease both;
+}
+.hero h1 .grad{
+  background:linear-gradient(135deg,var(--indigo),var(--fuchsia));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero p{
+  margin:20px auto 0;
+  max-width:520px;
+  font-size:18px;
+  color:var(--text-dim);
+  animation:fadeup .6s .2s ease both;
+}
+.hero-stats{
+  display:flex;justify-content:center;gap:40px;
+  margin:48px auto 0;
+  animation:fadeup .6s .3s ease both;
+}
+.stat{
+  text-align:center;
+}
+.stat-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:42px;font-weight:700;
+  background:linear-gradient(135deg,var(--amber),var(--fuchsia));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  line-height:1;
+}
+.stat-label{font-size:13px;color:var(--text-dim);margin-top:4px}
+@keyframes fadeup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ── SCROLL HINT ── */
+.scroll-hint{
+  margin-top:56px;
+  animation:fadeup .6s .4s ease both;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--text-dim);font-size:13px;
+}
+.scroll-hint span{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom,var(--indigo),transparent);
+  animation:scrollpulse 2s ease-in-out infinite;
+}
+@keyframes scrollpulse{0%,100%{opacity:.4;transform:scaleY(.8)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ── SECTION WRAPPER ── */
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.section{position:relative;z-index:1;padding:80px 0}
+.section-label{
+  font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--fuchsia);margin-bottom:12px;
+}
+.section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,4vw,44px);font-weight:700;
+  line-height:1.15;margin-bottom:10px;
+}
+.section-sub{color:var(--text-dim);font-size:16px;max-width:500px}
+
+/* ── SIGN PICKER ── */
+.picker-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-top:40px;
+}
+@media(max-width:700px){.picker-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:400px){.picker-grid{grid-template-columns:repeat(3,1fr)}}
+.sign-btn{
+  position:relative;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px 12px 16px;
+  cursor:pointer;
+  text-align:center;
+  transition:border-color .25s,transform .2s,background .25s;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  user-select:none;
+}
+.sign-btn:hover{
+  border-color:rgba(99,102,241,.4);
+  background:rgba(99,102,241,.06);
+  transform:translateY(-3px);
+}
+.sign-btn.active{
+  border-color:var(--indigo);
+  background:rgba(99,102,241,.12);
+  transform:translateY(-3px);
+}
+.sign-btn.active::after{
+  content:'';
+  position:absolute;inset:-1px;
+  border-radius:14px;
+  box-shadow:0 0 20px rgba(99,102,241,.3);
+  pointer-events:none;
+}
+.sign-glyph{font-size:32px;line-height:1}
+.sign-name{font-size:13px;font-weight:600}
+.sign-dates{font-size:11px;color:var(--text-dim)}
+
+/* ── RESULT PANEL ── */
+.result-panel{
+  margin-top:32px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  transition:opacity .3s;
+  display:none;
+}
+.result-panel.visible{display:block}
+.result-header{
+  padding:32px;
+  background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(232,121,249,.08));
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:24px;
+  flex-wrap:wrap;
+}
+.result-glyphs{
+  font-size:52px;line-height:1;
+  filter:drop-shadow(0 0 16px rgba(99,102,241,.5));
+}
+.result-glyphs span{display:inline-block}
+.result-vs{font-size:20px;color:var(--text-dim);margin:0 4px}
+.result-info h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;font-weight:700;
+}
+.result-info p{font-size:14px;color:var(--text-dim);margin-top:4px}
+.result-score-big{
+  margin-left:auto;
+  text-align:center;
+}
+.rscore-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:64px;font-weight:700;line-height:1;
+  background:linear-gradient(135deg,var(--indigo),var(--fuchsia));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.rscore-label{font-size:13px;color:var(--text-dim)}
+.result-bars{padding:28px 32px;display:grid;grid-template-columns:1fr 1fr;gap:16px 40px}
+@media(max-width:640px){.result-bars{grid-template-columns:1fr}}
+.bar-row{}
+.bar-label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+.bar-label span:last-child{font-weight:600}
+.bar-track{
+  height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;
+}
+.bar-fill{
+  height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--indigo),var(--fuchsia));
+  transition:width .8s cubic-bezier(.4,0,.2,1);
+  width:0;
+}
+.result-cta{
+  padding:20px 32px 28px;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+}
+.result-cta p{font-size:14px;color:var(--text-dim)}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--indigo),var(--indigo-dim));
+  color:#fff;
+  border:none;border-radius:10px;
+  padding:11px 22px;
+  font-size:14px;font-weight:600;
+  cursor:pointer;
+  transition:opacity .2s,transform .2s;
+  text-decoration:none;
+}
+.btn:hover{opacity:.88;transform:translateY(-1px)}
+.btn-outline{
+  background:transparent;
+  border:1px solid rgba(99,102,241,.4);
+  color:var(--indigo);
+}
+.btn-outline:hover{background:rgba(99,102,241,.08)}
+
+/* ── MATRIX ── */
+.matrix-wrap{
+  overflow-x:auto;
+  margin-top:40px;
+  border-radius:16px;
+  border:1px solid var(--border);
+}
+.matrix-table{
+  border-collapse:collapse;
+  width:100%;
+  min-width:640px;
+}
+.matrix-table th,
+.matrix-table td{
+  width:52px;height:52px;
+  text-align:center;
+  font-size:13px;
+  border:1px solid rgba(255,255,255,.04);
+}
+.matrix-table th{
+  background:var(--surface2);
+  font-weight:600;
+  font-size:18px;
+  position:sticky;
+  z-index:2;
+}
+.matrix-table th:first-child{
+  left:0;
+  min-width:52px;
+  z-index:3;
+}
+.corner{background:var(--surface) !important}
+.cell{
+  cursor:pointer;
+  position:relative;
+  transition:transform .15s;
+  font-size:12px;
+  font-weight:600;
+}
+.cell:hover{transform:scale(1.15);z-index:10;border-radius:4px}
+.cell a{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;height:100%;
+  color:inherit;
+}
+.cell-diag{
+  background:rgba(99,102,241,.08);
+}
+/* color by score */
+.score-hi{background:rgba(34,197,94,.12);color:#4ade80}
+.score-mid{background:rgba(251,191,36,.08);color:#fbbf24}
+.score-lo{background:rgba(239,68,68,.08);color:#f87171}
+.score-hi:hover{background:rgba(34,197,94,.22)}
+.score-mid:hover{background:rgba(251,191,36,.16)}
+.score-lo:hover{background:rgba(239,68,68,.16)}
+
+/* ── TOP PAIRS ── */
+.pairs-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:16px;
+  margin-top:40px;
+}
+.pair-card{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  display:flex;flex-direction:column;gap:12px;
+  transition:border-color .25s,transform .2s;
+}
+.pair-card:hover{
+  border-color:rgba(99,102,241,.35);
+  transform:translateY(-4px);
+}
+.pair-card-top{display:flex;align-items:center;gap:12px}
+.pair-glyphs{font-size:28px;line-height:1}
+.pair-name{font-weight:600;font-size:15px}
+.pair-name span{color:var(--text-dim);font-weight:400}
+.pair-score{
+  margin-left:auto;
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;font-weight:700;
+  background:linear-gradient(135deg,var(--indigo),var(--fuchsia));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  line-height:1;
+}
+.pair-mini-bars{display:flex;flex-direction:column;gap:6px}
+.pmb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-dim)}
+.pmb-label{width:60px;flex-shrink:0}
+.pmb-track{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.pmb-fill{height:100%;background:linear-gradient(90deg,var(--indigo),var(--fuchsia));border-radius:2px}
+.pair-link{font-size:13px;color:var(--indigo);display:flex;align-items:center;gap:4px;margin-top:auto}
+.pair-link::after{content:'→';transition:transform .2s}
+.pair-card:hover .pair-link::after{transform:translateX(4px)}
+
+/* ── ZODIAC SIGNS HUB ── */
+.hubs-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:14px;
+  margin-top:40px;
+}
+.hub-card{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:24px 20px;
+  display:block;
+  transition:border-color .25s,transform .2s;
+  position:relative;overflow:hidden;
+}
+.hub-card::before{
+  content:attr(data-glyph);
+  position:absolute;right:-10px;bottom:-16px;
+  font-size:72px;opacity:.06;
+  pointer-events:none;
+  line-height:1;
+}
+.hub-card:hover{
+  border-color:rgba(99,102,241,.4);
+  transform:translateY(-4px);
+}
+.hub-glyph{font-size:36px;margin-bottom:8px;display:block}
+.hub-name{font-size:16px;font-weight:600}
+.hub-dates{font-size:12px;color:var(--text-dim);margin-top:3px}
+.hub-elem{
+  display:inline-block;
+  margin-top:10px;
+  padding:2px 10px;
+  border-radius:100px;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.elem-fire{background:rgba(251,146,60,.12);color:#fb923c}
+.elem-earth{background:rgba(74,222,128,.1);color:#4ade80}
+.elem-air{background:rgba(99,102,241,.12);color:#818cf8}
+.elem-water{background:rgba(6,182,212,.1);color:#22d3ee}
+
+/* ── FAQ ── */
+.faqs{margin-top:40px;display:flex;flex-direction:column;gap:2px}
+.faq-item{
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  margin-bottom:8px;
+}
+.faq-q{
+  padding:18px 22px;
+  cursor:pointer;
+  font-weight:600;font-size:15px;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:16px;
+  background:var(--surface2);
+  transition:background .2s;
+  list-style:none;
+}
+.faq-q:hover{background:rgba(99,102,241,.06)}
+.faq-q::after{content:'+';font-size:22px;color:var(--indigo);flex-shrink:0;transition:transform .3s}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{
+  max-height:0;overflow:hidden;
+  transition:max-height .35s ease;
+  background:var(--surface);
+}
+.faq-a p{padding:18px 22px;color:var(--text-dim);font-size:14px;line-height:1.7}
+.faq-item.open .faq-a{max-height:400px}
+
+/* ── CTA BANNER ── */
+.cta-banner{
+  position:relative;z-index:1;
+  margin:0 24px 80px;
+  border-radius:24px;
+  overflow:hidden;
+  background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(232,121,249,.1));
+  border:1px solid rgba(99,102,241,.2);
+  padding:60px 48px;
+  text-align:center;
+}
+.cta-banner::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(99,102,241,.15),transparent 70%);
+  pointer-events:none;
+}
+.cta-banner h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,4vw,46px);font-weight:700;
+  margin-bottom:14px;
+}
+.cta-banner p{color:var(--text-dim);font-size:16px;max-width:440px;margin:0 auto 28px}
+.cta-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+
+/* ── FOOTER ── */
+footer{
+  position:relative;z-index:1;
+  border-top:1px solid var(--border);
+  padding:32px 0 48px;
+}
+.footer-inner{
+  max-width:1200px;margin:0 auto;padding:0 24px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700}
+.footer-logo em{color:var(--fuchsia);font-style:normal}
+.footer-links a{font-size:13px;color:var(--text-dim);margin-left:20px;transition:color .2s}
+.footer-links a:hover{color:var(--text)}
+.footer-copy{width:100%;text-align:center;font-size:12px;color:rgba(232,233,241,.3);margin-top:16px}
+
+/* ── UTILS ── */
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(99,102,241,.2),rgba(232,121,249,.2),transparent);
+  margin:0 0;
+}
+</style>
+</head>
+<body>
+<div class="aurora"><span></span><span></span><span></span></div>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="https://neotaro.ru/">Neo<em>Taro</em></a>
+    <nav>
+      <a href="https://neotaro.ru/">Главная</a>
+      <a href="https://neotaro.ru/sovmestimost/" style="color:var(--indigo)">Совместимость</a>
+      <a href="https://neotaro.ru/">Таро</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Астрология нового поколения</div>
+  <h1>Совместимость<br><span class="grad">знаков зодиака</span></h1>
+  <p>78 пар · 5 сфер жизни · точные проценты.<br>Узнайте, что звёзды говорят о вашем союзе.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">78</div><div class="stat-label">уникальных пар</div></div>
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label">сфер жизни</div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">знаков зодиака</div></div>
+  </div>
+  <div class="scroll-hint">выберите свой знак<span></span></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PICKER -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-label">Интерактивный расчёт</div>
+    <div class="section-title">Выберите два знака</div>
+    <p class="section-sub">Нажмите на свой знак, затем на знак партнёра — и моментально увидите совместимость</p>
+
+    <div class="picker-grid" id="picker">
+      <button class="sign-btn" data-sign="oven" data-glyph="♈" data-name="Овен" data-dates="21.03–19.04" data-scores="78,77,88,77,83,71" onclick="pick(this)">
+        <span class="sign-glyph">♈</span>
+        <span class="sign-name">Овен</span>
+        <span class="sign-dates">21.03–19.04</span>
+      </button>
+      <button class="sign-btn" data-sign="telec" data-glyph="♉" data-name="Телец" data-dates="20.04–20.05" onclick="pick(this)">
+        <span class="sign-glyph">♉</span>
+        <span class="sign-name">Телец</span>
+        <span class="sign-dates">20.04–20.05</span>
+      </button>
+      <button class="sign-btn" data-sign="bliznecy" data-glyph="♊" data-name="Близнецы" data-dates="21.05–20.06" onclick="pick(this)">
+        <span class="sign-glyph">♊</span>
+        <span class="sign-name">Близнецы</span>
+        <span class="sign-dates">21.05–20.06</span>
+      </button>
+      <button class="sign-btn" data-sign="rak" data-glyph="♋" data-name="Рак" data-dates="21.06–22.07" onclick="pick(this)">
+        <span class="sign-glyph">♋</span>
+        <span class="sign-name">Рак</span>
+        <span class="sign-dates">21.06–22.07</span>
+      </button>
+      <button class="sign-btn" data-sign="lev" data-glyph="♌" data-name="Лев" data-dates="23.07–22.08" onclick="pick(this)">
+        <span class="sign-glyph">♌</span>
+        <span class="sign-name">Лев</span>
+        <span class="sign-dates">23.07–22.08</span>
+      </button>
+      <button class="sign-btn" data-sign="deva" data-glyph="♍" data-name="Дева" data-dates="23.08–22.09" onclick="pick(this)">
+        <span class="sign-glyph">♍</span>
+        <span class="sign-name">Дева</span>
+        <span class="sign-dates">23.08–22.09</span>
+      </button>
+      <button class="sign-btn" data-sign="vesy" data-glyph="♎" data-name="Весы" data-dates="23.09–22.10" onclick="pick(this)">
+        <span class="sign-glyph">♎</span>
+        <span class="sign-name">Весы</span>
+        <span class="sign-dates">23.09–22.10</span>
+      </button>
+      <button class="sign-btn" data-sign="skorpion" data-glyph="♏" data-name="Скорпион" data-dates="23.10–21.11" onclick="pick(this)">
+        <span class="sign-glyph">♏</span>
+        <span class="sign-name">Скорпион</span>
+        <span class="sign-dates">23.10–21.11</span>
+      </button>
+      <button class="sign-btn" data-sign="strelec" data-glyph="♐" data-name="Стрелец" data-dates="22.11–21.12" onclick="pick(this)">
+        <span class="sign-glyph">♐</span>
+        <span class="sign-name">Стрелец</span>
+        <span class="sign-dates">22.11–21.12</span>
+      </button>
+      <button class="sign-btn" data-sign="kozerog" data-glyph="♑" data-name="Козерог" data-dates="22.12–19.01" onclick="pick(this)">
+        <span class="sign-glyph">♑</span>
+        <span class="sign-name">Козерог</span>
+        <span class="sign-dates">22.12–19.01</span>
+      </button>
+      <button class="sign-btn" data-sign="vodoley" data-glyph="♒" data-name="Водолей" data-dates="20.01–18.02" onclick="pick(this)">
+        <span class="sign-glyph">♒</span>
+        <span class="sign-name">Водолей</span>
+        <span class="sign-dates">20.01–18.02</span>
+      </button>
+      <button class="sign-btn" data-sign="ryby" data-glyph="♓" data-name="Рыбы" data-dates="19.02–20.03" onclick="pick(this)">
+        <span class="sign-glyph">♓</span>
+        <span class="sign-name">Рыбы</span>
+        <span class="sign-dates">19.02–20.03</span>
+      </button>
+    </div>
+
+    <div class="result-panel" id="result">
+      <div class="result-header">
+        <div class="result-glyphs">
+          <span id="r-glyph1"></span>
+          <span class="result-vs">×</span>
+          <span id="r-glyph2"></span>
+        </div>
+        <div class="result-info">
+          <h2 id="r-title"></h2>
+          <p id="r-sub"></p>
+        </div>
+        <div class="result-score-big">
+          <div class="rscore-num" id="r-score"></div>
+          <div class="rscore-label">общий %</div>
+        </div>
+      </div>
+      <div class="result-bars" id="r-bars"></div>
+      <div class="result-cta">
+        <p id="r-hint">Полный разбор — любовь, секс, брак, дружба, работа</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-outline" onclick="resetPick()">← Выбрать другую пару</button>
+          <a class="btn" id="r-link" href="#">Читать полный разбор →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MATRIX -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-label">Все 78 пар</div>
+    <div class="section-title">Таблица совместимости</div>
+    <p class="section-sub">Наведите на ячейку — увидите процент. Нажмите — перейдёте к подробному разбору</p>
+    <div class="matrix-wrap">
+      <table class="matrix-table" id="matrix"></table>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOP PAIRS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-label">Рейтинг союзов</div>
+    <div class="section-title">Лучшие пары зодиака</div>
+    <p class="section-sub">Союзы с наивысшим общим процентом совместимости</p>
+    <div class="pairs-grid" id="top-pairs"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HUB CARDS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-label">Все знаки</div>
+    <div class="section-title">Совместимость по знаку</div>
+    <p class="section-sub">Выберите знак — увидите его совместимость с каждым из 12 знаков</p>
+    <div class="hubs-grid">
+      <a class="hub-card" href="/sovmestimost/oven/" data-glyph="♈">
+        <span class="hub-glyph">♈</span>
+        <div class="hub-name">Овен</div>
+        <div class="hub-dates">21 марта — 19 апреля</div>
+        <span class="hub-elem elem-fire">Огонь</span>
+      </a>
+      <a class="hub-card" href="/sovmestimost/telec/" data-glyph="♉">
+        <span class="hub-glyph">♉</span>
+        <div class="hub-name">Телец</div>
+        <div class="hub-dates">20 апреля — 20 мая</div>
+        <span class="hub-elem elem-earth">Земля</span>
+      </a>
+      <a class="hub-card" href="/sovmestimost/bliznecy/" data-glyph="♊">
+        <span class="hub-glyph">♊</span>
+        <div class="hub-name">Близнецы</div>
+        <div class="hub-dates">21 мая — 20 июня</div>
+        <span class="hub-elem elem-air">Воздух</span>
+      </a>
+      <a class="hub-card" href="/sovmestimost/rak/" data-glyph="♋">
+        <span class="hub-glyph">♋</span>
+        <div class="hub-name">Рак</div>
+        <div class="hub-dates">21 июня — 22 июля</div>
+        <span class="hub-elem elem-water">Вода</span>
+      </a>
+      <a class="hub-card" href="/sovmestimost/lev/" data-glyph="♌">
+        <span class="hub-glyph">♌</span>
+        <div class="hub-name">Лев</div>
+        <div class="hub-dates">23 июля — 22 августа</div>
+        <span class="hub-elem elem-fire">Огонь</span>
+      </a>
+      <a class="hub-card" href="/sovmestimost/deva/" data-glyph="♍">
+        <span class="hub-glyph">♍</span>
+        <div class="hub-name">Дева</div>
+        <div class="hub-dates">23 августа — 22 сентября</div>
+        <span class="hub-elem elem-earth">Земля</span>
+      </a>
+      <a class="hub-card" href="/sovmestimost/vesy/" data-glyph="♎">
+        <span class="hub-glyph">♎</span>
+        <div class="hub-name">Весы</div>
+        <div class="hub-dates">23 сентября — 22 октября</div>
+        <span class="hub-elem elem-air">Воздух</span>
+      </a>
+      <a class="hub-card" href="/sovmestimost/skorpion/" data-glyph="♏">
+        <span class="hub-glyph">♏</span>
+        <div class="hub-name">Скорпион</div>
+        <div class="hub-dates">23 октября — 21 ноября</div>
+        <span class="hub-elem elem-water">Вода</span>
+      </a>
+      <a class="hub-card" href="/sovmestimost/strelec/" data-glyph="♐">
+        <span class="hub-glyph">♐</span>
+        <div class="hub-name">Стрелец</div>
+        <div class="hub-dates">22 ноября — 21 декабря</div>
+        <span class="hub-elem elem-fire">Огонь</span>
+      </a>
+      <a class="hub-card" href="/sovmestimost/kozerog/" data-glyph="♑">
+        <span class="hub-glyph">♑</span>
+        <div class="hub-name">Козерог</div>
+        <div class="hub-dates">22 декабря — 19 января</div>
+        <span class="hub-elem elem-earth">Земля</span>
+      </a>
+      <a class="hub-card" href="/sovmestimost/vodoley/" data-glyph="♒">
+        <span class="hub-glyph">♒</span>
+        <div class="hub-name">Водолей</div>
+        <div class="hub-dates">20 января — 18 февраля</div>
+        <span class="hub-elem elem-air">Воздух</span>
+      </a>
+      <a class="hub-card" href="/sovmestimost/ryby/" data-glyph="♓">
+        <span class="hub-glyph">♓</span>
+        <div class="hub-name">Рыбы</div>
+        <div class="hub-dates">19 февраля — 20 марта</div>
+        <span class="hub-elem elem-water">Вода</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-label">Частые вопросы</div>
+    <div class="section-title">Как работает совместимость</div>
+    <div class="faqs" id="faqs">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Как считается процент совместимости?</div>
+        <div class="faq-a"><p>Процент совместимости рассчитывается по нескольким астрологическим параметрам: стихия знака (огонь, земля, воздух, вода), модальность (кардинал, фикс, мутабельный), аспект между знаками (трин, секстиль, квадрат, оппозиция, соединение), а также классические нодальные взаимодействия. Для каждой из 5 сфер жизни — любовь, секс, брак, дружба, работа — веса факторов разные. Итоговый % — взвешенное среднее.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Можно ли доверять астрологической совместимости?</div>
+        <div class="faq-a"><p>Знак зодиака — только один из факторов личности. Полный астрологический прогноз учитывает восходящий знак, позицию Луны, Венеры и Марса в натальной карте. Наши проценты — ориентир, а не приговор: пара с 50% вполне может быть счастливее пары с 96%, если оба работают над отношениями. Используйте цифры как отправную точку для разговора, а не как окончательный вердикт.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Какие пары считаются идеальными в астрологии?</div>
+        <div class="faq-a"><p>Классически самые сильные союзы — знаки одной стихии (трины): Овен–Лев–Стрелец, Телец–Дева–Козерог, Близнецы–Весы–Водолей, Рак–Скорпион–Рыбы. Также хорошо работают секстили — знаки через одного: Овен–Близнецы, Телец–Рак и т.д. По нашим расчётам наивысший процент набирают Овен–Лев (96%), Телец–Козерог (96%), Дева–Козерог (96%), Близнецы–Весы (96%), Весы–Водолей (96%).</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Почему одна сфера высокая, а другая низкая?</div>
+        <div class="faq-a"><p>Это нормально. Например, Овен и Скорпион дают высокое сексуальное напряжение (62%), но в браке всего 44% из-за разных ценностей по безопасности и контролю. Или Лев и Скорпион: секс 77%, а брак 40% — жёсткая борьба за власть. Детальный разбор каждой сферы есть на странице каждой пары.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Что делать, если совместимость низкая?</div>
+        <div class="faq-a"><p>Низкий процент — не запрет, а предупреждение о зонах напряжения. В разборе каждой пары мы даём конкретные советы: как сгладить противоречия, какие роли лучше распределить, о чём договориться заранее. Квадраты (90°) в астрологии — одни из самых «горючих» пар именно потому, что они заставляют обоих расти.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <h2>Хотите глубже?</h2>
+  <p>Таро-расклад на отношения или ваша натальная карта покажут то, что проценты не расскажут</p>
+  <div class="cta-actions">
+    <a class="btn" href="https://neotaro.ru/">Расклад Таро на любовь</a>
+    <a class="btn" style="background:linear-gradient(135deg,#7c3aed,var(--fuchsia))" href="https://neotaro.ru/">Натальная карта</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Neo<em>Taro</em></div>
+    <div class="footer-links">
+      <a href="https://neotaro.ru/">Таро онлайн</a>
+      <a href="https://neotaro.ru/sovmestimost/">Совместимость</a>
+      <a href="https://neotaro.ru/">Астрология</a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2025 NeoTaro — астрология, таро и матрица судьбы онлайн. Носит исключительно развлекательный характер.</div>
+</footer>
+
+<script>
+const SIGNS = [
+  {s:'oven',g:'♈',n:'Овен',d:'21.03–19.04'},
+  {s:'telec',g:'♉',n:'Телец',d:'20.04–20.05'},
+  {s:'bliznecy',g:'♊',n:'Близнецы',d:'21.05–20.06'},
+  {s:'rak',g:'♋',n:'Рак',d:'21.06–22.07'},
+  {s:'lev',g:'♌',n:'Лев',d:'23.07–22.08'},
+  {s:'deva',g:'♍',n:'Дева',d:'23.08–22.09'},
+  {s:'vesy',g:'♎',n:'Весы',d:'23.09–22.10'},
+  {s:'skorpion',g:'♏',n:'Скорпион',d:'23.10–21.11'},
+  {s:'strelec',g:'♐',n:'Стрелец',d:'22.11–21.12'},
+  {s:'kozerog',g:'♑',n:'Козерог',d:'22.12–19.01'},
+  {s:'vodoley',g:'♒',n:'Водолей',d:'20.01–18.02'},
+  {s:'ryby',g:'♓',n:'Рыбы',d:'19.02–20.03'}
+];
+
+// total, love, sex, marriage, friendship, work
+const SCORES = {
+  'oven-oven':[78,77,88,77,83,71],'oven-telec':[58,54,61,57,58,60],
+  'oven-bliznecy':[89,86,86,87,95,91],'oven-rak':[51,53,74,43,45,44],
+  'oven-lev':[96,97,97,94,97,97],'oven-deva':[52,51,52,49,47,59],
+  'oven-vesy':[76,80,91,69,80,67],'oven-skorpion':[48,45,62,44,49,47],
+  'oven-strelec':[95,93,97,93,97,95],'oven-kozerog':[54,55,68,52,46,49],
+  'oven-vodoley':[87,85,85,84,93,89],'oven-ryby':[53,48,64,55,51,50],
+  'telec-telec':[83,81,86,84,85,81],'telec-bliznecy':[56,49,57,56,58,62],
+  'telec-rak':[88,85,83,89,89,96],'telec-lev':[52,54,69,47,47,48],
+  'telec-deva':[95,93,92,97,94,97],'telec-vesy':[53,51,50,52,55,58],
+  'telec-skorpion':[78,82,83,78,74,72],'telec-strelec':[52,50,51,54,47,56],
+  'telec-kozerog':[96,95,95,97,97,97],'telec-vodoley':[52,55,63,48,52,45],
+  'telec-ryby':[89,84,84,91,90,96],'bliznecy-bliznecy':[82,81,83,81,89,79],
+  'bliznecy-rak':[55,56,53,53,56,57],'bliznecy-lev':[87,82,83,88,94,90],
+  'bliznecy-deva':[54,53,64,51,51,52],'bliznecy-vesy':[96,97,96,96,97,96],
+  'bliznecy-skorpion':[50,53,50,44,55,51],'bliznecy-strelec':[78,81,90,69,83,71],
+  'bliznecy-kozerog':[51,49,51,47,56,53],'bliznecy-vodoley':[95,93,93,97,97,97],
+  'bliznecy-ryby':[51,54,63,44,53,44],'rak-rak':[79,79,81,80,83,71],
+  'rak-lev':[54,50,65,53,55,51],'rak-deva':[88,83,79,94,89,95],
+  'rak-vesy':[50,54,65,44,48,41],'rak-skorpion':[94,93,94,96,93,95],
+  'rak-strelec':[49,47,59,47,48,48],'rak-kozerog':[79,83,86,76,76,77],
+  'rak-vodoley':[50,49,50,45,53,53],'rak-ryby':[94,95,93,94,97,93],
+  'lev-lev':[82,83,90,83,83,75],'lev-deva':[58,54,60,61,57,58],
+  'lev-vesy':[90,86,89,88,97,93],'lev-skorpion':[49,50,77,40,48,41],
+  'lev-strelec':[95,95,97,95,96,94],'lev-kozerog':[52,52,55,50,49,53],
+  'lev-vodoley':[77,82,90,71,79,67],'lev-ryby':[51,51,61,44,51,51],
+  'deva-deva':[84,79,86,86,88,85],'deva-vesy':[57,55,53,56,61,63],
+  'deva-skorpion':[88,84,80,89,92,94],'deva-strelec':[56,56,72,53,47,55],
+  'deva-kozerog':[96,97,97,97,95,97],'deva-vodoley':[51,48,48,53,53,52],
+  'deva-ryby':[79,77,88,77,75,78],'vesy-vesy':[80,81,85,77,87,71],
+  'vesy-skorpion':[54,52,56,52,59,52],'vesy-strelec':[87,82,89,84,96,91],
+  'vesy-kozerog':[52,57,67,46,48,45],'vesy-vodoley':[96,95,97,95,97,96],
+  'vesy-ryby':[51,49,51,49,57,50],'skorpion-skorpion':[81,78,87,83,86,72],
+  'skorpion-strelec':[54,52,63,53,50,56],'skorpion-kozerog':[89,86,79,91,92,97],
+  'skorpion-vodoley':[52,56,63,48,52,43],'skorpion-ryby':[94,93,93,97,93,95],
+  'strelec-strelec':[81,80,85,83,83,74],'strelec-kozerog':[57,53,59,62,53,58],
+  'strelec-vodoley':[87,83,87,83,94,93],'strelec-ryby':[49,53,71,40,44,43],
+  'kozerog-kozerog':[82,77,83,86,88,79],'kozerog-vodoley':[56,49,57,57,55,61],
+  'kozerog-ryby':[90,86,85,91,92,96],'vodoley-vodoley':[81,79,82,82,91,72],
+  'vodoley-ryby':[56,53,55,55,61,56],'ryby-ryby':[80,78,81,79,86,77]
+};
+
+const ORDER = ['oven','telec','bliznecy','rak','lev','deva','vesy','skorpion','strelec','kozerog','vodoley','ryby'];
+
+function getKey(a,b){
+  const ia=ORDER.indexOf(a), ib=ORDER.indexOf(b);
+  return ia<=ib ? a+'-'+b : b+'-'+a;
+}
+function getScores(a,b){ return SCORES[getKey(a,b)] || null; }
+
+function slugToName(s){ const r=SIGNS.find(x=>x.s===s); return r?r.n:s; }
+function slugToGlyph(s){ const r=SIGNS.find(x=>x.s===s); return r?r.g:''; }
+
+function pairUrl(a,b){
+  const ia=ORDER.indexOf(a), ib=ORDER.indexOf(b);
+  const [ca,cb]=ia<=ib?[a,b]:[b,a];
+  return '/sovmestimost/'+ca+'-i-'+cb+'/';
+}
+
+// ── PICKER ──
+let pick1=null, pick2=null;
+function pick(btn){
+  const sign=btn.dataset.sign;
+  if(!pick1){
+    pick1=sign; btn.classList.add('active');
+  } else if(pick1===sign){
+    pick1=null; btn.classList.remove('active');
+  } else if(!pick2){
+    pick2=sign; btn.classList.add('active');
+    showResult();
+  } else {
+    // replace second
+    document.querySelectorAll('#picker .sign-btn').forEach(b=>{
+      if(b.dataset.sign===pick2) b.classList.remove('active');
+    });
+    pick2=sign; btn.classList.add('active');
+    showResult();
+  }
+}
+function resetPick(){
+  pick1=null; pick2=null;
+  document.querySelectorAll('#picker .sign-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('result').classList.remove('visible');
+}
+function showResult(){
+  const sc=getScores(pick1,pick2);
+  if(!sc) return;
+  const [tot,love,sex,mar,fri,wrk]=sc;
+  const n1=slugToName(pick1),n2=slugToName(pick2);
+  const g1=slugToGlyph(pick1),g2=slugToGlyph(pick2);
+  document.getElementById('r-glyph1').textContent=g1;
+  document.getElementById('r-glyph2').textContent=g2;
+  document.getElementById('r-title').textContent=n1+' и '+n2;
+  document.getElementById('r-score').textContent=tot+'%';
+  const hint=tot>=80?'Отличная совместимость — звёзды за вас':tot>=65?'Хорошая база, есть нюансы':'Сложный союз — но рабочий';
+  document.getElementById('r-sub').textContent=hint;
+  const bars=[
+    ['❤️ Любовь',love],['🔥 Секс',sex],['💍 Брак',mar],['🤝 Дружба',fri],['💼 Работа',wrk]
+  ];
+  const barsEl=document.getElementById('r-bars');
+  barsEl.innerHTML=bars.map(([l,v])=>
+    `<div class="bar-row"><div class="bar-label"><span>${l}</span><span>${v}%</span></div><div class="bar-track"><div class="bar-fill" style="width:0" data-w="${v}"></div></div></div>`
+  ).join('');
+  document.getElementById('r-link').href=pairUrl(pick1,pick2);
+  const panel=document.getElementById('result');
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  setTimeout(()=>{
+    barsEl.querySelectorAll('.bar-fill').forEach(el=>{
+      el.style.width=el.dataset.w+'%';
+    });
+  },80);
+}
+
+// ── MATRIX ──
+(function buildMatrix(){
+  const tbl=document.getElementById('matrix');
+  // header row
+  let head='<tr><th class="corner"></th>';
+  SIGNS.forEach(s=>{ head+=`<th title="${s.n}">${s.g}</th>`; });
+  head+='</tr>';
+  let body='';
+  SIGNS.forEach(row=>{
+    body+=`<tr><th>${row.g}</th>`;
+    SIGNS.forEach(col=>{
+      const sc=getScores(row.s,col.s);
+      const v=sc?sc[0]:0;
+      const cls=v>=80?'score-hi':v>=60?'score-mid':'score-lo';
+      const diag=row.s===col.s?' cell-diag':'';
+      body+=`<td class="cell ${cls}${diag}" title="${row.n} × ${col.n}: ${v}%"><a href="${pairUrl(row.s,col.s)}">${v}</a></td>`;
+    });
+    body+='</tr>';
+  });
+  tbl.innerHTML=head+body;
+})();
+
+// ── TOP PAIRS ──
+(function buildTopPairs(){
+  const all=[];
+  for(let i=0;i<ORDER.length;i++){
+    for(let j=i;j<ORDER.length;j++){
+      const a=ORDER[i],b=ORDER[j];
+      const sc=getScores(a,b);
+      if(sc) all.push({a,b,sc});
+    }
+  }
+  all.sort((x,y)=>y.sc[0]-x.sc[0]);
+  const top=all.slice(0,9);
+  const el=document.getElementById('top-pairs');
+  const LABELS=['❤️ Любовь','🔥 Секс','💍 Брак','🤝 Дружба','💼 Работа'];
+  el.innerHTML=top.map(({a,b,sc})=>{
+    const [tot,...rest]=sc;
+    const bars=rest.map((v,i)=>
+      `<div class="pmb"><span class="pmb-label">${LABELS[i]}</span><div class="pmb-track"><div class="pmb-fill" style="width:${v}%"></div></div><span style="font-size:11px;min-width:28px;text-align:right">${v}%</span></div>`
+    ).join('');
+    return `<a class="pair-card" href="${pairUrl(a,b)}">
+      <div class="pair-card-top">
+        <span class="pair-glyphs">${slugToGlyph(a)} ${slugToGlyph(b)}</span>
+        <div>
+          <div class="pair-name">${slugToName(a)} <span>&</span> ${slugToName(b)}</div>
+        </div>
+        <div class="pair-score">${tot}%</div>
+      </div>
+      <div class="pair-mini-bars">${bars}</div>
+      <span class="pair-link">Подробный разбор</span>
+    </a>`;
+  }).join('');
+})();
+
+// ── FAQ ──
+function toggleFaq(el){
+  const item=el.closest('.faq-item');
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(x=>x.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+
+// ── INTERSECTION OBSERVER for bar animations ──
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.pmb-fill').forEach(el=>{
+        el.style.transition='width .8s cubic-bezier(.4,0,.2,1)';
+        const w=el.style.width;
+        el.style.width='0';
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{ el.style.width=w; }));
+      });
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.pair-card').forEach(c=>obs.observe(c));
+</script>
+</body>
+</html>
