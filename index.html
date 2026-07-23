@@ -1657,7 +1657,7 @@
                 <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-neon-indigo/20 rounded-full blur-3xl pointer-events-none"></div>
                 
                 <div class="flex items-center gap-4 mb-6 relative z-10">
-                    <div class="w-16 h-16 rounded-full p-0.5 bg-gradient-to-br from-neon-indigo to-neon-fuchsia shadow-[0_0_15px_rgba(232,121,249,0.3)]">
+                    <div id="profile-avatar-wrapper" class="w-16 h-16 rounded-full p-0.5 bg-gradient-to-br from-neon-indigo to-neon-fuchsia shadow-[0_0_15px_rgba(232,121,249,0.3)]">
                         <div id="profile-avatar-container" class="w-full h-full bg-space-900 rounded-full flex items-center justify-center font-mystic text-2xl text-white font-bold overflow-hidden">
                             <span id="profile-avatar-initial">И</span>
                         </div>
@@ -4718,17 +4718,26 @@
         }
 
         async function buyEnergyRub(itemId) {
+            // Мобильные браузеры блокируют window.open, если вызвать его только после await.
+            // Поэтому на сайте создаем вкладку сразу по клику, а URL подставляем после ответа API.
+            const paymentWindow = bridge.isWeb ? window.open('about:blank', '_blank') : null;
             showToast("Создаем счет...", "ph-spinner animate-spin");
             const data = await apiRequest("/shop/invoice-rub", "POST", { item_id: itemId });
             
             if (data.success && data.invoice_url) {
                 hideToast();
                 closeAllModals(); // <-- ЗАКРЫВАЕМ ОКНО МАГАЗИНА
-                tg.openLink(data.invoice_url);
+                if (bridge.isWeb && paymentWindow) {
+                    paymentWindow.opener = null;
+                    paymentWindow.location.replace(data.invoice_url);
+                } else {
+                    bridge.openLink(data.invoice_url);
+                }
                 
                 showToast("После оплаты энергия зачислится автоматически", "ph-info");
                 startPaymentPolling(false); // <-- РАДАР ДЛЯ МАГАЗИНА
             } else {
+                if (paymentWindow) paymentWindow.close();
                 // 🛡 НОВАЯ ОБРАБОТКА ОШИБОК
                 if (data.message === "offer_expired") {
                     showToast(t('toast_offer_expired'), "ph-timer text-neon-rose");
@@ -5297,7 +5306,14 @@
             const startParam = bridge.startParam;
             
             const avatarContainer = document.getElementById('profile-avatar-container');
+            const avatarWrapper = document.getElementById('profile-avatar-wrapper');
             const nameElement = document.getElementById('profile-name');
+
+            // На обычном сайте оставляем только имя и дату регистрации.
+            // В Telegram Mini App и VK аватар остается без изменений.
+            if (avatarWrapper) {
+                avatarWrapper.classList.toggle('hidden', bridge.isWeb);
+            }
         
             // Предзаполняем данные из Telegram/VK
             if (appUser && Object.keys(appUser).length > 0) {
@@ -6438,17 +6454,24 @@
         }
 
         async function payForSpreadRub() {
+            const paymentWindow = bridge.isWeb ? window.open('about:blank', '_blank') : null;
             showToast(t('toast_wait'), "ph-spinner animate-spin");
             const data = await apiRequest("/shop/invoice-direct-spread-rub", "POST", { spread_id: currentSpread.type });
             
             if (data.success && data.invoice_url) {
                 hideToast();
                 closeAllModals(); // <-- МГНОВЕННО ЗАКРЫВАЕМ ОКНО
-                tg.openLink(data.invoice_url); // Перебрасываем в браузер
+                if (bridge.isWeb && paymentWindow) {
+                    paymentWindow.opener = null;
+                    paymentWindow.location.replace(data.invoice_url);
+                } else {
+                    bridge.openLink(data.invoice_url);
+                }
                 
                 showToast("Ожидаем оплату...", "ph-spinner animate-spin");
                 startPaymentPolling(true); // <-- ВКЛЮЧАЕМ РАДАР
             } else {
+                if (paymentWindow) paymentWindow.close();
                 showToast(t('toast_error'), "ph-warning-circle");
             }
         }
@@ -7029,16 +7052,23 @@
         }
         
         async function mxPayRub() {
+            const paymentWindow = bridge.isWeb ? window.open('about:blank', '_blank') : null;
             showToast(t('toast_wait'), 'ph-spinner animate-spin');
             const data = await apiRequest('/matrix/invoice-rub', 'POST', { reading_id: mxReadingId() });
             if (data && data.success && data.invoice_url) {
                 hideToast();
                 closeAllModals();
                 const kind = mxBuyKind;
-                tg.openLink(data.invoice_url);
+                if (bridge.isWeb && paymentWindow) {
+                    paymentWindow.opener = null;
+                    paymentWindow.location.replace(data.invoice_url);
+                } else {
+                    bridge.openLink(data.invoice_url);
+                }
                 showToast(t('mx_generating'), 'ph-spinner animate-spin');
                 mxFetchReading(kind, 0); // радар: ждем вебхук ЮKassa + генерацию
             } else {
+                if (paymentWindow) paymentWindow.close();
                 showToast(t('mx_pay_error'), 'ph-warning-circle');
             }
         }
