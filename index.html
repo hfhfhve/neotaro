@@ -2053,58 +2053,6 @@
         </div>
     </div>
 
-    <div id="modal-share-card" class="bottom-sheet fixed bottom-0 w-full max-w-md z-[120]">
-        <div class="glass-strong rounded-t-[32px] pb-8 flex flex-col relative overflow-hidden">
-            <!-- Красивые блики на фоне -->
-            <div class="absolute -top-10 -right-10 w-40 h-40 bg-neon-indigo/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-neon-fuchsia/20 rounded-full blur-3xl pointer-events-none"></div>
-            
-            <div class="flex justify-center pt-4 pb-3">
-                <div class="w-12 h-1.5 bg-white/20 rounded-full"></div>
-            </div>
-            
-            <div class="p-6 relative z-10">
-                <h3 class="text-white font-mystic font-bold text-3xl mb-6 text-center" data-i18n="share_card">Поделиться</h3>
-                
-                <div class="space-y-3">
-                    <!-- Telegram Сторис -->
-                    <button onclick="executeShare('story')" class="w-full bg-gradient-to-r from-[#0088cc] to-[#00aaff] rounded-[20px] p-4 flex items-center gap-4 active:scale-95 transition-transform shadow-[0_5px_20px_rgba(0,136,204,0.3)]">
-                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white text-xl shrink-0 backdrop-blur-md">
-                            <i class="ph-fill ph-instagram-logo"></i> <!-- Похоже на сторис -->
-                        </div>
-                        <div class="text-left flex-1">
-                            <p class="text-white font-bold text-base tracking-wide" data-i18n="share_story">В Telegram Истории</p>
-                            <p class="text-white/70 text-[10px] uppercase tracking-wider font-semibold">Красивая интеграция</p>
-                        </div>
-                        <i class="ph-bold ph-caret-right text-white/50"></i>
-                    </button>
-
-                    <!-- Telegram Чат -->
-                    <button onclick="executeShare('chat')" class="w-full glass bg-space-800 border border-[#0088cc]/30 hover:border-[#0088cc]/60 rounded-[20px] p-4 flex items-center gap-4 active:scale-95 transition-transform">
-                        <div class="w-10 h-10 rounded-full bg-[#0088cc]/10 flex items-center justify-center text-[#00aaff] text-xl shrink-0 border border-[#0088cc]/20">
-                            <i class="ph-fill ph-telegram-logo"></i>
-                        </div>
-                        <div class="text-left flex-1">
-                            <p class="text-white font-bold text-sm tracking-wide" data-i18n="share_chat">Отправить в чат</p>
-                        </div>
-                        <i class="ph-bold ph-caret-right text-white/30"></i>
-                    </button>
-
-                    <!-- Другие приложения (Нативный шеринг телефона) -->
-                    <button onclick="executeShare('system')" class="w-full glass bg-space-800 border border-white/10 hover:border-white/30 rounded-[20px] p-4 flex items-center gap-4 active:scale-95 transition-transform">
-                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/70 text-xl shrink-0">
-                            <i class="ph-fill ph-export"></i>
-                        </div>
-                        <div class="text-left flex-1">
-                            <p class="text-white font-bold text-sm tracking-wide" data-i18n="share_other">Другие приложения</p>
-                        </div>
-                        <i class="ph-bold ph-caret-right text-white/30"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="modal-stat-info" class="bottom-sheet fixed bottom-0 w-full max-w-md z-[110]">
         <div class="glass-strong rounded-t-[32px] pb-6 flex flex-col relative overflow-hidden">
             <div id="stat-info-glow" class="absolute -top-10 -right-10 w-40 h-40 bg-white/20 rounded-full blur-3xl pointer-events-none transition-colors"></div>
@@ -2329,31 +2277,6 @@
             </div>
         </div>
     </div>
-
-    <div id="modal-edit-profile" class="bottom-sheet fixed bottom-0 w-full max-w-md z-[60]">
-        <div class="glass-strong rounded-t-[32px] pb-6 flex flex-col">
-            <div class="flex justify-center pt-4 pb-3">
-                <div class="w-12 h-1.5 bg-white/20 rounded-full"></div>
-            </div>
-            <div class="p-6">
-                <h3 class="text-white font-bold text-2xl mb-5 text-center" data-i18n="prof_settings">Твои данные</h3>
-                <div class="space-y-4">
-                    <div>
-                        <label class="text-xs font-bold text-white/40 ml-1 mb-1.5 block uppercase tracking-wider" data-i18n="prof_name">Имя в приложении</label>
-                        <input type="text" id="edit-name" maxlength="30" class="w-full bg-space-800 border border-white/10 rounded-2xl p-4 text-white outline-none focus:border-neon-indigo/50 transition-colors text-sm" data-i18n="ph_name" placeholder="Как к тебе обращаться?">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-white/40 ml-1 mb-1.5 block uppercase tracking-wider" data-i18n="prof_birth">Дата рождения</label>
-                        <input type="date" id="edit-birthdate" class="w-full bg-space-800 border border-white/10 rounded-2xl p-4 text-white outline-none focus:border-neon-indigo/50 transition-colors text-sm">
-                    </div>
-                    <button onclick="saveProfileData()" class="w-full bg-gradient-to-r from-neon-indigo to-neon-purple text-white font-bold py-4 rounded-2xl mt-4 shadow-[0_10px_20px_rgba(99,102,241,0.3)] active:scale-95 transition-transform text-sm tracking-wide" data-i18n="save">
-                        СОХРАНИТЬ
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- REFERRAL MODAL -->
     <div id="modal-referral" class="bottom-sheet fixed bottom-0 w-full max-w-md z-[60]">
         <div class="glass-strong rounded-t-[32px] pb-4 flex flex-col max-h-[85vh]">
@@ -3210,7 +3133,6 @@
         let userHasPurchased = false;
         let currentChat = 'oracle';
         let currentWandererIndex = Math.floor(Math.random() * 5);
-        let isCardFlipped = false;
         let activeLanguage = 'ru';
         let userBalance = { energy: 0, streak: 0 };
         let currentSpread = { type: null, requiredCards: 0, pickedCards: [], drawnVisualIndices: [] };
@@ -3649,11 +3571,6 @@
             return langData[key] || key;
         }
 
-        function stripHtmlTags(str) {
-            if (!str) return "";
-            return str.replace(/<br\s*\/?>/gi, ' ').replace(/<\/?[^>]+(>|$)/g, "").trim();
-        }
-
         // ВАЖНЫЙ ФИКС №1: Превращаем картинку в Base64, чтобы обойти блокировку CORS
         async function getBase64ImageFromUrl(imageUrl) {
             try {
@@ -4042,9 +3959,6 @@
         let isFetchingHistory = false;
         let hasMoreHistory = true;
         let initialChatLoaded = false;
-    
-        const ADMIN_IDS = [6546116205, 7672744848];
-
         async function apiRequest(endpoint, method = "POST", data = {}, silent = false) {
             let retries = 3; // Даем скрипту 3 скрытых попытки
             let delay = 1000; // Ждем 1 секунду между попытками
@@ -4846,109 +4760,6 @@
         }
 
         let currentAuthMode = 'login'; // 'login' или 'register'
-
-        function switchAuthTab(mode) {
-            if (currentAuthMode === mode) return;
-            currentAuthMode = mode;
-        
-            const slider = document.getElementById('tab-slider');
-            const tabLogin = document.getElementById('tab-login');
-            const tabRegister = document.getElementById('tab-register');
-            const title = document.getElementById('auth-title');
-            const btn = document.getElementById('auth-main-btn');
-            const forgotLink = document.getElementById('forgot-password-link');
-        
-            if (mode === 'login') {
-                // Дизайн переключателя
-                slider.style.transform = 'translateX(0)';
-                tabLogin.classList.replace('text-white/50', 'text-white');
-                tabRegister.classList.replace('text-white', 'text-white/50');
-                
-                // Тексты
-                title.textContent = 'С возвращением';
-                btn.textContent = 'ВОЙТИ В ПРОСТРАНСТВО';
-                
-                // Показываем "Забыли пароль?"
-                forgotLink.classList.remove('hidden');
-                forgotLink.classList.add('mb-5');
-            } else {
-                // Дизайн переключателя
-                slider.style.transform = 'translateX(100%)';
-                tabRegister.classList.replace('text-white/50', 'text-white');
-                tabLogin.classList.replace('text-white', 'text-white/50');
-                
-                // Тексты
-                title.textContent = 'Начать путь';
-                btn.textContent = 'СОЗДАТЬ АККАУНТ';
-                
-                // Прячем "Забыли пароль?", чтобы не мешался при регистрации
-                forgotLink.classList.add('hidden');
-                forgotLink.classList.remove('mb-5');
-            }
-        }
-        
-        // Заглушка отправки формы (пока нет бэкенда)
-        async function submitAuthForm() {
-            const email = document.getElementById('auth-email').value.trim();
-            const pass = document.getElementById('auth-password').value.trim();
-            const status = document.getElementById('web-login-status');
-            const btn = document.getElementById('auth-main-btn');
-            
-            // Базовая валидация
-            if (!email || !pass) {
-                status.classList.add('nl-active');
-                status.innerHTML = `<div class="nl-err">Пожалуйста, заполните все поля</div>`;
-                return;
-            }
-            if (pass.length < 6) {
-                status.classList.add('nl-active');
-                status.innerHTML = `<div class="nl-err">Пароль должен содержать минимум 6 символов</div>`;
-                return;
-            }
-        
-            // Блокируем кнопку от спама и показываем лоадер
-            btn.disabled = true;
-            status.classList.add('nl-active');
-            status.innerHTML = `<div class="text-neon-fuchsia text-xs mt-3 text-center animate-pulse">Связываемся со звездами...</div>`;
-        
-            // Выбираем, куда стучаться на бэкенде
-            const endpoint = currentAuthMode === 'login' ? '/auth/login' : '/auth/register';
-            
-            try {
-                const response = await fetch(`${API_URL}${endpoint}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email, password: pass })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success && data.token) {
-                    // УСПЕХ! Сохраняем токен и перезагружаем страницу
-                    localStorage.setItem('neotaro_token', data.token);
-                    localStorage.setItem('neotaro_user', JSON.stringify(data.user || {}));
-                    
-                    // Скрипт при загрузке сам найдет токен и откроет Onboarding
-                    location.reload(); 
-                } else {
-                    // ОБРАБОТКА ОШИБОК
-                    btn.disabled = false;
-                    let errorMsg = "Ошибка входа. Проверьте введенные данные.";
-                    
-                    if (data.message === "email_exists") {
-                        errorMsg = "Этот Email уже зарегистрирован! Переключитесь на «Вход».";
-                    } else if (data.message === "invalid_credentials") {
-                        errorMsg = "Неверный Email или пароль. Попробуйте еще раз.";
-                    }
-                    
-                    status.innerHTML = `<div class="nl-err">${errorMsg}</div>`;
-                }
-            } catch (e) {
-                btn.disabled = false;
-                status.innerHTML = `<div class="nl-err">Ошибка сети. Сервер временно недоступен.</div>`;
-            }
-        }
-    
         // ==================== LUNAR CALENDAR ====================
         async function loadLunarCalendar() {
             const data = await apiRequest("/calendar/today", "GET");
@@ -5185,88 +4996,12 @@
                 loader.classList.add('hidden');
             }, 500);
         }
-
-        function openShareModal() {
-            // Открываем модалку шеринга. Задаем z-index выше карты дня
-            const overlay = document.getElementById('overlay');
-            overlay.style.zIndex = "115";
-            overlay.classList.add('active');
-            
-            const modal = document.getElementById('modal-share-card');
-            modal.classList.add('active');
-        }
-
         // Вспомогательная функция для очистки текста от HTML тегов
         function stripHtmlTags(str) {
             if (!str) return "";
             return str.replace(/<br\s*\/?>/gi, '\n') // меняем <br> на нормальный перенос
                       .replace(/<\/?[^>]+(>|$)/g, "") // вырезаем <b>, <i> и т.д.
                       .trim();
-        }
-
-        // Генерация текста и ссылки
-        function getShareData() {
-            if (!dailyCardDataCache) return null;
-
-            // Чистим текст интерпретации от HTML-тегов, чтобы в чате он смотрелся опрятно
-            const cleanDesc = stripHtmlTags(dailyCardDataCache.interpretation);
-            
-            // Берем первые 100 символов, чтобы не спамить стену текста
-            const shortDesc = cleanDesc.length > 100 ? cleanDesc.substring(0, 100) + '...' : cleanDesc;
-            
-            const botUrl = "https://t.me/tarot_neurobot"; 
-            
-            // Подставляем переменные в шаблон перевода
-            let shareText = t('share_text') || '🌌 Моя Карта Дня: {card}\n\n✨ {desc}\n\n🔮 Узнай, что звезды приготовили для тебя сегодня:';
-            shareText = shareText.replace('{card}', dailyCardDataCache.name).replace('{desc}', shortDesc);
-
-            return {
-                imageUrl: dailyCardDataCache.image,
-                text: shareText,
-                url: botUrl,
-                cardName: dailyCardDataCache.name
-            };
-        }
-
-        function executeShare(type) {
-            const data = getShareData();
-            if (!data) return showToast(t('toast_error'), 'ph-warning-circle');
-
-            closeAllModals(); // Закрываем окно выбора шеринга
-
-            if (type === 'story') {
-                // Нативный метод Telegram: Открывает редактор сторис с вашей картинкой!
-                if (tg.shareToStory) {
-                    tg.shareToStory(data.imageUrl, {
-                        text: `${data.cardName} 🌌\nУзнай свою карту дня по ссылке:`,
-                        widget_link: {
-                            url: data.url,
-                            name: "Вытянуть Карту" // Название красивой кнопочки в сторис
-                        }
-                    });
-                } else {
-                    showToast("Обновите Telegram для этой функции", "ph-warning-circle");
-                }
-            } 
-            else if (type === 'chat') {
-                // Пересылка текста со ссылкой в выбранный чат ТГ
-                const fullText = encodeURIComponent(`${data.text}\n${data.url}`);
-                tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(data.url)}&text=${fullText}`);
-            } 
-            else if (type === 'system') {
-                // Нативное меню "Поделиться" iOS/Android (в WhatsApp, SMS, Заметки и т.д.)
-                if (navigator.share) {
-                    navigator.share({
-                        title: 'Cosmic Tarot',
-                        text: data.text,
-                        url: data.url
-                    }).catch(console.error);
-                } else {
-                    // Фолбек, если браузер старый (просто копируем в буфер)
-                    navigator.clipboard.writeText(`${data.text}\n${data.url}`);
-                    showToast(t('toast_copied') || 'Скопировано в буфер!', 'ph-copy');
-                }
-            }
         }
     
         function updateCustomMonthLanguage() {
@@ -5488,7 +5223,6 @@
                 showMaintenanceScreen();
                 updateInterfaceTranslations();
                 updateDynamicDates();
-                updateChatChips();
                 await Promise.all([
                     loadShopItems(),
                     loadLunarCalendar(),
@@ -7256,30 +6990,6 @@
             
             container.innerHTML = html;
         }
-    
-        function checkScrollPosition() {
-            const container = document.getElementById('chat-scroll-wrapper');
-            const btn = document.getElementById('scroll-to-bottom-btn');
-            if (!container || !btn) return;
-    
-            const distanceToBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
-            
-            if (distanceToBottom > 150) {
-                btn.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
-                btn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
-            } else {
-                btn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
-                btn.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
-            }
-        }
-    
-        function scrollToBottomSmooth() {
-            const container = document.getElementById('chat-scroll-wrapper');
-            if (container) {
-                container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
-            }
-        }
-    
         function scrollToBottom() {
             // Первый скролл
             setTimeout(() => {
@@ -7288,7 +6998,6 @@
                     container.scrollTop = container.scrollHeight;
                 }
             }, 150); 
-            
             // Контрольный скролл (если большое сообщение долго рендерилось)
             setTimeout(() => {
                 const container = document.getElementById('chat-scroll-wrapper');
@@ -7296,37 +7005,6 @@
                     container.scrollTop = container.scrollHeight;
                 }
             }, 600);
-        }
-    
-    
-        const chipTranslations = {
-            card: { ru: 'Карта дня', en: 'Daily Card', es: 'Carta Diaria', fr: 'Carte du Jour', de: 'Tageskarte' },
-            spread: { ru: 'Расклад Таро', en: 'Tarot Spread', es: 'Tirada de Tarot', fr: 'Tirage Tarot', de: 'Tarot-Legung' },
-            dream: { ru: 'Сонник', en: 'Dream Analysis', es: 'Análisis de Sueño', fr: 'Analyse de Rêve', de: 'Traumdeutung' },
-            astro: { ru: 'Астрология', en: 'Astrology', es: 'Astrología', fr: 'Astrologie', de: 'Astrologie' }
-        };
-
-        // Обновление языка на чипах
-        function updateChatChips() {
-            const lang = activeLanguage || 'en';
-            ['card', 'spread', 'dream', 'astro'].forEach(key => {
-                const el = document.getElementById(`chip-${key}`);
-                if (el) el.textContent = chipTranslations[key][lang] || chipTranslations[key]['en'];
-            });
-        }
-
-        // Вызов быстрого действия
-        function sendQuickAction(actionKey) {
-            const lang = activeLanguage || 'en';
-            const text = chipTranslations[actionKey][lang] || chipTranslations[actionKey]['en'];
-            
-            const input = document.getElementById('message-input');
-            input.value = text;
-            
-            // Прячем панель подсказок после использования, чтобы не мешала
-            document.getElementById('chat-quick-actions').classList.add('hidden');
-            
-            sendMessage();
         }
     
         async function sendMessage() {
