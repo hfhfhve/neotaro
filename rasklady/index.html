@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Расклады Таро онлайн — 10 раскладов по 10 темам | NeoTaro</title>
+<meta name="description" content="Расклады Таро онлайн: Кельтский крест, три карты, подкова и др. Любовь, деньги, работа, будущее — 100 страниц с подробными инструкциями.">
+<link rel="canonical" href="https://neotaro.ru/rasklady/">
+<meta property="og:title" content="Расклады Таро | NeoTaro">
+<meta property="og:description" content="10 раскладов таро по 10 темам — 100 страниц с инструкциями. Бесплатно.">
+<meta property="og:url" content="https://neotaro.ru/rasklady/">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Расклады Таро","url":"https://neotaro.ru/rasklady/","description":"10 раскладов таро по 10 темам"}</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#03030b;--s:#080813;--s2:#0d0d20;--border:rgba(255,255,255,.07);--ind:#6366f1;--ind2:#4f52c7;--fuc:#e879f9;--amb:#fbbf24;--tx:#e8e9f1;--dim:rgba(232,233,241,.55)}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--tx);font-family:Inter,system-ui,sans-serif;line-height:1.6;overflow-x:hidden}a{color:inherit;text-decoration:none}
+.aurora{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.aurora span{position:absolute;border-radius:50%;filter:blur(110px);opacity:.13;animation:drift 20s ease-in-out infinite alternate}
+.aurora span:nth-child(1){width:600px;height:600px;background:var(--ind);top:-200px;left:-100px}
+.aurora span:nth-child(2){width:500px;height:500px;background:var(--fuc);bottom:-150px;right:-100px;animation-delay:-10s}
+.aurora span:nth-child(3){width:300px;height:300px;background:var(--amb);top:40%;left:50%;transform:translate(-50%,-50%);animation-delay:-5s;opacity:.07}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(25px,20px) scale(1.04)}}
+header{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);backdrop-filter:blur(24px);background:rgba(3,3,11,.82)}
+header .hw{display:flex;justify-content:space-between;align-items:center;height:62px;padding:0 28px;max-width:1100px;margin:0 auto}
+.logo{font-family:Cormorant Garamond,serif;font-weight:700;font-size:23px}.logo em{color:var(--fuc);font-style:normal}
+nav a{font-size:14px;color:var(--dim);margin-left:22px;transition:color .2s}nav a:hover,nav a.active{color:var(--tx)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+.hero{position:relative;z-index:1;padding:80px 28px 56px;max-width:1080px;margin:0 auto;text-align:center}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(99,102,241,.35);background:rgba(99,102,241,.09);border-radius:100px;padding:6px 18px;font-size:13px;color:var(--ind);margin-bottom:24px;letter-spacing:.02em}
+h1{font-family:Cormorant Garamond,serif;font-size:clamp(38px,7vw,72px);font-weight:700;line-height:1.05;letter-spacing:-.025em;margin-bottom:20px}
+.grad{background:linear-gradient(135deg,var(--ind),var(--fuc));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(16px,2.5vw,20px);color:var(--dim);max-width:600px;margin:0 auto 36px}
+.stats{display:flex;gap:0;justify-content:center;border:1px solid var(--border);border-radius:16px;background:var(--s2);overflow:hidden;max-width:520px;margin:0 auto}
+.stat{flex:1;padding:18px 12px;text-align:center;border-right:1px solid var(--border)}.stat:last-child{border-right:none}
+.stat-n{font-family:Cormorant Garamond,serif;font-size:28px;font-weight:700;background:linear-gradient(135deg,var(--ind),var(--fuc));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.stat-l{font-size:12px;color:var(--dim);margin-top:3px}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,.18),rgba(232,121,249,.18),transparent);margin:0}
+section.z{position:relative;z-index:1;padding:56px 0}
+.sec-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--fuc);margin-bottom:8px}
+.sec-title{font-family:Cormorant Garamond,serif;font-size:clamp(24px,4vw,40px);font-weight:700;margin-bottom:8px}
+.sec-sub{color:var(--dim);font-size:15px;margin-bottom:28px}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.fbtn{background:var(--s2);border:1px solid var(--border);color:var(--dim);border-radius:100px;padding:7px 16px;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;font-family:Inter,sans-serif}
+.fbtn:hover,.fbtn.active{background:rgba(var(--t-rgb,99,102,241),.12);border-color:var(--t,var(--ind));color:var(--t,var(--ind))}
+.fbtn.active{border-color:var(--t);color:var(--t);background:rgba(99,102,241,.1)}
+.fbtn-all{background:linear-gradient(135deg,var(--ind),var(--ind2));color:#fff;border:none}
+.fbtn-all:hover{opacity:.88}
+.spreads-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.scard{border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:border-color .25s,transform .2s;background:var(--s)}
+.scard:hover{border-color:var(--a,var(--ind));transform:translateY(-4px)}
+.scard-top{padding:22px 22px 18px;background:linear-gradient(135deg,rgba(var(--a-rgb,99,102,241),.1),transparent);border-bottom:1px solid var(--border);position:relative}
+.scard-top::before{content:"";position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(circle,var(--a,var(--ind)),transparent 70%);opacity:.15;border-radius:50%;transform:translate(20px,-20px)}
+.scard-cnt{font-family:Cormorant Garamond,serif;font-size:42px;font-weight:700;color:var(--a,var(--ind));line-height:1;margin-bottom:6px;opacity:.9}
+.scard-name{font-family:Cormorant Garamond,serif;font-size:22px;font-weight:700;margin-bottom:4px}
+.scard-short{font-size:13px;color:var(--dim)}
+.scard-topics{padding:16px 22px;display:flex;flex-wrap:wrap;gap:8px}
+.stopic{font-size:12px;font-weight:600;padding:4px 12px;border-radius:100px;border:1px solid var(--t,rgba(255,255,255,.1));color:var(--t,var(--dim));background:rgba(99,102,241,.04);transition:background .2s}
+.stopic:hover{background:rgba(99,102,241,.12)}
+.pop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.pop-card{background:var(--s2);border:1px solid var(--border);border-radius:14px;padding:20px;transition:border-color .25s,transform .2s;display:block;position:relative;overflow:hidden}
+.pop-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--a,var(--ind)),transparent);opacity:.07;pointer-events:none}
+.pop-card:hover{border-color:var(--a,var(--ind));transform:translateY(-3px)}
+.pop-name{font-size:16px;font-weight:600;margin-bottom:6px;font-family:Cormorant Garamond,serif}
+.pop-cnt{font-size:12px;color:var(--dim)}
+.how-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:8px}
+.how-card{background:var(--s2);border:1px solid var(--border);border-radius:14px;padding:20px;display:flex;gap:14px}
+.how-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--ind),var(--fuc));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
+.how-card strong{display:block;font-size:15px;margin-bottom:4px}.how-card p{font-size:13px;color:var(--dim)}
+.faqs{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.fi{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.fq{padding:16px 20px;cursor:pointer;font-weight:600;font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--s2);user-select:none}
+.fq:hover{background:rgba(99,102,241,.05)}.fi-ico{font-size:20px;color:var(--ind);flex-shrink:0;transition:transform .3s}
+.fi.open .fi-ico{transform:rotate(45deg)}.fa{max-height:0;overflow:hidden;transition:max-height .35s ease;background:var(--s)}
+.fa p{padding:16px 20px;color:var(--dim);font-size:14px;line-height:1.75}.fi.open .fa{max-height:400px}
+.cta{background:linear-gradient(135deg,rgba(99,102,241,.14),rgba(232,121,249,.08));border:1px solid rgba(99,102,241,.22);border-radius:22px;padding:56px 40px;text-align:center;position:relative;overflow:hidden;margin-top:56px;margin-bottom:56px}
+.cta::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(99,102,241,.15),transparent 70%);pointer-events:none}
+.cta h2{font-family:Cormorant Garamond,serif;font-size:clamp(26px,4.5vw,44px);font-weight:700;margin-bottom:12px}
+.cta p{color:var(--dim);font-size:16px;max-width:480px;margin:0 auto 28px}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--ind),var(--ind2));color:#fff;border:none;border-radius:11px;padding:13px 26px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s,transform .2s;text-decoration:none}
+.btn:hover{opacity:.88;transform:translateY(-1px)}
+.btn-g{background:transparent;border:1px solid rgba(99,102,241,.4);color:var(--ind)}
+.btn-g:hover{background:rgba(99,102,241,.08)}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:32px 28px;font-size:13px;color:var(--dim);text-align:center}
+.bc{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--dim);margin-bottom:16px;flex-wrap:wrap}
+.bc a{color:var(--ind)}.bc sep{opacity:.4}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="aurora"><span></span><span></span><span></span></div>
+
+<header><div class="hw">
+  <a class="logo" href="/">Neo<em>Taro</em></a>
+  <nav>
+    <a href="/">Главная</a>
+    <a href="/rasklady/" class="active">Расклады</a>
+    <a href="/sovmestimost/">Совместимость</a>
+  </nav>
+</div></header>
+
+<main>
+<div class="hero">
+  <div class="bc" style="justify-content:center">
+    <a href="/">Главная</a><sep>/</sep><span>Расклады Таро</span>
+  </div>
+  <div class="hero-pill">&#128302; Таро-гадание</div>
+  <h1>Расклады<br><span class="grad">Таро</span></h1>
+  <p class="hero-sub">10 раскладов × 10 тем — 100 страниц с подробными инструкциями. Выберите свой расклад и тему.</p>
+  <div class="stats"><div class="stat"><div class="stat-n">10</div><div class="stat-l">раскладов</div></div><div class="stat"><div class="stat-n">10</div><div class="stat-l">тем</div></div><div class="stat"><div class="stat-n">100</div><div class="stat-l">страниц</div></div><div class="stat"><div class="stat-n">1-10</div><div class="stat-l">карт в раскладе</div></div></div>
+</div>
+
+<div class="divider"></div>
+
+<section class="z" id="spreads">
+<div class="wrap">
+  <div class="sec-label">Все расклады</div>
+  <h2 class="sec-title">Выберите расклад и тему</h2>
+  <p class="sec-sub">Нажмите на тему внутри расклада, чтобы перейти на страницу с полной инструкцией</p>
+  <div class="filter-row" id="filters">
+    <button class="fbtn fbtn-all active" onclick="filterAll()">Все темы</button>
+    <button class="fbtn" data-topic="lyubov" onclick="filterTopic(this)" style="--t:#e879f9">Любовь</button><button class="fbtn" data-topic="otnosheniya" onclick="filterTopic(this)" style="--t:#f472b6">Отношения</button><button class="fbtn" data-topic="dengi" onclick="filterTopic(this)" style="--t:#fbbf24">Деньги</button><button class="fbtn" data-topic="rabota" onclick="filterTopic(this)" style="--t:#60a5fa">Работа</button><button class="fbtn" data-topic="budushchee" onclick="filterTopic(this)" style="--t:#a78bfa">Будущее</button><button class="fbtn" data-topic="zdorovye" onclick="filterTopic(this)" style="--t:#34d399">Здоровье</button><button class="fbtn" data-topic="situaciya" onclick="filterTopic(this)" style="--t:#94a3b8">Ситуация</button><button class="fbtn" data-topic="karera" onclick="filterTopic(this)" style="--t:#fb923c">Карьера</button><button class="fbtn" data-topic="vybor" onclick="filterTopic(this)" style="--t:#e2e8f0">Выбор</button><button class="fbtn" data-topic="sudba" onclick="filterTopic(this)" style="--t:#818cf8">Судьба</button>
+  </div>
+  <div class="spreads-grid" id="sgrid"><div class="scard" data-cnt="1"><div class="scard-top" style="--a:#fbbf24"><div class="scard-cnt">1 к.</div><div class="scard-name">Одна карта</div><div class="scard-short">Экспресс-ответ на любой вопрос</div></div><div class="scard-topics"><a class="stopic" href="/rasklady/odna-karta-lyubov/" style="--t:#e879f9">Любовь</a><a class="stopic" href="/rasklady/odna-karta-otnosheniya/" style="--t:#f472b6">Отношения</a><a class="stopic" href="/rasklady/odna-karta-dengi/" style="--t:#fbbf24">Деньги</a><a class="stopic" href="/rasklady/odna-karta-rabota/" style="--t:#60a5fa">Работа</a><a class="stopic" href="/rasklady/odna-karta-budushchee/" style="--t:#a78bfa">Будущее</a><a class="stopic" href="/rasklady/odna-karta-zdorovye/" style="--t:#34d399">Здоровье</a><a class="stopic" href="/rasklady/odna-karta-situaciya/" style="--t:#94a3b8">Ситуация</a><a class="stopic" href="/rasklady/odna-karta-karera/" style="--t:#fb923c">Карьера</a><a class="stopic" href="/rasklady/odna-karta-vybor/" style="--t:#e2e8f0">Выбор</a><a class="stopic" href="/rasklady/odna-karta-sudba/" style="--t:#818cf8">Судьба</a></div></div><div class="scard" data-cnt="3"><div class="scard-top" style="--a:#a78bfa"><div class="scard-cnt">3 к.</div><div class="scard-name">Три карты</div><div class="scard-short">Прошлое, настоящее, будущее — быстро</div></div><div class="scard-topics"><a class="stopic" href="/rasklady/tri-karty-lyubov/" style="--t:#e879f9">Любовь</a><a class="stopic" href="/rasklady/tri-karty-otnosheniya/" style="--t:#f472b6">Отношения</a><a class="stopic" href="/rasklady/tri-karty-dengi/" style="--t:#fbbf24">Деньги</a><a class="stopic" href="/rasklady/tri-karty-rabota/" style="--t:#60a5fa">Работа</a><a class="stopic" href="/rasklady/tri-karty-budushchee/" style="--t:#a78bfa">Будущее</a><a class="stopic" href="/rasklady/tri-karty-zdorovye/" style="--t:#34d399">Здоровье</a><a class="stopic" href="/rasklady/tri-karty-situaciya/" style="--t:#94a3b8">Ситуация</a><a class="stopic" href="/rasklady/tri-karty-karera/" style="--t:#fb923c">Карьера</a><a class="stopic" href="/rasklady/tri-karty-vybor/" style="--t:#e2e8f0">Выбор</a><a class="stopic" href="/rasklady/tri-karty-sudba/" style="--t:#818cf8">Судьба</a></div></div><div class="scard" data-cnt="10"><div class="scard-top" style="--a:#6366f1"><div class="scard-cnt">10 к.</div><div class="scard-name">Кельтский крест</div><div class="scard-short">Глубочайший анализ на 10 позициях</div></div><div class="scard-topics"><a class="stopic" href="/rasklady/keltskiy-krest-lyubov/" style="--t:#e879f9">Любовь</a><a class="stopic" href="/rasklady/keltskiy-krest-otnosheniya/" style="--t:#f472b6">Отношения</a><a class="stopic" href="/rasklady/keltskiy-krest-dengi/" style="--t:#fbbf24">Деньги</a><a class="stopic" href="/rasklady/keltskiy-krest-rabota/" style="--t:#60a5fa">Работа</a><a class="stopic" href="/rasklady/keltskiy-krest-budushchee/" style="--t:#a78bfa">Будущее</a><a class="stopic" href="/rasklady/keltskiy-krest-zdorovye/" style="--t:#34d399">Здоровье</a><a class="stopic" href="/rasklady/keltskiy-krest-situaciya/" style="--t:#94a3b8">Ситуация</a><a class="stopic" href="/rasklady/keltskiy-krest-karera/" style="--t:#fb923c">Карьера</a><a class="stopic" href="/rasklady/keltskiy-krest-vybor/" style="--t:#e2e8f0">Выбор</a><a class="stopic" href="/rasklady/keltskiy-krest-sudba/" style="--t:#818cf8">Судьба</a></div></div><div class="scard" data-cnt="7"><div class="scard-top" style="--a:#34d399"><div class="scard-cnt">7 к.</div><div class="scard-name">Подкова</div><div class="scard-short">Удача, прогноз и скрытые обстоятельства</div></div><div class="scard-topics"><a class="stopic" href="/rasklady/podkova-lyubov/" style="--t:#e879f9">Любовь</a><a class="stopic" href="/rasklady/podkova-otnosheniya/" style="--t:#f472b6">Отношения</a><a class="stopic" href="/rasklady/podkova-dengi/" style="--t:#fbbf24">Деньги</a><a class="stopic" href="/rasklady/podkova-rabota/" style="--t:#60a5fa">Работа</a><a class="stopic" href="/rasklady/podkova-budushchee/" style="--t:#a78bfa">Будущее</a><a class="stopic" href="/rasklady/podkova-zdorovye/" style="--t:#34d399">Здоровье</a><a class="stopic" href="/rasklady/podkova-situaciya/" style="--t:#94a3b8">Ситуация</a><a class="stopic" href="/rasklady/podkova-karera/" style="--t:#fb923c">Карьера</a><a class="stopic" href="/rasklady/podkova-vybor/" style="--t:#e2e8f0">Выбор</a><a class="stopic" href="/rasklady/podkova-sudba/" style="--t:#818cf8">Судьба</a></div></div><div class="scard" data-cnt="3"><div class="scard-top" style="--a:#e879f9"><div class="scard-cnt">3 к.</div><div class="scard-name">Да или нет</div><div class="scard-short">Чёткий ответ на дихотомный вопрос</div></div><div class="scard-topics"><a class="stopic" href="/rasklady/da-ili-net-lyubov/" style="--t:#e879f9">Любовь</a><a class="stopic" href="/rasklady/da-ili-net-otnosheniya/" style="--t:#f472b6">Отношения</a><a class="stopic" href="/rasklady/da-ili-net-dengi/" style="--t:#fbbf24">Деньги</a><a class="stopic" href="/rasklady/da-ili-net-rabota/" style="--t:#60a5fa">Работа</a><a class="stopic" href="/rasklady/da-ili-net-budushchee/" style="--t:#a78bfa">Будущее</a><a class="stopic" href="/rasklady/da-ili-net-zdorovye/" style="--t:#34d399">Здоровье</a><a class="stopic" href="/rasklady/da-ili-net-situaciya/" style="--t:#94a3b8">Ситуация</a><a class="stopic" href="/rasklady/da-ili-net-karera/" style="--t:#fb923c">Карьера</a><a class="stopic" href="/rasklady/da-ili-net-vybor/" style="--t:#e2e8f0">Выбор</a><a class="stopic" href="/rasklady/da-ili-net-sudba/" style="--t:#818cf8">Судьба</a></div></div><div class="scard" data-cnt="5"><div class="scard-top" style="--a:#f472b6"><div class="scard-cnt">5 к.</div><div class="scard-name">Пять карт</div><div class="scard-short">Баланс глубины и скорости интерпретации</div></div><div class="scard-topics"><a class="stopic" href="/rasklady/pyat-kart-lyubov/" style="--t:#e879f9">Любовь</a><a class="stopic" href="/rasklady/pyat-kart-otnosheniya/" style="--t:#f472b6">Отношения</a><a class="stopic" href="/rasklady/pyat-kart-dengi/" style="--t:#fbbf24">Деньги</a><a class="stopic" href="/rasklady/pyat-kart-rabota/" style="--t:#60a5fa">Работа</a><a class="stopic" href="/rasklady/pyat-kart-budushchee/" style="--t:#a78bfa">Будущее</a><a class="stopic" href="/rasklady/pyat-kart-zdorovye/" style="--t:#34d399">Здоровье</a><a class="stopic" href="/rasklady/pyat-kart-situaciya/" style="--t:#94a3b8">Ситуация</a><a class="stopic" href="/rasklady/pyat-kart-karera/" style="--t:#fb923c">Карьера</a><a class="stopic" href="/rasklady/pyat-kart-vybor/" style="--t:#e2e8f0">Выбор</a><a class="stopic" href="/rasklady/pyat-kart-sudba/" style="--t:#818cf8">Судьба</a></div></div><div class="scard" data-cnt="7"><div class="scard-top" style="--a:#60a5fa"><div class="scard-cnt">7 к.</div><div class="scard-name">Семь карт</div><div class="scard-short">Полный разбор по времени и обстоятельствам</div></div><div class="scard-topics"><a class="stopic" href="/rasklady/sem-kart-lyubov/" style="--t:#e879f9">Любовь</a><a class="stopic" href="/rasklady/sem-kart-otnosheniya/" style="--t:#f472b6">Отношения</a><a class="stopic" href="/rasklady/sem-kart-dengi/" style="--t:#fbbf24">Деньги</a><a class="stopic" href="/rasklady/sem-kart-rabota/" style="--t:#60a5fa">Работа</a><a class="stopic" href="/rasklady/sem-kart-budushchee/" style="--t:#a78bfa">Будущее</a><a class="stopic" href="/rasklady/sem-kart-zdorovye/" style="--t:#34d399">Здоровье</a><a class="stopic" href="/rasklady/sem-kart-situaciya/" style="--t:#94a3b8">Ситуация</a><a class="stopic" href="/rasklady/sem-kart-karera/" style="--t:#fb923c">Карьера</a><a class="stopic" href="/rasklady/sem-kart-vybor/" style="--t:#e2e8f0">Выбор</a><a class="stopic" href="/rasklady/sem-kart-sudba/" style="--t:#818cf8">Судьба</a></div></div><div class="scard" data-cnt="4"><div class="scard-top" style="--a:#fb923c"><div class="scard-cnt">4 к.</div><div class="scard-name">Четыре карты</div><div class="scard-short">Стороны света: что за чем следить</div></div><div class="scard-topics"><a class="stopic" href="/rasklady/chetyre-karty-lyubov/" style="--t:#e879f9">Любовь</a><a class="stopic" href="/rasklady/chetyre-karty-otnosheniya/" style="--t:#f472b6">Отношения</a><a class="stopic" href="/rasklady/chetyre-karty-dengi/" style="--t:#fbbf24">Деньги</a><a class="stopic" href="/rasklady/chetyre-karty-rabota/" style="--t:#60a5fa">Работа</a><a class="stopic" href="/rasklady/chetyre-karty-budushchee/" style="--t:#a78bfa">Будущее</a><a class="stopic" href="/rasklady/chetyre-karty-zdorovye/" style="--t:#34d399">Здоровье</a><a class="stopic" href="/rasklady/chetyre-karty-situaciya/" style="--t:#94a3b8">Ситуация</a><a class="stopic" href="/rasklady/chetyre-karty-karera/" style="--t:#fb923c">Карьера</a><a class="stopic" href="/rasklady/chetyre-karty-vybor/" style="--t:#e2e8f0">Выбор</a><a class="stopic" href="/rasklady/chetyre-karty-sudba/" style="--t:#818cf8">Судьба</a></div></div><div class="scard" data-cnt="9"><div class="scard-top" style="--a:#818cf8"><div class="scard-cnt">9 к.</div><div class="scard-name">Древо жизни</div><div class="scard-short">Каббалистический расклад на 9 сферах</div></div><div class="scard-topics"><a class="stopic" href="/rasklady/drevo-lyubov/" style="--t:#e879f9">Любовь</a><a class="stopic" href="/rasklady/drevo-otnosheniya/" style="--t:#f472b6">Отношения</a><a class="stopic" href="/rasklady/drevo-dengi/" style="--t:#fbbf24">Деньги</a><a class="stopic" href="/rasklady/drevo-rabota/" style="--t:#60a5fa">Работа</a><a class="stopic" href="/rasklady/drevo-budushchee/" style="--t:#a78bfa">Будущее</a><a class="stopic" href="/rasklady/drevo-zdorovye/" style="--t:#34d399">Здоровье</a><a class="stopic" href="/rasklady/drevo-situaciya/" style="--t:#94a3b8">Ситуация</a><a class="stopic" href="/rasklady/drevo-karera/" style="--t:#fb923c">Карьера</a><a class="stopic" href="/rasklady/drevo-vybor/" style="--t:#e2e8f0">Выбор</a><a class="stopic" href="/rasklady/drevo-sudba/" style="--t:#818cf8">Судьба</a></div></div><div class="scard" data-cnt="8"><div class="scard-top" style="--a:#94a3b8"><div class="scard-cnt">8 к.</div><div class="scard-name">Ромашка</div><div class="scard-short">8 аспектов вопроса в одном раскладе</div></div><div class="scard-topics"><a class="stopic" href="/rasklady/romashka-lyubov/" style="--t:#e879f9">Любовь</a><a class="stopic" href="/rasklady/romashka-otnosheniya/" style="--t:#f472b6">Отношения</a><a class="stopic" href="/rasklady/romashka-dengi/" style="--t:#fbbf24">Деньги</a><a class="stopic" href="/rasklady/romashka-rabota/" style="--t:#60a5fa">Работа</a><a class="stopic" href="/rasklady/romashka-budushchee/" style="--t:#a78bfa">Будущее</a><a class="stopic" href="/rasklady/romashka-zdorovye/" style="--t:#34d399">Здоровье</a><a class="stopic" href="/rasklady/romashka-situaciya/" style="--t:#94a3b8">Ситуация</a><a class="stopic" href="/rasklady/romashka-karera/" style="--t:#fb923c">Карьера</a><a class="stopic" href="/rasklady/romashka-vybor/" style="--t:#e2e8f0">Выбор</a><a class="stopic" href="/rasklady/romashka-sudba/" style="--t:#818cf8">Судьба</a></div></div></div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<section class="z">
+<div class="wrap">
+  <div class="sec-label">Популярные</div>
+  <h2 class="sec-title">Чаще всего выбирают</h2>
+  <p class="sec-sub">Наиболее востребованные комбинации расклад + тема</p>
+  <div class="pop-grid"><a class="pop-card" href="/rasklady/keltskiy-krest-lyubov/" style="--a:#6366f1"><div class="pop-name">Кельтский крест на любовь</div><div class="pop-cnt">10 поз.</div></a><a class="pop-card" href="/rasklady/tri-karty-budushchee/" style="--a:#a78bfa"><div class="pop-name">Три карты на будущее</div><div class="pop-cnt">3 поз.</div></a><a class="pop-card" href="/rasklady/da-ili-net-vybor/" style="--a:#e879f9"><div class="pop-name">Да или нет на выбор</div><div class="pop-cnt">3 поз.</div></a><a class="pop-card" href="/rasklady/podkova-dengi/" style="--a:#34d399"><div class="pop-name">Подкова на деньги</div><div class="pop-cnt">7 поз.</div></a><a class="pop-card" href="/rasklady/drevo-sudba/" style="--a:#818cf8"><div class="pop-name">Древо жизни на судьбу</div><div class="pop-cnt">9 поз.</div></a><a class="pop-card" href="/rasklady/sem-kart-rabota/" style="--a:#60a5fa"><div class="pop-name">Семь карт на работу</div><div class="pop-cnt">7 поз.</div></a><a class="pop-card" href="/rasklady/romashka-otnosheniya/" style="--a:#f472b6"><div class="pop-name">Ромашка на отношения</div><div class="pop-cnt">8 поз.</div></a><a class="pop-card" href="/rasklady/odna-karta-zdorovye/" style="--a:#34d399"><div class="pop-name">Одна карта на здоровье</div><div class="pop-cnt">1 поз.</div></a></div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<section class="z">
+<div class="wrap">
+  <div class="sec-label">Инструкция</div>
+  <h2 class="sec-title">Как провести расклад</h2>
+  <p class="sec-sub">Универсальные шаги для любого расклада</p>
+  <div class="how-grid">
+    <div class="how-card"><div class="how-num">1</div><div><strong>Очистите ум</strong><p>Выключите телефон, зажгите свечу, глубоко дышите 5 раз.</p></div></div>
+    <div class="how-card"><div class="how-num">2</div><div><strong>Выберите расклад</strong><p>Определитесь с целью: простой вопрос — 1-3 карты, глубокий анализ — 10.</p></div></div>
+    <div class="how-card"><div class="how-num">3</div><div><strong>Сформулируйте вопрос</strong><p>Говорите вслух или в уме: открыто, без оценок, доверяя процессу.</p></div></div>
+    <div class="how-card"><div class="how-num">4</div><div><strong>Перетасуйте колоду</strong><p>Тасуйте нужное количество раз, вкладывая намерение отпустить ситуацию.</p></div></div>
+    <div class="how-card"><div class="how-num">5</div><div><strong>Разложите карты</strong><p>Следуйте схеме на странице — каждая позиция имеет смысл.</p></div></div>
+    <div class="how-card"><div class="how-num">6</div><div><strong>Интерпретируйте</strong><p>Свяжите карты в нарратив. Запишите интуицию, не цензурируя себя.</p></div></div>
+  </div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<section class="z">
+<div class="wrap">
+  <div class="sec-label">FAQ</div>
+  <h2 class="sec-title">Частые вопросы</h2>
+  <div class="faqs"><div class="fi"><div class="fq" onclick="tog(this)">Что такое расклад Таро?<span class="fi-ico">+</span></div><div class="fa"><p>Расклад — это схема расположения карт, где каждая позиция имеет чёткий смысл. Одна карта — моментальный ответ, десять карт — глубокий анализ. Чем больше позиций, тем детальнее ответ.</p></div></div><div class="fi"><div class="fq" onclick="tog(this)">Как выбрать подходящий расклад?<span class="fi-ico">+</span></div><div class="fa"><p>Опирайтесь на цель: простой вопрос — 1-3 карты, сложная ситуация — Кельтский крест или Древо жизни. Для быстрого ответа — «Да или нет», для энергетики времени — Семь карт.</p></div></div><div class="fi"><div class="fq" onclick="tog(this)">Можно ли гадать себе самостоятельно?<span class="fi-ico">+</span></div><div class="fa"><p>Да. Для начинающих лучше начать с одной или трёх карт. Главное — очистить ум, сформулировать вопрос и доверять первой ассоциации.</p></div></div><div class="fi"><div class="fq" onclick="tog(this)">Как часто можно гадать?<span class="fi-ico">+</span></div><div class="fa"><p>Не чаще раза в неделю по одному вопросу. Ежедневная одна карта — хорошая практика. Частые гадания по одному вопросу размывают внимание.</p></div></div><div class="fi"><div class="fq" onclick="tog(this)">Чем отличаются расклады по темам?<span class="fi-ico">+</span></div><div class="fa"><p>Тема задаёт контекст интерпретации: те же карты о любви и о деньгах читаются совершенно разным образом. Тема помогает сосредоточиться и получить точный ответ.</p></div></div></div>
+</div>
+</section>
+
+<div class="wrap">
+<div class="cta">
+  <h2>Готовы гадать прямо сейчас?</h2>
+  <p>Выберите расклад и тему выше — или просто начните гадание на NeoTaro. Бесплатно.</p>
+  <div class="btns">
+    <a class="btn" href="/">Гадать онлайн</a>
+    <a class="btn btn-g" href="/sovmestimost/">Совместимость</a>
+  </div>
+</div>
+</div>
+</main>
+
+<footer>&copy; 2025 NeoTaro &mdash; таро, астрология, матрица судьбы. Носит исключительно развлекательный характер.</footer>
+
+<script>
+function tog(el){const i=el.closest(".fi");const w=i.classList.contains("open");document.querySelectorAll(".fi.open").forEach(x=>x.classList.remove("open"));if(!w)i.classList.add("open");}
+
+function filterTopic(btn){
+  const topic = btn.dataset.topic;
+  document.querySelectorAll(".fbtn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll(".stopic").forEach(a=>{
+    const href = a.getAttribute("href");
+    if(href && href.includes("-"+topic+"/")){
+      a.closest(".scard").classList.remove("hide");
+    }
+  });
+  // highlight matching topic links, dim others
+  document.querySelectorAll(".stopic").forEach(a=>{
+    const href = a.getAttribute("href") || "";
+    a.style.opacity = href.includes("-"+topic+"/") ? "1" : "0.25";
+  });
+}
+
+function filterAll(){
+  document.querySelectorAll(".fbtn").forEach(b=>b.classList.remove("active"));
+  document.querySelector(".fbtn-all").classList.add("active");
+  document.querySelectorAll(".scard").forEach(c=>c.classList.remove("hide"));
+  document.querySelectorAll(".stopic").forEach(a=>a.style.opacity="1");
+}
+
+// color var fallback
+document.querySelectorAll(".scard").forEach(c=>{
+  const top = c.querySelector(".scard-top");
+  if(top){const clr=top.style.getPropertyValue("--a");top.style.setProperty("--a",clr);}
+});
+</script>
+</body></html>
