@@ -3337,13 +3337,23 @@
             }
         }
 
+        let paymentPollingInterval = null;
+
         function startPaymentPolling(isSpread = false) {
+            // Повторный клик или старый незакрытый радар не должен запускать второй цикл.
+            if (paymentPollingInterval) {
+                clearInterval(paymentPollingInterval);
+                paymentPollingInterval = null;
+            }
+
             let attempts = 0;
-            const interval = setInterval(async () => {
+            paymentPollingInterval = setInterval(async () => {
+                const interval = paymentPollingInterval;
                 attempts++;
                 // Проверяем ровно 1 минуту (20 раз по 3 сек). Если не оплатил — выключаем радар.
                 if (attempts > 20) { 
                     clearInterval(interval);
+                    paymentPollingInterval = null;
                     return;
                 }
                 
@@ -3353,6 +3363,7 @@
                     // Если энергия увеличилась (значит вебхук успешно зачислил оплату)
                     if (data.energy > userBalance.energy) {
                         clearInterval(interval);
+                        paymentPollingInterval = null;
                         userBalance.energy = data.energy;
                         updateBalanceUI(); // Обновляем циферки на экране
                         userHasPurchased = true; // <-- Теперь у юзера есть покупки!
@@ -3938,6 +3949,23 @@
         
         // Создаем глобальный объект моста
         const bridge = new AppBridge();
+
+        // На мобильном сайте открываем оплату в этой же вкладке.
+        // Переход текущей вкладки не блокируется Safari/Chrome после await,
+        // в отличие от window.open() и Telegram.WebApp.openLink().
+        const isMobileWeb = bridge.isWeb && (
+            /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+            window.matchMedia?.('(pointer: coarse)').matches
+        );
+
+        function openPaymentUrl(url) {
+            if (isMobileWeb) {
+                window.location.assign(url);
+                return 'redirect';
+            }
+            bridge.openLink(url);
+            return 'external';
+        }
     
         const API_URL = "https://api.neotaro.ru/api"; 
 
@@ -4718,26 +4746,18 @@
         }
 
         async function buyEnergyRub(itemId) {
-            // Мобильные браузеры блокируют window.open, если вызвать его только после await.
-            // Поэтому на сайте создаем вкладку сразу по клику, а URL подставляем после ответа API.
-            const paymentWindow = bridge.isWeb ? window.open('about:blank', '_blank') : null;
             showToast("Создаем счет...", "ph-spinner animate-spin");
             const data = await apiRequest("/shop/invoice-rub", "POST", { item_id: itemId });
             
             if (data.success && data.invoice_url) {
                 hideToast();
-                closeAllModals(); // <-- ЗАКРЫВАЕМ ОКНО МАГАЗИНА
-                if (bridge.isWeb && paymentWindow) {
-                    paymentWindow.opener = null;
-                    paymentWindow.location.replace(data.invoice_url);
-                } else {
-                    bridge.openLink(data.invoice_url);
+                closeAllModals();
+                const openMode = openPaymentUrl(data.invoice_url);
+                if (openMode !== 'redirect') {
+                    showToast("После оплаты энергия зачислится автоматически", "ph-info");
+                    startPaymentPolling(false);
                 }
-                
-                showToast("После оплаты энергия зачислится автоматически", "ph-info");
-                startPaymentPolling(false); // <-- РАДАР ДЛЯ МАГАЗИНА
             } else {
-                if (paymentWindow) paymentWindow.close();
                 // 🛡 НОВАЯ ОБРАБОТКА ОШИБОК
                 if (data.message === "offer_expired") {
                     showToast(t('toast_offer_expired'), "ph-timer text-neon-rose");
@@ -6454,24 +6474,18 @@
         }
 
         async function payForSpreadRub() {
-            const paymentWindow = bridge.isWeb ? window.open('about:blank', '_blank') : null;
             showToast(t('toast_wait'), "ph-spinner animate-spin");
             const data = await apiRequest("/shop/invoice-direct-spread-rub", "POST", { spread_id: currentSpread.type });
             
             if (data.success && data.invoice_url) {
                 hideToast();
-                closeAllModals(); // <-- МГНОВЕННО ЗАКРЫВАЕМ ОКНО
-                if (bridge.isWeb && paymentWindow) {
-                    paymentWindow.opener = null;
-                    paymentWindow.location.replace(data.invoice_url);
-                } else {
-                    bridge.openLink(data.invoice_url);
+                closeAllModals();
+                const openMode = openPaymentUrl(data.invoice_url);
+                if (openMode !== 'redirect') {
+                    showToast("Ожидаем оплату...", "ph-spinner animate-spin");
+                    startPaymentPolling(true);
                 }
-                
-                showToast("Ожидаем оплату...", "ph-spinner animate-spin");
-                startPaymentPolling(true); // <-- ВКЛЮЧАЕМ РАДАР
             } else {
-                if (paymentWindow) paymentWindow.close();
                 showToast(t('toast_error'), "ph-warning-circle");
             }
         }
@@ -7052,23 +7066,18 @@
         }
         
         async function mxPayRub() {
-            const paymentWindow = bridge.isWeb ? window.open('about:blank', '_blank') : null;
             showToast(t('toast_wait'), 'ph-spinner animate-spin');
             const data = await apiRequest('/matrix/invoice-rub', 'POST', { reading_id: mxReadingId() });
             if (data && data.success && data.invoice_url) {
                 hideToast();
                 closeAllModals();
                 const kind = mxBuyKind;
-                if (bridge.isWeb && paymentWindow) {
-                    paymentWindow.opener = null;
-                    paymentWindow.location.replace(data.invoice_url);
-                } else {
-                    bridge.openLink(data.invoice_url);
+                const openMode = openPaymentUrl(data.invoice_url);
+                if (openMode !== 'redirect') {
+                    showToast(t('mx_generating'), 'ph-spinner animate-spin');
+                    mxFetchReading(kind, 0);
                 }
-                showToast(t('mx_generating'), 'ph-spinner animate-spin');
-                mxFetchReading(kind, 0); // радар: ждем вебхук ЮKassa + генерацию
             } else {
-                if (paymentWindow) paymentWindow.close();
                 showToast(t('mx_pay_error'), 'ph-warning-circle');
             }
         }
