@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://neotaro.ru/sitemap-sovmestimost.xml
