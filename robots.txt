@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
 Sitemap: https://neotaro.ru/sitemap-sovmestimost.xml
+Sitemap: https://neotaro.ru/sitemap-chisla.xml
+Sitemap: https://neotaro.ru/sitemap-rasklady.xml
