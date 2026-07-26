@@ -11,35 +11,6 @@
   <meta property="og:description" content="Расклады Таро, астрология, матрица судьбы и лунный календарь — в одном тихом ночном пространстве.">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-
-  <!-- ==================== SKIN: тема зависит от платформы ====================
-       legacy = старый яркий неон (Telegram / VK Mini App)
-       atlas  = Ночной атлас (браузер, neotaro.ru)
-       Ставится ДО Tailwind и ДО любых стилей — иначе будет вспышка чужой темы. -->
-  <script>
-    (function () {
-      var tg = window.Telegram && window.Telegram.WebApp;
-      var isTG = !!(tg && tg.initData);
-      var isVK = /vk_(user_id|app_id)/.test(window.location.search);
-      var skin = (isTG || isVK) ? 'legacy' : 'atlas';
-      try {
-        var f = new URLSearchParams(location.search).get('skin');
-        if (f === 'legacy' || f === 'atlas') skin = f;   // ?skin=legacy — для проверки в браузере
-      } catch (e) {}
-      document.documentElement.setAttribute('data-skin', skin);
-
-      // Цвет темы для JS (Telegram-шапка, html2canvas, сторис)
-      window.skinColor = function (name, fallback) {
-        var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-        return v || fallback || '#0B0F1E';
-      };
-      // <meta theme-color> тоже по теме
-      document.addEventListener('DOMContentLoaded', function () {
-        var m = document.querySelector('meta[name="theme-color"]');
-        if (m) m.setAttribute('content', window.skinColor('--space-900'));
-      });
-    })();
-  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -50,11 +21,12 @@
   </script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:image" content="https://neotaro.ru/og-cover.png">
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.min.css">
@@ -74,27 +46,27 @@
       theme: {
         extend: {
           colors: {
-            white: 'var(--c-white)',
-            amber: { 300: 'var(--amber-300)', 400: 'var(--amber-400)', 500: 'var(--amber-500)', 600: 'var(--amber-600)' },
-            orange: { 400: 'var(--orange-400)', 500: 'var(--orange-500)', 600: 'var(--orange-600)' },
-            emerald: { 300: 'var(--emerald-300)', 400: 'var(--emerald-400)', 500: 'var(--emerald-500)', 600: 'var(--emerald-600)' },
-            green: { 400: 'var(--green-400)', 500: 'var(--green-500)', 600: 'var(--green-600)' },
-            red: { 400: 'var(--red-400)', 500: 'var(--red-500)', 600: 'var(--red-600)' },
+            white: '#F2EDE0',
+            amber: { 300: '#E9D9AC', 400: '#D9AE5F', 500: '#C89055', 600: '#B87F45' },
+            orange: { 400: '#C89055', 500: '#B87F45', 600: '#A66F3A' },
+            emerald: { 300: '#A8C7B2', 400: '#93B9A0', 500: '#7FA68C', 600: '#6E9379' },
+            green: { 400: '#93B9A0', 500: '#7FA68C', 600: '#6E9379' },
+            red: { 400: '#C4899B', 500: '#B06F84', 600: '#9C5A70' },           /* тёплая слоновая кость вместо чистого белого */
             space: {
-              900: 'var(--space-900)',
-              800: 'var(--space-800)',
-              700: 'var(--space-700)',
-              600: 'var(--space-600)',
-              500: 'var(--space-500)',
+              900: '#0B0F1E',           /* чернила */
+              800: '#121829',           /* поверхность */
+              700: '#1A2138',           /* приподнятая поверхность */
+              600: '#232C47',           /* активная поверхность */
+              500: '#2E3A5C',           /* границы, разделители */
             },
             neon: {
-              indigo: 'var(--neon-indigo)',
-              fuchsia: 'var(--neon-fuchsia)',
-              amber: 'var(--neon-amber)',
-              purple: 'var(--neon-purple)',
-              cyan: 'var(--neon-cyan)',
-              rose: 'var(--neon-rose)',
-              emerald: 'var(--neon-emerald)',
+              indigo: '#8FA3DE',        /* звёздная сталь */
+              fuchsia: '#C9A0DC',       /* сиреневая дымка */
+              amber: '#D9AE5F',         /* старое золото — главный акцент */
+              purple: '#A78FD6',        /* аметист */
+              cyan: '#87B7C6',          /* лунная вода */
+              rose: '#C4899B',          /* пыльная роза */
+              emerald: '#93B9A0',       /* шалфей */
             }
           },
           fontFamily: {
@@ -145,82 +117,12 @@
     }
   </script>
 
-  <!-- ==================== ПАЛИТРЫ ДВУХ ТЕМ ====================
-       Менять цвета теперь только здесь. Всё остальное ссылается на эти переменные. -->
-  <style>
-    :root, :root[data-skin="atlas"] {
-      --space-900: var(--space-900);
-      --space-800: var(--space-800);
-      --space-700: var(--space-700);
-      --space-600: var(--space-600);
-      --space-500: var(--space-500);
-      --c-white: var(--c-white);
-      --amber-300: var(--amber-300);
-      --amber-400: var(--amber-400);
-      --amber-500: var(--amber-500);
-      --amber-600: var(--amber-600);
-      --orange-400: var(--amber-500);
-      --orange-500: var(--amber-600);
-      --orange-600: var(--orange-600);
-      --emerald-300: var(--emerald-300);
-      --emerald-400: var(--emerald-400);
-      --emerald-500: var(--emerald-500);
-      --emerald-600: var(--emerald-600);
-      --green-400: var(--emerald-400);
-      --green-500: var(--emerald-500);
-      --green-600: var(--emerald-600);
-      --red-400: var(--red-400);
-      --red-500: var(--red-500);
-      --red-600: var(--red-600);
-      --neon-indigo: var(--neon-indigo);
-      --neon-fuchsia: var(--neon-fuchsia);
-      --neon-amber: var(--amber-400);
-      --neon-purple: var(--neon-purple);
-      --neon-cyan: var(--neon-cyan);
-      --neon-rose: var(--red-400);
-      --neon-emerald: var(--emerald-400);
-    }
-
-    :root[data-skin="legacy"] {
-      --space-900: #03030b;
-      --space-800: #0a0a1a;
-      --space-700: #12122a;
-      --space-600: #1b1b38;
-      --space-500: #2a2a52;
-      --c-white: #e8e9f1;
-      --amber-300: #fcd34d;
-      --amber-400: #fbbf24;
-      --amber-500: #f59e0b;
-      --amber-600: #d97706;
-      --orange-400: #fb923c;
-      --orange-500: #f97316;
-      --orange-600: #ea580c;
-      --emerald-300: #6ee7b7;
-      --emerald-400: #34d399;
-      --emerald-500: #10b981;
-      --emerald-600: #059669;
-      --green-400: #4ade80;
-      --green-500: #22c55e;
-      --green-600: #16a34a;
-      --red-400: #f87171;
-      --red-500: #ef4444;
-      --red-600: #dc2626;
-      --neon-indigo: #6366f1;
-      --neon-fuchsia: #e879f9;
-      --neon-amber: #fbbf24;
-      --neon-purple: #a855f7;
-      --neon-cyan: #06b6d4;
-      --neon-rose: #fb7185;
-      --neon-emerald: #34d399;
-    }
-  </style>
-
   <!-- Компонентные стили оригинального приложения -->
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
     * { -webkit-tap-highlight-color: transparent; }
-    body { background: var(--space-900); overflow-x: hidden; }
+    body { background: #0B0F1E; overflow-x: hidden; }
 
     /* Эффекты стекла */
     .glass {
@@ -315,7 +217,7 @@
         flex: 0 0 70px;
         height: 110px;
         border-radius: 10px;
-        background: linear-gradient(135deg, var(--space-600), #0F1424);
+        background: linear-gradient(135deg, #232C47, #0F1424);
         border: 1px solid rgba(167, 143, 214, 0.4);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         scroll-snap-align: center;
@@ -367,7 +269,7 @@
 
     .spread-slot.filled {
         border: 1px solid rgba(201, 160, 220, 0.6);
-        background: linear-gradient(135deg, var(--space-600), #0F1424);
+        background: linear-gradient(135deg, #232C47, #0F1424);
         box-shadow: 0 0 15px rgba(201, 160, 220, 0.3);
     }
     
@@ -406,7 +308,7 @@
     
     .card-slot.filled {
         border: 1px solid rgba(201, 160, 220, 0.5);
-        background: linear-gradient(135deg, var(--space-600), #0F1424);
+        background: linear-gradient(135deg, #232C47, #0F1424);
         box-shadow: 0 0 15px rgba(201, 160, 220, 0.3);
         animation: slotDropIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
     }
@@ -577,15 +479,15 @@
 
   :focus-visible { outline: 2px solid rgba(217, 174, 95, .65); outline-offset: 2px; border-radius: 4px; }
 
-  html { scrollbar-color: var(--space-500) var(--space-900); }
+  html { scrollbar-color: #2E3A5C #0B0F1E; }
 
   body {
-    background: var(--space-900);
-    color: var(--c-white);
+    background: #0B0F1E;
+    color: #F2EDE0;
   }
 
-  /* Тёплая виньетка поверх чернил — только в atlas */
-  [data-skin="atlas"] body::before {
+  /* Тёплая виньетка поверх чернил */
+  body::before {
     content: '';
     position: fixed; inset: 0;
     pointer-events: none; z-index: 0;
@@ -618,12 +520,12 @@
       background: transparent; border: none; cursor: pointer;
       font-family: 'Prata', 'Cormorant Garamond', serif;
       font-size: 16px; letter-spacing: .28em;
-      color: var(--amber-300);
+      color: #E9D9AC;
       text-align: left;
     }
     .as-brand svg { flex: none; }
 
-    .as-scroll { flex: 1; overflow-y: auto; padding: 0 12px 12px; scrollbar-width: thin; scrollbar-color: var(--space-500) transparent; }
+    .as-scroll { flex: 1; overflow-y: auto; padding: 0 12px 12px; scrollbar-width: thin; scrollbar-color: #2E3A5C transparent; }
 
     .as-group {
       display: flex; align-items: center; gap: 10px;
@@ -655,15 +557,15 @@
       transition: color .18s ease;
     }
     .atlas-sidebar .as-link span { font-size: 13.5px; letter-spacing: .01em; text-transform: none; color: inherit; }
-    .atlas-sidebar .as-link:hover { background: rgba(217, 174, 95, .07); color: var(--c-white); }
-    .atlas-sidebar .as-link:hover i { color: var(--amber-400); }
+    .atlas-sidebar .as-link:hover { background: rgba(217, 174, 95, .07); color: #F2EDE0; }
+    .atlas-sidebar .as-link:hover i { color: #D9AE5F; }
 
     .atlas-sidebar .nav-btn.active {
       background: linear-gradient(90deg, rgba(217, 174, 95, .14), rgba(217, 174, 95, .03));
       border-color: rgba(217, 174, 95, .3);
       color: #F0DDB0;
     }
-    .atlas-sidebar .nav-btn.active i { color: var(--amber-400); }
+    .atlas-sidebar .nav-btn.active i { color: #D9AE5F; }
     .atlas-sidebar .nav-btn.active span { color: #F0DDB0; }
 
     .as-soon { opacity: .55; }
@@ -671,7 +573,7 @@
       margin-left: auto;
       font-size: 9px; font-weight: 700;
       letter-spacing: .16em; text-transform: uppercase;
-      color: var(--amber-400);
+      color: #D9AE5F;
       border: 1px solid rgba(217, 174, 95, .4);
       border-radius: 99px; padding: 2px 7px;
     }
@@ -686,7 +588,7 @@
       text-align: left;
     }
     .as-balance:hover { border-color: rgba(217, 174, 95, .6); }
-    .as-balance i { color: var(--amber-400); font-size: 18px; }
+    .as-balance i { color: #D9AE5F; font-size: 18px; }
     .as-balance-num { font-family: 'Prata', serif; font-size: 18px; color: #F0DDB0; line-height: 1; }
     .as-balance-label { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(242, 237, 224, .45); }
 
@@ -749,8 +651,8 @@
 
 /* ==================== NEOTARO · Night Atlas — app skin ==================== */
 :root{
---at-ink:var(--space-900);--at-ink2:var(--space-800);--at-ink3:var(--space-700);
---at-gold:var(--amber-400);--at-pale:#F0DDB0;--at-ivory:var(--c-white);
+--at-ink:#0B0F1E;--at-ink2:#121829;--at-ink3:#1A2138;
+--at-gold:#D9AE5F;--at-pale:#F0DDB0;--at-ivory:#F2EDE0;
 --at-line:rgba(217,174,95,.15);--at-line2:rgba(217,174,95,.38);
 --at-mut:rgba(242,237,224,.58);--at-mut2:rgba(242,237,224,.38);
 }
@@ -758,7 +660,7 @@
 
 /* Reskin legacy glass surfaces (modals, dynamic cards) */
 .glass,.glass-strong{background:rgba(18,24,41,.88)!important;border-color:rgba(217,174,95,.16)!important}
-.bottom-sheet>div{background:var(--space-800)!important;border:1px solid rgba(217,174,95,.22);border-bottom:none}
+.bottom-sheet>div{background:#121829!important;border:1px solid rgba(217,174,95,.22);border-bottom:none}
 
 /* ---------- primitives ---------- */
 .at-wrap{max-width:1060px;margin:0 auto;padding:44px 48px 80px}
@@ -770,7 +672,7 @@
 .at-label{font-size:10px;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:rgba(217,174,95,.78);display:flex;align-items:center;gap:12px;margin:0 0 16px}
 .at-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(217,174,95,.25),transparent)}
 .at-panel{background:linear-gradient(170deg,#131A2E,#0E1425);border:1px solid var(--at-line);border-radius:18px}
-.at-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(120deg,#E9C87E,var(--amber-400));color:#241B08;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;border-radius:12px;padding:14px 26px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 6px 24px rgba(217,174,95,.16)}
+.at-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(120deg,#E9C87E,#D9AE5F);color:#241B08;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;border-radius:12px;padding:14px 26px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 6px 24px rgba(217,174,95,.16)}
 .at-btn:hover{transform:translateY(-1px);box-shadow:0 10px 30px rgba(217,174,95,.28)}
 .at-btn:active{transform:scale(.98)}
 .at-btn i{font-size:15px}
@@ -780,7 +682,7 @@
 .at-seal-lg{width:56px;height:56px;font-size:25px;border-radius:16px}
 .at-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--at-line2);border-radius:999px;padding:6px 12px;color:var(--at-pale);font-size:12px;font-weight:700;background:rgba(217,174,95,.07);white-space:nowrap}
 .at-chip i{color:var(--at-gold);font-size:12px}
-.at-chip-free{color:var(--emerald-400);border-color:rgba(147,185,160,.4);background:rgba(147,185,160,.08)}
+.at-chip-free{color:#93B9A0;border-color:rgba(147,185,160,.4);background:rgba(147,185,160,.08)}
 .at-caret{margin-left:auto;color:rgba(242,237,224,.28);font-size:15px;flex-shrink:0}
 .at-page-head{margin:6px 0 28px}
 .at-loading{display:flex;justify-content:center;padding:56px;color:var(--at-gold);font-size:28px}
@@ -803,7 +705,7 @@
 .at-bonus-badge{border:1px solid var(--at-line2);color:var(--at-gold);border-radius:999px;padding:2px 8px;font-size:8px;letter-spacing:.2em}
 .at-bonus-t{color:var(--at-ivory);font-weight:700;font-size:14px}
 .at-offerwrap{margin:0 0 14px}
-.at-offer{width:100%;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:16px 20px;background:linear-gradient(170deg,var(--space-700),var(--space-800));border:1px solid rgba(217,174,95,.32);border-radius:16px;cursor:pointer;text-align:left;transition:border-color .2s}
+.at-offer{width:100%;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:16px 20px;background:linear-gradient(170deg,#1A2138,#121829);border:1px solid rgba(217,174,95,.32);border-radius:16px;cursor:pointer;text-align:left;transition:border-color .2s}
 .at-offer:hover{border-color:rgba(217,174,95,.6)}
 .at-offer-k{display:flex;align-items:center;gap:8px;color:var(--at-gold);font-size:10px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;margin-bottom:7px}
 .at-offer-v{font-family:'Prata',serif;font-size:30px;color:var(--at-ivory);line-height:1}
@@ -813,7 +715,7 @@
 .at-offer-timer{display:inline-flex;gap:6px;align-items:center;font-family:ui-monospace,SFMono-Regular,monospace;font-size:12px;color:var(--at-pale);border:1px solid rgba(242,237,224,.14);border-radius:999px;padding:4px 11px}
 .at-offer-timer i{color:var(--at-mut2)}
 .at-offer-old{color:rgba(242,237,224,.35);text-decoration:line-through;font-size:12px}
-.at-offer-price{background:linear-gradient(120deg,#E9C87E,var(--amber-400));color:#241B08;font-weight:800;font-size:14px;padding:8px 16px;border-radius:10px}
+.at-offer-price{background:linear-gradient(120deg,#E9C87E,#D9AE5F);color:#241B08;font-weight:800;font-size:14px;padding:8px 16px;border-radius:10px}
 .at-daily-sec{margin:34px 0 38px}
 .at-daily{display:grid;grid-template-columns:250px 1fr;gap:36px;align-items:center;width:100%;padding:32px 38px;background:linear-gradient(170deg,#141B30,#0E1425);border:1px solid var(--at-line);border-radius:22px;cursor:pointer;text-align:left;position:relative;overflow:hidden;transition:border-color .25s}
 .at-daily::after{content:"";position:absolute;right:-60px;top:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(217,174,95,.1),transparent 70%);pointer-events:none}
@@ -871,43 +773,43 @@
 div.at-row{cursor:default}
 .at-row-ico{width:34px;height:34px;border-radius:10px;border:1px solid rgba(242,237,224,.1);display:flex;align-items:center;justify-content:center;color:var(--at-gold);font-size:16px;flex-shrink:0}
 .at-row-val{margin-left:auto;color:var(--at-mut2);font-size:12px;display:flex;align-items:center;gap:8px;text-align:right}
-.at-row-danger,.at-row-danger .at-row-ico{color:var(--red-400)}
+.at-row-danger,.at-row-danger .at-row-ico{color:#C4899B}
 .at-row-danger .at-row-ico{border-color:rgba(196,137,155,.3)}
 #profile-logout-btn:not(.hidden){display:flex}
 .at-switch{position:relative;display:inline-block;width:44px;height:24px;margin-left:auto;flex-shrink:0}
 .at-switch input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:1}
 .at-knob{position:absolute;inset:0;background:rgba(242,237,224,.12);border-radius:999px;transition:background .2s;pointer-events:none}
-.at-knob::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--c-white);transition:transform .2s}
+.at-knob::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#F2EDE0;transition:transform .2s}
 .at-switch input:checked+.at-knob{background:rgba(217,174,95,.75)}
 .at-switch input:checked+.at-knob::after{transform:translateX(20px)}
 
 /* ---------- chat ---------- */
 #screen-chats:not(.hidden){display:flex}
-.at-chat{position:absolute;inset:0;z-index:20;background:var(--space-900);flex-direction:column}
+.at-chat{position:absolute;inset:0;z-index:20;background:#0B0F1E;flex-direction:column}
 .at-chat-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 24px;border-bottom:1px solid var(--at-line);background:rgba(13,18,34,.92);backdrop-filter:blur(10px);flex-shrink:0}
 .at-chat-head-l{display:flex;align-items:center;gap:14px;min-width:0}
 .at-chat-name{font-family:'Prata',serif;font-size:17px;color:var(--at-ivory)}
 .at-chat-price{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--at-gold);margin-top:3px;display:flex;align-items:center;gap:5px;font-weight:700}
 .at-iconbtn{width:40px;height:40px;border-radius:12px;border:1px solid rgba(242,237,224,.12);background:none;color:var(--at-mut);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;transition:border-color .2s,color .2s;flex-shrink:0}
 .at-iconbtn:hover{border-color:rgba(217,174,95,.4);color:var(--at-pale)}
-.at-iconbtn-danger:hover{border-color:rgba(196,137,155,.5);color:var(--red-400)}
+.at-iconbtn-danger:hover{border-color:rgba(196,137,155,.5);color:#C4899B}
 .at-chat-scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column;padding:20px 24px;scroll-behavior:smooth}
 .at-chat-msgs{display:flex;flex-direction:column;justify-content:flex-end;gap:16px;min-height:100%;width:100%;margin:0 auto}
 #typing-indicator:not(.hidden){display:flex}
-.at-typing{gap:5px;align-items:center;padding:13px 16px;border:1px solid var(--at-line);border-radius:14px;background:var(--space-800);width:max-content;margin:14px auto 0 0}
+.at-typing{gap:5px;align-items:center;padding:13px 16px;border:1px solid var(--at-line);border-radius:14px;background:#121829;width:max-content;margin:14px auto 0 0}
 .at-typing span{width:5px;height:5px;border-radius:50%;background:rgba(217,174,95,.75);animation:atBlink 1.2s infinite}
 .at-typing span:nth-child(2){animation-delay:.2s}
 .at-typing span:nth-child(3){animation-delay:.4s}
 @keyframes atBlink{0%,80%,100%{opacity:.25}40%{opacity:1}}
 .at-chat-input{flex-shrink:0;padding:16px 24px 18px;border-top:1px solid var(--at-line);background:rgba(13,18,34,.94);position:relative}
-.at-chat-balance{position:absolute;top:-14px;right:28px;display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--at-mut);background:var(--space-800);border:1px solid var(--at-line2);border-radius:999px;padding:5px 13px;cursor:pointer;font-weight:700}
+.at-chat-balance{position:absolute;top:-14px;right:28px;display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--at-mut);background:#121829;border:1px solid var(--at-line2);border-radius:999px;padding:5px 13px;cursor:pointer;font-weight:700}
 .at-chat-balance b{color:var(--at-pale)}
 .at-chat-balance i{color:var(--at-gold)}
-.at-chat-capsule{display:flex;align-items:flex-end;gap:10px;max-width:860px;margin:0 auto;background:var(--space-800);border:1px solid rgba(217,174,95,.22);border-radius:18px;padding:8px;transition:border-color .2s}
+.at-chat-capsule{display:flex;align-items:flex-end;gap:10px;max-width:860px;margin:0 auto;background:#121829;border:1px solid rgba(217,174,95,.22);border-radius:18px;padding:8px;transition:border-color .2s}
 .at-chat-capsule:focus-within{border-color:rgba(217,174,95,.5)}
 .at-chat-capsule textarea{flex:1;background:none;border:none;outline:none;resize:none;color:var(--at-ivory);font-size:15px;font-family:'Manrope',sans-serif;padding:10px 12px;min-height:44px;max-height:120px}
 .at-chat-capsule textarea::placeholder{color:rgba(242,237,224,.35)}
-.at-send{width:46px;height:46px;border-radius:14px;border:none;background:linear-gradient(120deg,#E9C87E,var(--amber-400));color:#241B08;font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s;flex-shrink:0}
+.at-send{width:46px;height:46px;border-radius:14px;border:none;background:linear-gradient(120deg,#E9C87E,#D9AE5F);color:#241B08;font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s;flex-shrink:0}
 .at-send:hover{transform:scale(1.05)}
 
 /* ---------- shop / dream / spreads ---------- */
@@ -954,8 +856,8 @@ div.at-row{cursor:default}
         position: fixed; inset: 0; z-index: 10000;
         overflow-y: auto; overflow-x: hidden;
         font-family: 'Manrope', 'Inter', system-ui, sans-serif;
-        color: var(--c-white);
-        background: var(--space-900);
+        color: #F2EDE0;
+        background: #0B0F1E;
         scroll-behavior: smooth;
       }
       #web-login-screen.hidden { display: none; }
@@ -988,7 +890,7 @@ div.at-row{cursor:default}
       .lp-brand {
         display: flex; align-items: center; gap: 11px;
         font-family: 'Prata', serif; font-size: 17px; letter-spacing: .3em;
-        color: var(--amber-300); text-decoration: none; margin-right: auto;
+        color: #E9D9AC; text-decoration: none; margin-right: auto;
       }
       .lp-nav { display: flex; gap: 28px; }
       .lp-nav a {
@@ -1001,7 +903,7 @@ div.at-row{cursor:default}
         display: inline-flex; align-items: center; gap: 8px;
         padding: 10px 22px; border-radius: 12px; text-decoration: none;
         font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-        color: var(--space-900); background: linear-gradient(120deg, #E9C87E, var(--amber-400));
+        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
         box-shadow: 0 6px 24px rgba(217,174,95,.25);
         transition: transform .18s ease, box-shadow .18s ease;
       }
@@ -1022,7 +924,7 @@ div.at-row{cursor:default}
       .lp-h1 {
         font-family: 'Prata', serif; font-weight: 400;
         font-size: clamp(40px, 4.6vw, 62px); line-height: 1.12;
-        color: var(--c-white); margin: 0 0 24px;
+        color: #F2EDE0; margin: 0 0 24px;
       }
       .lp-h1 em { font-style: normal; color: #E9C87E; }
       .lp-lede {
@@ -1035,7 +937,7 @@ div.at-row{cursor:default}
         display: inline-flex; align-items: center; gap: 10px;
         padding: 16px 30px; border-radius: 14px; text-decoration: none;
         font-size: 14px; font-weight: 800; letter-spacing: .06em;
-        color: var(--space-900); background: linear-gradient(120deg, #E9C87E, var(--amber-400));
+        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
         box-shadow: 0 10px 34px rgba(217,174,95,.28);
         transition: transform .18s ease, box-shadow .18s ease;
       }
@@ -1130,7 +1032,7 @@ div.at-row{cursor:default}
         color: rgba(217,174,95,.7); margin-bottom: 16px;
       }
       .lp-kicker::before { content: ''; width: 34px; height: 1px; background: rgba(217,174,95,.55); }
-      .lp-h2 { font-family: 'Prata', serif; font-weight: 400; font-size: 32px; line-height: 1.25; color: var(--c-white); margin: 0; }
+      .lp-h2 { font-family: 'Prata', serif; font-weight: 400; font-size: 32px; line-height: 1.25; color: #F2EDE0; margin: 0; }
       .lp-sub { font-size: 15px; line-height: 1.6; color: rgba(242,237,224,.55); margin: 14px 0 0; }
 
       .lp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
@@ -1141,21 +1043,21 @@ div.at-row{cursor:default}
         transition: border-color .2s ease, transform .2s ease;
       }
       .lp-tile:hover { border-color: rgba(217,174,95,.42); transform: translateY(-3px); }
-      .lp-tile i { font-size: 26px; color: var(--amber-400); }
-      .lp-tile h3 { font-family: 'Prata', serif; font-weight: 400; font-size: 18px; color: var(--c-white); margin: 16px 0 8px; }
+      .lp-tile i { font-size: 26px; color: #D9AE5F; }
+      .lp-tile h3 { font-family: 'Prata', serif; font-weight: 400; font-size: 18px; color: #F2EDE0; margin: 16px 0 8px; }
       .lp-tile p { font-size: 13.5px; line-height: 1.6; color: rgba(242,237,224,.52); margin: 0; }
       .lp-tile .lp-badge {
         position: absolute; top: 18px; right: 18px;
         font-size: 9px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase;
-        color: var(--amber-400); border: 1px solid rgba(217,174,95,.45); border-radius: 99px; padding: 3px 9px;
+        color: #D9AE5F; border: 1px solid rgba(217,174,95,.45); border-radius: 99px; padding: 3px 9px;
       }
       .lp-tile.lp-soon { opacity: .72; }
 
       /* ---------- Ритуал ---------- */
       .lp-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
       .lp-step { border-top: 1px solid rgba(217,174,95,.3); padding-top: 22px; }
-      .lp-step-num { font-family: 'Prata', serif; font-size: 15px; letter-spacing: .34em; color: var(--amber-400); display: block; margin-bottom: 14px; }
-      .lp-step h3 { font-family: 'Prata', serif; font-weight: 400; font-size: 19px; color: var(--c-white); margin: 0 0 10px; }
+      .lp-step-num { font-family: 'Prata', serif; font-size: 15px; letter-spacing: .34em; color: #D9AE5F; display: block; margin-bottom: 14px; }
+      .lp-step h3 { font-family: 'Prata', serif; font-weight: 400; font-size: 19px; color: #F2EDE0; margin: 0 0 10px; }
       .lp-step p { font-size: 13.5px; line-height: 1.65; color: rgba(242,237,224,.52); margin: 0; }
 
       /* ---------- Вход ---------- */
@@ -1171,14 +1073,14 @@ div.at-row{cursor:default}
         content: ''; position: absolute; top: 0; left: 48px; right: 48px; height: 1px;
         background: linear-gradient(90deg, transparent, rgba(233,200,126,.7), transparent);
       }
-      .lp-auth-card h2 { font-family: 'Prata', serif; font-weight: 400; font-size: 24px; color: var(--c-white); margin: 0 0 10px; text-align: center; }
+      .lp-auth-card h2 { font-family: 'Prata', serif; font-weight: 400; font-size: 24px; color: #F2EDE0; margin: 0 0 10px; text-align: center; }
       .lp-auth-card > p { font-size: 13.5px; line-height: 1.6; color: rgba(242,237,224,.55); text-align: center; margin: 0 0 26px; }
 
       .lp-tg-btn {
         display: flex; align-items: center; justify-content: center; gap: 11px;
         width: 100%; padding: 16px 20px; border-radius: 14px; border: none; cursor: pointer;
         font-family: inherit; font-size: 14.5px; font-weight: 800; letter-spacing: .04em;
-        color: var(--space-900); background: linear-gradient(120deg, #E9C87E, var(--amber-400));
+        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
         box-shadow: 0 10px 30px rgba(217,174,95,.25);
         transition: transform .18s ease, box-shadow .18s ease;
       }
@@ -1206,11 +1108,11 @@ div.at-row{cursor:default}
       /* ---------- Статус входа (используется JS-логикой) ---------- */
       #web-login-status { min-height: 16px; margin-top: 18px; font-size: 12px; text-align: center; display: none; }
       #web-login-status.nl-active { display: block; }
-      .nl-err { color: var(--red-400); padding: 8px 0 2px; font-weight: 600; }
+      .nl-err { color: #C4899B; padding: 8px 0 2px; font-weight: 600; }
       .nl-wait { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 6px 0; }
       .nl-spin {
         width: 26px; height: 26px; border-radius: 50%;
-        border: 2px solid rgba(217,174,95,.25); border-top-color: var(--amber-400);
+        border: 2px solid rgba(217,174,95,.25); border-top-color: #D9AE5F;
         animation: nl-rot 1s linear infinite;
       }
       @keyframes nl-rot { to { transform: rotate(360deg); } }
@@ -1218,7 +1120,7 @@ div.at-row{cursor:default}
       .nl-wait-s { font-size: 12px; line-height: 1.6; color: rgba(242,237,224,.55); max-width: 300px; }
       .nl-open {
         display: inline-block; margin-top: 4px; padding: 10px 22px; border-radius: 11px;
-        background: linear-gradient(120deg, #E9C87E, var(--amber-400)); color: var(--space-900);
+        background: linear-gradient(120deg, #E9C87E, #D9AE5F); color: #0B0F1E;
         font-weight: 800; font-size: 12.5px; text-decoration: none;
       }
       .nl-cancel { margin-top: 6px; background: none; border: none; color: rgba(242,237,224,.4); font-size: 11.5px; cursor: pointer; text-decoration: underline; font-family: inherit; }
@@ -1255,7 +1157,7 @@ div.at-row{cursor:default}
       <header class="lp-top">
         <a class="lp-brand" href="#">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M10.5 4.5a7.5 7.5 0 1 0 9 9 6 6 0 1 1-9-9Z" stroke="#D9AE5F" style="stroke:var(--amber-400)" stroke-width="1.2" stroke-linejoin="round" fill="rgba(217,174,95,.1)"/>
+            <path d="M10.5 4.5a7.5 7.5 0 1 0 9 9 6 6 0 1 1-9-9Z" stroke="#D9AE5F" stroke-width="1.2" stroke-linejoin="round" fill="rgba(217,174,95,.1)"/>
             <path d="M17 4.5l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6z" fill="#F0DDB0"/>
           </svg>
           NEOTARO
@@ -1434,7 +1336,7 @@ div.at-row{cursor:default}
     </div>
   </div>
 
-  <div id="app-loading-screen" class="fixed inset-0 z-[10000] bg-[var(--space-900)] flex flex-col items-center justify-center transition-opacity duration-500 pointer-events-auto">
+  <div id="app-loading-screen" class="fixed inset-0 z-[10000] bg-[#0B0F1E] flex flex-col items-center justify-center transition-opacity duration-500 pointer-events-auto">
     <div class="fixed inset-0 stars-bg opacity-40 pointer-events-none"></div>
     
     <div class="relative w-24 h-24 mb-6 flex items-center justify-center">
@@ -1473,7 +1375,7 @@ div.at-row{cursor:default}
   <aside id="atlas-sidebar" class="atlas-sidebar" aria-label="Навигация">
     <button class="as-brand" onclick="navigateTo('home')" aria-label="NEOTARO — на главную">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M10.5 4.5a7.5 7.5 0 1 0 9 9 6 6 0 1 1-9-9Z" stroke="#D9AE5F" style="stroke:var(--amber-400)" stroke-width="1.2" stroke-linejoin="round" fill="rgba(217,174,95,.10)"/>
+        <path d="M10.5 4.5a7.5 7.5 0 1 0 9 9 6 6 0 1 1-9-9Z" stroke="#D9AE5F" stroke-width="1.2" stroke-linejoin="round" fill="rgba(217,174,95,.10)"/>
         <path d="M17 4.5l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6z" fill="#F0DDB0"/>
       </svg>
       <span>NEOTARO</span>
@@ -1625,7 +1527,7 @@ div.at-row{cursor:default}
     </div>
 
     <div id="modal-buy-spread" class="bottom-sheet fixed bottom-0 w-full max-w-md z-[80]">
-        <div class="glass-strong bg-[var(--space-800)] rounded-t-[32px] pb-8 flex flex-col px-5">
+        <div class="glass-strong bg-[#121829] rounded-t-[32px] pb-8 flex flex-col px-5">
             <div class="flex justify-center pt-3 pb-4">
                 <div class="w-10 h-1.5 bg-white/10 rounded-full"></div>
             </div>
@@ -1651,7 +1553,7 @@ div.at-row{cursor:default}
             </div>
     
             <div class="space-y-3">
-                <button onclick="payForSpreadStars()" class="w-full bg-[var(--space-700)] border border-white/5 hover:border-amber-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group shadow-lg">
+                <button onclick="payForSpreadStars()" class="w-full bg-[#1A2138] border border-white/5 hover:border-amber-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group shadow-lg">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-400 text-2xl border border-amber-500/20 group-hover:scale-105 transition-transform">
                             <i class="ph-fill ph-star"></i>
@@ -1666,7 +1568,7 @@ div.at-row{cursor:default}
                     </div>
                 </button>
     
-                <button onclick="payForSpreadRub()" class="w-full bg-[var(--space-700)] border border-white/5 hover:border-emerald-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group shadow-lg">
+                <button onclick="payForSpreadRub()" class="w-full bg-[#1A2138] border border-white/5 hover:border-emerald-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group shadow-lg">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-2xl border border-emerald-500/20 group-hover:scale-105 transition-transform">
                             <i class="ph-fill ph-credit-card"></i>
@@ -1906,11 +1808,11 @@ div.at-row{cursor:default}
     </div>
 
     <!-- ================= ПОЛНОЭКРАННЫЙ РЕЗУЛЬТАТ СИНАСТРИИ ================= -->
-    <div id="modal-synastry-result" class="fixed inset-0 z-[100] hidden opacity-0 transition-opacity duration-300 bg-[var(--space-900)] overflow-y-auto hide-scrollbar flex flex-col">
+    <div id="modal-synastry-result" class="fixed inset-0 z-[100] hidden opacity-0 transition-opacity duration-300 bg-[#0B0F1E] overflow-y-auto hide-scrollbar flex flex-col">
         <div class="fixed inset-0 stars-bg opacity-40 pointer-events-none z-0"></div>
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[radial-gradient(ellipse_at_top,_rgba(196,137,155,0.15),_transparent_75%)] pointer-events-none z-0"></div>
     
-        <div class="sticky top-0 inset-x-0 px-5 py-4 flex justify-between items-center z-50 bg-[color-mix(in_srgb,var(--space-900)_90%,transparent)] backdrop-blur-xl border-b border-white/5">
+        <div class="sticky top-0 inset-x-0 px-5 py-4 flex justify-between items-center z-50 bg-[#0B0F1E]/90 backdrop-blur-xl border-b border-white/5">
             <button onclick="closeSynastryModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/5 border border-white/10 text-white/80 hover:text-white active:scale-95 transition-all shadow-sm">
                 <i class="ph-bold ph-caret-left text-lg text-neon-rose"></i>
                 <span class="text-xs font-black uppercase tracking-wider" data-i18n="back">Назад</span>
@@ -1920,7 +1822,7 @@ div.at-row{cursor:default}
     
         <div class="flex-1 w-full max-w-md mx-auto px-5 pt-8 pb-24 flex flex-col items-center relative z-10">
             
-            <div id="synastry-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[var(--space-900)] z-40">
+            <div id="synastry-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0B0F1E] z-40">
                 <div class="relative w-32 h-32 mb-8 flex items-center justify-center">
                     <div class="absolute inset-0 rounded-full border border-dashed border-neon-rose/30 animate-spin-slow"></div>
                     <div class="absolute inset-4 rounded-full border border-dashed border-neon-cyan/30 animate-spin-reverse-slow"></div>
@@ -1993,7 +1895,7 @@ div.at-row{cursor:default}
         </div>
     </div>
 
-    <div id="screen-astro" class="screen hidden flex-1 flex flex-col relative bg-[var(--space-900)] pb-24 overflow-y-auto hide-scrollbar">
+    <div id="screen-astro" class="screen hidden flex-1 flex flex-col relative bg-[#0B0F1E] pb-24 overflow-y-auto hide-scrollbar">
         <!-- Космический туман сверху -->
         <div class="absolute top-0 inset-x-0 h-[400px] bg-[radial-gradient(ellipse_at_top,_rgba(167,143,214,0.15),_transparent_70%)] pointer-events-none z-0"></div>
         <div class="absolute top-40 left-0 w-64 h-64 bg-neon-fuchsia/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
@@ -2243,7 +2145,7 @@ div.at-row{cursor:default}
             </div>
         </div>
     </div>
-    <div id="screen-matrix" class="screen hidden flex-1 flex flex-col relative bg-[var(--space-900)] pb-24 overflow-y-auto hide-scrollbar">
+    <div id="screen-matrix" class="screen hidden flex-1 flex flex-col relative bg-[#0B0F1E] pb-24 overflow-y-auto hide-scrollbar">
         <div class="absolute top-0 inset-x-0 h-[400px] bg-[radial-gradient(ellipse_at_top,_rgba(167,143,214,0.15),_transparent_70%)] pointer-events-none z-0"></div>
         <div class="absolute top-40 left-0 w-64 h-64 bg-neon-purple/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
     
@@ -2324,7 +2226,7 @@ div.at-row{cursor:default}
                 <!-- Пейволл -->
                 <div id="mx-paywall" class="relative">
                     <div class="absolute -inset-0.5 bg-gradient-to-r from-neon-purple/40 via-neon-fuchsia/20 to-transparent rounded-[26px] blur-md opacity-60 animate-pulse-slow pointer-events-none"></div>
-                    <div class="relative glass-strong bg-gradient-to-br from-[var(--space-700)] to-[var(--space-900)] border border-neon-purple/50 rounded-[24px] p-5 text-center overflow-hidden">
+                    <div class="relative glass-strong bg-gradient-to-br from-[#1A2138] to-[#0B0F1E] border border-neon-purple/50 rounded-[24px] p-5 text-center overflow-hidden">
                         <p class="text-white/40 text-[11px] line-through decoration-neon-rose/60 mb-1" data-i18n="mx_anchor">У матрицолога такой разбор стоит 3 000–5 000 ₽</p>
                         <div class="flex items-baseline justify-center gap-2 mb-4">
                             <span id="mx-price-rub" class="text-white font-mystic text-4xl font-bold">499 ₽</span>
@@ -2513,7 +2415,7 @@ div.at-row{cursor:default}
             <div class="px-5 pt-2 pb-4 overflow-y-auto hide-scrollbar">
                 
                 <!-- Верхняя карточка прогресса (Неоновая) -->
-                <div class="w-full rounded-[24px] bg-gradient-to-br from-[var(--space-600)] to-[#0F1424] p-5 mb-6 border border-neon-indigo/30 shadow-[0_15px_40px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                <div class="w-full rounded-[24px] bg-gradient-to-br from-[#232C47] to-[#0F1424] p-5 mb-6 border border-neon-indigo/30 shadow-[0_15px_40px_rgba(0,0,0,0.5)] relative overflow-hidden">
                     <div class="absolute -top-10 -right-10 w-32 h-32 bg-neon-amber/20 rounded-full blur-3xl pointer-events-none"></div>
                     
                     <div class="flex items-center gap-2 mb-4 text-neon-amber">
@@ -2560,13 +2462,13 @@ div.at-row{cursor:default}
     </div>
 
     <!-- ==================== ПОЛНОЭКРАННАЯ МОДАЛКА КАРТЫ ДНЯ ==================== -->
-    <div id="modal-daily-card" class="fixed inset-0 z-[100] hidden opacity-0 transition-opacity duration-300 bg-[var(--space-900)] overflow-y-auto hide-scrollbar flex flex-col">
+    <div id="modal-daily-card" class="fixed inset-0 z-[100] hidden opacity-0 transition-opacity duration-300 bg-[#0B0F1E] overflow-y-auto hide-scrollbar flex flex-col">
         <!-- Звездный фон и неоновые туманности -->
         <div class="fixed inset-0 stars-bg opacity-40 pointer-events-none z-0"></div>
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[radial-gradient(ellipse_at_top,_rgba(167,143,214,0.18),_transparent_75%)] pointer-events-none z-0"></div>
     
         <!-- Шапка экрана с Крупной Навигацией -->
-        <div class="sticky top-0 inset-x-0 px-5 py-4 flex justify-between items-center z-50 bg-[color-mix(in_srgb,var(--space-900)_90%,transparent)] backdrop-blur-xl border-b border-white/5 shadow-lg">
+        <div class="sticky top-0 inset-x-0 px-5 py-4 flex justify-between items-center z-50 bg-[#0B0F1E]/90 backdrop-blur-xl border-b border-white/5 shadow-lg">
             <button onclick="closeDailyModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/5 border border-white/10 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all shadow-md group">
                 <i class="ph-bold ph-caret-left text-lg text-neon-rose group-hover:-translate-x-0.5 transition-transform"></i>
                 <span class="text-xs font-black uppercase tracking-wider" data-i18n="back">Назад</span>
@@ -2581,7 +2483,7 @@ div.at-row{cursor:default}
         <div class="flex-1 w-full max-w-md mx-auto px-5 pt-6 pb-20 flex flex-col items-center relative z-10">
             
             <!-- Лоадер частот -->
-            <div id="daily-reading-loader" class="absolute inset-0 flex flex-col items-center justify-center hidden bg-[color-mix(in_srgb,var(--space-900)_95%,transparent)] z-40 backdrop-blur-md">
+            <div id="daily-reading-loader" class="absolute inset-0 flex flex-col items-center justify-center hidden bg-[#0B0F1E]/95 z-40 backdrop-blur-md">
                 <i class="ph-fill ph-spinner animate-spin text-4xl text-neon-indigo mb-4"></i>
                 <p class="text-sm font-mystic text-white/70 italic" data-i18n="card_wait">Оракул настраивает астральные частоты...</p>
             </div>
@@ -3010,7 +2912,7 @@ div.at-row{cursor:default}
     </div>
 
     <div id="modal-purchase" class="bottom-sheet fixed bottom-0 w-full max-w-md z-[70]">
-        <div class="glass-strong bg-[var(--space-800)] rounded-t-[32px] pb-8 flex flex-col px-5">
+        <div class="glass-strong bg-[#121829] rounded-t-[32px] pb-8 flex flex-col px-5">
             <div class="flex justify-center pt-3 pb-5">
                 <div class="w-10 h-1.5 bg-white/10 rounded-full"></div>
             </div>
@@ -3020,12 +2922,12 @@ div.at-row{cursor:default}
                     <h3 class="text-white text-2xl font-bold tracking-tight" data-i18n="modal_purchase">Покупка</h3>
                     <p class="text-white/50 text-xs mt-0.5" data-i18n="modal_secure">Безопасная транзакция</p>
                 </div>
-                <div class="w-12 h-12 bg-gradient-to-br from-[var(--space-700)] to-[var(--space-800)] rounded-2xl flex items-center justify-center border border-white/5 shadow-inner">
+                <div class="w-12 h-12 bg-gradient-to-br from-[#1A2138] to-[#121829] rounded-2xl flex items-center justify-center border border-white/5 shadow-inner">
                     <i class="ph-fill ph-shopping-bag text-emerald-400 text-xl drop-shadow-[0_0_8px_rgba(147,185,160,0.3)]"></i>
                 </div>
             </div>
     
-            <div class="bg-[var(--space-700)] border border-white/5 rounded-2xl p-5 mb-5 flex justify-between items-center shadow-lg">
+            <div class="bg-[#1A2138] border border-white/5 rounded-2xl p-5 mb-5 flex justify-between items-center shadow-lg">
                 <span class="text-white/60 text-sm font-medium" data-i18n="modal_to_pay">К оплате:</span>
                 <div class="text-right">
                     <p id="purchase-price-rub" class="text-white text-2xl font-black leading-none tracking-tight">0 ₽</p>
@@ -3034,7 +2936,7 @@ div.at-row{cursor:default}
             </div>
     
             <div class="space-y-3">
-                <button id="btn-pay-stars" class="w-full bg-[var(--space-700)] border border-white/5 hover:border-amber-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group">
+                <button id="btn-pay-stars" class="w-full bg-[#1A2138] border border-white/5 hover:border-amber-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-400 text-2xl border border-amber-500/20 group-hover:scale-105 transition-transform">
                             <i class="ph-fill ph-star"></i>
@@ -3049,7 +2951,7 @@ div.at-row{cursor:default}
                     </div>
                 </button>
     
-                <button id="btn-pay-rub" class="w-full bg-[var(--space-700)] border border-white/5 hover:border-emerald-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group">
+                <button id="btn-pay-rub" class="w-full bg-[#1A2138] border border-white/5 hover:border-emerald-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-2xl border border-emerald-500/20 group-hover:scale-105 transition-transform">
                             <i class="ph-fill ph-credit-card"></i>
@@ -3092,7 +2994,7 @@ div.at-row{cursor:default}
     
     <!-- 🔮 МАТРИЦА: окно оплаты (копия modal-purchase) -->
     <div id="modal-matrix-buy" class="bottom-sheet fixed bottom-0 w-full max-w-md z-[85]">
-        <div class="glass-strong bg-[var(--space-800)] rounded-t-[32px] pb-8 flex flex-col px-5">
+        <div class="glass-strong bg-[#121829] rounded-t-[32px] pb-8 flex flex-col px-5">
             <div class="flex justify-center pt-3 pb-5">
                 <div class="w-10 h-1.5 bg-white/10 rounded-full"></div>
             </div>
@@ -3101,12 +3003,12 @@ div.at-row{cursor:default}
                     <h3 id="mx-buy-title" class="text-white text-xl font-bold tracking-tight">Матрица Судьбы</h3>
                     <p class="text-white/50 text-xs mt-0.5" data-i18n="modal_secure">Безопасная транзакция</p>
                 </div>
-                <div class="w-12 h-12 bg-gradient-to-br from-[var(--space-700)] to-[var(--space-800)] rounded-2xl flex items-center justify-center border border-white/5 shadow-inner">
+                <div class="w-12 h-12 bg-gradient-to-br from-[#1A2138] to-[#121829] rounded-2xl flex items-center justify-center border border-white/5 shadow-inner">
                     <i class="ph-fill ph-star-four text-neon-purple text-xl drop-shadow-[0_0_8px_rgba(167,143,214,0.4)]"></i>
                 </div>
             </div>
             <div class="space-y-3">
-                <button onclick="mxPayStars()" class="w-full bg-[var(--space-700)] border border-white/5 hover:border-amber-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group">
+                <button onclick="mxPayStars()" class="w-full bg-[#1A2138] border border-white/5 hover:border-amber-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-400 text-2xl border border-amber-500/20 group-hover:scale-105 transition-transform">
                             <i class="ph-fill ph-star"></i>
@@ -3120,7 +3022,7 @@ div.at-row{cursor:default}
                         <span id="mx-label-stars">0</span> <i class="ph-fill ph-star text-xs"></i>
                     </div>
                 </button>
-                <button onclick="mxPayRub()" class="w-full bg-[var(--space-700)] border border-white/5 hover:border-emerald-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group">
+                <button onclick="mxPayRub()" class="w-full bg-[#1A2138] border border-white/5 hover:border-emerald-500/30 rounded-2xl p-4 flex items-center justify-between transition-all active:scale-95 group">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-2xl border border-emerald-500/20 group-hover:scale-105 transition-transform">
                             <i class="ph-fill ph-credit-card"></i>
@@ -3138,7 +3040,7 @@ div.at-row{cursor:default}
         </div>
     </div>
 
-    <div id="story-export-template" class="fixed top-0 left-[-9999px] w-[1080px] h-[1920px] bg-[var(--space-900)] flex flex-col items-center justify-between py-24 px-16 z-0">
+    <div id="story-export-template" class="fixed top-0 left-[-9999px] w-[1080px] h-[1920px] bg-[#0B0F1E] flex flex-col items-center justify-between py-24 px-16 z-0">
         <!-- Неоновые эффекты на фоне -->
         <div class="absolute top-0 left-0 w-[800px] h-[800px] bg-neon-indigo/40 blur-[150px] rounded-full"></div>
         <div class="absolute bottom-0 right-0 w-[800px] h-[800px] bg-neon-fuchsia/40 blur-[150px] rounded-full"></div>
@@ -3195,7 +3097,7 @@ div.at-row{cursor:default}
         </div>
     </div>
 
-    <div id="matrix-story-template" class="fixed top-0 left-[-9999px] w-[1080px] h-[1920px] z-0" style="opacity:0; background:linear-gradient(180deg,#120523 0%,var(--space-900) 40%,#0a0318 100%); overflow:hidden;">
+    <div id="matrix-story-template" class="fixed top-0 left-[-9999px] w-[1080px] h-[1920px] z-0" style="opacity:0; background:linear-gradient(180deg,#120523 0%,#0B0F1E 40%,#0a0318 100%); overflow:hidden;">
         <!-- свечения -->
         <div style="position:absolute; top:-250px; left:-250px; width:800px; height:800px; background:radial-gradient(circle, rgba(167,143,214,0.30), transparent 65%);"></div>
         <div style="position:absolute; bottom:-150px; right:-300px; width:900px; height:900px; background:radial-gradient(circle, rgba(135,183,198,0.18), transparent 65%);"></div>
@@ -4269,7 +4171,7 @@ div.at-row{cursor:default}
                     scale: 1, 
                     useCORS: true,
                     allowTaint: true, // Разрешаем "грязные" картинки на всякий случай
-                    backgroundColor: window.skinColor("--space-900"),
+                    backgroundColor: "#0B0F1E",
                     logging: false
                 });
 
@@ -4426,8 +4328,8 @@ div.at-row{cursor:default}
                     this.user = this.tg.initDataUnsafe?.user;
                     
                     this.tg.expand();
-                    this.tg.setBackgroundColor(window.skinColor('--space-900'));
-                    this.tg.setHeaderColor(window.skinColor('--space-900'));
+                    this.tg.setBackgroundColor('#0B0F1E');
+                    this.tg.setHeaderColor('#0B0F1E');
                 } else if (this.isVK) {
                     this.initData = window.location.search.substring(1); // Убираем '?' из начала
                     vkBridge.send('VKWebAppInit');
@@ -5157,7 +5059,7 @@ div.at-row{cursor:default}
                 if (isOfferActiveGlobally) {
                     const isMega = globalOfferType === 'mega_pack_30';
                     const color = isMega ? 'neon-amber' : 'neon-rose';
-                    const bgClass = isMega ? 'from-[#241B10] to-[var(--space-900)]' : 'from-[#241019] to-[var(--space-900)]';
+                    const bgClass = isMega ? 'from-[#241B10] to-[#0B0F1E]' : 'from-[#241019] to-[#0B0F1E]';
                     const priceRub = isMega ? '9.99' : '24.99';
                     const priceStars = isMega ? 15 : 75;
                     const btnClass = isMega ? 'bg-gradient-to-r from-neon-amber to-orange-500 text-black' : 'bg-neon-rose text-white';
@@ -5235,7 +5137,7 @@ div.at-row{cursor:default}
                         cardBorder = "border-neon-amber/20 hover:border-neon-amber/40";
                         iconClass = "ph-crown text-neon-amber drop-shadow-md";
                         iconBg = "bg-neon-amber/10";
-                        priceClass = "bg-neon-amber text-[var(--space-900)] font-black";
+                        priceClass = "bg-neon-amber text-[#0B0F1E] font-black";
                     }
 
                     container.innerHTML += `
@@ -5937,7 +5839,7 @@ div.at-row{cursor:default}
                     glow.classList.add('hidden');
                 } else {
                     // ЕСЛИ НЕ ЗАБРАНО: Включаем подсветку, анимацию и призыв к действию
-                    btn.className = "w-full glass bg-gradient-to-r from-space-800 to-[var(--space-600)] border border-neon-fuchsia/50 shadow-[0_0_20px_rgba(201,160,220,0.25)] rounded-[20px] p-4 flex items-center justify-between active:scale-95 transition-all relative overflow-hidden group";
+                    btn.className = "w-full glass bg-gradient-to-r from-space-800 to-[#232C47] border border-neon-fuchsia/50 shadow-[0_0_20px_rgba(201,160,220,0.25)] rounded-[20px] p-4 flex items-center justify-between active:scale-95 transition-all relative overflow-hidden group";
                     text.textContent = t('bonus_claim') || "Забрать награду!";
                     text.className = "text-white font-bold text-sm leading-none drop-shadow-md";
                     iconBg.className = "w-12 h-12 rounded-full bg-neon-fuchsia/20 flex items-center justify-center border border-neon-fuchsia/50 shadow-[0_0_15px_rgba(201,160,220,0.5)] shrink-0 transition-colors";
@@ -5965,9 +5867,9 @@ div.at-row{cursor:default}
             let dotsHTML = '';
             for(let i=1; i<=7; i++) {
                 if (i <= data.cycle_day) {
-                    dotsHTML += `<div class="w-4 h-4 rounded-full bg-neon-amber shadow-[0_0_8px_rgba(217,174,95,0.8)] border-2 border-[var(--space-600)]"></div>`;
+                    dotsHTML += `<div class="w-4 h-4 rounded-full bg-neon-amber shadow-[0_0_8px_rgba(217,174,95,0.8)] border-2 border-[#232C47]"></div>`;
                 } else {
-                    dotsHTML += `<div class="w-4 h-4 rounded-full bg-space-600 border-2 border-[var(--space-600)]"></div>`;
+                    dotsHTML += `<div class="w-4 h-4 rounded-full bg-space-600 border-2 border-[#232C47]"></div>`;
                 }
             }
             document.getElementById('bonus-progress-dots').innerHTML = dotsHTML;
@@ -7505,7 +7407,7 @@ div.at-row{cursor:default}
             template.style.zIndex = '-1000';
             template.style.opacity = '1';
             try {
-                const canvas = await html2canvas(template, { scale: 1, useCORS: true, allowTaint: true, backgroundColor: window.skinColor('--space-900'), logging: false });
+                const canvas = await html2canvas(template, { scale: 1, useCORS: true, allowTaint: true, backgroundColor: '#0B0F1E', logging: false });
                 template.style.left = '-9999px';
                 const imgDataUrl = canvas.toDataURL('image/jpeg', 0.9);
                 document.getElementById('share-preview-img').src = imgDataUrl;
