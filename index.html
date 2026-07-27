@@ -397,6 +397,21 @@ textarea.field{resize:none;line-height:1.55}
 .tile p{font-size:13px;line-height:1.55;color:var(--mist);margin-bottom:14px}
 .tile .foot{margin-top:auto;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);opacity:.85}
 .tile.locked{opacity:.72}
+.ic{width:18px;height:18px;display:block;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.rail-link .gl{display:flex;align-items:center;justify-content:center}
+.dock-btn .gl{display:flex;align-items:center;justify-content:center}
+.dock-btn .ic{width:20px;height:20px}
+.tile .tg{display:block}
+.tile .ic{width:25px;height:25px;stroke-width:1.15}
+.rowcard .idx .ic{width:19px;height:19px;margin:0 auto}
+.empty .g .ic{width:34px;height:34px;margin:0 auto;stroke-width:.9;opacity:.6}
+.city-picked .pin{display:flex;align-items:center}
+.city-picked .pin .ic{width:16px;height:16px}
+.syn-names i .ic{width:17px;height:17px}
+.chat-sigil .ic{width:38px;height:38px;margin:0 auto;stroke-width:.9}
+.dial-face .glyph .ic{width:22px;height:22px;margin:0 auto}
+.deck .plate .ic{width:22px;height:22px;margin:0 auto}
+.tag .ic{width:13px;height:13px}
 /* --- поиск города --- */
 .city-wrap{position:relative}
 .city-list{margin-top:8px;display:none;flex-direction:column;border:1px solid var(--line-soft);border-radius:10px;background:var(--ink-850);overflow:hidden;max-height:238px;overflow-y:auto}
@@ -516,16 +531,17 @@ textarea.field{resize:none;line-height:1.55}
   background:linear-gradient(180deg,#111729,#0A0E1C);
   border:1px solid var(--line-soft);border-bottom:none;border-radius:20px 20px 0 0;
   max-height:90vh;overflow-y:auto;transition:transform .34s cubic-bezier(.2,.8,.25,1);
+  visibility:hidden;pointer-events:none;
   padding:10px 24px calc(var(--sab) + 26px);
 }
-.sheet.is-on{transform:translate(-50%,0)}
+.sheet.is-on{transform:translate(-50%,0);visibility:visible;pointer-events:auto}
 .sheet-grip{width:38px;height:3px;border-radius:2px;background:rgba(147,160,192,.3);margin:6px auto 18px}
 .sheet h3{font-family:var(--serif);font-weight:400;font-size:22px;color:var(--brass-pale);margin-bottom:6px}
 .sheet .sheet-sub{font-size:13.5px;color:var(--mist);margin-bottom:20px;line-height:1.55}
 .sheet-acts{display:flex;flex-direction:column;gap:10px;margin-top:22px}
 @media(min-width:900px){
   .sheet{top:50%;bottom:auto;transform:translate(-50%,-46%) scale(.97);opacity:0;border-radius:18px;border-bottom:1px solid var(--line-soft);padding:26px 30px 30px;max-height:84vh}
-  .sheet.is-on{transform:translate(-50%,-50%) scale(1);opacity:1}
+  .sheet.is-on{transform:translate(-50%,-50%) scale(1);opacity:1;visibility:visible;pointer-events:auto}
   .sheet-grip{display:none}
 }
 
@@ -1270,18 +1286,18 @@ textarea.field{resize:none;line-height:1.55}
       <span class="sub" id="rail-date">—</span>
     </div>
     <nav class="rail-nav">
-      <button class="rail-link" data-nav="home" onclick="go('home')"><span class="gl">◉</span><span data-t="nav_home">Сегодня</span></button>
-      <button class="rail-link" data-nav="chat" onclick="go('chat')"><span class="gl">❧</span><span data-t="nav_chat">Оракул</span></button>
+      <button class="rail-link" data-nav="home" onclick="go('home')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7"/></svg></span><span data-t="nav_home">Сегодня</span></button>
+      <button class="rail-link" data-nav="chat" onclick="go('chat')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.6h16v10.2H9.6L4 19.6z"/><path d="M8 9.4h8M8 12.4h5"/></svg></span><span data-t="nav_chat">Оракул</span></button>
       <div class="rail-sep" data-t="rail_practice">Практики</div>
-      <button class="rail-link" data-nav="spreads" onclick="go('spreads')"><span class="gl">✦</span><span data-t="nav_spreads">Расклады</span></button>
-      <button class="rail-link" data-nav="dream" onclick="go('dream')"><span class="gl">☾</span><span data-t="nav_dream">Сонник</span></button>
-      <button class="rail-link" data-nav="astro" onclick="go('astro')"><span class="gl">♉</span><span data-t="nav_astro">Космо-паспорт</span></button>
-      <button class="rail-link" data-nav="syn" onclick="go('syn')"><span class="gl">○●</span><span data-t="nav_syn">Совместимость</span></button>
-      <button class="rail-link" data-nav="matrix" onclick="go('matrix')"><span class="gl">✧</span><span data-t="nav_matrix">Матрица судьбы</span></button>
-      <button class="rail-link" data-nav="calendar" onclick="go('calendar')"><span class="gl">◑</span><span data-t="nav_calendar">Лунный день</span></button>
+      <button class="rail-link" data-nav="spreads" onclick="go('spreads')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg></span><span data-t="nav_spreads">Расклады</span></button>
+      <button class="rail-link" data-nav="dream" onclick="go('dream')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 3.4a8.6 8.6 0 100 17.2 8.9 8.9 0 01-3.6-8.6 8.9 8.9 0 013.6-8.6z"/></svg></span><span data-t="nav_dream">Сонник</span></button>
+      <button class="rail-link" data-nav="astro" onclick="go('astro')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg></span><span data-t="nav_astro">Космо-паспорт</span></button>
+      <button class="rail-link" data-nav="syn" onclick="go('syn')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg></span><span data-t="nav_syn">Совместимость</span></button>
+      <button class="rail-link" data-nav="matrix" onclick="go('matrix')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></span><span data-t="nav_matrix">Матрица судьбы</span></button>
+      <button class="rail-link" data-nav="calendar" onclick="go('calendar')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg></span><span data-t="nav_calendar">Лунный день</span></button>
       <div class="rail-sep" data-t="rail_account">Кабинет</div>
-      <button class="rail-link" data-nav="shop" onclick="go('shop')"><span class="gl">⍟</span><span data-t="nav_shop">Пополнить энергию</span></button>
-      <button class="rail-link" data-nav="profile" onclick="go('profile')"><span class="gl">○</span><span data-t="nav_profile">Профиль</span></button>
+      <button class="rail-link" data-nav="shop" onclick="go('shop')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 2.8L5.6 13.6h4.8l-1.2 7.6 8-11.2h-4.8z"/></svg></span><span data-t="nav_shop">Пополнить энергию</span></button>
+      <button class="rail-link" data-nav="profile" onclick="go('profile')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="3.8"/><path d="M4.8 20.4c.9-3.9 3.7-5.8 7.2-5.8s6.3 1.9 7.2 5.8"/></svg></span><span data-t="nav_profile">Профиль</span></button>
     </nav>
     <div class="rail-foot">
       <button class="meter" onclick="go('shop')">
@@ -1329,7 +1345,7 @@ textarea.field{resize:none;line-height:1.55}
                 </svg>
                 <button class="dial-face" id="dial-face" onclick="openDaily()" aria-label="Карта дня">
                   <span class="back" id="dial-back">
-                    <span class="glyph">✦</span>
+                    <span class="glyph"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.3 6.9 6.9 2.3-6.9 2.3L12 21.2l-2.3-6.9L2.8 12l6.9-2.3z"/></svg></span>
                     <span class="t" data-t="dial_draw">вытянуть</span>
                   </span>
                   <img id="dial-img" alt="" style="display:none">
@@ -1365,43 +1381,43 @@ textarea.field{resize:none;line-height:1.55}
           <div class="orn"><span class="eyebrow" data-t="home_practices">Практики</span></div>
           <div class="grid grid-3">
             <button class="tile" onclick="go('spreads')">
-              <span class="tg">✦</span>
+              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg></span>
               <h4 data-t="nav_spreads">Расклады</h4>
               <p data-t="tile_spreads">Задайте вопрос и получите разбор позиций — от одной карты до Кельтского креста.</p>
               <span class="foot" data-t="tile_open">Открыть →</span>
             </button>
             <button class="tile" onclick="go('dream')">
-              <span class="tg">☾</span>
+              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 3.4a8.6 8.6 0 100 17.2 8.9 8.9 0 01-3.6-8.6 8.9 8.9 0 013.6-8.6z"/></svg></span>
               <h4 data-t="nav_dream">Сонник</h4>
               <p data-t="tile_dream">Опишите сон — разберём символы по Юнгу и архетипам.</p>
               <span class="foot" data-t="tile_open">Открыть →</span>
             </button>
             <button class="tile" onclick="go('astro')">
-              <span class="tg">♉</span>
+              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg></span>
               <h4 data-t="nav_astro">Космо-паспорт</h4>
               <p data-t="tile_astro">Дата, время и город рождения — личная карта светил.</p>
               <span class="foot" data-t="tile_open">Открыть →</span>
             </button>
             <button class="tile" onclick="go('syn')">
-              <span class="tg">○●</span>
+              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg></span>
               <h4 data-t="nav_syn">Совместимость</h4>
               <p data-t="tile_syn">Две даты рождения — где связь держит, а где рвётся.</p>
               <span class="foot" data-t="tile_open">Открыть →</span>
             </button>
             <button class="tile" onclick="go('matrix')">
-              <span class="tg">✧</span>
+              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></span>
               <h4 data-t="nav_matrix">Матрица судьбы</h4>
               <p data-t="tile_matrix">Двадцать два аркана в октаграмме вашей даты рождения.</p>
               <span class="foot" data-t="tile_open">Открыть →</span>
             </button>
             <button class="tile" onclick="go('calendar')">
-              <span class="tg">◑</span>
+              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg></span>
               <h4 data-t="nav_calendar">Лунный день</h4>
               <p data-t="tile_calendar">Что сегодня идёт легко, а что лучше отложить.</p>
               <span class="foot" data-t="tile_open">Открыть →</span>
             </button>
             <button class="tile" onclick="go('chat')">
-              <span class="tg">❧</span>
+              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.6h16v10.2H9.6L4 19.6z"/><path d="M8 9.4h8M8 12.4h5"/></svg></span>
               <h4 data-t="nav_chat">Оракул</h4>
               <p data-t="tile_chat">Свободный разговор: карты, звёзды, сны и сложные вопросы.</p>
               <span class="foot" data-t="tile_open">Открыть →</span>
@@ -1452,7 +1468,7 @@ textarea.field{resize:none;line-height:1.55}
             </div>
 
             <div id="tb-shuffle" style="display:none;text-align:center">
-              <div class="deck shuffling"><span class="plate">✦</span><span class="plate">✦</span><span class="plate">✦</span></div>
+              <div class="deck shuffling"><span class="plate"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.3 6.9 6.9 2.3-6.9 2.3L12 21.2l-2.3-6.9L2.8 12l6.9-2.3z"/></svg></span><span class="plate"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.3 6.9 6.9 2.3-6.9 2.3L12 21.2l-2.3-6.9L2.8 12l6.9-2.3z"/></svg></span><span class="plate"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.3 6.9 6.9 2.3-6.9 2.3L12 21.2l-2.3-6.9L2.8 12l6.9-2.3z"/></svg></span></div>
               <p class="label" data-t="table_shuffling">Тасуем колоду и читаем позиции</p>
             </div>
 
@@ -1486,7 +1502,7 @@ textarea.field{resize:none;line-height:1.55}
         <section class="view" id="v-profile">
           <div class="eyebrow" style="margin-bottom:12px" data-t="nav_profile">Профиль</div>
           <div class="panel panel-pad" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
-            <div id="pf-sigil" style="width:64px;height:64px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:24px;color:var(--brass);flex:0 0 auto">✦</div>
+            <div id="pf-sigil" style="width:64px;height:64px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:24px;color:var(--brass);flex:0 0 auto">N</div>
             <div style="flex:1;min-width:180px">
               <h1 class="h2" id="pf-name">—</h1>
               <p class="label" style="margin-top:6px" id="pf-since">—</p>
@@ -1511,32 +1527,32 @@ textarea.field{resize:none;line-height:1.55}
           <div class="orn"><span class="eyebrow" data-t="pf_settings">Настройки</span></div>
           <div class="stack">
             <button class="rowcard" onclick="openSheet('birth')">
-              <span class="idx">♉</span>
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.6" y="5.4" width="16.8" height="15" rx="2"/><path d="M3.6 10h16.8M8.4 3.4v3.4M15.6 3.4v3.4"/><circle cx="12" cy="15" r="1.5" fill="currentColor" stroke="none"/></svg></span>
               <span class="mid"><strong data-t="pf_birth">Дата рождения</strong><span data-t="pf_birth_hint">Нужна для знака, матрицы и гороскопа</span></span>
               <span class="end"><span class="num" id="pf-birth-2" style="color:var(--brass-pale);font-size:13px">—</span></span>
             </button>
             <button class="rowcard" onclick="openSheet('lang')">
-              <span class="idx">⊕</span>
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M3.4 12h17.2M12 3.2c2.4 2.4 3.6 5.4 3.6 8.8s-1.2 6.4-3.6 8.8c-2.4-2.4-3.6-5.4-3.6-8.8S9.6 5.6 12 3.2z"/></svg></span>
               <span class="mid"><strong data-t="pf_lang">Язык интерфейса</strong><span data-t="pf_lang_hint">На нём же говорит оракул</span></span>
               <span class="end"><span id="pf-lang" style="color:var(--brass-pale);font-size:13px">Русский</span></span>
             </button>
             <div class="rowcard">
-              <span class="idx">◔</span>
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 17.2V11a5.6 5.6 0 1111.2 0v6.2h1.4H5z"/><path d="M10.2 20.2a2 2 0 003.6 0"/></svg></span>
               <span class="mid"><strong data-t="pf_notif">Напоминания о карте дня</strong><span data-t="pf_notif_hint">Одно сообщение в сутки в Telegram</span></span>
               <span class="end"><button class="switch" id="pf-notif" onclick="toggleNotif()" aria-label="Напоминания"></button></span>
             </div>
             <button class="rowcard" onclick="openSheet('referral')">
-              <span class="idx">✲</span>
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.6" cy="8.6" r="3.6"/><path d="M3.4 20c.8-3.6 3.2-5.4 6.2-5.4 1.3 0 2.5.3 3.5 1"/><path d="M17.4 12.6v6M14.4 15.6h6"/></svg></span>
               <span class="mid"><strong data-t="ref_btn2">Пригласить друга</strong><span data-t="ref_text">За каждого — 50 звёзд на баланс</span></span>
               <span class="end"><span class="tag" id="pf-refs-2">0</span></span>
             </button>
             <button class="rowcard" onclick="openSupport()">
-              <span class="idx">✉</span>
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5.6" width="17.6" height="12.8" rx="2"/><path d="M3.6 7l8.4 6 8.4-6"/></svg></span>
               <span class="mid"><strong data-t="pf_support">Написать в поддержку</strong><span data-t="pf_support_hint">Отвечаем в течение суток</span></span>
               <span class="end">→</span>
             </button>
             <button class="rowcard" id="pf-logout" onclick="logout()" style="display:none">
-              <span class="idx" style="color:var(--ember)">⏻</span>
+              <span class="idx" style="color:var(--ember)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4v7.8"/><path d="M7.6 6.4a7 7 0 108.8 0"/></svg></span>
               <span class="mid"><strong data-t="pf_logout">Выйти из кабинета</strong><span data-t="pf_logout_hint">Потребуется подтверждение в Telegram</span></span>
               <span class="end">→</span>
             </button>
@@ -1613,7 +1629,7 @@ textarea.field{resize:none;line-height:1.55}
               <div class="city-wrap" style="margin-top:14px">
                 <label class="field-lab" for="as-city-q" data-t="f_city">Город рождения</label>
                 <div id="as-city-picked" class="city-picked" style="display:none">
-                  <span class="pin">⊕</span>
+                  <span class="pin"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M3.4 12h17.2M12 3.2c2.4 2.4 3.6 5.4 3.6 8.8s-1.2 6.4-3.6 8.8c-2.4-2.4-3.6-5.4-3.6-8.8S9.6 5.6 12 3.2z"/></svg></span>
                   <span class="nm" id="as-city-name">—</span>
                   <button type="button" class="again" onclick="clearCity()" data-t="city_change">Изменить</button>
                 </div>
@@ -1693,7 +1709,7 @@ textarea.field{resize:none;line-height:1.55}
                 <div class="syn-dial-num"><b id="syn-pct">—</b><span data-t="syn_pct_lab">совпадение</span></div>
               </div>
               <div>
-                <div class="syn-names"><span id="syn-n1">—</span><i>✧</i><span id="syn-n2">—</span></div>
+                <div class="syn-names"><span id="syn-n1">—</span><i><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg></i><span id="syn-n2">—</span></div>
                 <p class="label" style="margin-top:10px" id="syn-rel-lab">—</p>
               </div>
             </div>
@@ -1750,7 +1766,7 @@ textarea.field{resize:none;line-height:1.55}
     <!-- ============ ОРАКУЛ (собственная высота) ============ -->
     <section class="view chat" id="v-chat" style="flex:1;min-height:0">
       <div class="chat-head">
-        <div class="chat-sigil">❧</div>
+        <div class="chat-sigil"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.6h16v10.2H9.6L4 19.6z"/><path d="M8 9.4h8M8 12.4h5"/></svg></div>
         <div class="who">
           <strong data-t="chat_name">Оракул</strong>
           <span data-t="chat_state">читает карты, звёзды и сны</span>
@@ -1777,11 +1793,11 @@ textarea.field{resize:none;line-height:1.55}
 
     <nav class="dock">
       <div class="dock-in">
-        <button class="dock-btn" data-nav="home" onclick="go('home')"><span class="gl">◉</span><span class="tx" data-t="nav_home">Сегодня</span></button>
-        <button class="dock-btn" data-nav="spreads" onclick="go('spreads')"><span class="gl">✦</span><span class="tx" data-t="nav_spreads">Расклады</span></button>
-        <button class="dock-btn" data-nav="chat" onclick="go('chat')"><span class="gl">❧</span><span class="tx" data-t="nav_chat">Оракул</span></button>
-        <button class="dock-btn" data-nav="shop" onclick="go('shop')"><span class="gl">⍟</span><span class="tx" data-t="nav_shop_short">Энергия</span></button>
-        <button class="dock-btn" data-nav="profile" onclick="go('profile')"><span class="gl">○</span><span class="tx" data-t="nav_profile">Профиль</span></button>
+        <button class="dock-btn" data-nav="home" onclick="go('home')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7"/></svg></span><span class="tx" data-t="nav_home">Сегодня</span></button>
+        <button class="dock-btn" data-nav="spreads" onclick="go('spreads')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg></span><span class="tx" data-t="nav_spreads">Расклады</span></button>
+        <button class="dock-btn" data-nav="chat" onclick="go('chat')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.6h16v10.2H9.6L4 19.6z"/><path d="M8 9.4h8M8 12.4h5"/></svg></span><span class="tx" data-t="nav_chat">Оракул</span></button>
+        <button class="dock-btn" data-nav="shop" onclick="go('shop')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 2.8L5.6 13.6h4.8l-1.2 7.6 8-11.2h-4.8z"/></svg></span><span class="tx" data-t="nav_shop_short">Энергия</span></button>
+        <button class="dock-btn" data-nav="profile" onclick="go('profile')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="3.8"/><path d="M4.8 20.4c.9-3.9 3.7-5.8 7.2-5.8s6.3 1.9 7.2 5.8"/></svg></span><span class="tx" data-t="nav_profile">Профиль</span></button>
       </div>
     </nav>
   </div><!-- /work -->
@@ -2205,6 +2221,33 @@ const STR = {
   premium_note:{ru:'Откроется после первого пополнения энергии',en:'Opens after your first energy purchase'}
 };
 
+const IC = {
+  astro: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg>`,
+  bell: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 17.2V11a5.6 5.6 0 1111.2 0v6.2h1.4H5z"/><path d="M10.2 20.2a2 2 0 003.6 0"/></svg>`,
+  bolt: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 2.8L5.6 13.6h4.8l-1.2 7.6 8-11.2h-4.8z"/></svg>`,
+  cal: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.6" y="5.4" width="16.8" height="15" rx="2"/><path d="M3.6 10h16.8M8.4 3.4v3.4M15.6 3.4v3.4"/><circle cx="12" cy="15" r="1.5" fill="currentColor" stroke="none"/></svg>`,
+  cards: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg>`,
+  chat: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.6h16v10.2H9.6L4 19.6z"/><path d="M8 9.4h8M8 12.4h5"/></svg>`,
+  check: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 12.8l4.6 4.4L19.4 6.6"/></svg>`,
+  endrole: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.4h10M7 20.6h10"/><path d="M8.4 3.4c0 4 7.2 4.6 7.2 8.6s-7.2 4.6-7.2 8.6"/></svg>`,
+  fall: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6v13.2"/><path d="M6.8 12l5.2 5.2 5.2-5.2"/><path d="M4.6 20.6h14.8"/></svg>`,
+  globe: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M3.4 12h17.2M12 3.2c2.4 2.4 3.6 5.4 3.6 8.8s-1.2 6.4-3.6 8.8c-2.4-2.4-3.6-5.4-3.6-8.8S9.6 5.6 12 3.2z"/></svg>`,
+  home: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7"/></svg>`,
+  house: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 10.6L12 3.8l8.4 6.8v9.8H3.6z"/><path d="M9.6 20.4v-6h4.8v6"/></svg>`,
+  invite: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.6" cy="8.6" r="3.6"/><path d="M3.4 20c.8-3.6 3.2-5.4 6.2-5.4 1.3 0 2.5.3 3.5 1"/><path d="M17.4 12.6v6M14.4 15.6h6"/></svg>`,
+  lock: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5.4" y="10.6" width="13.2" height="9.8" rx="2"/><path d="M8.4 10.6V8.2a3.6 3.6 0 017.2 0v2.4"/></svg>`,
+  loop: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 11-3.2-6.4"/><path d="M20.4 3.6v4.6h-4.6"/></svg>`,
+  lunar: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg>`,
+  mail: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5.6" width="17.6" height="12.8" rx="2"/><path d="M3.6 7l8.4 6 8.4-6"/></svg>`,
+  matrix: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>`,
+  moon: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 3.4a8.6 8.6 0 100 17.2 8.9 8.9 0 01-3.6-8.6 8.9 8.9 0 013.6-8.6z"/></svg>`,
+  power: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4v7.8"/><path d="M7.6 6.4a7 7 0 108.8 0"/></svg>`,
+  shadow: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="3.8"/><path d="M4.8 20.4c.9-3.9 3.7-5.8 7.2-5.8"/><path d="M12 4.6a3.8 3.8 0 010 7.6M12 14.6c3.5 0 6.3 1.9 7.2 5.8H12z" fill="currentColor" stroke="none" opacity=".5"/></svg>`,
+  spark: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.3 6.9 6.9 2.3-6.9 2.3L12 21.2l-2.3-6.9L2.8 12l6.9-2.3z"/></svg>`,
+  syn: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg>`,
+  user: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="3.8"/><path d="M4.8 20.4c.9-3.9 3.7-5.8 7.2-5.8s6.3 1.9 7.2 5.8"/></svg>`,
+  wave: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>`
+};
 const LANGS = [
   {code:'ru', name:'Русский', note:'RU'},
   {code:'en', name:'English', note:'EN'},
@@ -2656,7 +2699,7 @@ async function renderSpreads(){
   if(!S.spreads.length){
     box.innerHTML = '<div class="shimmer" style="height:70px;border-radius:12px"></div>'.repeat(4);
     const data = await api('/spreads', 'GET');
-    if(!data || !data.success || !data.spreads){ box.innerHTML = '<div class="empty"><div class="g">✦</div><p>' + esc(tt('err')) + '</p></div>'; return; }
+    if(!data || !data.success || !data.spreads){ box.innerHTML = `<div class="empty"><div class="g">${IC.cards}</div><p>${esc(tt('err'))}</p></div>`; return; }
     S.spreads = data.spreads;
   }
   const cats = [['basic','cat_basic'],['love','cat_love'],['career','cat_career'],['deep','cat_deep']];
@@ -2783,7 +2826,7 @@ async function loadHistory(){
   const data = await api(`/tarot/history?offset=${S.histOffset}&limit=10`, 'GET');
   if(!S.histOffset) box.innerHTML = '';
   if(!data || !data.success || !data.history || !data.history.length){
-    if(!S.history.length) box.innerHTML = `<div class="empty"><div class="g">✦</div><p>${esc(tt('hist_empty'))}</p></div>`;
+    if(!S.history.length) box.innerHTML = `<div class="empty"><div class="g">${IC.cards}</div><p>${esc(tt('hist_empty'))}</p></div>`;
     more.style.display = 'none';
     return;
   }
@@ -2792,7 +2835,7 @@ async function loadHistory(){
     const i = S.history.length - 1;
     const d = h.created_at ? new Date(h.created_at).toLocaleDateString(lang, { day:'2-digit', month:'2-digit' }) : '';
     box.insertAdjacentHTML('beforeend', `<button class="rowcard" onclick="openHistory(${i})">
-      <span class="idx num">${(h.cards || []).length || '✦'}</span>
+      <span class="idx num">${(h.cards || []).length || 1}</span>
       <span class="mid"><strong>${esc(h.spread_name || h.spread_type || '')}</strong><span>${esc((h.question || '').slice(0, 80))}</span></span>
       <span class="end"><span class="label num">${d}</span></span>
     </button>`);
@@ -2856,7 +2899,7 @@ async function loadChat(more){
 function renderChat(){
   const box = document.getElementById('chat-inner');
   if(!S.chat.length){
-    box.innerHTML = `<div class="empty" style="margin:auto"><div class="g">❧</div><p>${esc(tt('chat_empty'))}</p></div>`;
+    box.innerHTML = `<div class="empty" style="margin:auto"><div class="g">${IC.chat}</div><p>${esc(tt('chat_empty'))}</p></div>`;
     return;
   }
   let html = S.chatMore ? `<button class="btn btn-quiet btn-sm" style="align-self:center" onclick="loadChat(true)">${esc(tt('hist_more'))}</button>` : '';
@@ -2944,19 +2987,19 @@ async function clearChat(){
 
 /* ============================ СОННИК ============================ */
 const DREAM_SYMBOLS = [
-  { ru:['Вода','Чувства, которые вы не проговариваете вслух.'], en:['Water','Feelings you are not saying out loud.'], g:'≋' },
-  { ru:['Падение','Потеря контроля там, где вы держитесь из последних сил.'], en:['Falling','Losing control where you are holding on too hard.'], g:'↓' },
-  { ru:['Дом','Ваша личность: комнаты — её части.'], en:['A house','Your psyche: the rooms are its parts.'], g:'⌂' },
-  { ru:['Погоня','То, от чего вы отказываетесь встретиться лицом к лицу.'], en:['Being chased','What you refuse to face directly.'], g:'↺' },
-  { ru:['Смерть','Почти никогда о смерти — чаще о конце роли.'], en:['Death','Almost never literal — usually the end of a role.'], g:'☠' },
-  { ru:['Незнакомец','Ваша тень: черты, которые вы не признаёте своими.'], en:['A stranger','Your shadow: traits you do not claim as yours.'], g:'◑' }
+  { ru:['Вода','Чувства, которые вы не проговариваете вслух.'], en:['Water','Feelings you are not saying out loud.'], g:'wave' },
+  { ru:['Падение','Потеря контроля там, где вы держитесь из последних сил.'], en:['Falling','Losing control where you are holding on too hard.'], g:'fall' },
+  { ru:['Дом','Ваша личность: комнаты — её части.'], en:['A house','Your psyche: the rooms are its parts.'], g:'house' },
+  { ru:['Погоня','То, от чего вы отказываетесь встретиться лицом к лицу.'], en:['Being chased','What you refuse to face directly.'], g:'loop' },
+  { ru:['Смерть','Почти никогда о смерти — чаще о конце роли.'], en:['Death','Almost never literal — usually the end of a role.'], g:'endrole' },
+  { ru:['Незнакомец','Ваша тень: черты, которые вы не признаёте своими.'], en:['A stranger','Your shadow: traits you do not claim as yours.'], g:'shadow' }
 ];
 function renderDreamSymbols(){
   const box = document.getElementById('dream-symbols');
   if(!box) return;
   box.innerHTML = DREAM_SYMBOLS.map(s => {
     const pair = s[lang] || s.en;
-    return `<div class="tile" style="min-height:auto;cursor:default"><span class="tg">${s.g}</span><h4>${esc(pair[0])}</h4><p style="margin-bottom:0">${esc(pair[1])}</p></div>`;
+    return `<div class="tile" style="min-height:auto;cursor:default"><span class="tg">${IC[s.g] || IC.spark}</span><h4>${esc(pair[0])}</h4><p style="margin-bottom:0">${esc(pair[1])}</p></div>`;
   }).join('');
 }
 function sendDream(){
@@ -2976,7 +3019,7 @@ async function loadShop(){
   const box = document.getElementById('shop-list');
   box.innerHTML = '<div class="shimmer" style="height:150px;border-radius:14px"></div>'.repeat(3);
   const data = await api('/shop/items', 'GET');
-  if(!data || !data.success || !data.items){ box.innerHTML = `<div class="empty"><div class="g">⍟</div><p>${esc(tt('err'))}</p></div>`; return; }
+  if(!data || !data.success || !data.items){ box.innerHTML = `<div class="empty"><div class="g">${IC.bolt}</div><p>${esc(tt('err'))}</p></div>`; return; }
   S.shop = data.items;
   box.innerHTML = data.items.map(it => {
     const price = it.price_rub != null ? (it.price_rub + ' ₽') : (it.price_usd + ' $');
@@ -3096,7 +3139,7 @@ async function loadCalendar(){
 function paintProfile(){
   const name = S.name || tt('chat_name');
   document.getElementById('pf-name').textContent = name;
-  document.getElementById('pf-sigil').textContent = (name || '✦').trim().charAt(0).toUpperCase();
+  document.getElementById('pf-sigil').textContent = (name || 'N').trim().charAt(0).toUpperCase();
   if(S.since){
     const d = new Date(S.since);
     document.getElementById('pf-since').textContent = tt('pf_since') + ' ' + d.toLocaleDateString(lang, { month:'long', year:'numeric' });
@@ -3186,7 +3229,7 @@ function renderLangs(){
   document.getElementById('lang-list').innerHTML = LANGS.map(l => `<button class="rowcard" onclick="setLang('${l.code}')">
     <span class="idx" style="font-family:var(--mono);font-size:12px">${l.note}</span>
     <span class="mid"><strong>${esc(l.name)}</strong></span>
-    <span class="end">${l.code === lang ? '<span class="tag">✓</span>' : ''}</span>
+    <span class="end">${l.code === lang ? `<span class="tag">${IC.check}</span>` : ''}</span>
   </button>`).join('');
 }
 async function setLang(code){
@@ -3220,7 +3263,7 @@ async function loadReferrals(){
   box.innerHTML = '<div class="shimmer" style="height:56px;border-radius:12px"></div>';
   const res = await api('/referrals', 'GET', {}, true);
   if(!res || !res.success || !res.referrals || !res.referrals.length){
-    box.innerHTML = `<div class="empty"><div class="g">✲</div><p>${esc(tt('ref_empty'))}</p></div>`;
+    box.innerHTML = `<div class="empty"><div class="g">${IC.invite}</div><p>${esc(tt('ref_empty'))}</p></div>`;
     return;
   }
   S.refs = res.referrals.length;
@@ -3405,7 +3448,7 @@ function renderMatrix(){
     return `<button class="rowcard" onclick="openMxPoint('${k}')">
       <span class="idx num">${val}</span>
       <span class="mid"><strong>${esc(mxName(k))}</strong><span>${esc(arcName(v))}</span></span>
-      <span class="end">${open ? '→' : '<span class="tag tag-cold">○</span>'}</span>
+      <span class="end">${open ? '→' : `<span class="tag tag-cold">${IC.lock}</span>`}</span>
     </button>`;
   }).join('');
 }
