@@ -1,6 +1,15 @@
 User-agent: *
 Allow: /
-Sitemap: https://neotaro.ru/sitemap-sovmestimost.xml
+
+Disallow: /app.html
+Disallow: /*?*
+
+Sitemap: https://neotaro.ru/sitemap.xml
+
+Sitemap: https://neotaro.ru/sitemap-pages.xml
+Sitemap: https://neotaro.ru/sitemap-sonnik.xml
 Sitemap: https://neotaro.ru/sitemap-chisla.xml
-Sitemap: https://neotaro.ru/sitemap-rasklady.xml
+Sitemap: https://neotaro.ru/sitemap-karty.xml
 Sitemap: https://neotaro.ru/sitemap-matrica.xml
+Sitemap: https://neotaro.ru/sitemap-rasklady.xml
+Sitemap: https://neotaro.ru/sitemap-sovmestimost.xml
