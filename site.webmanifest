@@ -1,0 +1,22 @@
+{
+  "name": "NEOTARO",
+  "short_name": "NEOTARO",
+  "description": "Таро, сонник и нумерология с ИИ-оракулом",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0F1E",
+  "theme_color": "#D9AE5F",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
