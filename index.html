@@ -606,6 +606,29 @@ textarea.field{resize:none;line-height:1.55}
   .chat-log{scroll-behavior:auto}
 }
 
+/* чат: одна верхняя полоса и одна нижняя */
+body.chat-mode .topbar{display:none}
+body.chat-mode .chat-head{padding-top:16px}
+@media(max-width:900px){body.chat-mode .chat-head{padding-top:calc(var(--sat) + 13px)}}
+.chat-energy{margin-left:auto;display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:7px 12px;flex:0 0 auto}
+.chat-energy .v{font-family:var(--mono);font-size:12.5px;color:var(--brass-bright)}
+.chat-energy .u{font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}
+.chat-head .clear{margin-left:8px}
+.chips.is-off{display:none}
+@media(max-width:420px){.chat-energy .u{display:none}.chat-head .who span{display:none}}
+
+/* знак / стихия / планета — всегда в три колонки */
+.grid-trio{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.sm-short{display:none}
+@media(max-width:620px){
+  .grid-trio{gap:8px}
+  .grid-trio .panel-pad{padding:14px 11px}
+  .grid-trio .h3{font-size:15px;line-height:1.2}
+  .grid-trio .label{font-size:8.5px;letter-spacing:.12em}
+  .sm-long{display:none}
+  .sm-short{display:inline}
+}
+
 @media (max-width:900px){.scroll{padding-bottom:calc(var(--dock) + var(--sab) + 48px)}}
 </style>
   <script type="application/ld+json">
@@ -1512,10 +1535,10 @@ textarea.field{resize:none;line-height:1.55}
             <button class="btn btn-quiet btn-sm" onclick="openSheet('name')" data-t="pf_edit">Изменить имя</button>
           </div>
 
-          <div class="grid grid-3" style="margin-top:14px">
-            <button class="panel panel-pad stat-card" onclick="openStatInfo('sign')" style="text-align:left"><div class="label" data-t="pf_sign">Знак</div><div class="h3" id="pf-sign" style="margin-top:8px">—</div><div class="label stat-more" style="margin-top:12px" data-t="stat_more">Что это значит</div></button>
-            <button class="panel panel-pad stat-card" onclick="openStatInfo('element')" style="text-align:left"><div class="label" data-t="pf_element">Стихия</div><div class="h3" id="pf-element" style="margin-top:8px">—</div><div class="label stat-more" style="margin-top:12px" data-t="stat_more">Что это значит</div></button>
-            <button class="panel panel-pad stat-card" onclick="openStatInfo('planet')" style="text-align:left"><div class="label" data-t="pf_planet">Планета</div><div class="h3" id="pf-planet" style="margin-top:8px">—</div><div class="label stat-more" style="margin-top:12px" data-t="stat_more">Что это значит</div></button>
+          <div class="grid grid-trio" style="margin-top:14px">
+            <button class="panel panel-pad stat-card" onclick="openStatInfo('sign')" style="text-align:left"><div class="label" data-t="pf_sign">Знак</div><div class="h3" id="pf-sign" style="margin-top:8px">—</div><div class="label stat-more" style="margin-top:12px"><span class="sm-long" data-t="stat_more">Что это значит</span><span class="sm-short" data-t="stat_more_s">Читать</span></div></button>
+            <button class="panel panel-pad stat-card" onclick="openStatInfo('element')" style="text-align:left"><div class="label" data-t="pf_element">Стихия</div><div class="h3" id="pf-element" style="margin-top:8px">—</div><div class="label stat-more" style="margin-top:12px"><span class="sm-long" data-t="stat_more">Что это значит</span><span class="sm-short" data-t="stat_more_s">Читать</span></div></button>
+            <button class="panel panel-pad stat-card" onclick="openStatInfo('planet')" style="text-align:left"><div class="label" data-t="pf_planet">Планета</div><div class="h3" id="pf-planet" style="margin-top:8px">—</div><div class="label stat-more" style="margin-top:12px"><span class="sm-long" data-t="stat_more">Что это значит</span><span class="sm-short" data-t="stat_more_s">Читать</span></div></button>
           </div>
 
           <div class="almanac" style="margin-top:14px">
@@ -1773,7 +1796,11 @@ textarea.field{resize:none;line-height:1.55}
           <strong data-t="chat_name">Оракул</strong>
           <span data-t="chat_state">читает карты, звёзды и сны</span>
         </div>
-        <button class="btn btn-quiet btn-sm" style="margin-left:auto" onclick="openSheet('clear')" data-t="chat_clear">Очистить</button>
+        <button class="chat-energy" onclick="go('shop')" aria-label="Энергия">
+          <span class="v num" id="m-energy-4">0</span>
+          <span class="u" data-t="energy_unit">энергия</span>
+        </button>
+        <button class="btn btn-quiet btn-sm clear" onclick="openSheet('clear')" data-t="chat_clear">Очистить</button>
       </div>
       <div class="chat-log" id="chat-log" onscroll="onChatScroll()">
         <div class="chat-inner" id="chat-inner"></div>
@@ -1784,10 +1811,6 @@ textarea.field{resize:none;line-height:1.55}
           <div class="composer">
             <textarea id="chat-in" rows="1" data-ph="chat_ph" placeholder="Спросите о том, что сейчас важно…" oninput="growInput(this)" onkeydown="chatKey(event)"></textarea>
             <button class="send" id="chat-send" onclick="sendChat()" aria-label="Отправить">→</button>
-          </div>
-          <div class="cost">
-            <span data-t="chat_cost">1 вопрос = 1 энергия</span>
-            <button onclick="go('shop')" style="font:inherit;color:var(--brass);letter-spacing:.16em"><span class="num" id="m-energy-3">0</span> · <span data-t="energy_top_up2">пополнить</span></button>
           </div>
         </div>
       </div>
@@ -2057,6 +2080,7 @@ const STR = {
   tile_matrix:{ru:'Двадцать два аркана в октаграмме вашей даты рождения.',en:'Twenty-two arcana in the octagram of your birth date.'},
   tile_calendar:{ru:'Что сегодня идёт легко, а что лучше отложить.',en:'What flows easily today and what is better postponed.'},
   tile_chat:{ru:'Свободный разговор: карты, звёзды, сны и сложные вопросы.',en:'An open conversation: cards, stars, dreams and hard questions.'},
+  stat_more_s:{ru:'Читать',en:'Read',es:'Leer',fr:'Lire',de:'Lesen'},
   stat_more:{ru:'Что это значит',en:'What it means',es:'Qué significa',fr:'Ce que cela veut dire',de:'Was das bedeutet'},
   stat_none:{ru:'Описание появится, когда будет заполнена дата рождения.',en:'The description appears once your birth date is saved.'},
   ref_eyebrow:{ru:'Приглашения',en:'Invitations',es:'Invitaciones',fr:'Invitations',de:'Einladungen'},
@@ -2436,6 +2460,7 @@ function go(view){
   const el = document.getElementById('v-' + view);
   if(el) el.classList.add('is-on');
   const isChat = view === 'chat';
+  document.body.classList.toggle('chat-mode', isChat);
   document.getElementById('scroll').style.display = isChat ? 'none' : 'block';
   const vc = document.getElementById('v-chat');
   if(vc) vc.style.display = isChat ? 'flex' : 'none';
@@ -2448,7 +2473,7 @@ function go(view){
 
 /* ---------- энергия в интерфейсе ---------- */
 function paintEnergy(){
-  ['m-energy','m-energy-2','m-energy-3','pf-energy'].forEach(id => {
+  ['m-energy','m-energy-2','m-energy-4','pf-energy'].forEach(id => {
     const n = document.getElementById(id);
     if(n) n.textContent = S.energy;
   });
@@ -2892,6 +2917,8 @@ async function loadChat(more){
 }
 function renderChat(){
   const box = document.getElementById('chat-inner');
+  const chipbox = document.getElementById('chat-chips');
+  if(chipbox) chipbox.classList.toggle('is-off', S.chat.length > 0);
   if(!S.chat.length){
     box.innerHTML = `<div class="empty" style="margin:auto"><div class="g">${IC.chat}</div><p>${esc(tt('chat_empty'))}</p></div>`;
     return;
