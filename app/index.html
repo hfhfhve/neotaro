@@ -630,6 +630,51 @@ body.chat-mode .chat-head{padding-top:16px}
 }
 
 @media (max-width:900px){.scroll{padding-bottom:calc(var(--dock) + var(--sab) + 48px)}}
+
+/* ============ ГОЛОСОВОЙ ВВОД ============ */
+.mic{width:44px;height:44px;flex:0 0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--line-cold);background:rgba(35,44,71,.4);color:var(--brass-pale);transition:transform .16s,border-color .2s,background .2s}
+.mic:hover{border-color:var(--brass);background:rgba(217,174,95,.1)}
+.mic:active{transform:scale(.94)}
+.mic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.mic.is-off,.send.is-off{display:none}
+
+.mic-wide{display:inline-flex;align-items:center;gap:10px;margin-top:10px;padding:11px 18px;border-radius:999px;border:1px solid var(--line);color:var(--brass-pale);background:rgba(217,174,95,.06);font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;transition:background .2s,transform .16s}
+.mic-wide:hover{background:rgba(217,174,95,.14)}
+.mic-wide:active{transform:scale(.97)}
+.mic-wide.is-off{display:none}
+.mic-wide svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
+
+.vrec{position:fixed;z-index:90;left:50%;transform:translate(-50%,16px);bottom:calc(var(--sab) + 84px);width:min(560px,calc(100vw - 32px));display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(140deg,rgba(18,24,41,.97),rgba(7,10,20,.97));box-shadow:0 18px 50px rgba(0,0,0,.6);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s cubic-bezier(.2,.9,.3,1)}
+.vrec.is-on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+@media(min-width:901px){.vrec{bottom:calc(var(--sab) + 26px)}}
+
+.vrec-orb{position:relative;width:34px;height:34px;flex:0 0 auto;border-radius:50%;background:radial-gradient(circle at 50% 40%,var(--brass-bright),#8A6220);animation:vrecPulse 1.6s ease-out infinite}
+.vrec-orb::after{content:'';position:absolute;inset:0;margin:auto;width:9px;height:9px;border-radius:50%;background:#070A14}
+@keyframes vrecPulse{0%{box-shadow:0 0 0 0 rgba(217,174,95,.45)}70%{box-shadow:0 0 0 14px rgba(217,174,95,0)}100%{box-shadow:0 0 0 0 rgba(217,174,95,0)}}
+
+.vrec-wave{flex:1;height:34px;min-width:0;display:block}
+.vrec-time{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--brass-pale);flex:0 0 auto;font-variant-numeric:tabular-nums}
+.vrec.is-warn .vrec-time{color:var(--ember)}
+.vrec.is-warn .vrec-orb{background:radial-gradient(circle at 50% 40%,#E39A6E,var(--ember))}
+
+.vrec-btn{width:38px;height:38px;flex:0 0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .16s,background .2s}
+.vrec-btn:active{transform:scale(.92)}
+.vrec-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+.vrec-cancel{border:1px solid rgba(196,112,63,.45);color:var(--ember);background:rgba(196,112,63,.08)}
+.vrec-cancel:hover{background:rgba(196,112,63,.18)}
+.vrec-ok{background:linear-gradient(140deg,var(--brass-pale),#C0913F);color:#0B0F1E}
+
+.vrec-work{display:none;flex:1;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-pale)}
+.vrec.is-work .vrec-wave,.vrec.is-work .vrec-time,.vrec.is-work .vrec-cancel,.vrec.is-work .vrec-ok{display:none}
+.vrec.is-work .vrec-work{display:flex}
+.vrec.is-work .vrec-orb{animation-duration:.9s}
+.vrec-work i{display:block;height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--brass),transparent);background-size:200% 100%;animation:vrecShim 1.1s linear infinite}
+@keyframes vrecShim{from{background-position:200% 0}to{background-position:-200% 0}}
+
+.vtag{display:inline-flex;align-items:center;gap:5px;margin-bottom:7px;padding:3px 8px;border:1px solid var(--line-soft);border-radius:999px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:rgba(233,217,172,.8);background:rgba(217,174,95,.07);font-variant-numeric:tabular-nums}
+.vtag svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+
+@media(prefers-reduced-motion:reduce){.vrec-orb,.vrec-work i{animation:none}}
 </style>
 </head>
 <body class="bg-space-900 min-h-screen">
@@ -967,6 +1012,7 @@ body.chat-mode .chat-head{padding-top:16px}
           <div class="panel panel-pad" style="margin-top:24px;max-width:720px">
             <label class="field-lab" for="dream-in" data-t="dream_label">Содержание сна</label>
             <textarea id="dream-in" class="field" rows="6" data-ph="dream_ph" placeholder="Мне снилось, что я падаю в тёмную воду, и вода оказалась тёплой…"></textarea>
+            <button class="mic-wide is-off" id="dream-mic" type="button" data-t="v_speak_dream"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></svg>Рассказать сон голосом</button>
             <button class="btn btn-brass btn-wide" style="margin-top:16px" onclick="sendDream()" data-t="dream_btn">Разобрать сон</button>
           </div>
           <div class="hair"></div>
@@ -1185,6 +1231,7 @@ body.chat-mode .chat-head{padding-top:16px}
           <div class="chips" id="chat-chips"></div>
           <div class="composer">
             <textarea id="chat-in" rows="1" data-ph="chat_ph" placeholder="Спросите о том, что сейчас важно…" oninput="growInput(this)" onkeydown="chatKey(event)"></textarea>
+            <button class="mic is-off" id="chat-mic" type="button" aria-label="Голосовое сообщение"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M8.5 21h7"/></svg></button>
             <button class="send" id="chat-send" onclick="sendChat()" aria-label="Отправить">→</button>
           </div>
         </div>
@@ -2273,7 +2320,7 @@ async function loadChat(more){
   const data = await api(`/chat/history?persona=oracle&offset=${S.chatOffset}&limit=20`, 'GET', {}, true);
   S.chatLoading = false;
   if(data && data.success && data.messages){
-    const batch = data.messages.slice().reverse();
+    const batch = data.messages.slice().reverse().map(m => Object.assign({}, m, { voiceSec: m.voice_sec || null }));
     S.chat = more ? batch.concat(S.chat) : batch;
     S.chatOffset += data.messages.length;
     S.chatMore = !!data.has_more;
@@ -2312,7 +2359,7 @@ function renderChat(){
       }
       return `<div class="msg msg-ai"><div class="meta">${esc(tt('chat_name'))} · ${esc(m.time || '')}</div><div class="bubble">${clean(text)}${act}</div></div>`;
     }
-    return `<div class="msg msg-me"><div class="meta">${esc(m.time || '')}</div><div class="bubble">${clean(text)}</div></div>`;
+    return `<div class="msg msg-me"><div class="meta">${esc(m.time || '')}</div><div class="bubble">${m.voiceSec ? vTag(m.voiceSec) : ''}${clean(text)}</div></div>`;
   }).join('');
   box.innerHTML = html;
 }
@@ -2338,7 +2385,8 @@ async function sendChat(){
   if(!text) return;
   if(S.energy < 1){ toast(tt('no_energy')); go('shop'); return; }
   const now = new Date().toLocaleTimeString(lang, { hour:'2-digit', minute:'2-digit' });
-  S.chat.push({ type:'user', text, time: now });
+  const vmeta = window.__voiceMeta; window.__voiceMeta = null;
+  S.chat.push({ type:'user', text, time: now, voiceSec: vmeta ? vmeta.sec : null });
   input.value = '';
   growInput(input);
   renderChat();
@@ -2349,7 +2397,12 @@ async function sendChat(){
 
   let payload = text;
   if(window.cardDiscussContext){ payload += "\n\n===HIDDEN_DATA===\n" + window.cardDiscussContext; window.cardDiscussContext = null; }
-  const data = await api('/chat/send', 'POST', { text: payload, persona: 'oracle' });
+  const data = await api('/chat/send', 'POST', {
+    text: payload,
+    persona: 'oracle',
+    input_type: vmeta ? 'voice' : 'text',
+    audio_sec: vmeta ? vmeta.sec : null
+  });
   document.getElementById('chat-send').disabled = false;
   const t = document.getElementById('typing');
   if(t) t.remove();
@@ -3050,6 +3103,304 @@ function discussSyn(){
     if(input){ input.value = tt('syn_prompt'); growInput(input); input.focus(); }
   }, 350);
 }
+
+
+/* =====================================================================
+   ГОЛОСОВОЙ ВВОД
+   Запись → POST /stt/transcribe → текст в поле → обычный sendChat().
+   Энергия списывается только в /chat/send — голос стоит те же 1 ⊙.
+   ===================================================================== */
+
+const VCFG = { maxSec: 60, warnSec: 50, minMs: 700 };
+
+const VT = {
+  v_work:   { ru:'Расшифровываю голос…', en:'Transcribing…', es:'Transcribiendo…', fr:'Transcription…', de:'Transkribiere…' },
+  v_dream:  { ru:'Рассказать сон голосом', en:'Tell the dream aloud', es:'Cuenta el sueño en voz alta', fr:'Racontez le rêve', de:'Traum laut erzählen' },
+  v_denied: { ru:'Нет доступа к микрофону. Разрешите его в настройках браузера', en:'No microphone access. Allow it in browser settings', es:'Sin acceso al micrófono. Permítelo en el navegador', fr:'Pas d’accès au micro. Autorisez-le dans le navigateur', de:'Kein Mikrofonzugriff. Im Browser erlauben' },
+  v_short:  { ru:'Слишком коротко — говорите чуть дольше', en:'Too short — speak a bit longer', es:'Demasiado corto: habla más', fr:'Trop court — parlez plus longtemps', de:'Zu kurz — sprich länger' },
+  v_long:   { ru:'Слишком длинная запись', en:'Recording is too long', es:'Grabación demasiado larga', fr:'Enregistrement trop long', de:'Aufnahme zu lang' },
+  v_empty:  { ru:'Не расслышала. Попробуйте ещё раз — ближе к микрофону', en:'I could not hear it. Try again, closer to the mic', es:'No te oí. Inténtalo más cerca', fr:'Je n’ai rien entendu. Réessayez', de:'Nichts gehört. Nochmal versuchen' },
+  v_rate:   { ru:'Слишком много голосовых подряд. Подождите', en:'Too many voice messages. Wait a moment', es:'Demasiados mensajes de voz. Espera', fr:'Trop de messages vocaux. Patientez', de:'Zu viele Sprachnachrichten. Warte kurz' },
+  v_off:    { ru:'Голосовой ввод временно отключён', en:'Voice input is temporarily off', es:'Entrada de voz desactivada', fr:'Saisie vocale désactivée', de:'Spracheingabe ist aus' }
+};
+function vt(k){ const row = VT[k]; return row ? (row[lang] || row.en) : k; }
+
+const V_MIME = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4','audio/aac','audio/mpeg'];
+const V_EXT  = { webm:'webm', ogg:'ogg', mp4:'m4a', aac:'aac', mpeg:'mp3' };
+
+function vPickMime(){
+  if(typeof MediaRecorder === 'undefined') return null;
+  for(const m of V_MIME){ try{ if(MediaRecorder.isTypeSupported(m)) return m; }catch(e){} }
+  return '';
+}
+const VOICE_OK = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && typeof MediaRecorder !== 'undefined' && vPickMime() !== null);
+
+function vFmt(sec){ const s = Math.floor(sec); return Math.floor(s/60) + ':' + ('0' + (s%60)).slice(-2); }
+
+function vTag(sec){
+  return `<span class="vtag"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></svg>${vFmt(sec)}</span><br>`;
+}
+
+function vSwipes(lock){
+  try{
+    if(!bridge.isTG || !window.Telegram || !Telegram.WebApp) return;
+    const w = Telegram.WebApp;
+    if(lock && w.disableVerticalSwipes) w.disableVerticalSwipes();
+    if(!lock && w.enableVerticalSwipes) w.enableVerticalSwipes();
+  }catch(e){}
+}
+
+/* multipart-аналог api(): Content-Type убираем, чтобы браузер сам поставил boundary */
+async function apiUpload(endpoint, blob, filename, fields){
+  const h = bridge.headers();
+  delete h['Content-Type'];
+  const fd = new FormData();
+  fd.append('file', blob, filename);
+  if(fields) Object.keys(fields).forEach(k => fd.append(k, String(fields[k])));
+  try{
+    const res = await fetch(API_URL + endpoint, { method:'POST', headers:h, body:fd });
+    if(res.status === 401 && bridge.isWeb){
+      localStorage.removeItem('neotaro_token');
+      localStorage.removeItem('neotaro_user');
+      location.replace(SITE_URL);
+      return { success:false };
+    }
+    if(res.status === 413) return { success:false, error:'too_large' };
+    return await res.json();
+  }catch(e){ return { success:false, error:'network' }; }
+}
+
+/* ---------- панель записи ---------- */
+let vPanel, vWave, vTime, vWorkTx;
+function vBuild(){
+  if(vPanel) return;
+  vPanel = document.createElement('div');
+  vPanel.className = 'vrec';
+  vPanel.setAttribute('aria-hidden','true');
+  vPanel.innerHTML =
+    '<span class="vrec-orb"></span>' +
+    '<canvas class="vrec-wave"></canvas>' +
+    '<div class="vrec-work"><span></span><i></i></div>' +
+    '<span class="vrec-time">0:00</span>' +
+    '<button class="vrec-btn vrec-cancel" type="button" aria-label="Cancel"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
+    '<button class="vrec-btn vrec-ok" type="button" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>';
+  document.body.appendChild(vPanel);
+  vWave   = vPanel.querySelector('.vrec-wave');
+  vTime   = vPanel.querySelector('.vrec-time');
+  vWorkTx = vPanel.querySelector('.vrec-work span');
+  vPanel.querySelector('.vrec-cancel').addEventListener('click', () => REC.cancel());
+  vPanel.querySelector('.vrec-ok').addEventListener('click', () => REC.stop());
+}
+function vShow(on){
+  vBuild();
+  vPanel.classList.toggle('is-on', !!on);
+  vPanel.setAttribute('aria-hidden', on ? 'false' : 'true');
+  if(!on) vPanel.classList.remove('is-work','is-warn');
+  vSwipes(!!on);
+}
+function vWork(on){ vBuild(); vWorkTx.textContent = vt('v_work'); vPanel.classList.toggle('is-work', !!on); }
+
+/* ---------- рекордер ---------- */
+const REC = {
+  stream:null, mr:null, chunks:[], mime:'', ctx:null, analyser:null, buf:null,
+  raf:0, t0:0, timer:0, active:false, aborted:false, target:null,
+
+  async start(target){
+    if(this.active) return;
+    if(!VOICE_OK) return;
+    this.target = target; this.aborted = false; this.chunks = [];
+    try{
+      this.stream = await navigator.mediaDevices.getUserMedia({
+        audio:{ channelCount:1, echoCancellation:true, noiseSuppression:true, autoGainControl:true }
+      });
+    }catch(e){ toast(vt('v_denied')); return; }
+
+    this.mime = vPickMime() || '';
+    try{
+      this.mr = this.mime
+        ? new MediaRecorder(this.stream, { mimeType:this.mime, audioBitsPerSecond:32000 })
+        : new MediaRecorder(this.stream);
+    }catch(e){
+      try{ this.mr = new MediaRecorder(this.stream); }
+      catch(e2){ this.release(); toast(tt('err')); return; }
+    }
+
+    this.mr.ondataavailable = ev => { if(ev.data && ev.data.size) this.chunks.push(ev.data); };
+    this.mr.onstop = () => this.finish();
+    this.mr.start(250);
+
+    this.active = true;
+    this.t0 = Date.now();
+    bridge.haptic('tap');
+    vShow(true);
+    this.meter();
+    this.tick();
+    this.timer = setInterval(() => this.tick(), 200);
+  },
+
+  tick(){
+    const sec = (Date.now() - this.t0) / 1000;
+    vTime.textContent = vFmt(sec) + ' / ' + vFmt(VCFG.maxSec);
+    vPanel.classList.toggle('is-warn', sec >= VCFG.warnSec);
+    if(sec >= VCFG.maxSec) this.stop();
+  },
+
+  meter(){
+    try{
+      const AC = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AC();
+      if(this.ctx.state === 'suspended') this.ctx.resume();
+      const src = this.ctx.createMediaStreamSource(this.stream);
+      this.analyser = this.ctx.createAnalyser();
+      this.analyser.fftSize = 512;
+      this.analyser.smoothingTimeConstant = 0.75;
+      src.connect(this.analyser);
+      this.buf = new Uint8Array(this.analyser.frequencyBinCount);
+      this.draw();
+    }catch(e){}
+  },
+
+  draw(){
+    if(!this.analyser || !this.active) return;
+    const dpr = window.devicePixelRatio || 1;
+    const w = vWave.clientWidth, hh = vWave.clientHeight;
+    if(vWave.width !== w * dpr){ vWave.width = w * dpr; vWave.height = hh * dpr; }
+    const g = vWave.getContext('2d');
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, w, hh);
+    this.analyser.getByteFrequencyData(this.buf);
+    const bars = Math.max(12, Math.floor(w / 6));
+    const step = Math.floor(this.buf.length / bars) || 1;
+    const grad = g.createLinearGradient(0, 0, w, 0);
+    grad.addColorStop(0, 'rgba(217,174,95,.35)');
+    grad.addColorStop(.5, 'rgba(240,221,176,.95)');
+    grad.addColorStop(1, 'rgba(217,174,95,.35)');
+    g.fillStyle = grad;
+    for(let i = 0; i < bars; i++){
+      const v = this.buf[i * step] / 255;
+      const bh = Math.max(2, v * v * hh * 1.15);
+      g.fillRect(i * (w / bars), (hh - bh) / 2, Math.max(1.5, (w / bars) - 2.5), bh);
+    }
+    this.raf = requestAnimationFrame(() => this.draw());
+  },
+
+  stop(){
+    if(!this.active || !this.mr) return;
+    this.active = false;
+    clearInterval(this.timer);
+    cancelAnimationFrame(this.raf);
+    bridge.haptic('tap');
+    try{ this.mr.stop(); }catch(e){ this.finish(); }
+  },
+
+  cancel(){ this.aborted = true; this.stop(); vShow(false); },
+
+  release(){
+    try{ if(this.stream) this.stream.getTracks().forEach(t => t.stop()); }catch(e){}
+    try{ if(this.ctx) this.ctx.close(); }catch(e){}
+    this.stream = null; this.ctx = null; this.analyser = null; this.mr = null;
+  },
+
+  async finish(){
+    const ms = Date.now() - this.t0;
+    const chunks = this.chunks.slice();
+    const mime = this.mime || 'audio/webm';
+    const target = this.target;
+    const aborted = this.aborted;
+    this.chunks = [];
+    this.release();
+
+    if(aborted) return;
+    if(ms < VCFG.minMs || !chunks.length){ vShow(false); toast(vt('v_short')); return; }
+
+    const blob = new Blob(chunks, { type: mime });
+    const sub = (mime.split('/')[1] || 'webm').split(';')[0];
+    const name = 'voice.' + (V_EXT[sub] || 'webm');
+
+    vWork(true);
+    const data = await apiUpload('/stt/transcribe', blob, name, { scope: target.scope });
+    vShow(false);
+
+    if(!data || !data.success){
+      const code = (data && data.error) || 'network';
+      if(code === 'no_energy'){ toast(tt('no_energy')); go('shop'); return; }
+      if(code === 'empty')      return toast(vt('v_empty'));
+      if(code === 'too_long')   return toast(vt('v_long'));
+      if(code === 'too_short')  return toast(vt('v_short'));
+      if(code === 'too_large')  return toast(vt('v_long'));
+      if(code === 'rate_limit') return toast(vt('v_rate'));
+      if(code === 'disabled')   return toast(vt('v_off'));
+      return toast(tt('err'));
+    }
+
+    bridge.haptic('ok');
+    vDeliver(target, data.text, data.duration);
+  }
+};
+
+function vDeliver(target, text, sec){
+  const input = document.getElementById(target.inputId);
+  if(!input) return;
+  const prev = (input.value || '').trim();
+  input.value = prev ? (prev + ' ' + text) : text;
+  if(input.tagName === 'TEXTAREA' && target.grow) growInput(input);
+  vPaintComposer();
+  if(target.autoSend){
+    window.__voiceMeta = { sec: sec };
+    sendChat();
+  }else{
+    input.focus();
+    try{ input.setSelectionRange(input.value.length, input.value.length); }catch(e){}
+  }
+}
+
+function vPaintComposer(){
+  const input = document.getElementById('chat-in');
+  const mic = document.getElementById('chat-mic');
+  const send = document.getElementById('chat-send');
+  if(!input || !mic || !send) return;
+  const empty = !input.value.trim();
+  mic.classList.toggle('is-off', !empty);
+  send.classList.toggle('is-off', empty);
+}
+
+function vInit(){
+  const micChat = document.getElementById('chat-mic');
+  const micDream = document.getElementById('dream-mic');
+
+  if(!VOICE_OK){
+    // Микрофона нет (чаще всего WebView в iOS Telegram) — просто убираем кнопки.
+    if(micChat) micChat.remove();
+    if(micDream) micDream.remove();
+    return;
+  }
+
+  vBuild();
+
+  if(micChat){
+    micChat.addEventListener('click', e => {
+      e.preventDefault();
+      if(REC.active) REC.stop();
+      else REC.start({ inputId:'chat-in', scope:'chat', autoSend:true, grow:true });
+    });
+    const input = document.getElementById('chat-in');
+    if(input) input.addEventListener('input', vPaintComposer);
+    vPaintComposer();
+  }
+
+  if(micDream){
+    micDream.classList.remove('is-off');
+    micDream.addEventListener('click', e => {
+      e.preventDefault();
+      if(REC.active) REC.stop();
+      // в Соннике НЕ отправляем автоматом — даём дописать детали сна
+      else REC.start({ inputId:'dream-in', scope:'dream', autoSend:false, grow:false });
+    });
+  }
+}
+
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', vInit);
+else vInit();
 </script>
 </body>
 </html>
