@@ -991,6 +991,11 @@ body.chat-mode .chat-head{padding-top:16px}
               <span class="mid"><strong data-t="ref_btn2">Пригласить друга</strong><span data-t="ref_text">Ссылка на сайт и бонус за каждого</span></span>
               <span class="end"><span class="tag" id="pf-refs-2">0</span></span>
             </button>
+            <button class="rowcard" onclick="go('memory')">
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.6h9.4l3.4 3.4v13.4H6z"/><path d="M15 3.6V7h3.6"/><path d="M9 11.4h6M9 14.8h6M9 18h3.6"/></svg></span>
+              <span class="mid"><strong data-t="mem_row">Хроника памяти</strong><span data-t="mem_row_hint">Что оракул помнит о вас</span></span>
+              <span class="end"><span class="tag" id="pf-mem-count">0</span></span>
+            </button>
             <button class="rowcard" onclick="openSupport()">
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5.6" width="17.6" height="12.8" rx="2"/><path d="M3.6 7l8.4 6 8.4-6"/></svg></span>
               <span class="mid"><strong data-t="pf_support">Написать в поддержку</strong><span data-t="pf_support_hint">Отвечаем в течение суток</span></span>
@@ -1002,6 +1007,31 @@ body.chat-mode .chat-head{padding-top:16px}
               <span class="end">→</span>
             </button>
           </div>
+        </section>
+
+        <!-- ============ ХРОНИКА (память оракула) ============ -->
+        <section class="view" id="v-memory">
+          <button class="btn btn-quiet btn-sm" onclick="go('profile')" style="margin-bottom:14px">← <span data-t="nav_profile">Профиль</span></button>
+          <div class="eyebrow" style="margin-bottom:12px" data-t="mem_title">Хроника</div>
+          <h1 class="h1" data-t="mem_h1">Оракул помнит вашу историю</h1>
+          <p class="sub" data-t="mem_lead">Здесь всё, что оракул запомнил из ваших разговоров, раскладов и снов. Вы управляете этим полностью: любую запись можно убрать в один касательный жест.</p>
+
+          <div class="stack" style="margin-top:18px">
+            <div class="rowcard">
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 7.6v5l3.2 2"/></svg></span>
+              <span class="mid"><strong data-t="mem_on">Запоминать меня</strong><span data-t="mem_on_hint">Если выключить — каждый разговор начнётся с чистого листа</span></span>
+              <span class="end"><button class="switch" id="mem-switch" onclick="memToggle()" aria-label="Память"></button></span>
+            </div>
+          </div>
+
+          <div class="panel panel-pad" id="mem-digest" style="display:none;margin-top:16px">
+            <div class="label" data-t="mem_digest">Общая картина</div>
+            <p class="sub" id="mem-digest-text" style="margin-top:8px"></p>
+          </div>
+
+          <div id="mem-body" style="margin-top:18px"></div>
+
+          <button class="btn btn-quiet btn-wide" id="mem-clear" onclick="memForgetAll()" style="margin-top:22px;display:none;color:var(--ember)" data-t="mem_forget_all">Стереть всю память</button>
         </section>
 
         <!-- ============ СОННИК ============ -->
@@ -1561,6 +1591,20 @@ const STR = {
   pf_birth:{ru:'Дата рождения',en:'Date of birth',es:'Fecha de nacimiento',fr:'Date de naissance',de:'Geburtsdatum'},
   pf_birth_hint:{ru:'Нужна для знака, матрицы и гороскопа',en:'Needed for your sign, matrix and horoscope'},
   pf_settings:{ru:'Настройки',en:'Settings',es:'Ajustes',fr:'Réglages',de:'Einstellungen'},
+  mem_row:{ru:'Хроника памяти',en:'Memory chronicle',es:'Crónica de memoria',fr:'Chronique de mémoire',de:'Gedächtnis-Chronik'},
+  mem_row_hint:{ru:'Что оракул помнит о вас',en:'What the oracle remembers about you',es:'Lo que el oráculo recuerda de ti',fr:'Ce que l\'oracle retient de vous',de:'Was das Orakel über dich weiß'},
+  mem_title:{ru:'Хроника',en:'Chronicle',es:'Crónica',fr:'Chronique',de:'Chronik'},
+  mem_h1:{ru:'Оракул помнит вашу историю',en:'The oracle remembers your story',es:'El oráculo recuerda tu historia',fr:'L\'oracle se souvient de votre histoire',de:'Das Orakel erinnert sich an deine Geschichte'},
+  mem_lead:{ru:'Здесь всё, что оракул запомнил из ваших разговоров, раскладов и снов. Любую запись можно убрать.',en:'Everything the oracle has learned from your talks, spreads and dreams. Remove any entry at any time.',es:'Todo lo que el oráculo aprendió de tus charlas, tiradas y sueños. Puedes borrar cualquier entrada.',fr:'Tout ce que l\'oracle a retenu de vos échanges, tirages et rêves. Supprimez ce que vous voulez.',de:'Alles, was das Orakel aus deinen Gesprächen, Legungen und Träumen weiß. Jeder Eintrag lässt sich löschen.'},
+  mem_on:{ru:'Запоминать меня',en:'Remember me',es:'Recordarme',fr:'Se souvenir de moi',de:'An mich erinnern'},
+  mem_on_hint:{ru:'Если выключить — каждый разговор начнётся с чистого листа',en:'Turn off and every talk starts from a blank page',es:'Si lo apagas, cada charla empieza de cero',fr:'Désactivé, chaque échange repart de zéro',de:'Aus: Jedes Gespräch startet bei null'},
+  mem_digest:{ru:'Общая картина',en:'The big picture',es:'La imagen general',fr:'Vue d\'ensemble',de:'Das Gesamtbild'},
+  mem_empty:{ru:'Пока пусто. Поговорите с оракулом или сделайте расклад — хроника начнёт заполняться сама.',en:'Empty for now. Talk to the oracle or pull a spread — the chronicle fills itself.',es:'Aún vacío. Habla con el oráculo o haz una tirada: la crónica se llenará sola.',fr:'Encore vide. Parlez à l\'oracle ou tirez les cartes : la chronique se remplira seule.',de:'Noch leer. Sprich mit dem Orakel oder lege die Karten — die Chronik füllt sich von selbst.'},
+  mem_off_note:{ru:'Память выключена. Старые записи сохранены, но оракул их не видит.',en:'Memory is off. Old entries are kept but the oracle cannot see them.',es:'Memoria apagada. Las entradas se guardan, pero el oráculo no las ve.',fr:'Mémoire désactivée. Les entrées restent mais l\'oracle ne les voit pas.',de:'Gedächtnis aus. Einträge bleiben, aber das Orakel sieht sie nicht.'},
+  mem_forget_all:{ru:'Стереть всю память',en:'Erase all memory',es:'Borrar toda la memoria',fr:'Effacer toute la mémoire',de:'Gesamtes Gedächtnis löschen'},
+  mem_confirm:{ru:'Стереть всё безвозвратно?',en:'Erase everything permanently?',es:'¿Borrar todo definitivamente?',fr:'Tout effacer définitivement ?',de:'Alles unwiderruflich löschen?'},
+  mem_done:{ru:'Готово',en:'Done',es:'Listo',fr:'Terminé',de:'Fertig'},
+  mem_pin:{ru:'Закрепить',en:'Pin',es:'Fijar',fr:'Épingler',de:'Anheften'},
   pf_lang:{ru:'Язык интерфейса',en:'Interface language',es:'Idioma',fr:'Langue',de:'Sprache'},
   pf_lang_hint:{ru:'На нём же говорит оракул',en:'The oracle speaks it too'},
   pf_notif:{ru:'Напоминания о карте дня',en:'Daily card reminders'},
@@ -1860,6 +1904,130 @@ function showGate(which){
   document.getElementById('shell').style.display = which ? 'none' : 'flex';
 }
 
+/* ---------- ХРОНИКА: долговременная память оракула ---------- */
+const MEM = { loaded:false, enabled:true, groups:[], total:0 };
+
+const MEM_KIND_ICON = {
+  identity:'◈', person:'●', relation:'❦', goal:'▲', fear:'▽',
+  situation:'◆', pattern:'∞', event:'▪', preference:'○'
+};
+
+async function loadMemory(){
+  const body = document.getElementById('mem-body');
+  if(!body) return;
+  if(!MEM.loaded) body.innerHTML = '<p class="sub" style="opacity:.6">…</p>';
+
+  const d = await api('/memory', 'GET', {}, true);
+  if(!d || !d.success){
+    body.innerHTML = '<p class="sub" style="opacity:.6">' + esc(tt('err')) + '</p>';
+    return;
+  }
+
+  MEM.loaded = true;
+  MEM.enabled = d.enabled !== false;
+  MEM.groups = d.groups || [];
+  MEM.total = d.total || 0;
+  renderMemory(d);
+}
+
+function renderMemory(d){
+  const sw = document.getElementById('mem-switch');
+  if(sw) sw.classList.toggle('is-on', MEM.enabled);
+
+  const dg = document.getElementById('mem-digest');
+  const dgt = document.getElementById('mem-digest-text');
+  if(dg && dgt){
+    if(d.digest){ dgt.textContent = d.digest; dg.style.display = ''; }
+    else dg.style.display = 'none';
+  }
+
+  const clear = document.getElementById('mem-clear');
+  if(clear) clear.style.display = MEM.total ? '' : 'none';
+
+  const cnt = document.getElementById('pf-mem-count');
+  if(cnt) cnt.textContent = MEM.total;
+
+  const body = document.getElementById('mem-body');
+  if(!body) return;
+
+  let head = '';
+  if(!MEM.enabled){
+    head = '<div class="panel panel-pad" style="margin-bottom:14px;border-color:var(--ember)">'
+         + '<p class="sub" style="margin:0">' + esc(tt('mem_off_note')) + '</p></div>';
+  }
+
+  if(!MEM.groups.length){
+    body.innerHTML = head + '<div class="panel panel-pad"><p class="sub" style="margin:0">'
+      + esc(tt('mem_empty')) + '</p></div>';
+    return;
+  }
+
+  const html = MEM.groups.map(g => {
+    const items = (g.items || []).map(it => {
+      const mark = MEM_KIND_ICON[it.kind] || '◆';
+      const meta = [];
+      if(it.mentions > 1) meta.push('×' + it.mentions);
+      if(it.source) meta.push(esc(it.source));
+      const metaHtml = meta.length
+        ? '<span style="font-size:11px;color:var(--mist);opacity:.75;margin-left:6px">' + meta.join(' · ') + '</span>'
+        : '';
+      return '<li style="display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line-soft)">'
+           + '<span style="color:var(--brass);font-size:12px;line-height:20px">' + mark + '</span>'
+           + '<span style="flex:1;font-size:14px;line-height:1.45;color:var(--ivory)">' + esc(it.fact) + metaHtml + '</span>'
+           + '<button onclick="memForget(' + it.id + ')" aria-label="delete" '
+           + 'style="background:none;border:0;color:var(--mist);font-size:17px;line-height:1;cursor:pointer;padding:2px 4px">×</button>'
+           + '</li>';
+    }).join('');
+
+    return '<div class="panel panel-pad" style="margin-bottom:12px">'
+         + '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px">'
+         + '<div class="label" style="margin:0">' + esc(g.label) + '</div>'
+         + '<button onclick="memForgetSubject(\'' + esc(g.key).replace(/'/g, "\\'") + '\')" '
+         + 'style="background:none;border:0;color:var(--mist);font-size:11px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer">'
+         + esc(tt('mem_forget_all').split(' ')[0]) + '</button>'
+         + '</div>'
+         + '<ul style="list-style:none;margin:8px 0 0;padding:0">' + items + '</ul>'
+         + '</div>';
+  }).join('');
+
+  body.innerHTML = head + html;
+}
+
+async function memForget(id){
+  bridge.haptic();
+  const r = await api('/memory/forget', 'POST', { scope:'fact', fact_id:id }, true);
+  if(r && r.success) loadMemory();
+}
+
+async function memForgetSubject(key){
+  bridge.haptic();
+  const r = await api('/memory/forget', 'POST', { scope:'subject', subject_key:key }, true);
+  if(r && r.success) loadMemory();
+}
+
+async function memForgetAll(){
+  if(!confirm(tt('mem_confirm'))) return;
+  bridge.haptic();
+  const r = await api('/memory/forget', 'POST', { scope:'all' }, true);
+  if(r && r.success){ toast(tt('mem_done')); loadMemory(); }
+}
+
+async function memToggle(){
+  bridge.haptic();
+  const next = !MEM.enabled;
+  MEM.enabled = next;
+  const sw = document.getElementById('mem-switch');
+  if(sw) sw.classList.toggle('is-on', next);
+  const r = await api('/memory/toggle', 'POST', { enabled: next }, true);
+  if(!r || !r.success){
+    MEM.enabled = !next;
+    if(sw) sw.classList.toggle('is-on', !next);
+    toast(tt('err'));
+    return;
+  }
+  loadMemory();
+}
+
 /* ---------- навигация ---------- */
 const LOADERS = {
   spreads: () => renderSpreads(),
@@ -1869,7 +2037,8 @@ const LOADERS = {
   chat: () => openChat(),
   astro: () => renderAstro(),
   syn: () => renderSyn(),
-  dream: () => renderDreamSymbols()
+  dream: () => renderDreamSymbols(),
+  memory: () => loadMemory()
 };
 function go(view){
   S.view = view;
@@ -1881,7 +2050,7 @@ function go(view){
   document.getElementById('scroll').style.display = isChat ? 'none' : 'block';
   const vc = document.getElementById('v-chat');
   if(vc) vc.style.display = isChat ? 'flex' : 'none';
-  const navKey = (view === 'table') ? 'spreads' : view;
+  const navKey = (view === 'table') ? 'spreads' : (view === 'memory' ? 'profile' : view);
   document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('is-on', b.dataset.nav === navKey));
   if(!isChat) document.getElementById('scroll').scrollTop = 0;
   if(LOADERS[view]) LOADERS[view]();
