@@ -1,19 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://neotaro.ru/sonnik/</loc><lastmod>2026-07-12</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/beremennost/</loc><lastmod>2026-01-09</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/dengi/</loc><lastmod>2026-01-02</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/dom/</loc><lastmod>2025-11-18</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/koshka/</loc><lastmod>2026-02-16</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/krov/</loc><lastmod>2025-12-04</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/ogon/</loc><lastmod>2025-11-02</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/padenie/</loc><lastmod>2026-06-23</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/pauk/</loc><lastmod>2026-03-08</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/pokoynik/</loc><lastmod>2025-12-16</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/polet/</loc><lastmod>2026-01-22</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/rebenok/</loc><lastmod>2026-05-09</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/sobaka/</loc><lastmod>2026-06-01</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/voda/</loc><lastmod>2026-06-21</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/zmeya/</loc><lastmod>2026-04-20</lastmod></url>
-  <url><loc>https://neotaro.ru/sonnik/zuby/</loc><lastmod>2026-01-04</lastmod></url>
+<url><loc>https://neotaro.ru/sonnik/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+<url><loc>https://neotaro.ru/sonnik/avariya/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/beremennost/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/bolezn/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/byvshiy/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/cerkov/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/chervi/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/cvety/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/dengi/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/derevo/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/dolg/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/dom/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/doroga/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/dozhd/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/dver/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/ekzamen/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/glaza/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/golub/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/golyy/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/gory/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/groza/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/klad/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/kladbishche/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/klyuchi/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/kolco/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/komary/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/korova/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/koshelek/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/koshka/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/krazha/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/krov/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/krovat/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/krysa/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/kupanie/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/kvartira/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/labirint/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/led/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/les/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/lestnica/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/lift/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/loshad/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/lyagushka/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/magazin/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/mashina/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/mat/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/medved/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/more/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/most/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/muravi/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/muzh/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/mysh/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/nachalnik/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/navodnenie/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/neznakomec/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/nogi/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/nogti/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/ogon/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/okno/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/opozdanie/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/otec/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/padenie/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/pauk/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/pchely/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/pereezd/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/pismo/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/podarok/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/podruga/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/poezd/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/pogonya/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/pohorony/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/pokoynik/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/polet/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/prazdnik/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/prizrak/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/ptica/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/rana/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/rebenok/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/rebenok-chuzhoy/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/reka/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/remont/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/rody/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/ruki/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/ryba/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/sad/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/samolet/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/sneg/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/sobaka/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/svadba/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/svinya/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/tarakany/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/telefon/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/temnota/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/tuman/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/tyurma/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/ubiystvo/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/vedma/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/veter/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/voda/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/volk/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/volosy/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/voyna/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/vrag/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/zabludilsya/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/zerkalo/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/zhena/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/zmeya/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/zoloto/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://neotaro.ru/sonnik/zuby/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>
