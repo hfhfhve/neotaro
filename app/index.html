@@ -1231,7 +1231,7 @@ body.chat-mode .chat-head{padding-top:16px}
           <div class="chips" id="chat-chips"></div>
           <div class="composer">
             <textarea id="chat-in" rows="1" data-ph="chat_ph" placeholder="Спросите о том, что сейчас важно…" oninput="growInput(this)" onkeydown="chatKey(event)"></textarea>
-            <button class="mic is-off" id="chat-mic" type="button" aria-label="Голосовое сообщение"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M8.5 21h7"/></svg></button>
+            <button class="mic" id="chat-mic" type="button" aria-label="Голосовое сообщение"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M8.5 21h7"/></svg></button>
             <button class="send" id="chat-send" onclick="sendChat()" aria-label="Отправить">→</button>
           </div>
         </div>
@@ -2388,6 +2388,7 @@ async function sendChat(){
   const vmeta = window.__voiceMeta; window.__voiceMeta = null;
   S.chat.push({ type:'user', text, time: now, voiceSec: vmeta ? vmeta.sec : null });
   input.value = '';
+  if(typeof vPaintComposer === 'function') vPaintComposer();
   growInput(input);
   renderChat();
   const box = document.getElementById('chat-inner');
@@ -3111,7 +3112,7 @@ function discussSyn(){
    Энергия списывается только в /chat/send — голос стоит те же 1 ⊙.
    ===================================================================== */
 
-const VCFG = { maxSec: 60, warnSec: 50, minMs: 700 };
+const VCFG = { maxSec: 120, warnSec: 105, minMs: 700, enabled: true };
 
 const VT = {
   v_work:   { ru:'Расшифровываю голос…', en:'Transcribing…', es:'Transcribiendo…', fr:'Transcription…', de:'Transkribiere…' },
@@ -3347,7 +3348,7 @@ function vDeliver(target, text, sec){
   vPaintComposer();
   if(target.autoSend){
     window.__voiceMeta = { sec: sec };
-    sendChat();
+    Promise.resolve(sendChat()).catch(()=>{}).then(vPaintComposer);
   }else{
     input.focus();
     try{ input.setSelectionRange(input.value.length, input.value.length); }catch(e){}
@@ -3360,9 +3361,42 @@ function vPaintComposer(){
   const send = document.getElementById('chat-send');
   if(!input || !mic || !send) return;
   const empty = !input.value.trim();
-  mic.classList.toggle('is-off', !empty);
+  // микрофон виден всегда, прячется только кнопка отправки
+  mic.classList.remove('is-off');
   send.classList.toggle('is-off', empty);
 }
+
+function vApplyCfg(cfg){
+  if(!cfg) return;
+  const m = parseInt(cfg.max_seconds, 10);
+  if(m && m > 0){
+    VCFG.maxSec  = Math.max(10, Math.min(m, 180));
+    VCFG.warnSec = Math.max(5, VCFG.maxSec - 15);
+  }
+  VCFG.enabled = cfg.enabled !== false;
+  ['chat-mic','dream-mic'].forEach(id => {
+    const n = document.getElementById(id);
+    if(n) n.style.display = VCFG.enabled ? '' : 'none';
+  });
+}
+
+// ловим stt-конфиг из любого ответа бэка (/get-user отдаёт его на старте)
+if(!window.__vApiHooked){
+  window.__vApiHooked = true;
+  const _api = api;
+  window.api = async function(){
+    const res = await _api.apply(this, arguments);
+    if(res && res.stt) vApplyCfg(res.stt);
+    return res;
+  };
+}
+
+// страховка: если микрофон кто-то погасил, а записи нет — вернём
+setInterval(() => {
+  if(!VCFG.enabled || REC.active) return;
+  const mic = document.getElementById('chat-mic');
+  if(mic && mic.classList.contains('is-off')) vPaintComposer();
+}, 1500);
 
 function vInit(){
   const micChat = document.getElementById('chat-mic');
