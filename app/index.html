@@ -971,6 +971,10 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 .plx-price .num{font-family:var(--serif);font-size:46px;line-height:1;color:var(--brass-bright)}
 .plx-price .cur{font-family:var(--serif);font-size:24px;color:var(--brass)}
 .plx-price .per{font-family:var(--sans);font-size:12px;color:var(--mist);letter-spacing:.04em}
+.plx-old{font-family:var(--sans);font-size:14px;color:var(--mist);text-decoration:line-through;
+  text-decoration-color:rgba(217,174,95,.7);align-self:flex-end;padding-bottom:9px;margin-right:2px}
+.plx-save{display:inline-block;align-self:flex-start;font-family:var(--sans);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--brass);border:1px solid var(--line);padding:4px 9px;margin-top:4px}
 .plx-bill{font-family:var(--sans);font-size:12px;color:var(--mist);line-height:1.5;min-height:18px}
 .plx-hl{list-style:none;margin:6px 0 0;padding:18px 0 0;border-top:1px solid var(--line-soft);display:grid;gap:9px}
 .plx-hl li{font-family:var(--sans);font-size:12.5px;color:#C9CBD8;line-height:1.5;padding-left:16px;position:relative}
@@ -2173,6 +2177,9 @@ const STR = {
   as_add_time:{ru:'Добавить время',en:'Add birth time',es:'Añadir la hora',fr:'Ajouter l’heure',de:'Zeit ergänzen'},
   astro_free:{ru:'Расчёт и колесо карты — бесплатно, энергия не списывается',en:'The chart and the wheel are free, no energy is spent',es:'El cálculo y la rueda son gratis, no gastas energía',fr:'Le calcul et la roue sont gratuits, aucune énergie dépensée',de:'Berechnung und Rad sind kostenlos, keine Energie nötig'},
   as_pay_cta:{ru:'Смотреть тарифы',en:'See plans',es:'Ver planes',fr:'Voir les offres',de:'Tarife ansehen'},
+  shop_energy_lock_title:{ru:'Пополнение энергии — в подписке',en:'Energy top-ups come with a plan',es:'La recarga de energía es con suscripción',fr:'La recharge d’énergie est dans l’abonnement',de:'Energie-Aufladung gibt es im Abo'},
+  shop_energy_lock_note:{ru:'На бесплатном тарифе энергия восстанавливается сама каждый день и за серию входов. Больше энергии — в ПРО и ДЕЛЮКС: там же диалог и расклады вообще без списания.',en:'On the free plan energy refills daily and with streaks. More energy lives in PRO and DELUXE — along with chats and spreads that cost no energy at all.',es:'En el plan gratis la energía se recarga sola cada día. Más energía está en PRO y DELUXE, junto con chats y tiradas sin coste.',fr:'Au gratuit, l’énergie se recharge chaque jour. Plus d’énergie dans PRO et DELUXE — avec dialogues et tirages sans dépense.',de:'Im Gratis-Tarif lädt sich Energie täglich selbst auf. Mehr Energie gibt es in PRO und DELUXE — zusammen mit Chats und Legungen ganz ohne Verbrauch.'},
+  pl_save:{ru:'выгода {sum} ₽',en:'save {sum} ₽',es:'ahorras {sum} ₽',fr:'économie de {sum} ₽',de:'spare {sum} ₽'},
   pw_in:{ru:'Доступно в {plan}',en:'Available in {plan}',es:'Disponible en {plan}',fr:'Disponible dans {plan}',de:'Verfügbar in {plan}'},
   pw_open_plans:{ru:'Посмотреть тарифы',en:'See plans',es:'Ver planes',fr:'Voir les offres',de:'Tarife ansehen'},
   pw_locked_toast:{ru:'Это открывается в {plan}',en:'This opens with {plan}',es:'Se abre con {plan}',fr:'Disponible avec {plan}',de:'Öffnet sich mit {plan}'},
@@ -3207,6 +3214,20 @@ async function loadShop(){
   // Подписки — главный продукт экрана. Пакеты энергии загружаются независимо ниже.
   renderShopPlans();
   const box = document.getElementById('shop-list');
+
+  // Бесплатный тариф: энергия не продаётся — только ежедневное восстановление.
+  // Показываем это красиво, а не ошибкой после оплаты.
+  if(!featOk('shop.energy')){
+    document.getElementById('shop-offer').innerHTML = '';
+    box.innerHTML = `<div class="panel panel-pad" style="grid-column:1/-1;text-align:center;padding:30px 22px">
+      <div style="display:flex;justify-content:center;margin-bottom:14px">${lockTag('shop.energy')}</div>
+      <div class="h2" style="margin-bottom:10px">${esc(tt('shop_energy_lock_title'))}</div>
+      <p class="sub" style="max-width:52ch;margin:0 auto 20px">${esc(tt('shop_energy_lock_note'))}</p>
+      <button class="btn btn-brass" onclick="goPlans('shop.energy')">${esc(tt('pw_open_plans'))}</button>
+    </div>`;
+    return;
+  }
+
   box.innerHTML = '<div class="shimmer" style="height:150px;border-radius:14px"></div>'.repeat(3);
   const data = await api('/shop/items', 'GET');
   if(!data || !data.success || !data.items){ box.innerHTML = `<div class="empty"><div class="g">${IC.bolt}</div><p>${esc(tt('err'))}</p></div>`; return; }
@@ -3225,7 +3246,7 @@ async function loadShop(){
 function paintOffer(offer){
   const box = document.getElementById('shop-offer');
   clearInterval(S.offerTimer);
-  if(!offer || !offer.active){ box.innerHTML = ''; return; }
+  if(!offer || !offer.active || !featOk('shop.energy')){ box.innerHTML = ''; return; }
   S.offer = offer;
   const mega = offer.type === 'mega_pack_30';
   const stars = mega ? 15 : 75;
@@ -3252,6 +3273,7 @@ function paintOffer(offer){
   S.offerTimer = setInterval(tick, 1000);
 }
 function pickPack(id){
+  if(!featOk('shop.energy')){ goPlans('shop.energy'); return; }
   const it = S.shop.find(x => x.id === id);
   if(!it) return;
   S.shopPick = it;
@@ -3261,6 +3283,7 @@ function pickPack(id){
   openSheet('buy');
 }
 function pickOffer(stars, rub){
+  if(!featOk('shop.energy')){ goPlans('shop.energy'); return; }
   const first = S.shop[0];
   S.shopPick = first ? Object.assign({}, first, { price_stars: stars, price_rub: rub }) : { id:'offer', price_stars: stars, price_rub: rub };
   document.getElementById('buy-title').textContent = tt('shop_offer');
@@ -3272,6 +3295,7 @@ async function payRub(){
   if(!S.shopPick) return;
   toast(tt('wait'));
   const data = await api('/shop/invoice-rub', 'POST', { item_id: S.shopPick.id });
+  if(handleGate(data)){ closeSheets(); return; }
   if(data && data.success && data.invoice_url){
     closeSheets();
     bridge.openLink(data.invoice_url);
@@ -3990,6 +4014,7 @@ function paintPlans(){
       const isCur = p.code === cur;
       const yearly = S.per === 'year' && p.price_rub_year;
       const price = yearly ? Math.round(p.year_month_rub || (p.price_rub_year / 12)) : Math.round(p.price_rub);
+      const saved = yearly ? Math.max(0, Math.round(p.price_rub * 12 - p.price_rub_year)) : 0;
       const bill = yearly
         ? esc(tt('pl_year_note').replace('{sum}', Math.round(p.price_rub_year)))
         : (p.trial_days ? esc(tt('pl_trial').replace('{n}', p.trial_days)) : '');
@@ -3997,8 +4022,11 @@ function paintPlans(){
       return '<div class="plx-card' + (p.best ? ' best' : '') + '">' +
         (p.best ? '<span class="plx-ribbon">' + esc(tt('as_plan_best')) + '</span>' : '') +
         '<div class="plx-name">' + esc(p.title) + '</div>' +
-        '<div class="plx-price"><span class="num">' + price + '</span><span class="cur">\u20bd</span><span class="per">' + esc(tt('pl_month')) + '</span></div>' +
+        '<div class="plx-price">' +
+          (yearly ? '<span class="plx-old">' + Math.round(p.price_rub) + ' \u20bd</span>' : '') +
+          '<span class="num">' + price + '</span><span class="cur">\u20bd</span><span class="per">' + esc(tt('pl_month')) + '</span></div>' +
         '<div class="plx-bill">' + bill + '</div>' +
+        (saved > 0 ? '<span class="plx-save">' + esc(tt('pl_save').replace('{sum}', saved)) + '</span>' : '') +
         (hl.length ? '<ul class="plx-hl">' + hl.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '') +
         (isCur
           ? '<div class="plx-current">' + esc(tt('pl_current')) + '</div>'
