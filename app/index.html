@@ -2,8 +2,25 @@
 <html lang="ru">
 <head>
   <meta name="yandex-verification" content="4829483e1c30ff58" />
-  <meta name="theme-color" content="#0B0F1E">
-  <meta charset="UTF-8"> 
+  <meta name="theme-color" content="#0B0F1E" id="meta-theme-color">
+  <script>/* тема до первой отрисовки — иначе будет вспышка */
+  (function(){
+    var TC = {ink:'#0B0F1E', obsidian:'#000000', dawn:'#FDF9F0'};
+    var pref = 'ink';
+    try { pref = localStorage.getItem('neo_theme') || 'ink'; } catch(e){}
+    if(['ink','obsidian','dawn','auto'].indexOf(pref) < 0) pref = 'ink';
+    var real = pref;
+    if(pref === 'auto'){
+      var mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)');
+      real = (mq && mq.matches) ? 'dawn' : 'ink';
+    }
+    var h = document.documentElement;
+    h.setAttribute('data-theme', real);
+    h.setAttribute('data-theme-pref', pref);
+    window.__themeBoot = {pref: pref, real: real, TC: TC};
+  })();
+  </script>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>NEOTARO — кабинет</title>
   <meta name="description" content="NEOTARO — расклады Таро с ИИ-толкователем, натальная карта, матрица судьбы, совместимость, сонник и лунный календарь. Вытяните карту дня бесплатно.">
@@ -675,6 +692,189 @@ body.chat-mode .chat-head{padding-top:16px}
 .vtag svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
 
 @media(prefers-reduced-motion:reduce){.vrec-orb,.vrec-work i{animation:none}}
+
+/* ============================================================
+   ТЕМЫ ОФОРМЛЕНИЯ
+   ink — Чернила (базовая, ничего не переопределяет)
+   obsidian — Обсидиан (градиентно-чёрная)
+   dawn — Рассвет (светлая)
+   ============================================================ */
+body,.panel,.tile,.rowcard,.field,.sheet,.toast,.composer{transition:background-color .28s ease,border-color .28s ease,color .28s ease}
+
+/* ===================== ОБСИДИАН ===================== */
+html[data-theme="obsidian"]{
+  --ink-950:#000000;--ink-900:#05060A;--ink-850:#090A0F;--ink-800:#0D0F15;--ink-700:#14171E;--ink-600:#1F232C;
+  --brass:#E6BC66;--brass-pale:#F2E1B6;--brass-bright:#FCF0CC;--ivory:#F7F3E9;--mist:#9BA0AE;
+  --verdigris:#74A899;--ember:#D07A44;
+  --line:rgba(230,188,102,.26);--line-soft:rgba(230,188,102,.13);--line-cold:rgba(155,160,174,.15);
+  --gold:#E6BC66;--gold-pale:#F2E1B6;--gold-bright:#FCF0CC;
+}
+html[data-theme="obsidian"] body{background:linear-gradient(178deg,#0C0E13 0%,#050609 46%,#000000 100%)}
+html[data-theme="obsidian"] body::before{background:radial-gradient(ellipse 74% 48% at 20% -10%,rgba(38,42,54,.62),transparent 64%),radial-gradient(ellipse 52% 42% at 94% 6%,rgba(230,188,102,.075),transparent 62%),radial-gradient(ellipse 90% 60% at 50% 112%,rgba(0,0,0,.85),transparent 70%)}
+html[data-theme="obsidian"] .rail{background:linear-gradient(180deg,rgba(12,14,19,.94),rgba(0,0,0,.96))}
+html[data-theme="obsidian"] .topbar{background:rgba(4,5,8,.94)}
+html[data-theme="obsidian"] .dock{background:rgba(3,4,6,.97)}
+html[data-theme="obsidian"] .panel{background:linear-gradient(160deg,rgba(16,18,24,.94),rgba(4,5,8,.94))}
+html[data-theme="obsidian"] .tile{background:linear-gradient(165deg,rgba(16,18,24,.92),rgba(4,5,8,.92))}
+html[data-theme="obsidian"] .rowcard{background:rgba(15,17,22,.8)}
+html[data-theme="obsidian"] .rowcard:hover{background:rgba(24,27,35,.86)}
+html[data-theme="obsidian"] .meter{background:rgba(14,16,21,.8)}
+html[data-theme="obsidian"] .almanac{background:rgba(8,9,13,.7)}
+html[data-theme="obsidian"] .field,html[data-theme="obsidian"] .composer{background:rgba(6,7,10,.85)}
+html[data-theme="obsidian"] .chat-head,html[data-theme="obsidian"] .chat-foot{background:rgba(4,5,8,.94)}
+html[data-theme="obsidian"] .chat-sigil{background:rgba(16,18,24,.92)}
+html[data-theme="obsidian"] .msg-ai .bubble{background:linear-gradient(140deg,rgba(17,19,26,.95),rgba(5,6,10,.93))}
+html[data-theme="obsidian"] .msg-me .bubble{background:rgba(30,34,44,.6)}
+html[data-theme="obsidian"] .typing{background:rgba(14,16,21,.85)}
+html[data-theme="obsidian"] .dial-face,html[data-theme="obsidian"] .deck .plate{background:linear-gradient(165deg,#15181F,#000000)}
+html[data-theme="obsidian"] .sheet{background:linear-gradient(180deg,#0D0F14,#040508)}
+html[data-theme="obsidian"] .scrim{background:rgba(0,0,0,.84)}
+html[data-theme="obsidian"] .toast{background:rgba(10,11,15,.98)}
+html[data-theme="obsidian"] .switch{background:rgba(6,7,10,.9)}
+html[data-theme="obsidian"] .gate{background:#000}
+html[data-theme="obsidian"] .mic{background:rgba(28,32,41,.45)}
+html[data-theme="obsidian"] .vrec{background:linear-gradient(140deg,rgba(16,18,24,.98),rgba(0,0,0,.98))}
+html[data-theme="obsidian"] .vrec-orb::after{background:#000}
+html[data-theme="obsidian"] .btn-brass,html[data-theme="obsidian"] .send,html[data-theme="obsidian"] .vrec-ok{color:#0A0A0A}
+html[data-theme="obsidian"] .site-foot{background:linear-gradient(180deg,rgba(14,16,21,.6),#000)}
+html[data-theme="obsidian"] .lp-lib-card{background:rgba(14,16,21,.66)}
+
+/* ===================== РАССВЕТ ===================== */
+html[data-theme="dawn"]{
+  --ink-950:#F5EFE2;--ink-900:#FBF6EA;--ink-850:#FFFCF5;--ink-800:#FFFFFF;--ink-700:#F1E8D6;--ink-600:#E4D8C0;
+  --brass:#9A6C1C;--brass-pale:#7C5412;--brass-bright:#5C3D08;--ivory:#241F16;--mist:#6E6656;
+  --verdigris:#3D6C5C;--ember:#A44C1E;
+  --line:rgba(154,108,28,.30);--line-soft:rgba(154,108,28,.16);--line-cold:rgba(110,102,86,.20);
+  --gold:#9A6C1C;--gold-pale:#7C5412;--gold-bright:#5C3D08;--blue:#3B57A6;--ink-500:#6E6656;
+  color-scheme:light;
+}
+html[data-theme="dawn"] body{background:linear-gradient(178deg,#FDF9F0 0%,#F6F0E3 52%,#F1E9DA 100%);color:var(--ivory)}
+html[data-theme="dawn"] body::before{background:radial-gradient(ellipse 72% 46% at 20% -8%,rgba(154,108,28,.10),transparent 64%),radial-gradient(ellipse 54% 44% at 94% 4%,rgba(211,168,96,.14),transparent 62%)}
+html[data-theme="dawn"] .h1{color:#4A3208}
+html[data-theme="dawn"] .h2{color:#5C3D08}
+html[data-theme="dawn"] .h3{color:#241F16}
+html[data-theme="dawn"] .body,html[data-theme="dawn"] .reading{color:#2C261B;opacity:1}
+html[data-theme="dawn"] .eyebrow{color:#8A5F16;opacity:1}
+html[data-theme="dawn"] a{color:#7C5412}
+html[data-theme="dawn"] .rail{background:linear-gradient(180deg,#FFFDF7,#F7F1E4);border-right-color:rgba(154,108,28,.18)}
+html[data-theme="dawn"] .rail-sep{color:rgba(110,102,86,.75)}
+html[data-theme="dawn"] .rail-link .gl{color:rgba(154,108,28,.7)}
+html[data-theme="dawn"] .rail-link .kbd{color:rgba(110,102,86,.55)}
+html[data-theme="dawn"] .rail-link:hover{background:rgba(154,108,28,.07);color:#241F16}
+html[data-theme="dawn"] .rail-link.is-on{background:linear-gradient(90deg,rgba(154,108,28,.15),transparent);color:#4A3208}
+html[data-theme="dawn"] .topbar{background:rgba(253,249,240,.95)}
+html[data-theme="dawn"] .dock{background:rgba(253,249,240,.97);border-top-color:rgba(154,108,28,.18)}
+html[data-theme="dawn"] .dock-btn .gl{color:rgba(110,102,86,.85)}
+html[data-theme="dawn"] .dock-btn.is-on{color:#4A3208}
+html[data-theme="dawn"] .panel{background:linear-gradient(160deg,#FFFFFF,#FDFAF2);box-shadow:0 1px 2px rgba(90,66,26,.05),0 10px 30px rgba(90,66,26,.055)}
+html[data-theme="dawn"] .tile{background:linear-gradient(165deg,#FFFFFF,#FCF8EE);box-shadow:0 1px 2px rgba(90,66,26,.05),0 8px 22px rgba(90,66,26,.05)}
+html[data-theme="dawn"] .tile:hover{box-shadow:0 4px 10px rgba(90,66,26,.07),0 14px 34px rgba(90,66,26,.09)}
+html[data-theme="dawn"] .tile h4{color:#241F16}
+html[data-theme="dawn"] .tile .tg{color:#9A6C1C}
+html[data-theme="dawn"] .rowcard{background:#FFFFFF;box-shadow:0 1px 2px rgba(90,66,26,.045)}
+html[data-theme="dawn"] .rowcard:hover{background:#FFFDF6;border-color:rgba(154,108,28,.34)}
+html[data-theme="dawn"] .rowcard .mid strong{color:#241F16}
+html[data-theme="dawn"] .meter{background:#FFFFFF}
+html[data-theme="dawn"] .meter-bar{background:rgba(110,102,86,.16)}
+html[data-theme="dawn"] .meter-fill{background:linear-gradient(90deg,#C08A22,#8A5F16)}
+html[data-theme="dawn"] .almanac{background:#FFFFFF}
+html[data-theme="dawn"] .alm .v{color:#5C3D08}
+html[data-theme="dawn"] .hair{background:linear-gradient(90deg,transparent,rgba(154,108,28,.34),transparent)}
+html[data-theme="dawn"] .btn-brass{background:linear-gradient(140deg,#B98829,#8A5C12);color:#FFF8E6;box-shadow:0 6px 18px rgba(138,92,18,.26)}
+html[data-theme="dawn"] .btn-brass:hover{box-shadow:0 10px 26px rgba(138,92,18,.34)}
+html[data-theme="dawn"] .btn-line{color:#7C5412}
+html[data-theme="dawn"] .btn-line:hover{background:rgba(154,108,28,.09);border-color:#9A6C1C}
+html[data-theme="dawn"] .btn-quiet{color:#5F5747}
+html[data-theme="dawn"] .btn-quiet:hover{color:#241F16;border-color:rgba(110,102,86,.4)}
+html[data-theme="dawn"] .field{background:#FFFFFF;color:#241F16;box-shadow:inset 0 1px 2px rgba(90,66,26,.05)}
+html[data-theme="dawn"] .field::placeholder{color:rgba(110,102,86,.65)}
+html[data-theme="dawn"] .field:focus{border-color:#9A6C1C}
+html[data-theme="dawn"] .composer{background:#FFFFFF;box-shadow:0 2px 8px rgba(90,66,26,.06)}
+html[data-theme="dawn"] .dial-face{background:linear-gradient(165deg,#2A2318,#14100A);border-color:rgba(154,108,28,.55);box-shadow:0 10px 30px rgba(90,66,26,.22),0 2px 6px rgba(90,66,26,.14),inset 0 0 0 3px rgba(255,251,240,.14)}
+html[data-theme="dawn"] .dial-face:hover{box-shadow:0 14px 40px rgba(90,66,26,.3),0 0 22px rgba(184,133,40,.22)}
+html[data-theme="dawn"] .dial-face .back .glyph{color:#E3B963}
+html[data-theme="dawn"] .dial-face .back .t{color:#F0DDB0}
+html[data-theme="dawn"] .deck .plate{background:linear-gradient(165deg,#2A2318,#14100A);border-color:rgba(154,108,28,.5);box-shadow:0 8px 20px rgba(90,66,26,.2);color:rgba(227,185,99,.85)}
+html[data-theme="dawn"] .spread-out img{border:1px solid rgba(154,108,28,.3);box-shadow:0 8px 20px rgba(90,66,26,.18)}
+html[data-theme="dawn"] .chat-head{background:rgba(253,249,240,.95)}
+html[data-theme="dawn"] .chat-foot{background:rgba(253,249,240,.97)}
+html[data-theme="dawn"] .chat-sigil{background:#FFFFFF;color:#9A6C1C}
+html[data-theme="dawn"] .chat-head .who strong{color:#241F16}
+html[data-theme="dawn"] .msg-ai .bubble{background:#FFFFFF;color:#2C261B;border-left-color:#9A6C1C;box-shadow:0 1px 2px rgba(90,66,26,.05),0 6px 18px rgba(90,66,26,.05)}
+html[data-theme="dawn"] .msg-me .bubble{background:#F2E9D6;color:#2C261B;border-color:rgba(154,108,28,.22)}
+html[data-theme="dawn"] .msg .meta{color:rgba(110,102,86,.8)}
+html[data-theme="dawn"] .typing{background:#FFFFFF}
+html[data-theme="dawn"] .chip{color:#7C5412}
+html[data-theme="dawn"] .chip:hover{background:rgba(154,108,28,.09)}
+html[data-theme="dawn"] .cost{color:rgba(110,102,86,.9)}
+html[data-theme="dawn"] .send{background:linear-gradient(140deg,#B98829,#8A5C12);color:#FFF8E6}
+html[data-theme="dawn"] .reading strong,html[data-theme="dawn"] .reading em,html[data-theme="dawn"] .reading h3,html[data-theme="dawn"] .reading h4{color:#5C3D08}
+html[data-theme="dawn"] .scrim{background:rgba(58,44,20,.34)}
+html[data-theme="dawn"] .sheet{background:linear-gradient(180deg,#FFFFFF,#FDF9F0);box-shadow:0 -8px 40px rgba(90,66,26,.16)}
+html[data-theme="dawn"] .sheet-grip{background:rgba(110,102,86,.35)}
+html[data-theme="dawn"] .sheet h3{color:#5C3D08}
+html[data-theme="dawn"] .toast{background:#FFFFFF;color:#241F16;box-shadow:0 10px 34px rgba(90,66,26,.2)}
+html[data-theme="dawn"] .gate{background:linear-gradient(178deg,#FDF9F0,#F1E9DA)}
+html[data-theme="dawn"] .gate h2{color:#4A3208}
+html[data-theme="dawn"] .spin{border-color:rgba(154,108,28,.28);border-top-color:#9A6C1C}
+html[data-theme="dawn"] .switch{background:#EFE6D4}
+html[data-theme="dawn"] .switch::after{background:#9A9282}
+html[data-theme="dawn"] .switch.is-on{background:rgba(154,108,28,.2)}
+html[data-theme="dawn"] .switch.is-on::after{background:#9A6C1C}
+html[data-theme="dawn"] .tag{background:rgba(154,108,28,.10);color:#7C5412}
+html[data-theme="dawn"] .tag-cold{background:rgba(110,102,86,.10);color:#5F5747}
+html[data-theme="dawn"] .tag-good{background:rgba(61,108,92,.12);border-color:rgba(61,108,92,.34);color:#2F5B4C}
+html[data-theme="dawn"] .tag-warm{background:rgba(164,76,30,.12);border-color:rgba(164,76,30,.32);color:#8E3F17}
+html[data-theme="dawn"] .empty{border-color:rgba(154,108,28,.28)}
+html[data-theme="dawn"] .empty .g{color:rgba(154,108,28,.7)}
+html[data-theme="dawn"] .shimmer{background:linear-gradient(90deg,rgba(154,108,28,.07),rgba(154,108,28,.16),rgba(154,108,28,.07));background-size:200% 100%}
+html[data-theme="dawn"] .city-list{background:#FFFFFF}
+html[data-theme="dawn"] .city-opt:hover,html[data-theme="dawn"] .city-opt:focus-visible{background:rgba(154,108,28,.08)}
+html[data-theme="dawn"] .city-opt b{color:#241F16}
+html[data-theme="dawn"] .city-picked{background:rgba(154,108,28,.08)}
+html[data-theme="dawn"] .city-picked .nm{color:#241F16}
+html[data-theme="dawn"] .rel-chip:hover{color:#241F16}
+html[data-theme="dawn"] .rel-chip.is-on{background:#8A5C12;border-color:#8A5C12;color:#FFF8E6}
+html[data-theme="dawn"] .syn-block{background:#FFFFFF}
+html[data-theme="dawn"] .syn-block p{color:#2C261B}
+html[data-theme="dawn"] .syn-names{color:#241F16}
+html[data-theme="dawn"] .mx-node:hover circle{fill:rgba(154,108,28,.16);stroke:#8A5C12}
+html[data-theme="dawn"] .mic{background:rgba(154,108,28,.07);color:#7C5412}
+html[data-theme="dawn"] .mic:hover{background:rgba(154,108,28,.14)}
+html[data-theme="dawn"] .mic-wide{background:rgba(154,108,28,.09);color:#7C5412}
+html[data-theme="dawn"] .mic-wide:hover{background:rgba(154,108,28,.16)}
+html[data-theme="dawn"] .vrec{background:linear-gradient(140deg,#FFFFFF,#FDF9F0);box-shadow:0 14px 40px rgba(90,66,26,.2)}
+html[data-theme="dawn"] .vrec-orb{background:radial-gradient(circle at 50% 40%,#C99B3A,#8A5C12)}
+html[data-theme="dawn"] .vrec-orb::after{background:#FFFDF6}
+html[data-theme="dawn"] .vrec-ok{background:linear-gradient(140deg,#B98829,#8A5C12);color:#FFF8E6}
+html[data-theme="dawn"] .vrec-time{color:#7C5412}
+html[data-theme="dawn"] .vrec-work{color:#7C5412}
+html[data-theme="dawn"] .vtag{background:rgba(154,108,28,.10);color:#7C5412}
+html[data-theme="dawn"] .lp-lib-card{background:#FFFFFF;border-color:rgba(154,108,28,.24);box-shadow:0 1px 2px rgba(90,66,26,.05),0 8px 22px rgba(90,66,26,.05)}
+html[data-theme="dawn"] .lp-lib-card:hover{border-color:rgba(154,108,28,.5)}
+html[data-theme="dawn"] .lp-lib-card h3{color:#4A3208}
+html[data-theme="dawn"] .lp-lib-card p{color:#5F5747}
+html[data-theme="dawn"] .lp-lib-count{color:#8A5F16}
+html[data-theme="dawn"] .lp-lib-links a{color:#3B57A6;border-bottom-color:rgba(59,87,166,.3)}
+html[data-theme="dawn"] .lp-lib-links a:hover{color:#26386D}
+html[data-theme="dawn"] .lp-prose p,html[data-theme="dawn"] .lp-prose ul{color:#2C261B}
+html[data-theme="dawn"] .lp-prose h3{color:#4A3208}
+html[data-theme="dawn"] .lp-prose strong{color:#5C3D08}
+html[data-theme="dawn"] .lp-faq details{border-bottom-color:rgba(154,108,28,.2)}
+html[data-theme="dawn"] .lp-faq summary{color:#241F16}
+html[data-theme="dawn"] .lp-faq summary::before{color:#9A6C1C}
+html[data-theme="dawn"] .lp-faq .a{color:#5F5747}
+html[data-theme="dawn"] .site-foot{background:linear-gradient(180deg,#FBF6EA,#F2EADB);border-top-color:rgba(154,108,28,.2)}
+html[data-theme="dawn"] .site-foot .brand{color:#241F16}
+html[data-theme="dawn"] .site-foot .brand b{color:#9A6C1C}
+html[data-theme="dawn"] .site-foot .btn-gold{background:linear-gradient(180deg,#C89A34,#8A5C12);color:#FFF8E6}
+html[data-theme="dawn"] .site-foot .btn-gold:hover{color:#FFF8E6}
+html[data-theme="dawn"] .fc-note{color:rgba(110,102,86,.9)}
+html[data-theme="dawn"] .fl-copy{color:rgba(110,102,86,.75)}
+.th-sw{display:flex;gap:5px;align-items:center}
+.th-sw i{width:13px;height:13px;border-radius:50%;display:block;border:1px solid rgba(255,255,255,.16)}
+html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
+
 </style>
 </head>
 <body class="bg-space-900 min-h-screen">
@@ -975,6 +1175,11 @@ body.chat-mode .chat-head{padding-top:16px}
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.6" y="5.4" width="16.8" height="15" rx="2"/><path d="M3.6 10h16.8M8.4 3.4v3.4M15.6 3.4v3.4"/><circle cx="12" cy="15" r="1.5" fill="currentColor" stroke="none"/></svg></span>
               <span class="mid"><strong data-t="pf_birth">Дата рождения</strong><span data-t="pf_birth_hint">Нужна для знака, матрицы и гороскопа</span></span>
               <span class="end"><span class="num" id="pf-birth-2" style="color:var(--brass-pale);font-size:13px">—</span></span>
+            </button>
+            <button class="rowcard" onclick="openSheet('theme')">
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 3.4a8.6 8.6 0 000 17.2z" fill="currentColor" stroke="none"/></svg></span>
+              <span class="mid"><strong data-t="th_row">Оформление</strong><span data-t="th_row_hint">Темная, обсидиан или светлая</span></span>
+              <span class="end"><span id="pf-theme" style="color:var(--brass-pale);font-size:13px">Чернила</span></span>
             </button>
             <button class="rowcard" onclick="openSheet('lang')">
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M3.4 12h17.2M12 3.2c2.4 2.4 3.6 5.4 3.6 8.8s-1.2 6.4-3.6 8.8c-2.4-2.4-3.6-5.4-3.6-8.8S9.6 5.6 12 3.2z"/></svg></span>
@@ -1374,6 +1579,13 @@ body.chat-mode .chat-head{padding-top:16px}
 </div>
 
 <!-- язык -->
+<div class="sheet" id="sheet-theme">
+  <div class="sheet-grip"></div>
+  <h3 data-t="th_title">Оформление</h3>
+  <p class="sheet-sub" data-t="th_sub">Выбор сохраняется и переносится на все ваши устройства.</p>
+  <div class="stack" id="theme-list"></div>
+</div>
+
 <div class="sheet" id="sheet-lang">
   <div class="sheet-grip"></div>
   <h3 data-t="lang_title">Язык интерфейса</h3>
@@ -1591,6 +1803,19 @@ const STR = {
   pf_birth:{ru:'Дата рождения',en:'Date of birth',es:'Fecha de nacimiento',fr:'Date de naissance',de:'Geburtsdatum'},
   pf_birth_hint:{ru:'Нужна для знака, матрицы и гороскопа',en:'Needed for your sign, matrix and horoscope'},
   pf_settings:{ru:'Настройки',en:'Settings',es:'Ajustes',fr:'Réglages',de:'Einstellungen'},
+  th_row:{ru:'Оформление',en:'Appearance',es:'Apariencia',fr:'Apparence',de:'Erscheinungsbild'},
+  th_row_hint:{ru:'Темная, обсидиан или светлая',en:'Dark, obsidian or light',es:'Oscuro, obsidiana o claro',fr:'Sombre, obsidienne ou clair',de:'Dunkel, Obsidian oder Hell'},
+  th_title:{ru:'Оформление',en:'Appearance',es:'Apariencia',fr:'Apparence',de:'Erscheinungsbild'},
+  th_sub:{ru:'Выбор сохраняется и переносится на все ваши устройства.',en:'Your choice is saved and follows you across devices.',es:'Tu elección se guarda y te sigue en todos los dispositivos.',fr:'Votre choix est enregistré et vous suit sur tous vos appareils.',de:'Deine Wahl wird gespeichert und gilt auf allen Geräten.'},
+  th_saved:{ru:'Оформление изменено',en:'Appearance changed',es:'Apariencia cambiada',fr:'Apparence modifiée',de:'Erscheinungsbild geändert'},
+  th_ink:{ru:'Чернила',en:'Ink',es:'Tinta',fr:'Encre',de:'Tinte'},
+  th_ink_note:{ru:'Ночной атлас, как было',en:'The night atlas, as before',es:'El atlas nocturno, como antes',fr:'L’atlas nocturne, comme avant',de:'Der Nachtatlas, wie zuvor'},
+  th_obsidian:{ru:'Обсидиан',en:'Obsidian',es:'Obsidiana',fr:'Obsidienne',de:'Obsidian'},
+  th_obsidian_note:{ru:'Глубокий чёрный градиент',en:'Deep black gradient',es:'Degradado negro profundo',fr:'Dégradé noir profond',de:'Tiefschwarzer Verlauf'},
+  th_dawn:{ru:'Рассвет',en:'Dawn',es:'Alba',fr:'Aube',de:'Morgen'},
+  th_dawn_note:{ru:'Светлая, теплая бумага',en:'Light, warm paper',es:'Papel claro y cálido',fr:'Papier clair et chaud',de:'Helles, warmes Papier'},
+  th_auto:{ru:'Как в системе',en:'Match system',es:'Como el sistema',fr:'Comme le système',de:'Wie das System'},
+  th_auto_note:{ru:'Переключается вместе с устройством',en:'Follows your device setting',es:'Sigue el ajuste del dispositivo',fr:'Suit le réglage de l’appareil',de:'Folgt der Geräteeinstellung'},
   mem_row:{ru:'Хроника памяти',en:'Memory chronicle',es:'Crónica de memoria',fr:'Chronique de mémoire',de:'Gedächtnis-Chronik'},
   mem_row_hint:{ru:'Что оракул помнит о вас',en:'What the oracle remembers about you',es:'Lo que el oráculo recuerda de ti',fr:'Ce que l\'oracle retient de vous',de:'Was das Orakel über dich weiß'},
   mem_title:{ru:'Хроника',en:'Chronicle',es:'Crónica',fr:'Chronique',de:'Chronik'},
@@ -1766,6 +1991,7 @@ function applyStrings(){
   const l = LANGS.find(x => x.code === lang);
   const disp = document.getElementById('pf-lang');
   if(disp && l) disp.textContent = l.name;
+  paintThemeLabel();
 }
 
 /* ---------- мост в Telegram / VK / веб ---------- */
@@ -1885,6 +2111,7 @@ function openSheet(id){
   if(id === 'referral') loadReferrals();
   if(id === 'history') resetHistory();
   if(id === 'lang') renderLangs();
+  if(id === 'theme') renderThemes();
   if(id === 'name') document.getElementById('name-in').value = S.name || '';
   if(id === 'birth') fillBirth();
   if(id === 'bonus') loadBonus();
@@ -2173,6 +2400,12 @@ async function boot(){
     if(bridge.isWeb && !bridge.token) showGate('login');
     else showGate('down');
     return;
+  }
+  if(data.theme && THEMES.some(t => t.code === data.theme) && data.theme !== themePref){
+    themePref = data.theme;
+    applyThemeDom();
+  } else if(data.theme === undefined || data.theme === null){
+    /* у аккаунта ещё нет темы — запомним тем же запросом при следующем выборе */
   }
   if(data.language_code && LANGS.some(l => l.code === data.language_code)) lang = data.language_code;
   else {
@@ -2837,6 +3070,60 @@ async function saveBirth(){
     if(S.view === 'matrix') loadMatrix();
   } else toast(tt('err'));
 }
+/* ---------- оформление ---------- */
+const THEMES = [
+  {code:'ink',      sw:['#0B0F1E','#232C47','#D9AE5F']},
+  {code:'obsidian', sw:['#000000','#14171E','#E6BC66']},
+  {code:'dawn',     sw:['#FDF9F0','#E4D8C0','#9A6C1C']},
+  {code:'auto',     sw:['#0B0F1E','#FDF9F0','#D9AE5F']}
+];
+const THEME_TC = {ink:'#0B0F1E', obsidian:'#000000', dawn:'#FDF9F0'};
+let themePref = (window.__themeBoot && window.__themeBoot.pref) || 'ink';
+
+function resolveTheme(pref){
+  if(pref !== 'auto') return pref;
+  const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)');
+  return (mq && mq.matches) ? 'dawn' : 'ink';
+}
+function applyThemeDom(){
+  const real = resolveTheme(themePref);
+  const h = document.documentElement;
+  h.setAttribute('data-theme', real);
+  h.setAttribute('data-theme-pref', themePref);
+  const m = document.getElementById('meta-theme-color');
+  if(m) m.setAttribute('content', THEME_TC[real] || '#0B0F1E');
+  try { localStorage.setItem('neo_theme', themePref); } catch(e){}
+  paintThemeLabel();
+}
+function paintThemeLabel(){
+  const el = document.getElementById('pf-theme');
+  if(el) el.textContent = tt('th_' + themePref);
+}
+function renderThemes(){
+  const box = document.getElementById('theme-list');
+  if(!box) return;
+  box.innerHTML = THEMES.map(t => `<button class="rowcard" onclick="setTheme('${t.code}')">
+    <span class="idx th-sw">${t.sw.map(c => `<i style="background:${c}"></i>`).join('')}</span>
+    <span class="mid"><strong>${esc(tt('th_' + t.code))}</strong><span>${esc(tt('th_' + t.code + '_note'))}</span></span>
+    <span class="end">${t.code === themePref ? `<span class="tag">${IC.check}</span>` : ''}</span>
+  </button>`).join('');
+}
+async function setTheme(code){
+  if(!THEMES.some(t => t.code === code)) return;
+  themePref = code;
+  applyThemeDom();
+  renderThemes();
+  closeSheets();
+  toast(tt('th_saved'));
+  try { await api('/profile/update', 'POST', { theme: code }); } catch(e){}
+}
+if(window.matchMedia){
+  const mqL = window.matchMedia('(prefers-color-scheme: light)');
+  const onSys = () => { if(themePref === 'auto') applyThemeDom(); };
+  if(mqL.addEventListener) mqL.addEventListener('change', onSys);
+  else if(mqL.addListener) mqL.addListener(onSys);
+}
+
 function renderLangs(){
   document.getElementById('lang-list').innerHTML = LANGS.map(l => `<button class="rowcard" onclick="setLang('${l.code}')">
     <span class="idx" style="font-family:var(--mono);font-size:12px">${l.note}</span>
