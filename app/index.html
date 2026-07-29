@@ -1572,7 +1572,6 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
                 <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
                   <button class="btn btn-brass" onclick="goPlans()" data-t="as_pay_cta">Смотреть тарифы</button>
                 </div>
-                <p class="label" style="margin-top:14px" data-t="as_pay_note">Открытые разделы останутся у вас навсегда, даже после отмены подписки. Отменить можно в любой момент.</p>
               </div>
             </div>
 
@@ -4056,7 +4055,7 @@ function paintPlans(){
           cols.map(function(c){ return cmpCell(r.cells ? r.cells[c] : false); }).join('') + '</div>';
       });
     });
-    html += '</div></div><p class="plx-note">' + esc(tt('cmp_note')) + '</p>';
+    html += '</div></div>';
     cmpBox.innerHTML = html;
   }
 }
