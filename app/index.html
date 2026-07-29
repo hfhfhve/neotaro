@@ -13,7 +13,7 @@
     if(pref === 'auto'){
       var mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)');
       real = (mq && mq.matches) ? 'dawn' : 'ink';
-    }
+    } 
     var h = document.documentElement;
     h.setAttribute('data-theme', real);
     h.setAttribute('data-theme-pref', pref);
