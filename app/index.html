@@ -13,7 +13,7 @@
     if(pref === 'auto'){
       var mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)');
       real = (mq && mq.matches) ? 'dawn' : 'ink';
-    } 
+    }
     var h = document.documentElement;
     h.setAttribute('data-theme', real);
     h.setAttribute('data-theme-pref', pref);
@@ -948,43 +948,83 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 .nk-plan li{font-family:var(--sans);font-size:12.5px;color:#C9CBD8;line-height:1.5;padding-left:15px;position:relative}
 .nk-plan li:before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;background:var(--brass);transform:rotate(45deg)}
 .nk-plan .btn{margin-top:auto}
+/* ====== Экран тарифов: спокойная люксовая подача ====== */
+.plx{margin-top:8px}
+.plx-per{display:flex;justify-content:center;margin:28px 0 24px}
+.plx-seg{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--ink-900)}
+.plx-seg button{font-family:var(--sans);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--mist);
+  background:transparent;border:0;border-radius:999px;padding:10px 20px;cursor:pointer;transition:color .2s,background .2s;white-space:nowrap}
+.plx-seg button.on{background:linear-gradient(140deg,var(--brass-pale),#C0913F);color:#0B0F1E}
+.plx-seg .save{margin-left:8px;font-family:var(--sans);font-size:10px;letter-spacing:.06em;color:var(--brass)}
+.plx-seg button.on .save{color:#0B0F1E;opacity:.75}
+
+.plx-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:820px;margin:0 auto}
+.plx-card{position:relative;display:flex;flex-direction:column;gap:15px;padding:34px 30px 28px;
+  border:1px solid var(--line-soft);background:linear-gradient(180deg,var(--ink-850),var(--ink-900))}
+.plx-card.best{border-color:rgba(217,174,95,.5);background:linear-gradient(180deg,#131a2f,var(--ink-900));
+  box-shadow:0 24px 60px -28px rgba(217,174,95,.3)}
+.plx-ribbon{position:absolute;top:0;right:26px;transform:translateY(-50%);
+  font-family:var(--sans);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#0B0F1E;
+  background:linear-gradient(140deg,var(--brass-pale),#C0913F);padding:5px 12px}
+.plx-name{font-family:var(--serif);font-size:25px;color:var(--ivory);letter-spacing:.01em}
+.plx-price{display:flex;align-items:baseline;gap:7px;margin-top:2px}
+.plx-price .num{font-family:var(--serif);font-size:46px;line-height:1;color:var(--brass-bright)}
+.plx-price .cur{font-family:var(--serif);font-size:24px;color:var(--brass)}
+.plx-price .per{font-family:var(--sans);font-size:12px;color:var(--mist);letter-spacing:.04em}
+.plx-bill{font-family:var(--sans);font-size:12px;color:var(--mist);line-height:1.5;min-height:18px}
+.plx-hl{list-style:none;margin:6px 0 0;padding:18px 0 0;border-top:1px solid var(--line-soft);display:grid;gap:9px}
+.plx-hl li{font-family:var(--sans);font-size:12.5px;color:#C9CBD8;line-height:1.5;padding-left:16px;position:relative}
+.plx-hl li:before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;background:var(--brass);transform:rotate(45deg)}
+.plx-card .btn{margin-top:auto}
+.plx-current{margin-top:auto;text-align:center;font-family:var(--sans);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--brass);border:1px solid var(--line);padding:13px}
+
+/* Сравнение */
+.plx-cmp{max-width:820px;margin:44px auto 0}
+.plx-cmp-title{font-family:var(--serif);font-size:22px;color:var(--ivory);text-align:center}
+.plx-cmp-sub{font-family:var(--sans);font-size:12px;color:var(--mist);text-align:center;margin-top:6px}
+.plx-cmp-scroll{margin-top:20px;overflow-x:auto}
+.plx-cmp-table{min-width:560px}
+.plx-cmp-r{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,96px);align-items:center;gap:10px;
+  padding:12px 2px;border-bottom:1px solid var(--line-soft)}
+.plx-cmp-h{border-bottom:1px solid var(--line);padding-bottom:14px}
+.plx-cmp-h span{font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);text-align:center}
+.plx-cmp-h span.pl{color:var(--ivory)}
+.plx-cmp-h span.best{color:var(--brass-bright)}
+.plx-cmp-g{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);
+  padding:22px 2px 6px;display:flex;align-items:center;gap:9px}
+.plx-cmp-g i{font-style:normal;opacity:.85}
+.plx-cmp-g:after{content:"";flex:1;height:1px;background:var(--line-soft)}
+.plx-cmp-t{font-family:var(--sans);font-size:13px;color:#C9CBD8;line-height:1.5}
+.plx-cmp-c{display:flex;justify-content:center;align-items:center;font-family:var(--sans);font-size:11px;color:var(--mist);line-height:1.35;text-align:center}
+.plx-cmp-c svg{width:15px;height:15px;stroke:var(--brass-bright);fill:none;stroke-width:1.8}
+.plx-cmp-c.no{color:#4A5270}
+.plx-note{max-width:820px;margin:22px auto 0;font-family:var(--sans);font-size:12px;color:var(--mist);
+  line-height:1.7;text-align:center}
+
+/* Раздел энергии под тарифами */
+.plx-divider{max-width:820px;margin:52px auto 0;display:flex;align-items:center;gap:16px}
+.plx-divider:before,.plx-divider:after{content:"";flex:1;height:1px;background:var(--line-soft)}
+.plx-divider span{font-family:var(--serif);font-size:15px;color:var(--brass);opacity:.9}
+
+@media(max-width:640px){
+  .plx-cards{grid-template-columns:1fr;gap:14px}
+  .plx-card{padding:26px 22px 22px}
+  .plx-price .num{font-size:40px}
+  .plx-cmp-scroll{overflow-x:visible}
+  .plx-cmp-table{min-width:0}
+  .plx-cmp-r{grid-template-columns:minmax(0,1fr) repeat(3,52px);gap:5px;padding:11px 0}
+  .plx-cmp-h span{font-size:8px;letter-spacing:.1em}
+  .plx-cmp-t{font-size:12px}
+  .plx-cmp-c{font-size:9px;line-height:1.25}
+  .plx-cmp-c svg{width:13px;height:13px}
+  .plx-cmp-g{font-size:9px;letter-spacing:.14em}
+}
+
 /* --- ГЕЙТЫ ТАРИФОВ: один визуальный язык для всего закрытого --- */
 .tag-lock{color:var(--brass);border-color:var(--line);background:rgba(217,174,95,.09)}
 .tag-lock svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.6}
 
-/* Переключатель месяц/год */
-.nk-per{display:inline-flex;border:1px solid var(--line-soft);border-radius:2px;overflow:hidden;margin-top:16px}
-.nk-per button{font-family:var(--sans);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
-  padding:9px 15px;background:transparent;border:0;color:var(--mist);cursor:pointer;transition:.18s}
-.nk-per button+button{border-left:1px solid var(--line-soft)}
-.nk-per button.on{background:rgba(217,174,95,.12);color:var(--brass-bright)}
-.nk-per .sv{color:var(--brass);margin-left:6px}
-
-/* Столбцы сравнения */
-.nk-cmp{margin-top:26px;border-top:1px solid var(--line-soft)}
-.nk-cmp-r{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,84px);align-items:center;
-  gap:8px;padding:11px 0;border-bottom:1px solid var(--line-soft)}
-.nk-cmp-h{position:sticky;top:0;z-index:2;background:var(--ink-900);border-bottom:1px solid var(--line)}
-.nk-cmp-h span{font-family:var(--sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--mist);text-align:center}
-.nk-cmp-h span.pl{color:var(--brass-bright)}
-.nk-cmp-h span.best{color:#0B0F1E;background:linear-gradient(140deg,var(--brass-pale),#C0913F);padding:4px 0}
-.nk-cmp-g{font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);
-  padding:18px 0 8px;display:flex;align-items:center;gap:8px}
-.nk-cmp-g i{font-style:normal;opacity:.8}
-.nk-cmp-t{font-family:var(--sans);font-size:13px;color:#C9CBD8;line-height:1.45}
-.nk-cmp-c{text-align:center;font-family:var(--sans);font-size:11px;color:var(--mist);line-height:1.3}
-.nk-cmp-c svg{width:15px;height:15px;stroke:var(--brass-bright);fill:none;stroke-width:1.8}
-.nk-cmp-c.no{color:#5A6180}
-.nk-cmp-note{font-family:var(--sans);font-size:12px;color:var(--mist);line-height:1.6;margin-top:14px}
-.nk-plan .yr{font-family:var(--sans);font-size:11.5px;color:var(--mist)}
-.nk-plan .cur{font-family:var(--sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass)}
-@media(max-width:640px){
-  .nk-cmp-r{grid-template-columns:minmax(0,1fr) repeat(3,54px);gap:4px}
-  .nk-cmp-t{font-size:12px}
-  .nk-cmp-c{font-size:9.5px}
-  .nk-cmp-h span{font-size:8.5px;letter-spacing:.08em}
-}
 .nk-skel-wheel{width:min(100%,420px);aspect-ratio:1;margin:26px auto 0;border-radius:50%;
   border:1px solid var(--line-soft);background:conic-gradient(from 0deg,rgba(217,174,95,.16),transparent 40%,rgba(217,174,95,.16));
   animation:nkspin 2.4s linear infinite}
@@ -1256,11 +1296,25 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 
         <!-- ============ МАГАЗИН ============ -->
         <section class="view" id="v-shop">
-          <div class="eyebrow" style="margin-bottom:12px" data-t="shop_eyebrow">Энергия</div>
-          <h1 class="h1" data-t="shop_title">Пополните запас и спрашивайте дальше</h1>
-          <p class="sub" style="margin-top:12px;max-width:54ch" data-t="shop_lead">Каждый вопрос оракулу и каждый расклад тратят энергию. Запас восстанавливается сам и растёт за ежедневные входы.</p>
-          <div id="shop-offer" style="margin-top:24px"></div>
-          <div class="hair"></div>
+          <div style="text-align:center">
+            <div class="eyebrow" style="margin-bottom:12px" data-t="subs_eyebrow">NEOTARO · ПОДПИСКА</div>
+            <h1 class="h1" data-t="subs_title">Выберите свой уровень доступа</h1>
+            <p class="sub" style="margin:12px auto 0;max-width:56ch" data-t="subs_lead">Больше свободы для ежедневной практики: глубокие разборы, расклады без списания энергии и персональные настройки проводника.</p>
+          </div>
+
+          <div class="plx">
+            <div class="plx-per" id="shop-per"></div>
+            <div class="plx-cards" id="shop-sub-plans"></div>
+            <div class="plx-cmp" id="shop-sub-cmp"></div>
+          </div>
+
+          <div class="plx-divider"><span>✦</span></div>
+          <div style="text-align:center;margin-top:26px">
+            <div class="eyebrow" style="margin-bottom:10px" data-t="shop_eyebrow">РАЗОВАЯ ПОКУПКА</div>
+            <h2 class="h2" data-t="shop_title">Нужна только энергия?</h2>
+            <p class="sub" style="margin:9px auto 0;max-width:52ch" data-t="shop_lead">Пакеты не сгорают и подходят, если подписка пока не нужна.</p>
+          </div>
+          <div id="shop-offer" style="margin-top:20px"></div>
           <div id="shop-list" class="grid grid-3"></div>
           <p class="label" style="margin-top:22px;line-height:1.7" id="shop-note" data-t="shop_note">Оплата банковской картой. Энергия зачисляется сразу после подтверждения.</p>
         </section>
@@ -1511,9 +1565,10 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
                 <div class="eyebrow" data-t="as_pay_eyebrow">Подписка NEOTARO</div>
                 <h2 class="h2" style="margin-top:10px" data-t="as_pay_title">Открыть весь разбор карты</h2>
                 <p class="sub" style="margin-top:10px;max-width:56ch" data-t="as_pay_lead">Одна подписка на всё: все разделы натальной карты, личные транзиты на каждый день, без списания энергии.</p>
-                <div class="nk-plans" id="as-plans"></div>
-                <div id="as-cmp"></div>
-                <p class="label" style="margin-top:12px" data-t="as_pay_note">Открытые разделы останутся у вас навсегда, даже после отмены подписки. Отменить можно в любой момент.</p>
+                <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+                  <button class="btn btn-brass" onclick="goPlans()" data-t="as_pay_cta">Смотреть тарифы</button>
+                </div>
+                <p class="label" style="margin-top:14px" data-t="as_pay_note">Открытые разделы останутся у вас навсегда, даже после отмены подписки. Отменить можно в любой момент.</p>
               </div>
             </div>
 
@@ -1895,8 +1950,8 @@ const STR = {
   nav_astro:{ru:'Космо-паспорт',en:'Star chart',es:'Carta astral',fr:'Carte du ciel',de:'Geburtshoroskop'},
   nav_matrix:{ru:'Матрица судьбы',en:'Destiny matrix',es:'Matriz del destino',fr:'Matrice du destin',de:'Schicksalsmatrix'},
   nav_calendar:{ru:'Лунный день',en:'Lunar day',es:'Día lunar',fr:'Jour lunaire',de:'Mondtag'},
-  nav_shop:{ru:'Пополнить энергию',en:'Add energy',es:'Añadir energía',fr:'Ajouter de l\u2019énergie',de:'Energie aufladen'},
-  nav_shop_short:{ru:'Энергия',en:'Energy',es:'Energía',fr:'Énergie',de:'Energie'},
+  nav_shop:{ru:'Тарифы и энергия',en:'Plans & energy',es:'Planes y energía',fr:'Offres et énergie',de:'Tarife & Energie'},
+  nav_shop_short:{ru:'Тарифы',en:'Plans',es:'Planes',fr:'Offres',de:'Tarife'},
   nav_profile:{ru:'Профиль',en:'Profile',es:'Perfil',fr:'Profil',de:'Profil'},
   rail_practice:{ru:'Практики',en:'Practices',es:'Prácticas',fr:'Pratiques',de:'Praktiken'},
   rail_account:{ru:'Кабинет',en:'Account',es:'Cuenta',fr:'Compte',de:'Konto'},
@@ -1977,9 +2032,12 @@ const STR = {
   table_again:{ru:'Другой расклад',en:'Another spread',es:'Otra tirada',fr:'Autre tirage',de:'Andere Legung'},
   need_q:{ru:'Напишите вопрос — без него карты молчат',en:'Write a question — without it the cards stay silent'},
 
-  shop_eyebrow:{ru:'Энергия',en:'Energy',es:'Energía',fr:'Énergie',de:'Energie'},
-  shop_title:{ru:'Пополните запас и спрашивайте дальше',en:'Top up the reserve and keep asking'},
-  shop_lead:{ru:'Каждый вопрос оракулу и каждый расклад тратят энергию. Запас восстанавливается сам и растёт за ежедневные входы.',en:'Every question and every spread spends energy. The reserve refills over time and grows with daily visits.'},
+  subs_eyebrow:{ru:'NEOTARO · ПОДПИСКА',en:'NEOTARO · MEMBERSHIP',es:'NEOTARO · SUSCRIPCIÓN',fr:'NEOTARO · ABONNEMENT',de:'NEOTARO · MITGLIEDSCHAFT'},
+  subs_title:{ru:'Выберите свой уровень доступа',en:'Choose your level of access',es:'Elige tu nivel de acceso',fr:'Choisissez votre niveau d’accès',de:'Wähle deinen Zugang'},
+  subs_lead:{ru:'Больше свободы для ежедневной практики: глубокие разборы, расклады без списания энергии и персональные настройки проводника.',en:'More freedom for daily practice: deeper readings, spreads without energy charges, and personal guide settings.',es:'Más libertad para tu práctica diaria: análisis profundos, tiradas sin gastar energía y ajustes personales.',fr:'Plus de liberté au quotidien : analyses approfondies, tirages sans dépenser d’énergie et réglages personnalisés.',de:'Mehr Freiheit für deine tägliche Praxis: tiefere Deutungen, Legungen ohne Energieverbrauch und persönliche Einstellungen.'},
+  shop_eyebrow:{ru:'РАЗОВАЯ ПОКУПКА',en:'ONE-TIME PURCHASE',es:'COMPRA ÚNICA',fr:'ACHAT UNIQUE',de:'EINMALIGER KAUF'},
+  shop_title:{ru:'Нужна только энергия?',en:'Only need energy?',es:'¿Solo necesitas energía?',fr:'Besoin seulement d’énergie ?',de:'Brauchst du nur Energie?'},
+  shop_lead:{ru:'Пакеты не сгорают и подходят, если подписка пока не нужна.',en:'Packs never expire and work well if you do not need a subscription yet.',es:'Los paquetes no caducan si aún no necesitas una suscripción.',fr:'Les packs n’expirent pas si vous ne souhaitez pas encore vous abonner.',de:'Pakete verfallen nicht, wenn du noch kein Abo brauchst.'},
   shop_note:{ru:'Оплата банковской картой. Энергия зачисляется сразу после подтверждения.',en:'Card payment. Energy arrives right after confirmation.'},
   shop_pick:{ru:'Выбрать',en:'Choose',es:'Elegir',fr:'Choisir',de:'Wählen'},
   shop_offer:{ru:'Стартовое предложение',en:'Starter offer',es:'Oferta inicial',fr:'Offre de départ',de:'Startangebot'},
@@ -2114,6 +2172,7 @@ const STR = {
   as_notime:{ru:'Время рождения не указано, поэтому дома и асцендент не рассчитаны. Мы не станем выдумывать их наугад.',en:'No birth time, so houses and the ascendant are not calculated. We will not invent them.',es:'Sin hora de nacimiento no calculamos casas ni ascendente. No los inventamos.',fr:'Sans heure de naissance, ni maisons ni ascendant ne sont calculés. Nous ne les inventons pas.',de:'Ohne Geburtszeit keine Häuser und kein Aszendent. Wir erfinden sie nicht.'},
   as_add_time:{ru:'Добавить время',en:'Add birth time',es:'Añadir la hora',fr:'Ajouter l’heure',de:'Zeit ergänzen'},
   astro_free:{ru:'Расчёт и колесо карты — бесплатно, энергия не списывается',en:'The chart and the wheel are free, no energy is spent',es:'El cálculo y la rueda son gratis, no gastas energía',fr:'Le calcul et la roue sont gratuits, aucune énergie dépensée',de:'Berechnung und Rad sind kostenlos, keine Energie nötig'},
+  as_pay_cta:{ru:'Смотреть тарифы',en:'See plans',es:'Ver planes',fr:'Voir les offres',de:'Tarife ansehen'},
   pw_in:{ru:'Доступно в {plan}',en:'Available in {plan}',es:'Disponible en {plan}',fr:'Disponible dans {plan}',de:'Verfügbar in {plan}'},
   pw_open_plans:{ru:'Посмотреть тарифы',en:'See plans',es:'Ver planes',fr:'Voir les offres',de:'Tarife ansehen'},
   pw_locked_toast:{ru:'Это открывается в {plan}',en:'This opens with {plan}',es:'Se abre con {plan}',fr:'Disponible avec {plan}',de:'Öffnet sich mit {plan}'},
@@ -3145,6 +3204,8 @@ function sendDream(){
 
 /* ============================ МАГАЗИН ============================ */
 async function loadShop(){
+  // Подписки — главный продукт экрана. Пакеты энергии загружаются независимо ниже.
+  renderShopPlans();
   const box = document.getElementById('shop-list');
   box.innerHTML = '<div class="shimmer" style="height:150px;border-radius:14px"></div>'.repeat(3);
   const data = await api('/shop/items', 'GET');
@@ -3855,17 +3916,11 @@ function lockText(key){ return tt('pw_in').replace('{plan}', planTitleFor(key));
 function lockTag(key){
   return '<span class="tag tag-lock">' + IC_LOCK + ' ' + esc(lockText(key)) + '</span>';
 }
-/* Одна точка входа в paywall из любого места приложения. */
+/* Одна точка входа в тарифы из любого места приложения.
+   Подписки живут ТОЛЬКО в магазине — никаких дублей экрана оплаты. */
 function goPlans(key){
   if(key) toast(tt('pw_locked_toast').replace('{plan}', planTitleFor(key)));
-  go('astro');
-  setTimeout(function(){
-    const pay = document.getElementById('as-paywall');
-    if(!pay) return;
-    pay.style.display = 'block';
-    renderAstroPlans();
-    pay.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 220);
+  go('shop');
 }
 /* Ответ бэка subscription_required обрабатывается везде одинаково. */
 function handleGate(d){
@@ -3892,19 +3947,23 @@ async function refreshAccess(){
   return S.access;
 }
 
-function planPrice(p){
-  if(S.per === 'year' && p.price_rub_year){
-    return '<span class="pr">' + Math.round(p.year_month_rub || (p.price_rub_year / 12)) + ' \u20bd <small>' + esc(tt('pl_month')) + '</small></span>' +
-           '<span class="yr">' + esc(tt('pl_year_note').replace('{sum}', Math.round(p.price_rub_year))) + '</span>';
-  }
-  return '<span class="pr">' + Math.round(p.price_rub) + ' \u20bd <small>' + esc(tt('pl_month')) + '</small></span>' +
-         (p.price_rub_year ? '<span class="yr">' + esc(tt('pl_year_note').replace('{sum}', Math.round(p.price_rub_year))) + '</span>' : '');
+function cmpCell(v){
+  if(v === true)  return '<span class="plx-cmp-c">' + IC_OK + '</span>';
+  if(!v)          return '<span class="plx-cmp-c no">\u2014</span>';
+  return '<span class="plx-cmp-c">' + esc(String(v)) + '</span>';
 }
 
-function cmpCell(v){
-  if(v === true)  return '<span class="nk-cmp-c">' + IC_OK + '</span>';
-  if(!v)          return '<span class="nk-cmp-c no">\u2014</span>';
-  return '<span class="nk-cmp-c">' + esc(String(v)) + '</span>';
+/* Преимущества на карточке берём из той же матрицы, что и таблицу сравнения:
+   plus — что появляется против free, pro — что появляется против plus. */
+function planHighlights(code, below, limit){
+  const rows = [];
+  (S.plansData.groups || []).forEach(function(g){
+    (g.rows || []).forEach(function(r){
+      const cells = r.cells || {};
+      if(cells[code] && !cells[below]) rows.push(r.title);
+    });
+  });
+  return rows.slice(0, limit || 4);
 }
 
 function paintPlans(){
@@ -3912,55 +3971,66 @@ function paintPlans(){
   if(!d) return;
   const paidPlans = (d.plans || []).filter(function(p){ return p.code !== 'free'; });
   const cur = (S.access && S.access.plan) || 'free';
-
-  /* Переключатель периода — скидка берётся из цен, а не вбивается руками. */
   const disc = Math.max.apply(null, paidPlans.map(function(p){ return p.year_discount_pct || 0; }).concat([0]));
-  let per = '<div class="nk-per">' +
-    '<button class="' + (S.per === 'month' ? 'on' : '') + '" onclick="setPeriod(\'month\')">' + esc(tt('per_month')) + '</button>' +
-    '<button class="' + (S.per === 'year' ? 'on' : '') + '" onclick="setPeriod(\'year\')">' + esc(tt('per_year')) +
-      (disc > 0 ? '<span class="sv">' + esc(tt('per_save').replace('{n}', disc)) + '</span>' : '') + '</button>' +
-  '</div>';
 
-  const cards = paidPlans.map(function(p){
-    const isCur = p.code === cur;
-    return '<div class="nk-plan' + (p.best ? ' best' : '') + '">' +
-      (p.best ? '<span class="tag">' + esc(tt('as_plan_best')) + '</span>' : '') +
-      '<span class="nm">' + esc(p.title) + '</span>' +
-      planPrice(p) +
-      (p.trial_days && !isCur ? '<span class="cur">' + esc(tt('pl_trial').replace('{n}', p.trial_days)) + '</span>' : '') +
-      (isCur
-        ? '<span class="cur">' + esc(tt('pl_current')) + '</span>'
-        : '<button class="btn ' + (p.best ? 'btn-brass' : 'btn-line') + ' btn-wide" onclick="astroSubscribe(\'' + p.code + '\')">' + esc(tt('as_plan_open')) + '</button>') +
+  /* Переключатель периода */
+  const perBox = document.getElementById('shop-per');
+  if(perBox){
+    perBox.innerHTML = '<div class="plx-seg">' +
+      '<button class="' + (S.per === 'month' ? 'on' : '') + '" onclick="setPeriod(\'month\')">' + esc(tt('per_month')) + '</button>' +
+      '<button class="' + (S.per === 'year' ? 'on' : '') + '" onclick="setPeriod(\'year\')">' + esc(tt('per_year')) +
+        (disc > 0 ? '<span class="save">−' + disc + '%</span>' : '') + '</button>' +
     '</div>';
-  }).join('');
+  }
 
-  const box = document.getElementById('as-plans');
-  if(box) box.innerHTML = per + '<div class="nk-plans-in" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:14px;grid-column:1/-1">' + cards + '</div>';
+  /* Карточки тарифов */
+  const cardsBox = document.getElementById('shop-sub-plans');
+  if(cardsBox){
+    cardsBox.innerHTML = paidPlans.map(function(p){
+      const isCur = p.code === cur;
+      const yearly = S.per === 'year' && p.price_rub_year;
+      const price = yearly ? Math.round(p.year_month_rub || (p.price_rub_year / 12)) : Math.round(p.price_rub);
+      const bill = yearly
+        ? esc(tt('pl_year_note').replace('{sum}', Math.round(p.price_rub_year)))
+        : (p.trial_days ? esc(tt('pl_trial').replace('{n}', p.trial_days)) : '');
+      const hl = planHighlights(p.code, p.code === 'pro' ? 'plus' : 'free', 4);
+      return '<div class="plx-card' + (p.best ? ' best' : '') + '">' +
+        (p.best ? '<span class="plx-ribbon">' + esc(tt('as_plan_best')) + '</span>' : '') +
+        '<div class="plx-name">' + esc(p.title) + '</div>' +
+        '<div class="plx-price"><span class="num">' + price + '</span><span class="cur">\u20bd</span><span class="per">' + esc(tt('pl_month')) + '</span></div>' +
+        '<div class="plx-bill">' + bill + '</div>' +
+        (hl.length ? '<ul class="plx-hl">' + hl.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '') +
+        (isCur
+          ? '<div class="plx-current">' + esc(tt('pl_current')) + '</div>'
+          : '<button class="btn ' + (p.best ? 'btn-brass' : 'btn-line') + ' btn-wide" onclick="astroSubscribe(\'' + p.code + '\')">' + esc(tt('as_plan_open')) + '</button>') +
+      '</div>';
+    }).join('');
+  }
 
-  /* Столбцы сравнения: строятся из того же реестра, что и реальный доступ. */
-  const cmp = document.getElementById('as-cmp');
-  if(!cmp) return;
-  const cols = ['free'].concat(paidPlans.map(function(p){ return p.code; }));
-  const names = { free: tt('cmp_free') };
-  paidPlans.forEach(function(p){ names[p.code] = p.title; });
-  const bestCode = (paidPlans.filter(function(p){ return p.best; })[0] || {}).code;
-
-  let html = '<div class="eyebrow" style="margin-bottom:2px">' + esc(tt('cmp_title')) + '</div>';
-  html += '<div class="nk-cmp"><div class="nk-cmp-r nk-cmp-h"><span></span>' +
-    cols.map(function(c){
-      const cls = c === bestCode ? 'pl best' : (c === 'free' ? '' : 'pl');
-      return '<span class="' + cls + '">' + esc(names[c] || c) + '</span>';
-    }).join('') + '</div>';
-
-  (d.groups || []).forEach(function(g){
-    html += '<div class="nk-cmp-g"><i>' + esc(g.icon || '') + '</i>' + esc(g.title) + '</div>';
-    (g.rows || []).forEach(function(r){
-      html += '<div class="nk-cmp-r"><span class="nk-cmp-t">' + esc(r.title) + '</span>' +
-        cols.map(function(c){ return cmpCell(r.cells ? r.cells[c] : false); }).join('') + '</div>';
+  /* Таблица сравнения */
+  const cmpBox = document.getElementById('shop-sub-cmp');
+  if(cmpBox){
+    const cols = ['free'].concat(paidPlans.map(function(p){ return p.code; }));
+    const names = { free: tt('cmp_free') };
+    paidPlans.forEach(function(p){ names[p.code] = p.title; });
+    const bestCode = (paidPlans.filter(function(p){ return p.best; })[0] || {}).code;
+    let html = '<div class="plx-cmp-title">' + esc(tt('cmp_title')) + '</div>';
+    html += '<div class="plx-cmp-scroll"><div class="plx-cmp-table">';
+    html += '<div class="plx-cmp-r plx-cmp-h"><span></span>' +
+      cols.map(function(c){
+        const cls = c === bestCode ? 'pl best' : (c === 'free' ? '' : 'pl');
+        return '<span class="' + cls + '">' + esc(names[c] || c) + '</span>';
+      }).join('') + '</div>';
+    (d.groups || []).forEach(function(g){
+      html += '<div class="plx-cmp-g"><i>' + esc(g.icon || '') + '</i>' + esc(g.title) + '</div>';
+      (g.rows || []).forEach(function(r){
+        html += '<div class="plx-cmp-r"><span class="plx-cmp-t">' + esc(r.title) + '</span>' +
+          cols.map(function(c){ return cmpCell(r.cells ? r.cells[c] : false); }).join('') + '</div>';
+      });
     });
-  });
-  html += '</div><p class="nk-cmp-note">' + esc(tt('cmp_note')) + '</p>';
-  cmp.innerHTML = html;
+    html += '</div></div><p class="plx-note">' + esc(tt('cmp_note')) + '</p>';
+    cmpBox.innerHTML = html;
+  }
 }
 
 function setPeriod(p){
@@ -3970,20 +4040,25 @@ function setPeriod(p){
   paintPlans();
 }
 
-async function renderAstroPlans(force){
-  const box = document.getElementById('as-plans');
-  if(!box) return;
+async function renderShopPlans(force){
   if(S.plansData && !force){ paintPlans(); return; }
-  if(box.dataset.load === '1') return;
-  box.dataset.load = '1';
-  box.innerHTML = '<div class="shimmer" style="height:150px;border-radius:12px;grid-column:1/-1"></div>';
-  const d = await api('/subscription/plans', 'GET', { lang_code: S.lang || lang || 'ru' }, true);
-  box.dataset.load = '0';
-  if(!d || !d.success || !d.plans){ box.innerHTML = ''; return; }
+  if(S.plansLoading) return;
+  S.plansLoading = true;
+  const box = document.getElementById('shop-sub-plans');
+  if(box && !S.plansData) box.innerHTML = '<div class="shimmer" style="height:280px;grid-column:1/-1"></div>'.repeat(1);
+  const d = await api('/subscription/plans?lang_code=' + encodeURIComponent(S.lang || lang || 'ru'), 'GET', {}, true);
+  S.plansLoading = false;
+  if(!d || !d.success || !d.plans){
+    if(box && !S.plansData) box.innerHTML = '<div class="empty" style="grid-column:1/-1"><p>' + esc(tt('err')) + '</p></div>';
+    return;
+  }
   S.plansData = d;
   if(d.access && d.access.features) S.access = d.access;
   paintPlans();
 }
+
+/* Совместимость со старыми вызовами из натальной карты: данные те же, экран один. */
+async function renderAstroPlans(force){ return renderShopPlans(force); }
 
 async function astroSubscribe(plan){
   toast(tt('wait'));
