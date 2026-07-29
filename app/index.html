@@ -1181,6 +1181,16 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
               <span class="mid"><strong data-t="th_row">Оформление</strong><span data-t="th_row_hint">Темная, обсидиан или светлая</span></span>
               <span class="end"><span id="pf-theme" style="color:var(--brass-pale);font-size:13px">Чернила</span></span>
             </button>
+            <button class="rowcard" onclick="openSheet('tone')">
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.4h16M4 12h11M4 17.6h7"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></span>
+              <span class="mid"><strong data-t="tn_row">Тон проводника</strong><span data-t="tn_row_hint">Насколько прямо с вами говорят</span></span>
+              <span class="end"><span id="pf-tone" style="color:var(--brass-pale);font-size:13px">Ровный</span></span>
+            </button>
+            <button class="rowcard" onclick="openSheet('length')">
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.4 5.6h15.2M4.4 10.4h15.2M4.4 15.2h9.6M4.4 20h5.6"/></svg></span>
+              <span class="mid"><strong data-t="ln_row">Длина ответа</strong><span data-t="ln_row_hint">Подробно или коротко</span></span>
+              <span class="end"><span id="pf-length" style="color:var(--brass-pale);font-size:13px">Обычная</span></span>
+            </button>
             <button class="rowcard" onclick="openSheet('lang')">
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M3.4 12h17.2M12 3.2c2.4 2.4 3.6 5.4 3.6 8.8s-1.2 6.4-3.6 8.8c-2.4-2.4-3.6-5.4-3.6-8.8S9.6 5.6 12 3.2z"/></svg></span>
               <span class="mid"><strong data-t="pf_lang">Язык интерфейса</strong><span data-t="pf_lang_hint">На нём же говорит оракул</span></span>
@@ -1586,6 +1596,22 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
   <div class="stack" id="theme-list"></div>
 </div>
 
+<!-- тон проводника -->
+<div class="sheet" id="sheet-tone">
+  <div class="sheet-grip"></div>
+  <h3 data-t="tn_title">Тон проводника</h3>
+  <p class="sheet-sub" data-t="tn_sub">Касается всего: чата, раскладов, снов, матрицы и гороскопов. Меняется подача, а не сами карты.</p>
+  <div class="stack" id="tone-list"></div>
+</div>
+
+<!-- длина ответа -->
+<div class="sheet" id="sheet-length">
+  <div class="sheet-grip"></div>
+  <h3 data-t="ln_title">Длина ответа</h3>
+  <p class="sheet-sub" data-t="ln_sub">Ни одна карта и ни один символ не пропадают — меняется только плотность текста.</p>
+  <div class="stack" id="length-list"></div>
+</div>
+
 <div class="sheet" id="sheet-lang">
   <div class="sheet-grip"></div>
   <h3 data-t="lang_title">Язык интерфейса</h3>
@@ -1816,6 +1842,26 @@ const STR = {
   th_dawn_note:{ru:'Светлая, теплая бумага',en:'Light, warm paper',es:'Papel claro y cálido',fr:'Papier clair et chaud',de:'Helles, warmes Papier'},
   th_auto:{ru:'Как в системе',en:'Match system',es:'Como el sistema',fr:'Comme le système',de:'Wie das System'},
   th_auto_note:{ru:'Переключается вместе с устройством',en:'Follows your device setting',es:'Sigue el ajuste del dispositivo',fr:'Suit le réglage de l’appareil',de:'Folgt der Geräteeinstellung'},
+  tn_row:{ru:'Тон проводника',en:'Guide tone',es:'Tono del guía',fr:'Ton du guide',de:'Ton des Begleiters'},
+  tn_row_hint:{ru:'Насколько прямо с вами говорят',en:'How directly you are spoken to',es:'Con cuánta franqueza te hablan',fr:'Avec quelle franchise on vous parle',de:'Wie direkt mit dir gesprochen wird'},
+  tn_title:{ru:'Тон проводника',en:'Guide tone',es:'Tono del guía',fr:'Ton du guide',de:'Ton des Begleiters'},
+  tn_sub:{ru:'Касается всего: чата, раскладов, снов, матрицы и гороскопов. Меняется подача, а не сами карты.',en:'Applies everywhere: chat, spreads, dreams, matrix and horoscopes. It changes the delivery, never the cards.',es:'Se aplica a todo: chat, tiradas, sueños, matriz y horóscopos. Cambia el tono, no las cartas.',fr:'Vaut partout : chat, tirages, rêves, matrice et horoscopes. Cela change le ton, pas les cartes.',de:'Gilt überall: Chat, Legungen, Träume, Matrix und Horoskope. Es ändert den Ton, nicht die Karten.'},
+  tn_saved:{ru:'Тон изменён',en:'Tone changed',es:'Tono cambiado',fr:'Ton modifié',de:'Ton geändert'},
+  tn_gentle:{ru:'Бережный',en:'Gentle',es:'Cuidadoso',fr:'Délicat',de:'Behutsam'},
+  tn_gentle_note:{ru:'Сначала поддержка, правда мягкими словами',en:'Support first, the truth in soft words',es:'Primero apoyo, la verdad con palabras suaves',fr:'Du soutien d’abord, la vérité en douceur',de:'Erst Halt, die Wahrheit in sanften Worten'},
+  tn_balanced:{ru:'Ровный',en:'Even',es:'Equilibrado',fr:'Équilibré',de:'Ausgeglichen'},
+  tn_balanced_note:{ru:'Как сейчас: тепло, но без прикрас',en:'As now: warm, but nothing sugar-coated',es:'Como ahora: cálido, pero sin adornos',fr:'Comme aujourd’hui : chaleureux, sans fard',de:'Wie jetzt: warm, aber ohne Beschrönigung'},
+  tn_direct:{ru:'Прямой',en:'Direct',es:'Directo',fr:'Direct',de:'Direkt'},
+  tn_direct_note:{ru:'Сразу к сути, без утешений',en:'Straight to the point, no cushioning',es:'Al grano, sin consuelos',fr:'Droit au but, sans ménagement',de:'Direkt zur Sache, ohne Trost'},
+  ln_row:{ru:'Длина ответа',en:'Answer length',es:'Largo de la respuesta',fr:'Longueur des réponses',de:'Länge der Antwort'},
+  ln_row_hint:{ru:'Подробно или коротко',en:'Detailed or brief',es:'Detallado o breve',fr:'Détaillé ou bref',de:'Ausführlich oder kurz'},
+  ln_title:{ru:'Длина ответа',en:'Answer length',es:'Largo de la respuesta',fr:'Longueur des réponses',de:'Länge der Antwort'},
+  ln_sub:{ru:'Ни одна карта и ни один символ не пропадают — меняется только плотность текста.',en:'No card and no symbol disappears — only the density of the text changes.',es:'Ninguna carta ni símbolo desaparece: solo cambia la densidad del texto.',fr:'Aucune carte ni symbole ne disparaît : seule la densité du texte change.',de:'Keine Karte und kein Symbol verschwindet — nur die Textdichte ändert sich.'},
+  ln_saved:{ru:'Длина изменена',en:'Length changed',es:'Largo cambiado',fr:'Longueur modifiée',de:'Länge geändert'},
+  ln_normal:{ru:'Обычная',en:'Normal',es:'Normal',fr:'Normale',de:'Normal'},
+  ln_normal_note:{ru:'Полный разбор, как сейчас',en:'The full reading, as now',es:'La lectura completa, como ahora',fr:'La lecture complète, comme aujourd’hui',de:'Die volle Deutung, wie jetzt'},
+  ln_short:{ru:'Короче',en:'Shorter',es:'Más corta',fr:'Plus courte',de:'Kürzer'},
+  ln_short_note:{ru:'Плотнее раза в полтора, только самое важное',en:'About 1.5x tighter, only what matters',es:'Cerca de 1,5 veces más densa, solo lo esencial',fr:'Environ 1,5 fois plus dense, l’essentiel',de:'Rund 1,5-mal dichter, nur das Wesentliche'},
   mem_row:{ru:'Хроника памяти',en:'Memory chronicle',es:'Crónica de memoria',fr:'Chronique de mémoire',de:'Gedächtnis-Chronik'},
   mem_row_hint:{ru:'Что оракул помнит о вас',en:'What the oracle remembers about you',es:'Lo que el oráculo recuerda de ti',fr:'Ce que l\'oracle retient de vous',de:'Was das Orakel über dich weiß'},
   mem_title:{ru:'Хроника',en:'Chronicle',es:'Crónica',fr:'Chronique',de:'Chronik'},
@@ -1862,7 +1908,7 @@ const STR = {
   dream_btn:{ru:'Разобрать сон',en:'Interpret the dream',es:'Interpretar el sueño',fr:'Interpréter le rêve',de:'Traum deuten'},
   dream_sym:{ru:'Частые символы',en:'Recurring symbols'},
   need_dream:{ru:'Опишите сон — даже обрывка достаточно',en:'Describe the dream — even a fragment is enough'},
-  dream_prefix:{ru:'Растолкуй мой сон: ',en:'Interpret my dream: ',es:'Interpreta mi sueño: ',fr:'Interprète mon rêve : ',de:'Deute meinen Traum: '},
+  dream_prefix:{ru:'Растолкуй мой сон: ',en:'Interpret my dream: ',es:'Interpreta mi sueño: ',fr:'Interprète mon rêve : ',de:'Deute meinen Traum: '},
 
   cl_dos:{ru:'Идёт легко',en:'Flows easily',es:'Fluye fácil',fr:'Coule facilement',de:'Läuft leicht'},
   cl_donts:{ru:'Лучше отложить',en:'Better postponed',es:'Mejor posponer',fr:'À reporter',de:'Besser verschieben'},
@@ -1992,6 +2038,8 @@ function applyStrings(){
   const disp = document.getElementById('pf-lang');
   if(disp && l) disp.textContent = l.name;
   paintThemeLabel();
+  paintToneLabel();
+  paintLengthLabel();
 }
 
 /* ---------- мост в Telegram / VK / веб ---------- */
@@ -2112,6 +2160,8 @@ function openSheet(id){
   if(id === 'history') resetHistory();
   if(id === 'lang') renderLangs();
   if(id === 'theme') renderThemes();
+  if(id === 'tone') renderTones();
+  if(id === 'length') renderLengths();
   if(id === 'name') document.getElementById('name-in').value = S.name || '';
   if(id === 'birth') fillBirth();
   if(id === 'bonus') loadBonus();
@@ -2407,6 +2457,10 @@ async function boot(){
   } else if(data.theme === undefined || data.theme === null){
     /* у аккаунта ещё нет темы — запомним тем же запросом при следующем выборе */
   }
+  if(data.reading_tone && TONES.indexOf(data.reading_tone) !== -1) tonePref = data.reading_tone;
+  if(data.response_length && LENGTHS.indexOf(data.response_length) !== -1) lengthPref = data.response_length;
+  paintToneLabel();
+  paintLengthLabel();
   if(data.language_code && LANGS.some(l => l.code === data.language_code)) lang = data.language_code;
   else {
     const guess = (bridge.isTG && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.language_code : navigator.language || 'ru').slice(0,2);
@@ -3122,6 +3176,77 @@ if(window.matchMedia){
   const onSys = () => { if(themePref === 'auto') applyThemeDom(); };
   if(mqL.addEventListener) mqL.addEventListener('change', onSys);
   else if(mqL.addListener) mqL.addListener(onSys);
+}
+
+/* ---------- тон проводника и длина ответа ---------- */
+const TONES = ['gentle', 'balanced', 'direct'];
+const LENGTHS = ['normal', 'short'];
+const TONE_GL = {gentle:'☽', balanced:'◉', direct:'✦'};
+const LENGTH_GL = {normal:'≡', short:'–'};
+let tonePref = 'balanced';
+let lengthPref = 'normal';
+
+function paintToneLabel(){
+  const el = document.getElementById('pf-tone');
+  if(el) el.textContent = tt('tn_' + tonePref);
+}
+function paintLengthLabel(){
+  const el = document.getElementById('pf-length');
+  if(el) el.textContent = tt('ln_' + lengthPref);
+}
+function renderTones(){
+  const box = document.getElementById('tone-list');
+  if(!box) return;
+  box.innerHTML = TONES.map(code => `<button class="rowcard" onclick="setTone('${code}')">
+    <span class="idx" style="font-family:var(--serif);font-size:17px">${TONE_GL[code]}</span>
+    <span class="mid"><strong>${esc(tt('tn_' + code))}</strong><span>${esc(tt('tn_' + code + '_note'))}</span></span>
+    <span class="end">${code === tonePref ? `<span class="tag">${IC.check}</span>` : ''}</span>
+  </button>`).join('');
+}
+function renderLengths(){
+  const box = document.getElementById('length-list');
+  if(!box) return;
+  box.innerHTML = LENGTHS.map(code => `<button class="rowcard" onclick="setLength('${code}')">
+    <span class="idx" style="font-family:var(--mono);font-size:15px">${LENGTH_GL[code]}</span>
+    <span class="mid"><strong>${esc(tt('ln_' + code))}</strong><span>${esc(tt('ln_' + code + '_note'))}</span></span>
+    <span class="end">${code === lengthPref ? `<span class="tag">${IC.check}</span>` : ''}</span>
+  </button>`).join('');
+}
+async function setTone(code){
+  if(TONES.indexOf(code) === -1) return;
+  const prev = tonePref;
+  tonePref = code;
+  paintToneLabel();
+  renderTones();
+  closeSheets();
+  toast(tt('tn_saved'));
+  try {
+    const r = await api('/profile/update', 'POST', { reading_tone: code });
+    if(!r || !r.success) throw new Error('save failed');
+  } catch(e){
+    tonePref = prev;
+    paintToneLabel();
+    renderTones();
+    toast(tt('err'));
+  }
+}
+async function setLength(code){
+  if(LENGTHS.indexOf(code) === -1) return;
+  const prev = lengthPref;
+  lengthPref = code;
+  paintLengthLabel();
+  renderLengths();
+  closeSheets();
+  toast(tt('ln_saved'));
+  try {
+    const r = await api('/profile/update', 'POST', { response_length: code });
+    if(!r || !r.success) throw new Error('save failed');
+  } catch(e){
+    lengthPref = prev;
+    paintLengthLabel();
+    renderLengths();
+    toast(tt('err'));
+  }
 }
 
 function renderLangs(){
