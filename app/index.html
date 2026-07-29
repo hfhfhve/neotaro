@@ -948,6 +948,43 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 .nk-plan li{font-family:var(--sans);font-size:12.5px;color:#C9CBD8;line-height:1.5;padding-left:15px;position:relative}
 .nk-plan li:before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;background:var(--brass);transform:rotate(45deg)}
 .nk-plan .btn{margin-top:auto}
+/* --- ГЕЙТЫ ТАРИФОВ: один визуальный язык для всего закрытого --- */
+.tag-lock{color:var(--brass);border-color:var(--line);background:rgba(217,174,95,.09)}
+.tag-lock svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+/* Переключатель месяц/год */
+.nk-per{display:inline-flex;border:1px solid var(--line-soft);border-radius:2px;overflow:hidden;margin-top:16px}
+.nk-per button{font-family:var(--sans);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  padding:9px 15px;background:transparent;border:0;color:var(--mist);cursor:pointer;transition:.18s}
+.nk-per button+button{border-left:1px solid var(--line-soft)}
+.nk-per button.on{background:rgba(217,174,95,.12);color:var(--brass-bright)}
+.nk-per .sv{color:var(--brass);margin-left:6px}
+
+/* Столбцы сравнения */
+.nk-cmp{margin-top:26px;border-top:1px solid var(--line-soft)}
+.nk-cmp-r{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,84px);align-items:center;
+  gap:8px;padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.nk-cmp-h{position:sticky;top:0;z-index:2;background:var(--ink-900);border-bottom:1px solid var(--line)}
+.nk-cmp-h span{font-family:var(--sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--mist);text-align:center}
+.nk-cmp-h span.pl{color:var(--brass-bright)}
+.nk-cmp-h span.best{color:#0B0F1E;background:linear-gradient(140deg,var(--brass-pale),#C0913F);padding:4px 0}
+.nk-cmp-g{font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);
+  padding:18px 0 8px;display:flex;align-items:center;gap:8px}
+.nk-cmp-g i{font-style:normal;opacity:.8}
+.nk-cmp-t{font-family:var(--sans);font-size:13px;color:#C9CBD8;line-height:1.45}
+.nk-cmp-c{text-align:center;font-family:var(--sans);font-size:11px;color:var(--mist);line-height:1.3}
+.nk-cmp-c svg{width:15px;height:15px;stroke:var(--brass-bright);fill:none;stroke-width:1.8}
+.nk-cmp-c.no{color:#5A6180}
+.nk-cmp-note{font-family:var(--sans);font-size:12px;color:var(--mist);line-height:1.6;margin-top:14px}
+.nk-plan .yr{font-family:var(--sans);font-size:11.5px;color:var(--mist)}
+.nk-plan .cur{font-family:var(--sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass)}
+@media(max-width:640px){
+  .nk-cmp-r{grid-template-columns:minmax(0,1fr) repeat(3,54px);gap:4px}
+  .nk-cmp-t{font-size:12px}
+  .nk-cmp-c{font-size:9.5px}
+  .nk-cmp-h span{font-size:8.5px;letter-spacing:.08em}
+}
 .nk-skel-wheel{width:min(100%,420px);aspect-ratio:1;margin:26px auto 0;border-radius:50%;
   border:1px solid var(--line-soft);background:conic-gradient(from 0deg,rgba(217,174,95,.16),transparent 40%,rgba(217,174,95,.16));
   animation:nkspin 2.4s linear infinite}
@@ -1475,6 +1512,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
                 <h2 class="h2" style="margin-top:10px" data-t="as_pay_title">Открыть весь разбор карты</h2>
                 <p class="sub" style="margin-top:10px;max-width:56ch" data-t="as_pay_lead">Одна подписка на всё: все разделы натальной карты, личные транзиты на каждый день, без списания энергии.</p>
                 <div class="nk-plans" id="as-plans"></div>
+                <div id="as-cmp"></div>
                 <p class="label" style="margin-top:12px" data-t="as_pay_note">Открытые разделы останутся у вас навсегда, даже после отмены подписки. Отменить можно в любой момент.</p>
               </div>
             </div>
@@ -2076,6 +2114,19 @@ const STR = {
   as_notime:{ru:'Время рождения не указано, поэтому дома и асцендент не рассчитаны. Мы не станем выдумывать их наугад.',en:'No birth time, so houses and the ascendant are not calculated. We will not invent them.',es:'Sin hora de nacimiento no calculamos casas ni ascendente. No los inventamos.',fr:'Sans heure de naissance, ni maisons ni ascendant ne sont calculés. Nous ne les inventons pas.',de:'Ohne Geburtszeit keine Häuser und kein Aszendent. Wir erfinden sie nicht.'},
   as_add_time:{ru:'Добавить время',en:'Add birth time',es:'Añadir la hora',fr:'Ajouter l’heure',de:'Zeit ergänzen'},
   astro_free:{ru:'Расчёт и колесо карты — бесплатно, энергия не списывается',en:'The chart and the wheel are free, no energy is spent',es:'El cálculo y la rueda son gratis, no gastas energía',fr:'Le calcul et la roue sont gratuits, aucune énergie dépensée',de:'Berechnung und Rad sind kostenlos, keine Energie nötig'},
+  pw_in:{ru:'Доступно в {plan}',en:'Available in {plan}',es:'Disponible en {plan}',fr:'Disponible dans {plan}',de:'Verfügbar in {plan}'},
+  pw_open_plans:{ru:'Посмотреть тарифы',en:'See plans',es:'Ver planes',fr:'Voir les offres',de:'Tarife ansehen'},
+  pw_locked_toast:{ru:'Это открывается в {plan}',en:'This opens with {plan}',es:'Se abre con {plan}',fr:'Disponible avec {plan}',de:'Öffnet sich mit {plan}'},
+  cmp_title:{ru:'Что входит в тарифы',en:'What each plan includes',es:'Qué incluye cada plan',fr:'Ce que comprend chaque offre',de:'Was jeder Tarif enthält'},
+  cmp_free:{ru:'Бесплатно',en:'Free',es:'Gratis',fr:'Gratuit',de:'Kostenlos'},
+  per_month:{ru:'Месяц',en:'Monthly',es:'Mensual',fr:'Mensuel',de:'Monat'},
+  per_year:{ru:'Год',en:'Yearly',es:'Anual',fr:'Annuel',de:'Jahr'},
+  per_save:{ru:'−{n}%',en:'−{n}%',es:'−{n}%',fr:'−{n}%',de:'−{n}%'},
+  pl_month:{ru:'/ мес',en:'/ mo',es:'/ mes',fr:'/ mois',de:'/ Mon.'},
+  pl_year_note:{ru:'{sum} ₽ в год, списание раз в год',en:'{sum} ₽ per year, billed yearly',es:'{sum} ₽ al año',fr:'{sum} ₽ par an',de:'{sum} ₽ pro Jahr'},
+  pl_current:{ru:'Ваш тариф',en:'Your plan',es:'Tu plan',fr:'Votre offre',de:'Dein Tarif'},
+  pl_trial:{ru:'{n} дня бесплатно',en:'{n} days free',es:'{n} días gratis',fr:'{n} jours offerts',de:'{n} Tage gratis'},
+  cmp_note:{ru:'Отменить можно в любой момент — доступ останется до конца оплаченного периода. Уже открытые разделы остаются навсегда.',en:'Cancel anytime — access lasts until the end of the paid period. Sections you opened stay yours for good.',es:'Cancela cuando quieras; el acceso dura hasta el final del periodo.',fr:'Annulez à tout moment ; l’accès dure jusqu’à la fin de la période.',de:'Jederzeit kündbar — Zugang bis zum Ende der bezahlten Periode.'},
   as_pay_eyebrow:{ru:'Подписка NEOTARO',en:'NEOTARO subscription',es:'Suscripción NEOTARO',fr:'Abonnement NEOTARO',de:'NEOTARO-Abo'},
   as_pay_title:{ru:'Открыть весь разбор карты',en:'Unlock the whole chart reading',es:'Abrir toda la lectura',fr:'Ouvrir toute la lecture',de:'Ganze Deutung freischalten'},
   as_pay_lead:{ru:'Одна подписка на всё: все разделы натальной карты, личные транзиты на каждый день, без списания энергии.',en:'One subscription for everything: all chart sections, daily personal transits, no energy spent.',es:'Una suscripción para todo: todas las secciones, tránsitos diarios, sin gastar energía.',fr:'Un abonnement pour tout : toutes les sections, transits quotidiens, sans énergie.',de:'Ein Abo für alles: alle Abschnitte, tägliche Transite, ohne Energie.'},
@@ -2307,6 +2358,8 @@ const S = {
   shop: [], shopPick: null, offer: null,
   history: [], histOffset: 0, histMore: false,
   mx: null, mxText: null,
+  access: {plan:'free', plan_title:'', level:0, paid:false, features:{}},
+  plansData: null, per: 'month',
   view: 'home', poll: null, offerTimer: null
 };
 
@@ -2608,6 +2661,8 @@ function absorbUser(d){
   if(d.birth_city) S.city = d.birth_city;
   if(d.daily_card) S.daily = d.daily_card;
   if(d.natal_chart_data) S.chart = d.natal_chart_data;
+  // Снимок доступов приходит вместе с юзером — один запрос на всё приложение.
+  if(d.access && d.access.features) S.access = d.access;
   S.energyMax = Math.max(30, S.energy);
   paintEnergy();
 }
@@ -2785,12 +2840,14 @@ async function renderSpreads(){
     if(!items.length) return;
     html += `<div class="orn" style="margin:22px 0 6px"><span class="eyebrow">${esc(tt(key))}</span></div>`;
     items.forEach(s => {
-      const locked = s.is_premium && !S.purchased;
-      const price = s.price === 0
+      // Замок берётся из реестра тарифов, а не из факта оплаты когда-то.
+      const locked = !!s.is_premium && !featOk('spread.premium');
+      const noCost = featOk('spread.no_energy');
+      const price = (s.price === 0 || noCost)
         ? `<span class="tag">${esc(tt('free'))}</span>`
         : `<span class="tag"><span class="num">${s.price}</span> ${esc(tt('energy_unit'))}</span>`;
-      const end = locked ? `<span class="tag tag-cold">${esc(tt('premium'))}</span>` : price;
-      html += `<button class="rowcard${locked ? ' locked' : ''}" onclick="${locked ? 'lockedSpread()' : `pickSpread('${s.id}')`}">
+      const end = locked ? lockTag('spread.premium') : price;
+      html += `<button class="rowcard${locked ? ' locked' : ''}" onclick="${locked ? `goPlans('spread.premium')` : `pickSpread('${s.id}')`}">
         <span class="idx num">${s.cards_count}</span>
         <span class="mid"><strong>${esc(s.name)}</strong><span>${esc(s.description || '')}</span></span>
         <span class="end">${end}</span>
@@ -3385,6 +3442,7 @@ function renderLengths(){
 }
 async function setTone(code){
   if(TONES.indexOf(code) === -1) return;
+  if(!featOk('chat.tone')){ closeSheets(); goPlans('chat.tone'); return; }
   const prev = tonePref;
   tonePref = code;
   paintToneLabel();
@@ -3403,6 +3461,7 @@ async function setTone(code){
 }
 async function setLength(code){
   if(LENGTHS.indexOf(code) === -1) return;
+  if(!featOk('chat.length')){ closeSheets(); goPlans('chat.length'); return; }
   const prev = lengthPref;
   lengthPref = code;
   paintLengthLabel();
@@ -3775,26 +3834,160 @@ async function openAstroSection(key){
   toast(tt('err'));
 }
 
-async function renderAstroPlans(){
-  const box = document.getElementById('as-plans');
-  if(box.dataset.done === '1') return;
-  const d = await api('/subscription/status', 'GET');
-  if(!d || !d.success || !d.plans) return;
-  box.dataset.done = '1';
-  const best = d.plans.length > 1 ? d.plans[d.plans.length - 2].code : (d.plans[0] || {}).code;
-  box.innerHTML = d.plans.map(p =>
-    '<div class="nk-plan' + (p.code === best ? ' best' : '') + '">' +
-      (p.code === best ? '<span class="tag">' + esc(tt('as_plan_best')) + '</span>' : '') +
+/* ===========================================================================
+   ГЕЙТЫ ТАРИФОВ — единый слой для всего интерфейса
+   ---------------------------------------------------------------------------
+   Никаких if(plan==='pro') в верстке. Всё решает бэкенд в access.features,
+   а текст «Доступно в ПРО» берётся из required_plan_title — поэтому
+   перенос фичи в другой тариф не требует правки фронта вообще.
+   =========================================================================== */
+const IC_LOCK = '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+const IC_OK   = '<svg viewBox="0 0 24 24"><path d="M5 13l4.5 4.5L19 7"/></svg>';
+
+function featOf(key){ return (S.access && S.access.features ? S.access.features[key] : null) || null; }
+function featOk(key){ const f = featOf(key); return f ? !!f.allowed : true; }        /* нет данных — не ломаем старое поведение */
+function featQuota(key){ const f = featOf(key); return f && typeof f.quota_left === 'number' ? f.quota_left : null; }
+function planTitleFor(key, fallback){
+  const f = featOf(key);
+  return (f && f.required_plan_title) || fallback || 'PRO';
+}
+function lockText(key){ return tt('pw_in').replace('{plan}', planTitleFor(key)); }
+function lockTag(key){
+  return '<span class="tag tag-lock">' + IC_LOCK + ' ' + esc(lockText(key)) + '</span>';
+}
+/* Одна точка входа в paywall из любого места приложения. */
+function goPlans(key){
+  if(key) toast(tt('pw_locked_toast').replace('{plan}', planTitleFor(key)));
+  go('astro');
+  setTimeout(function(){
+    const pay = document.getElementById('as-paywall');
+    if(!pay) return;
+    pay.style.display = 'block';
+    renderAstroPlans();
+    pay.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 220);
+}
+/* Ответ бэка subscription_required обрабатывается везде одинаково. */
+function handleGate(d){
+  if(!d || d.success) return false;
+  const msg = d.message || d.paywall;
+  if(msg !== 'subscription_required' && d.paywall !== 'subscription_required') return false;
+  if(d.feature && S.access && S.access.features && S.access.features[d.feature]){
+    S.access.features[d.feature].allowed = false;
+    if(d.required_plan) S.access.features[d.feature].required_plan = d.required_plan;
+    if(d.required_plan_title) S.access.features[d.feature].required_plan_title = d.required_plan_title;
+  }
+  toast(tt('pw_locked_toast').replace('{plan}', d.required_plan_title || planTitleFor(d.feature)));
+  setTimeout(function(){ goPlans(null); }, 900);
+  return true;
+}
+/* После оплаты/триала обновляем доступы без перезагрузки страницы. */
+async function refreshAccess(){
+  const d = await api('/subscription/status', 'GET', {}, true);
+  if(d && d.success && d.access && d.access.features){
+    S.access = d.access;
+    if(typeof renderSpreads === 'function' && S.view === 'spreads') renderSpreads();
+    if(typeof paintProfile === 'function') paintProfile();
+  }
+  return S.access;
+}
+
+function planPrice(p){
+  if(S.per === 'year' && p.price_rub_year){
+    return '<span class="pr">' + Math.round(p.year_month_rub || (p.price_rub_year / 12)) + ' \u20bd <small>' + esc(tt('pl_month')) + '</small></span>' +
+           '<span class="yr">' + esc(tt('pl_year_note').replace('{sum}', Math.round(p.price_rub_year))) + '</span>';
+  }
+  return '<span class="pr">' + Math.round(p.price_rub) + ' \u20bd <small>' + esc(tt('pl_month')) + '</small></span>' +
+         (p.price_rub_year ? '<span class="yr">' + esc(tt('pl_year_note').replace('{sum}', Math.round(p.price_rub_year))) + '</span>' : '');
+}
+
+function cmpCell(v){
+  if(v === true)  return '<span class="nk-cmp-c">' + IC_OK + '</span>';
+  if(!v)          return '<span class="nk-cmp-c no">\u2014</span>';
+  return '<span class="nk-cmp-c">' + esc(String(v)) + '</span>';
+}
+
+function paintPlans(){
+  const d = S.plansData;
+  if(!d) return;
+  const paidPlans = (d.plans || []).filter(function(p){ return p.code !== 'free'; });
+  const cur = (S.access && S.access.plan) || 'free';
+
+  /* Переключатель периода — скидка берётся из цен, а не вбивается руками. */
+  const disc = Math.max.apply(null, paidPlans.map(function(p){ return p.year_discount_pct || 0; }).concat([0]));
+  let per = '<div class="nk-per">' +
+    '<button class="' + (S.per === 'month' ? 'on' : '') + '" onclick="setPeriod(\'month\')">' + esc(tt('per_month')) + '</button>' +
+    '<button class="' + (S.per === 'year' ? 'on' : '') + '" onclick="setPeriod(\'year\')">' + esc(tt('per_year')) +
+      (disc > 0 ? '<span class="sv">' + esc(tt('per_save').replace('{n}', disc)) + '</span>' : '') + '</button>' +
+  '</div>';
+
+  const cards = paidPlans.map(function(p){
+    const isCur = p.code === cur;
+    return '<div class="nk-plan' + (p.best ? ' best' : '') + '">' +
+      (p.best ? '<span class="tag">' + esc(tt('as_plan_best')) + '</span>' : '') +
       '<span class="nm">' + esc(p.title) + '</span>' +
-      '<span class="pr">' + Math.round(p.price_rub) + ' \u20bd <small>' + esc(tt('as_plan_month')) + '</small></span>' +
-      '<button class="btn ' + (p.code === best ? 'btn-brass' : 'btn-line') + ' btn-wide" onclick="astroSubscribe(\'' + p.code + '\')">' + esc(tt('as_plan_open')) + '</button>' +
-    '</div>'
-  ).join('');
+      planPrice(p) +
+      (p.trial_days && !isCur ? '<span class="cur">' + esc(tt('pl_trial').replace('{n}', p.trial_days)) + '</span>' : '') +
+      (isCur
+        ? '<span class="cur">' + esc(tt('pl_current')) + '</span>'
+        : '<button class="btn ' + (p.best ? 'btn-brass' : 'btn-line') + ' btn-wide" onclick="astroSubscribe(\'' + p.code + '\')">' + esc(tt('as_plan_open')) + '</button>') +
+    '</div>';
+  }).join('');
+
+  const box = document.getElementById('as-plans');
+  if(box) box.innerHTML = per + '<div class="nk-plans-in" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:14px;grid-column:1/-1">' + cards + '</div>';
+
+  /* Столбцы сравнения: строятся из того же реестра, что и реальный доступ. */
+  const cmp = document.getElementById('as-cmp');
+  if(!cmp) return;
+  const cols = ['free'].concat(paidPlans.map(function(p){ return p.code; }));
+  const names = { free: tt('cmp_free') };
+  paidPlans.forEach(function(p){ names[p.code] = p.title; });
+  const bestCode = (paidPlans.filter(function(p){ return p.best; })[0] || {}).code;
+
+  let html = '<div class="eyebrow" style="margin-bottom:2px">' + esc(tt('cmp_title')) + '</div>';
+  html += '<div class="nk-cmp"><div class="nk-cmp-r nk-cmp-h"><span></span>' +
+    cols.map(function(c){
+      const cls = c === bestCode ? 'pl best' : (c === 'free' ? '' : 'pl');
+      return '<span class="' + cls + '">' + esc(names[c] || c) + '</span>';
+    }).join('') + '</div>';
+
+  (d.groups || []).forEach(function(g){
+    html += '<div class="nk-cmp-g"><i>' + esc(g.icon || '') + '</i>' + esc(g.title) + '</div>';
+    (g.rows || []).forEach(function(r){
+      html += '<div class="nk-cmp-r"><span class="nk-cmp-t">' + esc(r.title) + '</span>' +
+        cols.map(function(c){ return cmpCell(r.cells ? r.cells[c] : false); }).join('') + '</div>';
+    });
+  });
+  html += '</div><p class="nk-cmp-note">' + esc(tt('cmp_note')) + '</p>';
+  cmp.innerHTML = html;
+}
+
+function setPeriod(p){
+  if(p !== 'month' && p !== 'year') return;
+  S.per = p;
+  if(bridge.haptic) bridge.haptic();
+  paintPlans();
+}
+
+async function renderAstroPlans(force){
+  const box = document.getElementById('as-plans');
+  if(!box) return;
+  if(S.plansData && !force){ paintPlans(); return; }
+  if(box.dataset.load === '1') return;
+  box.dataset.load = '1';
+  box.innerHTML = '<div class="shimmer" style="height:150px;border-radius:12px;grid-column:1/-1"></div>';
+  const d = await api('/subscription/plans', 'GET', { lang_code: S.lang || lang || 'ru' }, true);
+  box.dataset.load = '0';
+  if(!d || !d.success || !d.plans){ box.innerHTML = ''; return; }
+  S.plansData = d;
+  if(d.access && d.access.features) S.access = d.access;
+  paintPlans();
 }
 
 async function astroSubscribe(plan){
   toast(tt('wait'));
-  const d = await api('/subscription/invoice-rub', 'POST', { plan: plan, period: 'month' });
+  const d = await api('/subscription/invoice-rub', 'POST', { plan: plan, period: S.per });
   hideToast();
   if(d && d.success && d.url){ bridge.openLink ? bridge.openLink(d.url) : window.open(d.url, '_blank'); return; }
   toast(tt('err'));
