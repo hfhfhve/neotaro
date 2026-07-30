@@ -1329,44 +1329,96 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
         <!-- ============ ПРОФИЛЬ ============ -->
         <section class="view" id="v-profile">
           <div class="eyebrow" style="margin-bottom:12px" data-t="nav_profile">Профиль</div>
-          <div class="panel panel-pad" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
-            <div id="pf-sigil" style="width:64px;height:64px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:24px;color:var(--brass);flex:0 0 auto">N</div>
-            <div style="flex:1;min-width:180px">
-              <h1 class="h2" id="pf-name">—</h1>
-              <p class="label" style="margin-top:6px" id="pf-since">—</p>
-              <button class="tag" id="pf-plan" onclick="goPlans()" style="margin-top:10px;cursor:pointer;border:0">—</button>
+
+          <!-- Шапка: имя, тариф и три главные цифры в ОДНОЙ карточке, а не в четырёх одинаковых плашках -->
+          <div class="panel panel-pad">
+            <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+              <div id="pf-sigil" style="width:58px;height:58px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:22px;color:var(--brass);flex:0 0 auto">N</div>
+              <div style="flex:1;min-width:170px">
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                  <h1 class="h2" id="pf-name">—</h1>
+                  <button class="tag" id="pf-plan" onclick="goPlans()" style="cursor:pointer;border:0">—</button>
+                </div>
+                <p class="label" style="margin-top:6px" id="pf-since">—</p>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-quiet btn-sm" onclick="openSheet('name')" data-t="pf_edit">Изменить имя</button>
+                <button class="btn btn-quiet btn-sm" onclick="go('settings')" data-t="pf_settings">Настройки</button>
+              </div>
             </div>
-            <button class="btn btn-quiet btn-sm" onclick="openSheet('name')" data-t="pf_edit">Изменить имя</button>
+
+            <div class="hair" style="margin:18px 0 14px"></div>
+
+            <div style="display:flex;gap:26px;flex-wrap:wrap">
+              <div style="min-width:96px">
+                <div class="label" data-t="energy_unit">Энергия</div>
+                <div class="h3 num" id="pf-energy" style="margin-top:4px">0</div>
+              </div>
+              <div style="min-width:96px">
+                <div class="label" data-t="alm_streak">Дней подряд</div>
+                <div class="h3 num" id="pf-streak" style="margin-top:4px">0</div>
+              </div>
+              <div style="min-width:96px">
+                <div class="label" data-t="pf_refs">Приглашено</div>
+                <div class="h3 num" id="pf-refs" style="margin-top:4px">0</div>
+              </div>
+              <div style="min-width:110px">
+                <div class="label" data-t="pf_birth">Дата рождения</div>
+                <div class="h3 num" id="pf-birth" style="margin-top:4px;font-size:17px">—</div>
+              </div>
+            </div>
           </div>
 
-          <div class="grid grid-trio" style="margin-top:14px">
-            <button class="panel panel-pad stat-card" onclick="openStatInfo('sign')" style="text-align:left"><div class="label" data-t="pf_sign">Знак</div><div class="h3" id="pf-sign" style="margin-top:8px">—</div><div class="label stat-more" style="margin-top:12px"><span class="sm-long" data-t="stat_more">Что это значит</span><span class="sm-short" data-t="stat_more_s">Читать</span></div></button>
-            <button class="panel panel-pad stat-card" onclick="openStatInfo('element')" style="text-align:left"><div class="label" data-t="pf_element">Стихия</div><div class="h3" id="pf-element" style="margin-top:8px">—</div><div class="label stat-more" style="margin-top:12px"><span class="sm-long" data-t="stat_more">Что это значит</span><span class="sm-short" data-t="stat_more_s">Читать</span></div></button>
-            <button class="panel panel-pad stat-card" onclick="openStatInfo('planet')" style="text-align:left"><div class="label" data-t="pf_planet">Планета</div><div class="h3" id="pf-planet" style="margin-top:8px">—</div><div class="label stat-more" style="margin-top:12px"><span class="sm-long" data-t="stat_more">Что это значит</span><span class="sm-short" data-t="stat_more_s">Читать</span></div></button>
+          <!-- Знак / стихия / планета — одной строкой вместо трёх одинаковых карточек -->
+          <div class="panel panel-pad" style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:stretch">
+            <button class="pf-zi" onclick="openStatInfo('sign')" style="flex:1;min-width:132px;background:none;border:0;padding:0;text-align:left;cursor:pointer;color:inherit">
+              <div class="label" data-t="pf_sign">Знак</div>
+              <div class="h3" id="pf-sign" style="margin-top:6px">—</div>
+            </button>
+            <button class="pf-zi" onclick="openStatInfo('element')" style="flex:1;min-width:132px;background:none;border:0;padding:0;text-align:left;cursor:pointer;color:inherit">
+              <div class="label" data-t="pf_element">Стихия</div>
+              <div class="h3" id="pf-element" style="margin-top:6px">—</div>
+            </button>
+            <button class="pf-zi" onclick="openStatInfo('planet')" style="flex:1;min-width:132px;background:none;border:0;padding:0;text-align:left;cursor:pointer;color:inherit">
+              <div class="label" data-t="pf_planet">Планета</div>
+              <div class="h3" id="pf-planet" style="margin-top:6px">—</div>
+            </button>
+            <div style="align-self:center">
+              <span class="label stat-more" data-t="stat_more">Что это значит</span>
+            </div>
           </div>
 
-          <div class="almanac" style="margin-top:14px">
-            <div class="alm"><div class="k" data-t="energy_unit">Энергия</div><div class="v num" id="pf-energy">0</div></div>
-            <div class="alm"><div class="k" data-t="alm_streak">Дней подряд</div><div class="v num" id="pf-streak">0</div></div>
-            <div class="alm"><div class="k" data-t="pf_refs">Приглашено</div><div class="v num" id="pf-refs">0</div></div>
-            <div class="alm"><div class="k" data-t="pf_birth">Дата рождения</div><div class="v num" id="pf-birth" style="font-size:16px">—</div></div>
-          </div>
-
+          <!-- Подписка -->
           <div id="pf-sub" style="margin-top:14px"></div>
 
-          <div class="hair"></div>
-          <div class="orn"><span class="eyebrow" data-t="pf_settings">Настройки</span></div>
+          <div class="stack" style="margin-top:14px">
+            <button class="rowcard" onclick="openSheet('referral')">
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.6" cy="8.6" r="3.6"/><path d="M3.4 20c.8-3.6 3.2-5.4 6.2-5.4 1.3 0 2.5.3 3.5 1"/><path d="M17.4 12.6v6M14.4 15.6h6"/></svg></span>
+              <span class="mid"><strong data-t="ref_btn2">Пригласить друга</strong><span data-t="ref_text">Ссылка на сайт и бонус за каждого</span></span>
+              <span class="end"><span class="tag" id="pf-refs-2">0</span></span>
+            </button>
+            <button class="rowcard" onclick="go('settings')">
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 3.2v2.6M12 18.2v2.6M3.2 12h2.6M18.2 12h2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9"/></svg></span>
+              <span class="mid"><strong data-t="pf_settings">Настройки</strong><span data-t="pf_settings_hint">Тон и длина ответов, язык, оформление, память</span></span>
+              <span class="end">→</span>
+            </button>
+            <button class="rowcard" onclick="openSupport()">
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5.6" width="17.6" height="12.8" rx="2"/><path d="M3.6 7l8.4 6 8.4-6"/></svg></span>
+              <span class="mid"><strong data-t="pf_support">Написать в поддержку</strong><span data-t="pf_support_hint">Отвечаем в течение суток</span></span>
+              <span class="end">→</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ============ НАСТРОЙКИ ============ -->
+        <section class="view" id="v-settings">
+          <button class="btn btn-quiet btn-sm" onclick="go('profile')" style="margin-bottom:14px">← <span data-t="nav_profile">Профиль</span></button>
+          <div class="eyebrow" style="margin-bottom:12px" data-t="pf_settings">Настройки</div>
+          <h1 class="h1" data-t="set_h1">Настройте кабинет под себя</h1>
+          <p class="sub" data-t="set_lead">Как с вами говорит оракул, как выглядит сайт и что о вас помнят.</p>
+
+          <div class="orn" style="margin:20px 0 6px"><span class="eyebrow" data-t="set_grp_guide">Проводник</span></div>
           <div class="stack">
-            <button class="rowcard" onclick="openSheet('birth')">
-              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.6" y="5.4" width="16.8" height="15" rx="2"/><path d="M3.6 10h16.8M8.4 3.4v3.4M15.6 3.4v3.4"/><circle cx="12" cy="15" r="1.5" fill="currentColor" stroke="none"/></svg></span>
-              <span class="mid"><strong data-t="pf_birth">Дата рождения</strong><span data-t="pf_birth_hint">Нужна для знака, матрицы и гороскопа</span></span>
-              <span class="end"><span class="num" id="pf-birth-2" style="color:var(--brass-pale);font-size:13px">—</span></span>
-            </button>
-            <button class="rowcard" onclick="openSheet('theme')">
-              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 3.4a8.6 8.6 0 000 17.2z" fill="currentColor" stroke="none"/></svg></span>
-              <span class="mid"><strong data-t="th_row">Оформление</strong><span data-t="th_row_hint">Темная, обсидиан или светлая</span></span>
-              <span class="end"><span id="pf-theme" style="color:var(--brass-pale);font-size:13px">Чернила</span></span>
-            </button>
             <button class="rowcard" onclick="openSheet('tone')">
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.4h16M4 12h11M4 17.6h7"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></span>
               <span class="mid"><strong data-t="tn_row">Тон проводника</strong><span data-t="tn_row_hint">Насколько прямо с вами говорят</span></span>
@@ -1377,31 +1429,35 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
               <span class="mid"><strong data-t="ln_row">Длина ответа</strong><span data-t="ln_row_hint">Подробно или коротко</span></span>
               <span class="end"><span id="pf-length" style="color:var(--brass-pale);font-size:13px">Обычная</span></span>
             </button>
+            <button class="rowcard" onclick="go('memory')">
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.6h9.4l3.4 3.4v13.4H6z"/><path d="M15 3.6V7h3.6"/><path d="M9 11.4h6M9 14.8h6M9 18h3.6"/></svg></span>
+              <span class="mid"><strong data-t="mem_row">Хроника памяти</strong><span data-t="mem_row_hint">Что оракул помнит о вас</span></span>
+              <span class="end"><span class="tag" id="pf-mem-count">0</span></span>
+            </button>
+          </div>
+
+          <div class="orn" style="margin:22px 0 6px"><span class="eyebrow" data-t="set_grp_app">Приложение</span></div>
+          <div class="stack">
             <button class="rowcard" onclick="openSheet('lang')">
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M3.4 12h17.2M12 3.2c2.4 2.4 3.6 5.4 3.6 8.8s-1.2 6.4-3.6 8.8c-2.4-2.4-3.6-5.4-3.6-8.8S9.6 5.6 12 3.2z"/></svg></span>
               <span class="mid"><strong data-t="pf_lang">Язык интерфейса</strong><span data-t="pf_lang_hint">На нём же говорит оракул</span></span>
               <span class="end"><span id="pf-lang" style="color:var(--brass-pale);font-size:13px">Русский</span></span>
+            </button>
+            <button class="rowcard" onclick="openSheet('theme')">
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 3.4a8.6 8.6 0 000 17.2z" fill="currentColor" stroke="none"/></svg></span>
+              <span class="mid"><strong data-t="th_row">Оформление</strong><span data-t="th_row_hint">Темная, обсидиан или светлая</span></span>
+              <span class="end"><span id="pf-theme" style="color:var(--brass-pale);font-size:13px">Чернила</span></span>
+            </button>
+            <button class="rowcard" onclick="openSheet('birth')">
+              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.6" y="5.4" width="16.8" height="15" rx="2"/><path d="M3.6 10h16.8M8.4 3.4v3.4M15.6 3.4v3.4"/><circle cx="12" cy="15" r="1.5" fill="currentColor" stroke="none"/></svg></span>
+              <span class="mid"><strong data-t="pf_birth">Дата рождения</strong><span data-t="pf_birth_hint">Нужна для знака, матрицы и гороскопа</span></span>
+              <span class="end"><span class="num" id="pf-birth-2" style="color:var(--brass-pale);font-size:13px">—</span></span>
             </button>
             <div class="rowcard" id="pf-notif-row">
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 17.2V11a5.6 5.6 0 1111.2 0v6.2h1.4H5z"/><path d="M10.2 20.2a2 2 0 003.6 0"/></svg></span>
               <span class="mid"><strong data-t="pf_notif">Напоминания о карте дня</strong><span data-t="pf_notif_hint">Одно сообщение в сутки в Telegram</span></span>
               <span class="end"><button class="switch" id="pf-notif" onclick="toggleNotif()" aria-label="Напоминания"></button></span>
             </div>
-            <button class="rowcard" onclick="openSheet('referral')">
-              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.6" cy="8.6" r="3.6"/><path d="M3.4 20c.8-3.6 3.2-5.4 6.2-5.4 1.3 0 2.5.3 3.5 1"/><path d="M17.4 12.6v6M14.4 15.6h6"/></svg></span>
-              <span class="mid"><strong data-t="ref_btn2">Пригласить друга</strong><span data-t="ref_text">Ссылка на сайт и бонус за каждого</span></span>
-              <span class="end"><span class="tag" id="pf-refs-2">0</span></span>
-            </button>
-            <button class="rowcard" onclick="go('memory')">
-              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.6h9.4l3.4 3.4v13.4H6z"/><path d="M15 3.6V7h3.6"/><path d="M9 11.4h6M9 14.8h6M9 18h3.6"/></svg></span>
-              <span class="mid"><strong data-t="mem_row">Хроника памяти</strong><span data-t="mem_row_hint">Что оракул помнит о вас</span></span>
-              <span class="end"><span class="tag" id="pf-mem-count">0</span></span>
-            </button>
-            <button class="rowcard" onclick="openSupport()">
-              <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5.6" width="17.6" height="12.8" rx="2"/><path d="M3.6 7l8.4 6 8.4-6"/></svg></span>
-              <span class="mid"><strong data-t="pf_support">Написать в поддержку</strong><span data-t="pf_support_hint">Отвечаем в течение суток</span></span>
-              <span class="end">→</span>
-            </button>
             <button class="rowcard" id="pf-logout" onclick="logout()" style="display:none">
               <span class="idx" style="color:var(--ember)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4v7.8"/><path d="M7.6 6.4a7 7 0 108.8 0"/></svg></span>
               <span class="mid"><strong data-t="pf_logout">Выйти из кабинета</strong><span data-t="pf_logout_hint">Вернётесь на страницу входа</span></span>
@@ -1412,7 +1468,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 
         <!-- ============ ХРОНИКА (память оракула) ============ -->
         <section class="view" id="v-memory">
-          <button class="btn btn-quiet btn-sm" onclick="go('profile')" style="margin-bottom:14px">← <span data-t="nav_profile">Профиль</span></button>
+          <button class="btn btn-quiet btn-sm" onclick="go('settings')" style="margin-bottom:14px">← <span data-t="pf_settings">Настройки</span></button>
           <div class="eyebrow" style="margin-bottom:12px" data-t="mem_title">Хроника</div>
           <h1 class="h1" data-t="mem_h1">Оракул помнит вашу историю</h1>
           <p class="sub" data-t="mem_lead">Здесь всё, что оракул запомнил из ваших разговоров, раскладов и снов. Вы управляете этим полностью: любую запись можно убрать в один касательный жест.</p>
@@ -2076,6 +2132,12 @@ const STR = {
   pf_birth:{ru:'Дата рождения',en:'Date of birth',es:'Fecha de nacimiento',fr:'Date de naissance',de:'Geburtsdatum'},
   pf_birth_hint:{ru:'Нужна для знака, матрицы и гороскопа',en:'Needed for your sign, matrix and horoscope'},
   pf_settings:{ru:'Настройки',en:'Settings',es:'Ajustes',fr:'Réglages',de:'Einstellungen'},
+  pf_settings_hint:{ru:'Тон и длина ответов, язык, оформление, память',en:'Tone and length, language, theme, memory',es:'Tono y longitud, idioma, tema, memoria',fr:'Ton et longueur, langue, thème, mémoire',de:'Ton und Länge, Sprache, Design, Gedächtnis'},
+  set_h1:{ru:'Настройте кабинет под себя',en:'Tune the app to your liking',es:'Ajusta la app a tu gusto',fr:'Configurez l’application à votre goût',de:'Richte die App nach dir ein'},
+  set_lead:{ru:'Как с вами говорит оракул, как выглядит сайт и что о вас помнят.',en:'How the oracle speaks to you, how the app looks and what it remembers.',es:'Cómo te habla el oráculo, cómo se ve la app y qué recuerda.',fr:'Comment l’oracle vous parle, l’apparence et ce dont il se souvient.',de:'Wie das Orakel spricht, wie die App aussieht und was sie sich merkt.'},
+  set_grp_guide:{ru:'Проводник',en:'Guide',es:'Guía',fr:'Guide',de:'Begleiter'},
+  set_grp_app:{ru:'Приложение',en:'App',es:'Aplicación',fr:'Application',de:'App'},
+  sub_manage_btn:{ru:'Тарифы',en:'Plans',es:'Planes',fr:'Offres',de:'Tarife'},
   th_row:{ru:'Оформление',en:'Appearance',es:'Apariencia',fr:'Apparence',de:'Erscheinungsbild'},
   th_row_hint:{ru:'Темная, обсидиан или светлая',en:'Dark, obsidian or light',es:'Oscuro, obsidiana o claro',fr:'Sombre, obsidienne ou clair',de:'Dunkel, Obsidian oder Hell'},
   th_title:{ru:'Оформление',en:'Appearance',es:'Apariencia',fr:'Apparence',de:'Erscheinungsbild'},
@@ -2625,6 +2687,7 @@ async function loadProfileSub(){
       ? new Date(sub.expires_at).toLocaleDateString(S.lang || 'ru', { day:'numeric', month:'long', year:'numeric' })
       : '—';
     const cancelled = !!sub.cancel_at_period_end;
+    // Кнопки самостоятельной отмены здесь больше нет — только статус и апгрейд.
     box.innerHTML = `<div class="panel panel-pad">
       <div style="display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap">
         <div>
@@ -2632,9 +2695,10 @@ async function loadProfileSub(){
           <div class="h3" style="margin-top:6px">${esc(acc.plan_title || sub.plan)}</div>
           <div class="label" style="margin-top:6px">${esc(tt('sub_until').replace('{date}', dateStr))}</div>
         </div>
-        ${cancelled
-          ? `<span class="tag tag-cold">${esc(tt('sub_canceled'))}</span>`
-          : `<button class="btn btn-quiet btn-sm" onclick="cancelSub()">${esc(tt('sub_cancel_btn'))}</button>`}
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          ${cancelled ? `<span class="tag tag-cold">${esc(tt('sub_canceled'))}</span>` : ''}
+          <button class="btn btn-quiet btn-sm" onclick="goPlans()">${esc(tt('sub_manage_btn'))}</button>
+        </div>
       </div>
     </div>`;
   } else {
@@ -2656,6 +2720,7 @@ async function cancelSub(){
 /* ---------- навигация ---------- */
 const LOADERS = {
   profile: () => loadProfileSub(),
+  settings: () => paintProfile(),
   spreads: () => renderSpreads(),
   shop: () => loadShop(),
   calendar: () => loadCalendar(),
@@ -2676,7 +2741,7 @@ function go(view){
   document.getElementById('scroll').style.display = isChat ? 'none' : 'block';
   const vc = document.getElementById('v-chat');
   if(vc) vc.style.display = isChat ? 'flex' : 'none';
-  const navKey = (view === 'table') ? 'spreads' : (view === 'memory' ? 'profile' : view);
+  const navKey = (view === 'table') ? 'spreads' : ((view === 'memory' || view === 'settings') ? 'profile' : view);
   document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('is-on', b.dataset.nav === navKey));
   if(!isChat) document.getElementById('scroll').scrollTop = 0;
   if(LOADERS[view]) LOADERS[view]();
@@ -3398,17 +3463,20 @@ async function loadCalendar(){
 
 /* ============================ ПРОФИЛЬ ============================ */
 function paintProfile(){
+  // Часть узлов живёт теперь на экране настроек, поэтому все записи — через безопасный put().
+  const put = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
   const name = S.name || tt('chat_name');
-  document.getElementById('pf-name').textContent = name;
-  document.getElementById('pf-sigil').textContent = (name || 'N').trim().charAt(0).toUpperCase();
+  put('pf-name', name);
+  put('pf-sigil', (name || 'N').trim().charAt(0).toUpperCase());
   if(S.since){
     const d = new Date(S.since);
-    document.getElementById('pf-since').textContent = tt('pf_since') + ' ' + d.toLocaleDateString(lang, { month:'long', year:'numeric' });
+    put('pf-since', tt('pf_since') + ' ' + d.toLocaleDateString(lang, { month:'long', year:'numeric' }));
   }
   const bd = S.birth ? formatDate(S.birth) : '—';
-  document.getElementById('pf-birth').textContent = bd;
-  document.getElementById('pf-birth-2').textContent = bd;
-  document.getElementById('pf-notif').classList.toggle('is-on', !!S.notif);
+  put('pf-birth', bd);
+  put('pf-birth-2', bd);
+  const nsw = document.getElementById('pf-notif');
+  if(nsw) nsw.classList.toggle('is-on', !!S.notif);
   const nrow = document.getElementById('pf-notif-row');
   if(nrow) nrow.style.display = bridge.isWeb ? 'none' : '';
   paintZodiac();
@@ -3472,11 +3540,11 @@ function openStatInfo(kind){
 }
 async function toggleNotif(){
   S.notif = !S.notif;
-  document.getElementById('pf-notif').classList.toggle('is-on', S.notif);
+  (function(){ const e = document.getElementById('pf-notif'); if(e) e.classList.toggle('is-on', S.notif); })();
   const data = await api('/profile/notifications', 'POST', { enabled: S.notif });
   if(!data || !data.success){
     S.notif = !S.notif;
-    document.getElementById('pf-notif').classList.toggle('is-on', S.notif);
+    (function(){ const e = document.getElementById('pf-notif'); if(e) e.classList.toggle('is-on', S.notif); })();
     return toast(tt('err'));
   }
   toast(S.notif ? tt('notif_on') : tt('notif_off'));
