@@ -117,7 +117,7 @@ body{
 /* ---------- Соцсети ---------- */
 .div{display:flex;align-items:center;gap:14px;margin:24px 0 16px;color:rgba(242,237,224,.32);font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase}
 .div::before,.div::after{content:'';height:1px;flex:1;background:rgba(242,237,224,.1)}
-.socials{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.socials{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .soc{
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
   padding:13px 6px;border-radius:13px;cursor:pointer;
@@ -309,16 +309,6 @@ body{
             </svg>
             <span>Google</span>
           </button>
-          <button class="soc" id="btn-yandex" type="button">
-            <span class="soc-ya">Я</span>
-            <span>Яндекс</span>
-          </button>
-          <button class="soc" id="btn-vk" type="button">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M13.6262 17.5C7.2023 17.5 3.32421 13.0694 3.14175 5.5H6.55995C6.68581 10.9634 9.17726 13.2562 11.0827 13.7317V5.5H14.3313V10.2018C16.1977 10.0003 18.2531 7.89679 18.9467 5.5H22.1953C21.6159 8.32479 19.5303 10.4283 18.0698 11.4862C19.5303 12.3582 21.9446 14.237 22.8466 17.5H19.284C18.5996 15.2284 16.653 13.4936 14.3313 13.2562V17.5H13.6262Z" fill="#0077FF"/>
-            </svg>
-            <span>ВКонтакте</span>
-          </button>
         </div>
       </div>
     </div>
@@ -362,8 +352,6 @@ body{
 const API_URL = "https://api.neotaro.ru/api";
 const APP_URL = "/app/";
 const SITE_URL = "/";
-const YANDEX_CLIENT_ID = "e911ccd5d3ff43deb575bf71ac3143b1";
-const VK_CLIENT_ID = "ВСТАВЬ_ВК_ID";
 const GOOGLE_CLIENT_ID = "67067405192-tfq2sj5kdk7no312f76lg4fenac49k08.apps.googleusercontent.com";
 /* OAuth возвращает на корень сайта — там уже стоит обработчик, который завершит вход. */
 const REDIRECT_URI = window.location.origin;
@@ -403,7 +391,7 @@ const ERRS = {
   code_attempts:'Слишком много попыток. Запросите новый код.',
   code_invalid:'Неверный код. Проверьте цифры из письма.',
   invalid_credentials:'Неверная почта или пароль.',
-  use_social_login:'Этот аккаунт создан через Google, Яндекс или Telegram — войдите тем же способом.',
+  use_social_login:'Этот аккаунт создан через Telegram или Google — войдите тем же способом.',
   too_many_attempts:'Слишком много попыток входа. Повторите через 15 минут.',
   user_not_found:'Аккаунт с такой почтой не найден.',
   already_verified:'Почта уже подтверждена — просто войдите.',
@@ -494,7 +482,7 @@ async function aRegister(){
   if(A.busy) return;
   const email = val('rg-email').toLowerCase();
   const p1 = raw('rg-pass'), p2 = raw('rg-pass2');
-  if(!email || !p1){ msg('Заполните почту и пароль.', 'err'); return; }
+  if(!email || !p1){ msg('Заполните почту и паро��ь.', 'err'); return; }
   if(p1 !== p2){ err('password_mismatch'); return; }
   if(p1.length < 8){ err('password_short'); return; }
   busy(true); msg('');
@@ -640,7 +628,7 @@ async function startTelegram(){
     }, 2000);
   } catch(e){
     if(btn) btn.disabled = false;
-    msg('Не получилось связаться с сервером. Попробуйте ещё раз.', 'err');
+    msg('Не получилось связаться с сервером. Поп��обуйте ещё раз.', 'err');
   }
 }
 
@@ -668,14 +656,6 @@ document.addEventListener('DOMContentLoaded', function(){
       scope: 'email profile',
       callback: function(res){ if(res.access_token) socialVerify('/auth/google', { token: res.access_token }); }
     }).requestAccessToken();
-  });
-
-  document.getElementById('btn-yandex').addEventListener('click', function(){
-    window.location.href = 'https://oauth.yandex.ru/authorize?response_type=token&client_id=' + YANDEX_CLIENT_ID + '&redirect_uri=' + REDIRECT_URI + '&state=yandex';
-  });
-
-  document.getElementById('btn-vk').addEventListener('click', function(){
-    window.location.href = 'https://oauth.vk.com/authorize?client_id=' + VK_CLIENT_ID + '&display=page&redirect_uri=' + REDIRECT_URI + '&scope=email&response_type=token&v=5.131&state=vk';
   });
 
   /* Enter отправляет форму активного экрана */
