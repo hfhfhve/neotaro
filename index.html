@@ -893,6 +893,47 @@ body.chat-mode .chat-head{padding-top:16px}
       .lp-soc svg { width: 22px; height: 22px; }
       .lp-ya { width: 22px; height: 22px; border-radius: 50%; background: #FC3F1D; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 12px; }
 
+      /* ---------- Вход по почте ---------- */
+      #lp-email { margin-top: 4px; }
+      .lpa-scr { display: none; flex-direction: column; gap: 10px; }
+      .lpa-scr.is-on { display: flex; }
+      .lpa-note { font-size: 12.5px; line-height: 1.55; color: rgba(242,237,224,.5); text-align: center; margin: 0 0 4px; }
+      .lpa-note b { color: rgba(242,237,224,.8); font-weight: 700; }
+      .lp-inp {
+        width: 100%; box-sizing: border-box; padding: 14px 16px;
+        border-radius: 13px; border: 1px solid rgba(242,237,224,.12);
+        background: rgba(11,15,30,.55); color: #F2EDE0;
+        font-family: inherit; font-size: 14.5px; outline: none;
+        transition: border-color .18s ease, background .18s ease;
+      }
+      .lp-inp::placeholder { color: rgba(242,237,224,.35); }
+      .lp-inp:focus { border-color: rgba(217,174,95,.55); background: rgba(11,15,30,.8); }
+      .lp-inp.lpa-code {
+        text-align: center; font-family: 'Courier New', monospace;
+        font-size: 22px; letter-spacing: .42em; padding-left: 22px;
+      }
+      .lp-btn2 {
+        width: 100%; padding: 15px 20px; margin-top: 2px;
+        border-radius: 13px; border: 1px solid rgba(217,174,95,.5); cursor: pointer;
+        font-family: inherit; font-size: 14px; font-weight: 800; letter-spacing: .06em;
+        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
+        transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+      }
+      .lp-btn2:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(217,174,95,.28); }
+      .lp-btn2:disabled { opacity: .55; cursor: wait; transform: none; box-shadow: none; }
+      .lpa-row { display: flex; justify-content: space-between; gap: 12px; margin-top: 6px; }
+      .lpa-link {
+        background: none; border: none; padding: 2px 0; cursor: pointer;
+        font-family: inherit; font-size: 12.5px; color: rgba(242,237,224,.55);
+        transition: color .18s ease;
+      }
+      .lpa-link:hover { color: #E9C87E; }
+      .lpa-link:disabled { opacity: .45; cursor: default; }
+      .lpa-link.is-mid { display: block; margin: 4px auto 0; }
+      #lpa-msg { min-height: 14px; font-size: 12.5px; line-height: 1.5; text-align: center; margin-top: 12px; }
+      #lpa-msg.is-err { color: #C4899B; }
+      #lpa-msg.is-ok { color: #8FBF9F; }
+
       /* ---------- Статус входа (используется JS-логикой) ---------- */
       #web-login-status { min-height: 16px; margin-top: 18px; font-size: 12px; text-align: center; display: none; }
       #web-login-status.nl-active { display: block; }
@@ -1188,6 +1229,60 @@ body.chat-mode .chat-head{padding-top:16px}
               <span>ВКонтакте</span>
             </button>
           </div>
+          <div class="lp-div">или по почте</div>
+
+          <div id="lp-email">
+            <div class="lpa-scr is-on" id="lpa-login">
+              <input class="lp-inp" id="lpa-li-email" type="email" placeholder="Почта" autocomplete="email" spellcheck="false">
+              <input class="lp-inp" id="lpa-li-pass" type="password" placeholder="Пароль" autocomplete="current-password">
+              <button class="lp-btn2" type="button" onclick="lpaLogin()">Войти</button>
+              <div class="lpa-row">
+                <button class="lpa-link" type="button" onclick="lpaScreen('register')">Создать аккаунт</button>
+                <button class="lpa-link" type="button" onclick="lpaScreen('forgot')">Забыли пароль?</button>
+              </div>
+            </div>
+
+            <div class="lpa-scr" id="lpa-register">
+              <input class="lp-inp" id="lpa-rg-name" type="text" placeholder="Как к вам обращаться" autocomplete="name">
+              <input class="lp-inp" id="lpa-rg-email" type="email" placeholder="Почта" autocomplete="email" spellcheck="false">
+              <input class="lp-inp" id="lpa-rg-pass" type="password" placeholder="Пароль, минимум 8 символов" autocomplete="new-password">
+              <input class="lp-inp" id="lpa-rg-pass2" type="password" placeholder="Пароль ещё раз" autocomplete="new-password">
+              <button class="lp-btn2" type="button" onclick="lpaRegister()">Создать аккаунт</button>
+              <button class="lpa-link is-mid" type="button" onclick="lpaScreen('login')">У меня уже есть аккаунт</button>
+            </div>
+
+            <div class="lpa-scr" id="lpa-verify">
+              <p class="lpa-note">Мы отправили код на <b id="lpa-vf-to">вашу почту</b>. Проверьте входящие и папку «Спам».</p>
+              <input class="lp-inp lpa-code" id="lpa-vf-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code">
+              <button class="lp-btn2" type="button" onclick="lpaVerify()">Подтвердить</button>
+              <div class="lpa-row">
+                <button class="lpa-link" type="button" onclick="lpaScreen('login')">Назад</button>
+                <button class="lpa-link" id="lpa-resend" type="button" onclick="lpaResend()">Отправить код ещё раз</button>
+              </div>
+            </div>
+
+            <div class="lpa-scr" id="lpa-forgot">
+              <p class="lpa-note">Укажите почту — пришлём код для смены пароля.</p>
+              <input class="lp-inp" id="lpa-fg-email" type="email" placeholder="Почта" autocomplete="email" spellcheck="false">
+              <button class="lp-btn2" type="button" onclick="lpaForgot()">Прислать код</button>
+              <button class="lpa-link is-mid" type="button" onclick="lpaScreen('login')">Назад ко входу</button>
+            </div>
+
+            <div class="lpa-scr" id="lpa-reset">
+              <p class="lpa-note">Код отправлен на <b id="lpa-rs-to">вашу почту</b>. Введите его и придумайте новый пароль.</p>
+              <input class="lp-inp lpa-code" id="lpa-rs-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code">
+              <input class="lp-inp" id="lpa-rs-pass" type="password" placeholder="Новый пароль" autocomplete="new-password">
+              <input class="lp-inp" id="lpa-rs-pass2" type="password" placeholder="Новый пароль ещё раз" autocomplete="new-password">
+              <button class="lp-btn2" type="button" onclick="lpaReset()">Сохранить пароль</button>
+              <div class="lpa-row">
+                <button class="lpa-link" type="button" onclick="lpaScreen('login')">Назад</button>
+                <button class="lpa-link" id="lpa-resend2" type="button" onclick="lpaResend('reset')">Отправить код ещё раз</button>
+              </div>
+            </div>
+
+            <div id="lpa-msg"></div>
+          </div>
+
           <div id="web-login-status"></div>
         </div>
       </section>
@@ -1358,6 +1453,236 @@ window.addEventListener('load', function(){
       callback: function(response){ if(response.credential) verifyTokenOnBackend('/auth/google', { token: response.credential }); }
     });
   }
+});
+
+/* ==================== ВХОД И РЕГИСТРАЦИЯ ПО ПОЧТЕ ==================== */
+const LPA = { email: '', screen: 'login', busy: false, cool: 0, coolTimer: null };
+
+const LPA_ERR = {
+  email_invalid: 'Проверьте адрес почты — кажется, в нём опечатка.',
+  email_exists: 'Такая почта уже зарегистрирована. Попробуйте войти.',
+  password_short: 'Пароль должен быть не короче 8 символов.',
+  password_long: 'Пароль слишком длинный.',
+  password_mismatch: 'Пароли не совпадают.',
+  mail_failed: 'Не удалось отправить письмо. Попробуйте через минуту.',
+  too_soon: 'Код уже отправлен. Подождите минуту перед повтором.',
+  too_many_requests: 'Слишком много запросов. Попробуйте через час.',
+  code_not_found: 'Код не найден. Запросите новый.',
+  code_expired: 'Срок действия кода истёк. Запросите новый.',
+  code_attempts: 'Слишком много попыток. Запросите новый код.',
+  code_invalid: 'Неверный код. Проверьте цифры из письма.',
+  invalid_credentials: 'Неверная почта или пароль.',
+  use_social_login: 'Этот аккаунт создан через Google, Яндекс или Telegram — войдите тем же способом.',
+  too_many_attempts: 'Слишком много попыток входа. Повторите через 15 минут.',
+  user_not_found: 'Аккаунт с такой почтой не найден.',
+  already_verified: 'Почта уже подтверждена — просто войдите.',
+  network: 'Сервер не ответил. Проверьте соединение и повторите.'
+};
+
+function lpaMsg(text, kind){
+  const el = document.getElementById('lpa-msg');
+  if(!el) return;
+  el.textContent = text || '';
+  el.className = text ? (kind === 'ok' ? 'is-ok' : 'is-err') : '';
+}
+
+function lpaErr(code){ lpaMsg(LPA_ERR[code] || 'Что-то пошло не так. Попробуйте ещё раз.', 'err'); }
+
+function lpaBusy(on){
+  LPA.busy = !!on;
+  document.querySelectorAll('#lp-email .lp-btn2').forEach(function(b){ b.disabled = !!on; });
+}
+
+function lpaScreen(name, keepMsg){
+  LPA.screen = name;
+  ['login','register','verify','forgot','reset'].forEach(function(s){
+    const el = document.getElementById('lpa-' + s);
+    if(el) el.classList.toggle('is-on', s === name);
+  });
+  if(!keepMsg) lpaMsg('');
+  const first = document.querySelector('#lpa-' + name + ' .lp-inp');
+  if(first) setTimeout(function(){ try { first.focus({ preventScroll: true }); } catch(e){ first.focus(); } }, 30);
+}
+window.lpaScreen = lpaScreen;
+
+function lpaCooldown(sec){
+  LPA.cool = sec || 60;
+  if(LPA.coolTimer) clearInterval(LPA.coolTimer);
+  const paint = function(){
+    ['lpa-resend','lpa-resend2'].forEach(function(id){
+      const b = document.getElementById(id);
+      if(!b) return;
+      b.disabled = LPA.cool > 0;
+      b.textContent = LPA.cool > 0 ? ('Отправить ещё раз — ' + LPA.cool + ' с') : 'Отправить код ещё раз';
+    });
+  };
+  paint();
+  LPA.coolTimer = setInterval(function(){
+    LPA.cool--;
+    if(LPA.cool <= 0){ clearInterval(LPA.coolTimer); LPA.coolTimer = null; LPA.cool = 0; }
+    paint();
+  }, 1000);
+}
+
+function lpaVal(id){ const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+async function lpaPost(endpoint, body){
+  const r = await fetch(API_URL + endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  return await r.json();
+}
+
+function lpaEnter(data){
+  localStorage.setItem('neotaro_token', data.token);
+  localStorage.setItem('neotaro_user', JSON.stringify(data.user || {}));
+  lpaMsg('Готово, открываем кабинет…', 'ok');
+  location.replace(APP_URL);
+}
+
+async function lpaLogin(){
+  if(LPA.busy) return;
+  const email = lpaVal('lpa-li-email').toLowerCase();
+  const pass = document.getElementById('lpa-li-pass').value;
+  if(!email || !pass){ lpaMsg('Заполните почту и пароль.', 'err'); return; }
+  lpaBusy(true); lpaMsg('');
+  try {
+    const d = await lpaPost('/auth/login', { email: email, password: pass });
+    if(d.success && d.token){ lpaEnter(d); return; }
+    if(d.message === 'email_not_verified'){
+      LPA.email = email;
+      const to = document.getElementById('lpa-vf-to');
+      if(to) to.textContent = email;
+      lpaScreen('verify');
+      lpaMsg('Почта ещё не подтверждена — мы отправили код.', 'ok');
+      lpaCooldown(60);
+      return;
+    }
+    lpaErr(d.message);
+  } catch(e){ lpaErr('network'); }
+  finally { lpaBusy(false); }
+}
+window.lpaLogin = lpaLogin;
+
+async function lpaRegister(){
+  if(LPA.busy) return;
+  const email = lpaVal('lpa-rg-email').toLowerCase();
+  const p1 = document.getElementById('lpa-rg-pass').value;
+  const p2 = document.getElementById('lpa-rg-pass2').value;
+  if(!email || !p1){ lpaMsg('Заполните почту и пароль.', 'err'); return; }
+  if(p1 !== p2){ lpaErr('password_mismatch'); return; }
+  if(p1.length < 8){ lpaErr('password_short'); return; }
+  lpaBusy(true); lpaMsg('');
+  try {
+    const d = await lpaPost('/auth/register', {
+      name: lpaVal('lpa-rg-name'), email: email,
+      password: p1, password2: p2, lang: 'ru'
+    });
+    if(d.success){
+      LPA.email = email;
+      const to = document.getElementById('lpa-vf-to');
+      if(to) to.textContent = email;
+      lpaScreen('verify');
+      lpaMsg('Код отправлен. Письмо приходит за минуту.', 'ok');
+      lpaCooldown(d.resend_after || 60);
+      return;
+    }
+    lpaErr(d.message);
+  } catch(e){ lpaErr('network'); }
+  finally { lpaBusy(false); }
+}
+window.lpaRegister = lpaRegister;
+
+async function lpaVerify(){
+  if(LPA.busy) return;
+  const code = lpaVal('lpa-vf-code').replace(/\D/g, '');
+  if(code.length < 4){ lpaMsg('Введите код из письма.', 'err'); return; }
+  lpaBusy(true); lpaMsg('');
+  try {
+    const d = await lpaPost('/auth/verify', { email: LPA.email, code: code });
+    if(d.success && d.token){ lpaEnter(d); return; }
+    lpaErr(d.message);
+  } catch(e){ lpaErr('network'); }
+  finally { lpaBusy(false); }
+}
+window.lpaVerify = lpaVerify;
+
+async function lpaForgot(){
+  if(LPA.busy) return;
+  const email = lpaVal('lpa-fg-email').toLowerCase();
+  if(!email){ lpaMsg('Укажите почту.', 'err'); return; }
+  lpaBusy(true); lpaMsg('');
+  try {
+    const d = await lpaPost('/auth/password/forgot', { email: email, lang: 'ru', purpose: 'reset' });
+    if(d.success){
+      LPA.email = email;
+      const to = document.getElementById('lpa-rs-to');
+      if(to) to.textContent = email;
+      lpaScreen('reset');
+      lpaMsg('Если аккаунт существует, код уже в пути.', 'ok');
+      lpaCooldown(d.resend_after || 60);
+      return;
+    }
+    lpaErr(d.message);
+  } catch(e){ lpaErr('network'); }
+  finally { lpaBusy(false); }
+}
+window.lpaForgot = lpaForgot;
+
+async function lpaReset(){
+  if(LPA.busy) return;
+  const code = lpaVal('lpa-rs-code').replace(/\D/g, '');
+  const p1 = document.getElementById('lpa-rs-pass').value;
+  const p2 = document.getElementById('lpa-rs-pass2').value;
+  if(code.length < 4){ lpaMsg('Введите код из письма.', 'err'); return; }
+  if(p1 !== p2){ lpaErr('password_mismatch'); return; }
+  if(p1.length < 8){ lpaErr('password_short'); return; }
+  lpaBusy(true); lpaMsg('');
+  try {
+    const d = await lpaPost('/auth/password/reset', {
+      email: LPA.email, code: code, password: p1, password2: p2
+    });
+    if(d.success && d.token){ lpaEnter(d); return; }
+    if(d.success){ lpaScreen('login'); lpaMsg('Пароль обновлён — войдите с новым.', 'ok'); return; }
+    lpaErr(d.message);
+  } catch(e){ lpaErr('network'); }
+  finally { lpaBusy(false); }
+}
+window.lpaReset = lpaReset;
+
+async function lpaResend(purpose){
+  if(LPA.cool > 0 || !LPA.email) return;
+  lpaMsg('');
+  try {
+    const d = await lpaPost('/auth/resend', {
+      email: LPA.email, lang: 'ru', purpose: purpose === 'reset' ? 'reset' : 'verify'
+    });
+    if(d.success){ lpaMsg('Новый код отправлен.', 'ok'); lpaCooldown(d.resend_after || 60); return; }
+    lpaErr(d.message);
+  } catch(e){ lpaErr('network'); }
+}
+window.lpaResend = lpaResend;
+
+/* Enter отправляет форму того экрана, который сейчас открыт */
+document.addEventListener('DOMContentLoaded', function(){
+  const box = document.getElementById('lp-email');
+  if(!box) return;
+  box.addEventListener('keydown', function(ev){
+    if(ev.key !== 'Enter') return;
+    ev.preventDefault();
+    const btn = document.querySelector('#lpa-' + LPA.screen + ' .lp-btn2');
+    if(btn && !btn.disabled) btn.click();
+  });
+  const code = document.getElementById('lpa-vf-code');
+  if(code) code.addEventListener('input', function(){
+    this.value = this.value.replace(/\D/g, '').slice(0, 6);
+  });
+  const code2 = document.getElementById('lpa-rs-code');
+  if(code2) code2.addEventListener('input', function(){
+    this.value = this.value.replace(/\D/g, '').slice(0, 6);
+  });
 });
 
 document.addEventListener('DOMContentLoaded', function(){
