@@ -1144,7 +1144,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
       <button class="btn btn-brass" type="submit" data-t="auth_reset_btn">Сохранить пароль</button>
       <div class="auth-links">
         <button type="button" class="auth-link" id="auth-resend-2" onclick="authResend('reset')" data-t="auth_resend">Отправить код заново</button>
-        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_back">Назад</button>
+        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_back">На��ад</button>
       </div>
     </form>
 
@@ -1322,7 +1322,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
             <div style="flex:1;min-width:220px">
               <div class="eyebrow" style="margin-bottom:10px" data-t="ref_eyebrow">Приглашения</div>
               <h3 class="h2" style="margin-bottom:8px" data-t="ref_title">Приведите своего человека</h3>
-              <p class="sub" data-t="ref_text">За каждого, кто зарегистрируется по вашей ссылке, на баланс приходит бонус энергии.</p>
+              <p class="sub" data-t="ref_text">За каждого, кто зарегис��рируется по вашей ссылке, на баланс приходит бонус энергии.</p>
             </div>
             <button class="btn btn-line" onclick="openSheet('referral')" data-t="ref_btn">Показать ссылку</button>
           </div>
@@ -2197,7 +2197,7 @@ const STR = {
   ref_copied:{ru:'Ссылка скопирована',en:'Link copied',es:'Enlace copiado',fr:'Lien copié',de:'Link kopiert'},
   ref_share:{ru:'Поделиться',en:'Share',es:'Compartir',fr:'Partager',de:'Teilen'},
   ref_list:{ru:'Кто пришёл',en:'Who joined',es:'Quién se unió',fr:'Qui a rejoint',de:'Wer beigetreten ist'},
-  ref_empty:{ru:'Пока никто не вошёл по ссылке. Отправьте её тем, кто точно поймёт.',en:'Nobody has joined yet. Send it to someone who will get it.'},
+  ref_empty:{ru:'Пока никто не вошёл по ссылке. Отправьте её тем, кто точно поймё��.',en:'Nobody has joined yet. Send it to someone who will get it.'},
   ref_remind:{ru:'Напомнить',en:'Remind',es:'Recordar',fr:'Rappeler',de:'Erinnern'},
   ref_done:{ru:'Засчитан',en:'Counted',es:'Contado',fr:'Compté',de:'Gezählt'},
   ref_pending:{ru:'Ждём входа',en:'Waiting',es:'Esperando',fr:'En attente',de:'Wartet'},
@@ -3132,6 +3132,9 @@ function logout(){
   localStorage.removeItem('neotaro_user');
   bridge.token = null;
   bridge.webUser = null;
+  /* В Telegram и VK выходить некуда — там просто перезапускаем приложение.
+     На сайте возвращаем человека на главную, а не на экран входа в /app/. */
+  if(bridge.isWeb){ location.href = SITE_URL; return; }
   location.reload();
 }
 function openSupport(){ bridge.openTelegram(SUPPORT_LINK); }
@@ -4299,7 +4302,7 @@ function hookKind(k){
 }
 
 /* Заголовки тизеров собираются из посчитанных данных — человек видит, что
-   система действительно разобрала его карту, а не показывает пустой замок. */
+   система действительно разобрала его карту, а не показывает пуст��й замок. */
 function hookText(h){
   const p = h.payload || {};
   if(h.kind === 'stellium') return (p.bodies || []).map(nkBody).join(' \u00b7 ') + ' \u2014 ' + (p.where ? nkSign(p.where) : '');
