@@ -580,6 +580,23 @@ textarea.field{resize:none;line-height:1.55}
 .spin{display:inline-block;width:15px;height:15px;border:1.5px solid rgba(217,174,95,.28);border-top-color:var(--brass);border-radius:50%;animation:sp .8s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 
+/* форма входа и регистрации */
+.auth-box{width:100%;max-width:340px}
+.auth-form{display:none;flex-direction:column;gap:10px;width:100%}
+.auth-form.is-on{display:flex}
+.auth-in{width:100%;padding:13px 15px;border-radius:11px;border:1px solid var(--line-cold);background:rgba(11,15,30,.86);color:var(--ivory);font-size:14.5px;font-family:inherit;outline:none;transition:border-color .18s}
+.auth-in:focus{border-color:var(--brass)}
+.auth-in::placeholder{color:var(--mist);opacity:.75}
+.auth-code{text-align:center;font-family:var(--mono);font-size:22px;letter-spacing:.42em;padding:15px 10px}
+.auth-links{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin-top:4px}
+.auth-link{background:none;border:0;padding:2px;color:var(--mist);font-family:inherit;font-size:12.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.auth-link:hover{color:var(--brass-bright)}
+.auth-or{display:flex;align-items:center;gap:12px;margin:16px 0 14px;color:var(--mist);font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+.auth-or::before,.auth-or::after{content:'';flex:1;height:1px;background:var(--line-soft)}
+.auth-note{font-size:12.5px;color:var(--mist);line-height:1.55;margin:0 0 4px;text-align:center}
+.auth-msg{min-height:16px;margin:12px 0 0;font-size:12.5px;line-height:1.5;color:var(--copper,#C4703F);text-align:center}
+.auth-msg.ok{color:var(--brass-bright)}
+
 /* пусто / скелет */
 .empty{text-align:center;padding:44px 20px;border:1px dashed var(--line-soft);border-radius:14px}
 .empty .g{font-family:var(--serif);font-size:26px;color:rgba(217,174,95,.55);margin-bottom:10px}
@@ -1070,10 +1087,71 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
       <text x="50" y="58" text-anchor="middle" font-family="Prata,serif" font-size="20" fill="#E9D9AC">N</text>
     </svg>
   </div>
-  <h2 data-t="gate_title">Вход в кабинет</h2>
-  <p data-t="gate_text">Кабинет открывается по подтверждению в Telegram. Бот пришлёт код и вы вернётесь сюда.</p>
-  <button class="btn btn-brass" id="gate-btn" onclick="gateWebLogin()" data-t="gate_btn">Подтвердить в Telegram</button>
-  <p id="gate-status" style="margin-top:18px;margin-bottom:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase"></p>
+  <h2 id="auth-title" data-t="gate_title">Вход в кабинет</h2>
+  <p id="auth-lead" data-t="gate_text">Войдите через Telegram или по почте — всё сохраняется в одном кабинете.</p>
+
+  <div class="auth-box">
+    <div id="auth-social">
+      <button class="btn btn-brass" id="gate-btn" onclick="gateWebLogin()" data-t="gate_btn">Подтвердить в Telegram</button>
+      <div class="auth-or"><span data-t="auth_or">или по почте</span></div>
+    </div>
+
+    <form class="auth-form is-on" id="auth-login" onsubmit="return authLogin(event)" novalidate>
+      <input class="auth-in" id="li-email" type="email" autocomplete="email" data-ph="auth_ph_email" placeholder="Почта">
+      <input class="auth-in" id="li-pass" type="password" autocomplete="current-password" data-ph="auth_ph_pass" placeholder="Пароль">
+      <button class="btn btn-brass" type="submit" data-t="auth_login_btn">Войти</button>
+      <div class="auth-links">
+        <button type="button" class="auth-link" onclick="authScreen('forgot')" data-t="auth_forgot">Забыли пароль?</button>
+        <button type="button" class="auth-link" onclick="authScreen('register')" data-t="auth_to_reg">Создать аккаунт</button>
+      </div>
+    </form>
+
+    <form class="auth-form" id="auth-register" onsubmit="return authRegister(event)" novalidate>
+      <input class="auth-in" id="rg-name" type="text" autocomplete="nickname" maxlength="60" data-ph="auth_ph_name" placeholder="Имя">
+      <input class="auth-in" id="rg-email" type="email" autocomplete="email" data-ph="auth_ph_email" placeholder="Почта">
+      <input class="auth-in" id="rg-pass" type="password" autocomplete="new-password" data-ph="auth_ph_pass_new" placeholder="Пароль">
+      <input class="auth-in" id="rg-pass2" type="password" autocomplete="new-password" data-ph="auth_ph_pass2" placeholder="Повторите пароль">
+      <button class="btn btn-brass" type="submit" data-t="auth_reg_btn">Создать аккаунт</button>
+      <div class="auth-links">
+        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_to_login">У меня уже есть аккаунт</button>
+      </div>
+    </form>
+
+    <form class="auth-form" id="auth-verify" onsubmit="return authVerify(event)" novalidate>
+      <p class="auth-note" id="auth-verify-note"></p>
+      <input class="auth-in auth-code" id="vf-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000">
+      <button class="btn btn-brass" type="submit" data-t="auth_verify_btn">Подтвердить</button>
+      <div class="auth-links">
+        <button type="button" class="auth-link" id="auth-resend" onclick="authResend()" data-t="auth_resend">Отправить код заново</button>
+        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_back">Назад</button>
+      </div>
+    </form>
+
+    <form class="auth-form" id="auth-forgot" onsubmit="return authForgot(event)" novalidate>
+      <p class="auth-note" data-t="auth_forgot_note">Пришлём код на почту — по нему зададите новый пароль.</p>
+      <input class="auth-in" id="fg-email" type="email" autocomplete="email" data-ph="auth_ph_email" placeholder="Почта">
+      <button class="btn btn-brass" type="submit" data-t="auth_forgot_btn">Прислать код</button>
+      <div class="auth-links">
+        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_back">Назад</button>
+      </div>
+    </form>
+
+    <form class="auth-form" id="auth-reset" onsubmit="return authReset(event)" novalidate>
+      <p class="auth-note" id="auth-reset-note"></p>
+      <input class="auth-in auth-code" id="rs-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000">
+      <input class="auth-in" id="rs-pass" type="password" autocomplete="new-password" data-ph="auth_ph_pass_new" placeholder="Новый пароль">
+      <input class="auth-in" id="rs-pass2" type="password" autocomplete="new-password" data-ph="auth_ph_pass2" placeholder="Повторите пароль">
+      <button class="btn btn-brass" type="submit" data-t="auth_reset_btn">Сохранить пароль</button>
+      <div class="auth-links">
+        <button type="button" class="auth-link" id="auth-resend-2" onclick="authResend('reset')" data-t="auth_resend">Отправить код заново</button>
+        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_back">Назад</button>
+      </div>
+    </form>
+
+    <p class="auth-msg" id="auth-msg"></p>
+  </div>
+
+  <p id="gate-status" style="margin-top:14px;margin-bottom:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase"></p>
 </div>
 
 <div class="gate hidden" id="gate-down">
@@ -2038,6 +2116,48 @@ const STR = {
   gate_btn:{ru:'Подтвердить в Telegram',en:'Confirm in Telegram',es:'Confirmar en Telegram',fr:'Confirmer sur Telegram',de:'In Telegram bestätigen'},
   gate_wait:{ru:'Ждём подтверждения…',en:'Waiting for confirmation…',es:'Esperando confirmación…',fr:'En attente de confirmation…',de:'Warten auf Bestätigung…'},
   gate_expired:{ru:'Код истёк. Нажмите кнопку снова.',en:'The code expired. Press the button again.',es:'El código caducó. Pulse de nuevo.',fr:'Le code a expiré. Appuyez à nouveau.',de:'Code abgelaufen. Erneut drücken.'},
+  auth_or:{ru:'или по почте',en:'or with email',es:'o por correo',fr:'ou par e-mail',de:'oder per E-Mail'},
+  auth_ph_email:{ru:'Почта',en:'Email',es:'Correo',fr:'E-mail',de:'E-Mail'},
+  auth_ph_pass:{ru:'Пароль',en:'Password',es:'Contraseña',fr:'Mot de passe',de:'Passwort'},
+  auth_ph_pass_new:{ru:'Пароль — минимум 8 символов',en:'Password — at least 8 characters',es:'Contraseña — mínimo 8 caracteres',fr:'Mot de passe — 8 caractères minimum',de:'Passwort — mindestens 8 Zeichen'},
+  auth_ph_pass2:{ru:'Повторите пароль',en:'Repeat password',es:'Repita la contraseña',fr:'Répétez le mot de passe',de:'Passwort wiederholen'},
+  auth_ph_name:{ru:'Как к вам обращаться',en:'How should we call you',es:'¿Cómo te llamamos?',fr:'Comment vous appeler',de:'Wie dürfen wir Sie nennen'},
+  auth_login_btn:{ru:'Войти',en:'Sign in',es:'Entrar',fr:'Se connecter',de:'Anmelden'},
+  auth_reg_btn:{ru:'Создать аккаунт',en:'Create account',es:'Crear cuenta',fr:'Créer un compte',de:'Konto erstellen'},
+  auth_verify_btn:{ru:'Подтвердить',en:'Confirm',es:'Confirmar',fr:'Confirmer',de:'Bestätigen'},
+  auth_forgot_btn:{ru:'Прислать код',en:'Send code',es:'Enviar código',fr:'Envoyer le code',de:'Code senden'},
+  auth_reset_btn:{ru:'Сохранить пароль',en:'Save password',es:'Guardar contraseña',fr:'Enregistrer le mot de passe',de:'Passwort speichern'},
+  auth_forgot:{ru:'Забыли пароль?',en:'Forgot password?',es:'¿Olvidó la contraseña?',fr:'Mot de passe oublié ?',de:'Passwort vergessen?'},
+  auth_to_reg:{ru:'Создать аккаунт',en:'Create account',es:'Crear cuenta',fr:'Créer un compte',de:'Konto erstellen'},
+  auth_to_login:{ru:'У меня уже есть аккаунт',en:'I already have an account',es:'Ya tengo una cuenta',fr:'J’ai déjà un compte',de:'Ich habe bereits ein Konto'},
+  auth_back:{ru:'Назад',en:'Back',es:'Atrás',fr:'Retour',de:'Zurück'},
+  auth_resend:{ru:'Отправить код заново',en:'Send the code again',es:'Reenviar el código',fr:'Renvoyer le code',de:'Code erneut senden'},
+  auth_resend_in:{ru:'Повторно — через {sec} с',en:'Resend in {sec} s',es:'Reenviar en {sec} s',fr:'Renvoyer dans {sec} s',de:'Erneut in {sec} s'},
+  auth_forgot_note:{ru:'Пришлём код на почту — по нему зададите новый пароль.',en:'We will email you a code to set a new password.',es:'Le enviaremos un código para crear una nueva contraseña.',fr:'Nous enverrons un code pour définir un nouveau mot de passe.',de:'Wir senden einen Code für ein neues Passwort.'},
+  auth_code_note:{ru:'Код из 6 цифр отправлен на {email}. Если письма нет — проверьте папку «Спам».',en:'A 6-digit code was sent to {email}. No email? Check the spam folder.',es:'Enviamos un código de 6 dígitos a {email}. Revise la carpeta de spam.',fr:'Un code à 6 chiffres a été envoyé à {email}. Vérifiez les spams.',de:'Ein 6-stelliger Code ging an {email}. Prüfen Sie den Spam-Ordner.'},
+  auth_title_reg:{ru:'Создание кабинета',en:'Create your account',es:'Crear tu cuenta',fr:'Créer votre compte',de:'Konto erstellen'},
+  auth_title_code:{ru:'Код из письма',en:'Code from the email',es:'Código del correo',fr:'Code reçu par e-mail',de:'Code aus der E-Mail'},
+  auth_title_forgot:{ru:'Восстановление доступа',en:'Password recovery',es:'Recuperar acceso',fr:'Récupération',de:'Zugang wiederherstellen'},
+  auth_lead_reg:{ru:'Придумайте пароль и подтвердите почту кодом из письма.',en:'Pick a password and confirm your email with a code.',es:'Elija una contraseña y confirme su correo con un código.',fr:'Choisissez un mot de passe et confirmez votre e-mail.',de:'Wählen Sie ein Passwort und bestätigen Sie Ihre E-Mail.'},
+  auth_ok_reset:{ru:'Пароль обновлён. Входим…',en:'Password updated. Signing in…',es:'Contraseña actualizada. Entrando…',fr:'Mot de passe mis à jour. Connexion…',de:'Passwort aktualisiert. Anmeldung…'},
+  auth_ok_sent:{ru:'Письмо отправлено.',en:'The email is on its way.',es:'Correo enviado.',fr:'E-mail envoyé.',de:'E-Mail gesendet.'},
+  e_email_invalid:{ru:'Проверьте адрес почты.',en:'Check the email address.',es:'Revise el correo.',fr:'Vérifiez l’adresse e-mail.',de:'Prüfen Sie die E-Mail-Adresse.'},
+  e_email_exists:{ru:'Такая почта уже зарегистрирована — войдите или восстановите пароль.',en:'This email is already registered — sign in or reset the password.',es:'Este correo ya está registrado.',fr:'Cet e-mail est déjà enregistré.',de:'Diese E-Mail ist bereits registriert.'},
+  e_password_short:{ru:'Пароль короче 8 символов.',en:'The password is shorter than 8 characters.',es:'La contraseña tiene menos de 8 caracteres.',fr:'Le mot de passe fait moins de 8 caractères.',de:'Das Passwort ist kürzer als 8 Zeichen.'},
+  e_password_long:{ru:'Слишком длинный пароль.',en:'The password is too long.',es:'Contraseña demasiado larga.',fr:'Mot de passe trop long.',de:'Passwort zu lang.'},
+  e_password_mismatch:{ru:'Пароли не совпадают.',en:'The passwords do not match.',es:'Las contraseñas no coinciden.',fr:'Les mots de passe ne correspondent pas.',de:'Die Passwörter stimmen nicht überein.'},
+  e_invalid_credentials:{ru:'Неверная почта или пароль.',en:'Wrong email or password.',es:'Correo o contraseña incorrectos.',fr:'E-mail ou mot de passe incorrect.',de:'E-Mail oder Passwort falsch.'},
+  e_use_social_login:{ru:'Этот аккаунт создан через Telegram или Google. Войдите тем же способом или задайте пароль через «Забыли пароль».',en:'This account was created via Telegram or Google. Use that method or set a password via “Forgot password”.',es:'Esta cuenta se creó con Telegram o Google.',fr:'Ce compte a été créé via Telegram ou Google.',de:'Dieses Konto wurde über Telegram oder Google erstellt.'},
+  e_code_invalid:{ru:'Код не подходит. Проверьте цифры из последнего письма.',en:'Wrong code. Check the digits from the latest email.',es:'Código incorrecto.',fr:'Code incorrect.',de:'Falscher Code.'},
+  e_code_expired:{ru:'Код истёк. Запросите новый.',en:'The code expired. Request a new one.',es:'El código caducó.',fr:'Le code a expiré.',de:'Der Code ist abgelaufen.'},
+  e_code_not_found:{ru:'Код не найден. Запросите новый.',en:'No active code. Request a new one.',es:'No hay código activo.',fr:'Aucun code actif.',de:'Kein aktiver Code.'},
+  e_code_attempts:{ru:'Слишком много попыток. Запросите новый код.',en:'Too many attempts. Request a new code.',es:'Demasiados intentos.',fr:'Trop de tentatives.',de:'Zu viele Versuche.'},
+  e_too_soon:{ru:'Письмо уже ушло. Повтор через минуту.',en:'The email was just sent. Try again in a minute.',es:'El correo acaba de enviarse.',fr:'L’e-mail vient d’être envoyé.',de:'Die E-Mail wurde gerade gesendet.'},
+  e_too_many_requests:{ru:'Слишком много писем на этот адрес. Попробуйте через час.',en:'Too many emails to this address. Try again in an hour.',es:'Demasiados correos a esta dirección.',fr:'Trop d’e-mails vers cette adresse.',de:'Zu viele E-Mails an diese Adresse.'},
+  e_too_many_attempts:{ru:'Слишком много попыток входа. Попробуйте позже.',en:'Too many sign-in attempts. Try later.',es:'Demasiados intentos de entrada.',fr:'Trop de tentatives de connexion.',de:'Zu viele Anmeldeversuche.'},
+  e_mail_failed:{ru:'Не удалось отправить письмо. Попробуйте ещё раз или войдите через Telegram.',en:'The email could not be sent. Try again or use Telegram.',es:'No se pudo enviar el correo.',fr:'L’e-mail n’a pas pu être envoyé.',de:'Die E-Mail konnte nicht gesendet werden.'},
+  e_user_not_found:{ru:'Аккаунт с такой почтой не найден.',en:'No account with this email.',es:'No hay cuenta con este correo.',fr:'Aucun compte avec cet e-mail.',de:'Kein Konto mit dieser E-Mail.'},
+  e_already_verified:{ru:'Почта уже подтверждена — просто войдите.',en:'The email is already confirmed — just sign in.',es:'El correo ya está confirmado.',fr:'L’e-mail est déjà confirmé.',de:'Die E-Mail ist bereits bestätigt.'},
   down_title:{ru:'Кабинет на обслуживании',en:'Account is under maintenance'},
   down_text:{ru:'Обновляем расчёты. Обновите страницу через пару минут — все данные на месте.',en:'We are updating the calculations. Reload in a couple of minutes — your data is safe.'},
   down_btn:{ru:'Обновить страницу',en:'Reload page',es:'Recargar',fr:'Recharger',de:'Neu laden'},
@@ -2476,7 +2596,10 @@ async function api(endpoint, method = 'POST', data = {}, silent = false){
       if(res.status === 401 && bridge.isWeb){
         localStorage.removeItem('neotaro_token');
         localStorage.removeItem('neotaro_user');
-        location.replace(SITE_URL);
+        bridge.token = null;
+        bridge.webUser = null;
+        showGate('login');
+        applyStrings();
         return { success:false };
       }
       const json = await res.json();
@@ -2545,7 +2668,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeSheets()
 
 /* ---------- ворота ---------- */
 function showGate(which){
-  if(which === 'login'){ location.replace(SITE_URL); return; }
+  // Вход теперь живёт внутри приложения, а не на отдельной странице сайта.
   ['boot','login','down'].forEach(g => document.getElementById('gate-' + g).classList.add('hidden'));
   if(which) document.getElementById('gate-' + which).classList.remove('hidden');
   document.getElementById('shell').style.display = which ? 'none' : 'flex';
@@ -2811,10 +2934,205 @@ async function gateWebLogin(){
     }
   }, 2000);
 }
+/* ---------- вход и регистрация по почте ---------- */
+// Пароль всегда придумывает человек, а почтой приходит только одноразовый код.
+const AUTH = { screen:'login', email:'', purpose:'verify', timer:null, left:0 };
+
+const AUTH_TITLES = {
+  login:   { t:'gate_title',       lead:'gate_text' },
+  register:{ t:'auth_title_reg',   lead:'auth_lead_reg' },
+  verify:  { t:'auth_title_code',  lead:null },
+  forgot:  { t:'auth_title_forgot',lead:null },
+  reset:   { t:'auth_title_code',  lead:null }
+};
+
+function authScreen(name){
+  AUTH.screen = name;
+  ['login','register','verify','forgot','reset'].forEach(s => {
+    const el = document.getElementById('auth-' + s);
+    if(el) el.classList.toggle('is-on', s === name);
+  });
+  const social = document.getElementById('auth-social');
+  if(social) social.style.display = (name === 'login') ? '' : 'none';
+  const head = AUTH_TITLES[name] || AUTH_TITLES.login;
+  const title = document.getElementById('auth-title');
+  const lead = document.getElementById('auth-lead');
+  if(title){ title.dataset.t = head.t; title.textContent = tt(head.t); }
+  if(lead){
+    if(head.lead){ lead.dataset.t = head.lead; lead.textContent = tt(head.lead); lead.style.display = ''; }
+    else { lead.textContent = ''; lead.style.display = 'none'; }
+  }
+  authMsg('');
+}
+
+function authMsg(text, ok){
+  const el = document.getElementById('auth-msg');
+  if(!el) return;
+  el.textContent = text || '';
+  el.classList.toggle('ok', !!ok);
+}
+
+// Ошибки с бэка приходят короткими кодами — текст живёт только на фронте.
+function authErr(code){
+  const key = 'e_' + (code || 'err');
+  const text = tt(key);
+  authMsg(text === key ? tt('err') : text, false);
+}
+
+function authBusy(form, on){
+  const btn = form ? form.querySelector('button[type=submit]') : null;
+  if(btn) btn.disabled = !!on;
+}
+
+function authEnter(res){
+  if(!res || !res.token) return;
+  localStorage.setItem('neotaro_token', res.token);
+  if(res.user) localStorage.setItem('neotaro_user', JSON.stringify(res.user));
+  bridge.token = res.token;
+  bridge.webUser = res.user || null;
+  boot();
+}
+
+function authCooldown(sec){
+  clearInterval(AUTH.timer);
+  AUTH.left = sec || 60;
+  const paint = () => {
+    ['auth-resend','auth-resend-2'].forEach(id => {
+      const b = document.getElementById(id);
+      if(!b) return;
+      if(AUTH.left > 0){ b.disabled = true; b.textContent = tt('auth_resend_in').replace('{sec}', AUTH.left); }
+      else { b.disabled = false; b.textContent = tt('auth_resend'); }
+    });
+  };
+  paint();
+  AUTH.timer = setInterval(() => {
+    AUTH.left--;
+    paint();
+    if(AUTH.left <= 0) clearInterval(AUTH.timer);
+  }, 1000);
+}
+
+function authGoCode(email, purpose, res){
+  AUTH.email = email;
+  AUTH.purpose = purpose;
+  authScreen(purpose === 'reset' ? 'reset' : 'verify');
+  const note = document.getElementById(purpose === 'reset' ? 'auth-reset-note' : 'auth-verify-note');
+  if(note) note.textContent = tt('auth_code_note').replace('{email}', email);
+  const input = document.getElementById(purpose === 'reset' ? 'rs-code' : 'vf-code');
+  if(input){ input.value = ''; setTimeout(() => input.focus(), 60); }
+  authCooldown((res && res.resend_after) || 60);
+}
+
+async function authLogin(e){
+  e.preventDefault();
+  const form = e.target;
+  const email = (document.getElementById('li-email').value || '').trim();
+  const pass = document.getElementById('li-pass').value || '';
+  if(!email || !pass){ authErr('invalid_credentials'); return false; }
+  authBusy(form, true);
+  authMsg(tt('wait'), true);
+  const res = await api('/auth/login', 'POST', { email, password: pass }, true);
+  authBusy(form, false);
+  if(res && res.success){ authEnter(res); return false; }
+  if(res && res.message === 'email_not_verified'){
+    // Пароль верный, но почта не подтверждена — сервер уже отправил код.
+    authGoCode(email, 'verify', res);
+    return false;
+  }
+  authErr(res && res.message);
+  return false;
+}
+
+async function authRegister(e){
+  e.preventDefault();
+  const form = e.target;
+  const name = (document.getElementById('rg-name').value || '').trim();
+  const email = (document.getElementById('rg-email').value || '').trim();
+  const pass = document.getElementById('rg-pass').value || '';
+  const pass2 = document.getElementById('rg-pass2').value || '';
+  if(pass !== pass2){ authErr('password_mismatch'); return false; }
+  if(pass.length < 8){ authErr('password_short'); return false; }
+  authBusy(form, true);
+  authMsg(tt('wait'), true);
+  const res = await api('/auth/register', 'POST', { name, email, password: pass, password2: pass2, lang }, true);
+  authBusy(form, false);
+  if(res && res.success){ authGoCode(email, 'verify', res); return false; }
+  authErr(res && res.message);
+  return false;
+}
+
+async function authVerify(e){
+  e.preventDefault();
+  const form = e.target;
+  const code = (document.getElementById('vf-code').value || '').replace(/\D/g, '');
+  if(code.length !== 6){ authErr('code_invalid'); return false; }
+  authBusy(form, true);
+  authMsg(tt('wait'), true);
+  const res = await api('/auth/verify', 'POST', { email: AUTH.email, code }, true);
+  authBusy(form, false);
+  if(res && res.success){ clearInterval(AUTH.timer); authEnter(res); return false; }
+  authErr(res && res.message);
+  return false;
+}
+
+async function authForgot(e){
+  e.preventDefault();
+  const form = e.target;
+  const email = (document.getElementById('fg-email').value || '').trim();
+  if(!email){ authErr('email_invalid'); return false; }
+  authBusy(form, true);
+  authMsg(tt('wait'), true);
+  const res = await api('/auth/password/forgot', 'POST', { email, lang }, true);
+  authBusy(form, false);
+  if(res && res.success){ authGoCode(email, 'reset', res); return false; }
+  authErr(res && res.message);
+  return false;
+}
+
+async function authReset(e){
+  e.preventDefault();
+  const form = e.target;
+  const code = (document.getElementById('rs-code').value || '').replace(/\D/g, '');
+  const pass = document.getElementById('rs-pass').value || '';
+  const pass2 = document.getElementById('rs-pass2').value || '';
+  if(code.length !== 6){ authErr('code_invalid'); return false; }
+  if(pass !== pass2){ authErr('password_mismatch'); return false; }
+  if(pass.length < 8){ authErr('password_short'); return false; }
+  authBusy(form, true);
+  authMsg(tt('wait'), true);
+  const res = await api('/auth/password/reset', 'POST', { email: AUTH.email, code, password: pass, password2: pass2 }, true);
+  authBusy(form, false);
+  if(res && res.success){
+    clearInterval(AUTH.timer);
+    authMsg(tt('auth_ok_reset'), true);
+    authEnter(res);
+    return false;
+  }
+  authErr(res && res.message);
+  return false;
+}
+
+async function authResend(purpose){
+  const kind = purpose || AUTH.purpose || 'verify';
+  if(!AUTH.email) return;
+  authMsg(tt('wait'), true);
+  const path = kind === 'reset' ? '/auth/password/forgot' : '/auth/resend';
+  const res = await api(path, 'POST', { email: AUTH.email, lang, purpose: kind }, true);
+  if(res && res.success){
+    authMsg(tt('auth_ok_sent'), true);
+    authCooldown(res.resend_after || 60);
+    return;
+  }
+  authErr(res && res.message);
+  if(res && res.retry_after) authCooldown(res.retry_after);
+}
+
 function logout(){
   localStorage.removeItem('neotaro_token');
   localStorage.removeItem('neotaro_user');
-  location.replace(SITE_URL);
+  bridge.token = null;
+  bridge.webUser = null;
+  location.reload();
 }
 function openSupport(){ bridge.openTelegram(SUPPORT_LINK); }
 
@@ -4603,7 +4921,10 @@ async function apiUpload(endpoint, blob, filename, fields){
     if(res.status === 401 && bridge.isWeb){
       localStorage.removeItem('neotaro_token');
       localStorage.removeItem('neotaro_user');
-      location.replace(SITE_URL);
+      bridge.token = null;
+      bridge.webUser = null;
+      showGate('login');
+      applyStrings();
       return { success:false };
     }
     if(res.status === 413) return { success:false, error:'too_large' };
