@@ -1348,6 +1348,8 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
             <div class="alm"><div class="k" data-t="pf_birth">Дата рождения</div><div class="v num" id="pf-birth" style="font-size:16px">—</div></div>
           </div>
 
+          <div id="pf-sub" style="margin-top:14px"></div>
+
           <div class="hair"></div>
           <div class="orn"><span class="eyebrow" data-t="pf_settings">Настройки</span></div>
           <div class="stack">
@@ -2035,6 +2037,14 @@ const STR = {
   table_again:{ru:'Другой расклад',en:'Another spread',es:'Otra tirada',fr:'Autre tirage',de:'Andere Legung'},
   need_q:{ru:'Напишите вопрос — без него карты молчат',en:'Write a question — without it the cards stay silent'},
 
+  sub_title:{ru:'Подписка',en:'Subscription',es:'Suscripción',fr:'Abonnement',de:'Abo'},
+  sub_until:{ru:'действует до {date}',en:'active until {date}',es:'activa hasta {date}',fr:'active jusqu’au {date}',de:'aktiv bis {date}'},
+  sub_canceled:{ru:'автопродление выключено',en:'auto-renewal off',es:'renovación desactivada',fr:'renouvellement désactivé',de:'Auto-Verlängerung aus'},
+  sub_cancel_btn:{ru:'Отменить подписку',en:'Cancel subscription',es:'Cancelar suscripción',fr:'Résilier l’abonnement',de:'Abo kündigen'},
+  sub_cancel_confirm:{ru:'Отменить подписку? Доступ сохранится до конца оплаченного периода.',en:'Cancel the subscription? Access stays until the end of the paid period.',es:'¿Cancelar la suscripción? El acceso dura hasta el final del periodo pagado.',fr:'Résilier l’abonnement ? L’accès reste jusqu’à la fin de la période payée.',de:'Abo kündigen? Zugang bleibt bis zum Ende der bezahlten Periode.'},
+  sub_cancel_done:{ru:'Подписка отменена — доступ до конца периода',en:'Subscription canceled — access until the end of the period',es:'Suscripción cancelada — acceso hasta el final del periodo',fr:'Abonnement résilié — accès jusqu’à la fin de la période',de:'Abo gekündigt — Zugang bis Periodenende'},
+  sub_free_title:{ru:'Бесплатный тариф',en:'Free plan',es:'Plan gratis',fr:'Offre gratuite',de:'Gratis-Tarif'},
+  sub_free_note:{ru:'ПРО и ДЕЛЮКС открывают больше возможностей',en:'PRO and DELUXE unlock more',es:'PRO y DELUXE abren más',fr:'PRO et DELUXE ouvrent plus',de:'PRO und DELUXE öffnen mehr'},
   subs_eyebrow:{ru:'NEOTARO · ПОДПИСКА',en:'NEOTARO · MEMBERSHIP',es:'NEOTARO · SUSCRIPCIÓN',fr:'NEOTARO · ABONNEMENT',de:'NEOTARO · MITGLIEDSCHAFT'},
   subs_title:{ru:'Выберите свой уровень доступа',en:'Choose your level of access',es:'Elige tu nivel de acceso',fr:'Choisissez votre niveau d’accès',de:'Wähle deinen Zugang'},
   subs_lead:{ru:'Больше свободы для ежедневной практики: глубокие разборы, расклады без списания энергии и персональные настройки проводника.',en:'More freedom for daily practice: deeper readings, spreads without energy charges, and personal guide settings.',es:'Más libertad para tu práctica diaria: análisis profundos, tiradas sin gastar energía y ajustes personales.',fr:'Plus de liberté au quotidien : analyses approfondies, tirages sans dépenser d’énergie et réglages personnalisés.',de:'Mehr Freiheit für deine tägliche Praxis: tiefere Deutungen, Legungen ohne Energieverbrauch und persönliche Einstellungen.'},
@@ -2594,8 +2604,49 @@ async function memToggle(){
   loadMemory();
 }
 
+/* ---------- подписка в профиле: статус и самостоятельная отмена ---------- */
+async function loadProfileSub(){
+  const box = document.getElementById('pf-sub');
+  if(!box) return;
+  const d = await api('/subscription/status', 'GET', {}, true);
+  if(!d || !d.success || !d.access){ box.innerHTML = ''; return; }
+  const acc = d.access, sub = d.subscription;
+  if(acc.paid && sub){
+    const dateStr = sub.expires_at
+      ? new Date(sub.expires_at).toLocaleDateString(S.lang || 'ru', { day:'numeric', month:'long', year:'numeric' })
+      : '—';
+    const cancelled = !!sub.cancel_at_period_end;
+    box.innerHTML = `<div class="panel panel-pad">
+      <div style="display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap">
+        <div>
+          <div class="label">${esc(tt('sub_title'))}</div>
+          <div class="h3" style="margin-top:6px">${esc(acc.plan_title || sub.plan)}</div>
+          <div class="label" style="margin-top:6px">${esc(tt('sub_until').replace('{date}', dateStr))}</div>
+        </div>
+        ${cancelled
+          ? `<span class="tag tag-cold">${esc(tt('sub_canceled'))}</span>`
+          : `<button class="btn btn-quiet btn-sm" onclick="cancelSub()">${esc(tt('sub_cancel_btn'))}</button>`}
+      </div>
+    </div>`;
+  } else {
+    box.innerHTML = `<button class="rowcard" onclick="goPlans()">
+      <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.4 5.2 5.6.7-4.1 3.9 1.1 5.6L12 15.7 7 18.4l1.1-5.6L4 8.9l5.6-.7z"/></svg></span>
+      <span class="mid"><strong>${esc(tt('sub_free_title'))}</strong><span>${esc(tt('sub_free_note'))}</span></span>
+      <span class="end">${lockTag('astro.reading')}</span>
+    </button>`;
+  }
+}
+async function cancelSub(){
+  if(!confirm(tt('sub_cancel_confirm'))) return;
+  if(bridge.haptic) bridge.haptic();
+  const d = await api('/subscription/cancel', 'POST');
+  if(d && d.success){ toast(tt('sub_cancel_done')); loadProfileSub(); refreshAccess(); }
+  else toast(tt('err'));
+}
+
 /* ---------- навигация ---------- */
 const LOADERS = {
+  profile: () => loadProfileSub(),
   spreads: () => renderSpreads(),
   shop: () => loadShop(),
   calendar: () => loadCalendar(),
@@ -2763,6 +2814,7 @@ async function boot(){
   paintDates();
   showGate(null);
   paintProfile();
+  loadProfileSub();
   paintDaily();
   go('home');
   loadCalendar();
