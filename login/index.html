@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Вход — NEOTARO</title>
+<meta name="description" content="Вход и регистрация в NEOTARO: расклады Таро с ИИ-толкователем, натальная карта, матрица судьбы и сонник.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://neotaro.ru/login/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink-950:#070A14; --ink-900:#0B0F1E; --ink-850:#0E1424; --ink-800:#121829;
+  --brass:#D9AE5F; --brass-pale:#E9D9AC; --brass-bright:#F0DDB0;
+  --ivory:#F2EDE0; --mist:#93A0C0;
+  --line:rgba(217,174,95,.22);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--ink-950); color:var(--ivory);
+  font-family:'Manrope',system-ui,-apple-system,sans-serif;
+  display:flex; align-items:center; justify-content:center;
+  padding:28px; overflow-x:hidden;
+}
+
+/* ---------- Фон ---------- */
+.sky,.stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+.sky{
+  background:
+    radial-gradient(1100px 720px at 78% -12%, rgba(143,163,222,.12), transparent 60%),
+    radial-gradient(860px 640px at -8% 108%, rgba(167,143,214,.09), transparent 55%),
+    radial-gradient(640px 460px at 92% 78%, rgba(217,174,95,.06), transparent 60%);
+}
+.stars{
+  opacity:.5;
+  background-image:
+    radial-gradient(1px 1px at 25px 35px, rgba(242,237,224,.5) 50%, transparent 51%),
+    radial-gradient(1px 1px at 120px 90px, rgba(242,237,224,.3) 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 200px 40px, rgba(233,217,172,.45) 50%, transparent 51%),
+    radial-gradient(1px 1px at 80px 160px, rgba(242,237,224,.25) 50%, transparent 51%),
+    radial-gradient(1px 1px at 170px 140px, rgba(242,237,224,.4) 50%, transparent 51%);
+  background-size:260px 220px;
+  animation:drift 220s linear infinite;
+}
+@keyframes drift{from{background-position:0 0}to{background-position:260px 220px}}
+
+/* ---------- Карточка ---------- */
+.auth{
+  position:relative; z-index:2;
+  width:min(1060px,100%);
+  display:grid; grid-template-columns:1fr 1fr;
+  border-radius:28px; overflow:hidden;
+  background:linear-gradient(165deg, rgba(242,237,224,.055), rgba(242,237,224,.015));
+  border:1px solid rgba(217,174,95,.28);
+  box-shadow:0 50px 120px rgba(4,6,14,.7);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  animation:rise .5s cubic-bezier(.2,.7,.3,1) both;
+}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- Левая колонка ---------- */
+.pane{padding:38px 44px 30px;display:flex;flex-direction:column;min-height:620px}
+.brand{
+  display:inline-flex;align-items:center;gap:9px;align-self:flex-start;
+  padding:9px 18px;border-radius:99px;text-decoration:none;
+  border:1px solid rgba(217,174,95,.3);background:rgba(11,15,30,.4);
+  font-family:'Prata',serif;font-size:13px;letter-spacing:.26em;color:var(--brass-pale);
+  transition:border-color .2s ease;
+}
+.brand:hover{border-color:rgba(217,174,95,.6)}
+.pane-mid{flex:1;display:flex;flex-direction:column;justify-content:center;padding:26px 0}
+.h1{font-family:'Prata',serif;font-weight:400;font-size:29px;line-height:1.2;color:var(--ivory);margin:0;text-align:center}
+.lede{font-size:13.5px;line-height:1.6;color:rgba(242,237,224,.5);margin:10px 0 26px;text-align:center}
+.lede b{color:rgba(242,237,224,.82);font-weight:700}
+
+.scr{display:none;flex-direction:column;gap:14px}
+.scr.is-on{display:flex;animation:fade .28s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.f-lab{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,237,224,.42);margin-bottom:7px}
+.inp{
+  width:100%;padding:14px 16px;border-radius:13px;
+  border:1px solid rgba(242,237,224,.12);background:rgba(7,10,20,.55);
+  color:var(--ivory);font-family:inherit;font-size:14.5px;outline:none;
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease;
+}
+.inp::placeholder{color:rgba(242,237,224,.3)}
+.inp:focus{border-color:rgba(217,174,95,.55);background:rgba(7,10,20,.8);box-shadow:0 0 0 3px rgba(217,174,95,.1)}
+.inp.code{text-align:center;font-family:'Courier New',monospace;font-size:24px;letter-spacing:.44em;padding-left:24px}
+.pass-wrap{position:relative}
+.pass-eye{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;padding:6px;
+  color:rgba(242,237,224,.4);font-size:11px;font-family:inherit;font-weight:700;letter-spacing:.1em;
+}
+.pass-eye:hover{color:var(--brass-pale)}
+.btn{
+  width:100%;padding:15px 20px;border-radius:13px;border:none;cursor:pointer;
+  font-family:inherit;font-size:14px;font-weight:800;letter-spacing:.06em;
+  color:#0B0F1E;background:linear-gradient(120deg,#E9C87E,#D9AE5F);
+  box-shadow:0 12px 34px rgba(217,174,95,.24);
+  transition:transform .18s ease,box-shadow .18s ease,opacity .18s ease;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 16px 42px rgba(217,174,95,.34)}
+.btn:disabled{opacity:.55;cursor:wait;transform:none;box-shadow:none}
+.row{display:flex;justify-content:space-between;gap:12px;margin-top:2px}
+.lnk{background:none;border:none;padding:2px 0;cursor:pointer;font-family:inherit;font-size:12.5px;color:rgba(242,237,224,.55);transition:color .18s ease}
+.lnk:hover{color:var(--brass-bright)}
+.lnk:disabled{opacity:.45;cursor:default}
+.lnk.mid{display:block;margin:2px auto 0}
+#msg{min-height:15px;font-size:12.5px;line-height:1.5;text-align:center;margin-top:14px}
+#msg.is-err{color:#C4899B}
+#msg.is-ok{color:#8FBF9F}
+
+/* ---------- Соцсети ---------- */
+.div{display:flex;align-items:center;gap:14px;margin:24px 0 16px;color:rgba(242,237,224,.32);font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase}
+.div::before,.div::after{content:'';height:1px;flex:1;background:rgba(242,237,224,.1)}
+.socials{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.soc{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  padding:13px 6px;border-radius:13px;cursor:pointer;
+  background:rgba(242,237,224,.04);border:1px solid rgba(242,237,224,.1);
+  font-family:inherit;color:rgba(242,237,224,.65);
+  font-size:9.5px;font-weight:700;letter-spacing:.08em;
+  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+}
+.soc:hover{background:rgba(242,237,224,.07);border-color:rgba(217,174,95,.42);transform:translateY(-1px)}
+.soc svg{width:21px;height:21px}
+.soc-tg{width:21px;height:21px;border-radius:50%;background:#29A9EB;display:flex;align-items:center;justify-content:center}
+.soc-tg svg{width:13px;height:13px}
+.soc-ya{width:21px;height:21px;border-radius:50%;background:#FC3F1D;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:12px}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:14px;padding-top:22px;border-top:1px solid rgba(242,237,224,.08);font-size:11.5px;color:rgba(242,237,224,.38)}
+.foot a{color:rgba(242,237,224,.5);text-decoration:none}
+.foot a:hover{color:var(--brass-pale)}
+
+/* ---------- Правая колонка ---------- */
+.art{position:relative;overflow:hidden;background:#0E1424 center/cover no-repeat}
+.art::after{content:'';position:absolute;inset:0;background:linear-gradient(200deg,rgba(7,10,20,.15),rgba(7,10,20,.62))}
+.art-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.art-close{
+  position:absolute;top:18px;right:18px;z-index:3;
+  width:38px;height:38px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(11,15,30,.55);border:1px solid rgba(242,237,224,.18);
+  color:var(--ivory);font-size:17px;text-decoration:none;line-height:1;
+  backdrop-filter:blur(8px);transition:background .18s ease,border-color .18s ease;
+}
+.art-close:hover{background:rgba(11,15,30,.85);border-color:rgba(217,174,95,.5)}
+.chip{
+  position:absolute;z-index:3;border-radius:15px;padding:13px 16px;
+  background:rgba(11,15,30,.62);border:1px solid rgba(217,174,95,.26);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 18px 44px rgba(4,6,14,.5);
+  animation:float 7s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.chip-1{top:64px;left:26px;animation-delay:0s}
+.chip-2{bottom:118px;right:26px;animation-delay:1.6s}
+.chip-3{bottom:34px;left:34px;animation-delay:3.1s}
+.chip-k{font-size:9.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:5px}
+.chip-v{font-family:'Prata',serif;font-size:16px;color:var(--ivory);line-height:1.25}
+.chip-s{font-size:11px;color:rgba(242,237,224,.5);margin-top:4px}
+.art-quote{position:absolute;left:34px;right:34px;bottom:150px;z-index:3;font-family:'Prata',serif;font-size:22px;line-height:1.35;color:var(--ivory);text-shadow:0 4px 24px rgba(0,0,0,.6)}
+.art-quote span{color:var(--brass-bright)}
+
+/* ---------- Мобильные ---------- */
+@media (max-width:900px){
+  body{padding:0;align-items:stretch}
+  .auth{grid-template-columns:1fr;border-radius:0;border:none;min-height:100vh;box-shadow:none}
+  .art{display:none}
+  .pane{padding:28px 22px 24px;min-height:100vh}
+  .h1{font-size:25px}
+  .socials{gap:8px}
+}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+<div class="stars" aria-hidden="true"></div>
+
+<main class="auth">
+
+  <!-- ============ ФОРМЫ ============ -->
+  <section class="pane">
+    <a class="brand" href="/">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M10.5 4.5a7.5 7.5 0 1 0 9 9 6 6 0 1 1-9-9Z" stroke="#D9AE5F" stroke-width="1.2" stroke-linejoin="round" fill="rgba(217,174,95,.1)"/>
+        <path d="M17 4.5l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6z" fill="#F0DDB0"/>
+      </svg>
+      NEOTARO
+    </a>
+
+    <div class="pane-mid">
+      <h1 class="h1" id="a-title">Создать аккаунт</h1>
+      <p class="lede" id="a-lede">Карта дня, история раскладов и энергия сохраняются в вашем кабинете.</p>
+
+      <!-- Регистрация -->
+      <div class="scr is-on" id="s-register">
+        <div>
+          <label class="f-lab" for="rg-name">Как к вам обращаться</label>
+          <input class="inp" id="rg-name" type="text" placeholder="Имя" autocomplete="name">
+        </div>
+        <div>
+          <label class="f-lab" for="rg-email">Почта</label>
+          <input class="inp" id="rg-email" type="email" placeholder="you@mail.ru" autocomplete="email" spellcheck="false">
+        </div>
+        <div>
+          <label class="f-lab" for="rg-pass">Пароль</label>
+          <div class="pass-wrap">
+            <input class="inp" id="rg-pass" type="password" placeholder="Минимум 8 символов" autocomplete="new-password">
+            <button class="pass-eye" type="button" onclick="aEye('rg-pass',this)">ПОКАЗАТЬ</button>
+          </div>
+        </div>
+        <div>
+          <label class="f-lab" for="rg-pass2">Пароль ещё раз</label>
+          <input class="inp" id="rg-pass2" type="password" placeholder="Повторите пароль" autocomplete="new-password">
+        </div>
+        <button class="btn" type="button" onclick="aRegister()">Создать аккаунт</button>
+        <button class="lnk mid" type="button" onclick="aScreen('login')">У меня уже есть аккаунт</button>
+      </div>
+
+      <!-- Вход -->
+      <div class="scr" id="s-login">
+        <div>
+          <label class="f-lab" for="li-email">Почта</label>
+          <input class="inp" id="li-email" type="email" placeholder="you@mail.ru" autocomplete="email" spellcheck="false">
+        </div>
+        <div>
+          <label class="f-lab" for="li-pass">Пароль</label>
+          <div class="pass-wrap">
+            <input class="inp" id="li-pass" type="password" placeholder="Ваш пароль" autocomplete="current-password">
+            <button class="pass-eye" type="button" onclick="aEye('li-pass',this)">ПОКАЗАТЬ</button>
+          </div>
+        </div>
+        <button class="btn" type="button" onclick="aLogin()">Войти</button>
+        <div class="row">
+          <button class="lnk" type="button" onclick="aScreen('register')">Создать аккаунт</button>
+          <button class="lnk" type="button" onclick="aScreen('forgot')">Забыли пароль?</button>
+        </div>
+      </div>
+
+      <!-- Код подтверждения -->
+      <div class="scr" id="s-verify">
+        <div>
+          <label class="f-lab" for="vf-code">Код из письма</label>
+          <input class="inp code" id="vf-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code">
+        </div>
+        <button class="btn" type="button" onclick="aVerify()">Подтвердить</button>
+        <div class="row">
+          <button class="lnk" type="button" onclick="aScreen('login')">Назад</button>
+          <button class="lnk" id="resend1" type="button" onclick="aResend('verify')">Отправить код ещё раз</button>
+        </div>
+      </div>
+
+      <!-- Забыли пароль -->
+      <div class="scr" id="s-forgot">
+        <div>
+          <label class="f-lab" for="fg-email">Почта</label>
+          <input class="inp" id="fg-email" type="email" placeholder="you@mail.ru" autocomplete="email" spellcheck="false">
+        </div>
+        <button class="btn" type="button" onclick="aForgot()">Прислать код</button>
+        <button class="lnk mid" type="button" onclick="aScreen('login')">Назад ко входу</button>
+      </div>
+
+      <!-- Новый пароль -->
+      <div class="scr" id="s-reset">
+        <div>
+          <label class="f-lab" for="rs-code">Код из письма</label>
+          <input class="inp code" id="rs-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code">
+        </div>
+        <div>
+          <label class="f-lab" for="rs-pass">Новый пароль</label>
+          <div class="pass-wrap">
+            <input class="inp" id="rs-pass" type="password" placeholder="Минимум 8 символов" autocomplete="new-password">
+            <button class="pass-eye" type="button" onclick="aEye('rs-pass',this)">ПОКАЗАТЬ</button>
+          </div>
+        </div>
+        <div>
+          <label class="f-lab" for="rs-pass2">Новый пароль ещё раз</label>
+          <input class="inp" id="rs-pass2" type="password" placeholder="Повторите пароль" autocomplete="new-password">
+        </div>
+        <button class="btn" type="button" onclick="aReset()">Сохранить пароль</button>
+        <div class="row">
+          <button class="lnk" type="button" onclick="aScreen('login')">Назад</button>
+          <button class="lnk" id="resend2" type="button" onclick="aResend('reset')">Отправить код ещё раз</button>
+        </div>
+      </div>
+
+      <div id="msg"></div>
+
+      <!-- Соцсети -->
+      <div id="soc-block">
+        <div class="div">или подтвердите через</div>
+        <div class="socials">
+          <button class="soc" id="btn-tg" type="button">
+            <span class="soc-tg">
+              <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M21.8 4.2 2.9 11.5c-1 .4-1 1.8.1 2.1l4.7 1.4 1.8 5.5c.3.8 1.3 1 1.9.4l2.6-2.5 4.7 3.5c.7.5 1.7.1 1.9-.7l3.3-15c.2-1-.8-1.8-1.8-1.4Z"/></svg>
+            </span>
+            <span>Telegram</span>
+          </button>
+          <button class="soc" id="btn-google" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            <span>Google</span>
+          </button>
+          <button class="soc" id="btn-yandex" type="button">
+            <span class="soc-ya">Я</span>
+            <span>Яндекс</span>
+          </button>
+          <button class="soc" id="btn-vk" type="button">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M13.6262 17.5C7.2023 17.5 3.32421 13.0694 3.14175 5.5H6.55995C6.68581 10.9634 9.17726 13.2562 11.0827 13.7317V5.5H14.3313V10.2018C16.1977 10.0003 18.2531 7.89679 18.9467 5.5H22.1953C21.6159 8.32479 19.5303 10.4283 18.0698 11.4862C19.5303 12.3582 21.9446 14.237 22.8466 17.5H19.284C18.5996 15.2284 16.653 13.4936 14.3313 13.2562V17.5H13.6262Z" fill="#0077FF"/>
+            </svg>
+            <span>ВКонтакте</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <span id="foot-switch">Уже есть аккаунт? <button class="lnk" type="button" onclick="aScreen('login')">Войти</button></span>
+      <a href="/oferta/">Условия и конфиденциальность</a>
+    </div>
+  </section>
+
+  <!-- ============ КАРТИНКА ============ -->
+  <aside class="art">
+    <img class="art-img" src="/login/side.jpg" alt="" onerror="this.style.display='none'">
+    <a class="art-close" href="/" aria-label="Закрыть">✕</a>
+
+    <div class="chip chip-1">
+      <div class="chip-k">Карта дня</div>
+      <div class="chip-v">XVII · Звезда</div>
+      <div class="chip-s">Надежда, ориентир, тихий свет</div>
+    </div>
+
+    <div class="chip chip-2">
+      <div class="chip-k">Луна сегодня</div>
+      <div class="chip-v">Растущая · Телец</div>
+      <div class="chip-s">День для решений о деньгах</div>
+    </div>
+
+    <div class="chip chip-3">
+      <div class="chip-k">Ваша энергия</div>
+      <div class="chip-v">+5 при входе</div>
+    </div>
+
+    <div class="art-quote">Карты уже знают.<br><span>Осталось спросить.</span></div>
+  </aside>
+
+</main>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+/* ==================== НАСТРОЙКИ ==================== */
+const API_URL = "https://api.neotaro.ru/api";
+const APP_URL = "/app/";
+const SITE_URL = "/";
+const YANDEX_CLIENT_ID = "e911ccd5d3ff43deb575bf71ac3143b1";
+const VK_CLIENT_ID = "ВСТАВЬ_ВК_ID";
+const GOOGLE_CLIENT_ID = "67067405192-tfq2sj5kdk7no312f76lg4fenac49k08.apps.googleusercontent.com";
+/* OAuth возвращает на корень сайта — там уже стоит обработчик, который завершит вход. */
+const REDIRECT_URI = window.location.origin;
+
+/* Уже вошёл — сразу в кабинет */
+(function(){
+  try {
+    const q = new URLSearchParams(location.search);
+    const ref = q.get("ref");
+    if(ref) localStorage.setItem("neotaro_ref", ref);
+  } catch(e){}
+  if(localStorage.getItem("neotaro_token")) location.replace(APP_URL);
+})();
+
+/* ==================== СОСТОЯНИЕ ==================== */
+const A = { email:'', screen:'register', busy:false, cool:0, timer:null, poll:null };
+
+const TITLES = {
+  register: ['Создать аккаунт', 'Карта дня, история раскладов и энергия сохраняются в вашем кабинете.'],
+  login:    ['Вход в пространство', 'Продолжим там, где вы остановились.'],
+  verify:   ['Подтвердите почту', 'Мы отправили код на <b id="to-1">вашу почту</b>. Загляните во входящие и в папку «Спам».'],
+  forgot:   ['Восстановление', 'Укажите почту — пришлём код для смены пароля.'],
+  reset:    ['Новый пароль', 'Код отправлен на <b id="to-2">вашу почту</b>. Введите его и придумайте новый пароль.']
+};
+
+const ERRS = {
+  email_invalid:'Проверьте адрес почты — кажется, в нём опечатка.',
+  email_exists:'Такая почта уже зарегистрирована. Попробуйте войти.',
+  password_short:'Пароль должен быть не короче 8 символов.',
+  password_long:'Пароль слишком длинный.',
+  password_mismatch:'Пароли не совпадают.',
+  mail_failed:'Не удалось отправить письмо. Попробуйте через минуту.',
+  too_soon:'Код уже отправлен. Подождите минуту перед повтором.',
+  too_many_requests:'Слишком много запросов. Попробуйте через час.',
+  code_not_found:'Код не найден. Запросите новый.',
+  code_expired:'Срок действия кода истёк. Запросите новый.',
+  code_attempts:'Слишком много попыток. Запросите новый код.',
+  code_invalid:'Неверный код. Проверьте цифры из письма.',
+  invalid_credentials:'Неверная почта или пароль.',
+  use_social_login:'Этот аккаунт создан через Google, Яндекс или Telegram — войдите тем же способом.',
+  too_many_attempts:'Слишком много попыток входа. Повторите через 15 минут.',
+  user_not_found:'Аккаунт с такой почтой не найден.',
+  already_verified:'Почта уже подтверждена — просто войдите.',
+  network:'Сервер не ответил. Проверьте соединение и повторите.'
+};
+
+/* ==================== УТИЛИТЫ ==================== */
+function msg(text, kind){
+  const el = document.getElementById('msg');
+  el.textContent = text || '';
+  el.className = text ? (kind === 'ok' ? 'is-ok' : 'is-err') : '';
+}
+function err(code){ msg(ERRS[code] || 'Что-то пошло не так. Попробуйте ещё раз.', 'err'); }
+function busy(on){
+  A.busy = !!on;
+  document.querySelectorAll('.btn').forEach(function(b){ b.disabled = !!on; });
+}
+function val(id){ const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function raw(id){ const el = document.getElementById(id); return el ? el.value : ''; }
+
+function aEye(id, btn){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const show = el.type === 'password';
+  el.type = show ? 'text' : 'password';
+  btn.textContent = show ? 'СКРЫТЬ' : 'ПОКАЗАТЬ';
+}
+
+function aScreen(name, keepMsg){
+  A.screen = name;
+  ['register','login','verify','forgot','reset'].forEach(function(s){
+    const el = document.getElementById('s-' + s);
+    if(el) el.classList.toggle('is-on', s === name);
+  });
+  const t = TITLES[name];
+  document.getElementById('a-title').textContent = t[0];
+  document.getElementById('a-lede').innerHTML = t[1].replace('вашу почту', A.email || 'вашу почту');
+
+  /* Соцсети нужны только на первых двух экранах */
+  const soc = document.getElementById('soc-block');
+  soc.style.display = (name === 'register' || name === 'login') ? '' : 'none';
+
+  const fs = document.getElementById('foot-switch');
+  fs.innerHTML = (name === 'register')
+    ? 'Уже есть аккаунт? <button class="lnk" type="button" onclick="aScreen(\'login\')">Войти</button>'
+    : 'Ещё нет аккаунта? <button class="lnk" type="button" onclick="aScreen(\'register\')">Создать</button>';
+
+  if(!keepMsg) msg('');
+  const first = document.querySelector('#s-' + name + ' .inp');
+  if(first && window.innerWidth > 900) setTimeout(function(){ try{ first.focus({preventScroll:true}); }catch(e){} }, 60);
+}
+
+function cooldown(sec){
+  A.cool = sec || 60;
+  if(A.timer) clearInterval(A.timer);
+  const paint = function(){
+    ['resend1','resend2'].forEach(function(id){
+      const b = document.getElementById(id);
+      if(!b) return;
+      b.disabled = A.cool > 0;
+      b.textContent = A.cool > 0 ? ('Отправить ещё раз — ' + A.cool + ' с') : 'Отправить код ещё раз';
+    });
+  };
+  paint();
+  A.timer = setInterval(function(){
+    A.cool--;
+    if(A.cool <= 0){ clearInterval(A.timer); A.timer = null; A.cool = 0; }
+    paint();
+  }, 1000);
+}
+
+async function post(endpoint, body){
+  const r = await fetch(API_URL + endpoint, {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
+  });
+  return await r.json();
+}
+
+function enter(data){
+  localStorage.setItem('neotaro_token', data.token);
+  localStorage.setItem('neotaro_user', JSON.stringify(data.user || {}));
+  msg('Готово, открываем кабинет…', 'ok');
+  location.replace(APP_URL);
+}
+
+/* ==================== ПОЧТА ==================== */
+async function aRegister(){
+  if(A.busy) return;
+  const email = val('rg-email').toLowerCase();
+  const p1 = raw('rg-pass'), p2 = raw('rg-pass2');
+  if(!email || !p1){ msg('Заполните почту и пароль.', 'err'); return; }
+  if(p1 !== p2){ err('password_mismatch'); return; }
+  if(p1.length < 8){ err('password_short'); return; }
+  busy(true); msg('');
+  try {
+    const d = await post('/auth/register', { name: val('rg-name'), email: email, password: p1, password2: p2, lang: 'ru' });
+    if(d.success){
+      A.email = email;
+      aScreen('verify');
+      msg('Код отправлен. Письмо приходит за минуту.', 'ok');
+      cooldown(d.resend_after || 60);
+      return;
+    }
+    err(d.message);
+  } catch(e){ err('network'); }
+  finally { busy(false); }
+}
+
+async function aLogin(){
+  if(A.busy) return;
+  const email = val('li-email').toLowerCase();
+  const pass = raw('li-pass');
+  if(!email || !pass){ msg('Заполните почту и пароль.', 'err'); return; }
+  busy(true); msg('');
+  try {
+    const d = await post('/auth/login', { email: email, password: pass });
+    if(d.success && d.token){ enter(d); return; }
+    if(d.message === 'email_not_verified'){
+      A.email = email;
+      aScreen('verify');
+      msg('Почта ещё не подтверждена — мы отправили код.', 'ok');
+      cooldown(60);
+      return;
+    }
+    err(d.message);
+  } catch(e){ err('network'); }
+  finally { busy(false); }
+}
+
+async function aVerify(){
+  if(A.busy) return;
+  const code = val('vf-code').replace(/\D/g, '');
+  if(code.length < 4){ msg('Введите код из письма.', 'err'); return; }
+  busy(true); msg('');
+  try {
+    const d = await post('/auth/verify', { email: A.email, code: code });
+    if(d.success && d.token){ enter(d); return; }
+    err(d.message);
+  } catch(e){ err('network'); }
+  finally { busy(false); }
+}
+
+async function aForgot(){
+  if(A.busy) return;
+  const email = val('fg-email').toLowerCase();
+  if(!email){ msg('Укажите почту.', 'err'); return; }
+  busy(true); msg('');
+  try {
+    const d = await post('/auth/password/forgot', { email: email, lang: 'ru', purpose: 'reset' });
+    if(d.success){
+      A.email = email;
+      aScreen('reset');
+      msg('Если аккаунт существует, код уже в пути.', 'ok');
+      cooldown(d.resend_after || 60);
+      return;
+    }
+    err(d.message);
+  } catch(e){ err('network'); }
+  finally { busy(false); }
+}
+
+async function aReset(){
+  if(A.busy) return;
+  const code = val('rs-code').replace(/\D/g, '');
+  const p1 = raw('rs-pass'), p2 = raw('rs-pass2');
+  if(code.length < 4){ msg('Введите код из письма.', 'err'); return; }
+  if(p1 !== p2){ err('password_mismatch'); return; }
+  if(p1.length < 8){ err('password_short'); return; }
+  busy(true); msg('');
+  try {
+    const d = await post('/auth/password/reset', { email: A.email, code: code, password: p1, password2: p2 });
+    if(d.success && d.token){ enter(d); return; }
+    if(d.success){ aScreen('login'); msg('Пароль обновлён — войдите с новым.', 'ok'); return; }
+    err(d.message);
+  } catch(e){ err('network'); }
+  finally { busy(false); }
+}
+
+async function aResend(purpose){
+  if(A.cool > 0 || !A.email) return;
+  msg('');
+  try {
+    const d = await post('/auth/resend', { email: A.email, lang: 'ru', purpose: purpose === 'reset' ? 'reset' : 'verify' });
+    if(d.success){ msg('Новый код отправлен.', 'ok'); cooldown(d.resend_after || 60); return; }
+    err(d.message);
+  } catch(e){ err('network'); }
+}
+
+/* ==================== СОЦСЕТИ ==================== */
+async function socialVerify(endpoint, body){
+  busy(true);
+  msg('Сверяем ваш вход…', 'ok');
+  try {
+    const d = await post(endpoint, body);
+    if(d.success && d.token){ enter(d); return; }
+    msg('Войти не удалось. Попробуйте другой способ.', 'err');
+  } catch(e){ err('network'); }
+  finally { busy(false); }
+}
+
+async function startTelegram(){
+  const btn = document.getElementById('btn-tg');
+  if(btn) btn.disabled = true;
+  msg('Открываем Telegram…', 'ok');
+  try {
+    const r = await fetch(API_URL + '/auth/web-code', { method: 'POST' });
+    const data = await r.json();
+    if(!data || !data.code || !data.url) throw new Error('no code');
+    window.open(data.url, '_blank');
+    msg('Подтвердите вход в Telegram и вернитесь сюда.', 'ok');
+    let ticks = 0;
+    A.poll = setInterval(async function(){
+      ticks++;
+      if(ticks > 150){
+        clearInterval(A.poll); A.poll = null;
+        if(btn) btn.disabled = false;
+        msg('Время вышло. Попробуйте ещё раз.', 'err');
+        return;
+      }
+      try {
+        const pr = await fetch(API_URL + '/auth/web-poll', {
+          method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code: data.code })
+        });
+        const pd = await pr.json();
+        if(pd && pd.status === 'ok' && pd.token){
+          clearInterval(A.poll); A.poll = null;
+          enter(pd);
+        } else if(pd && pd.status === 'expired'){
+          clearInterval(A.poll); A.poll = null;
+          if(btn) btn.disabled = false;
+          msg('Ссылка устарела. Попробуйте ещё раз.', 'err');
+        }
+      } catch(e){}
+    }, 2000);
+  } catch(e){
+    if(btn) btn.disabled = false;
+    msg('Не получилось связаться с сервером. Попробуйте ещё раз.', 'err');
+  }
+}
+
+window.addEventListener('load', function(){
+  if(window.google && google.accounts && google.accounts.id){
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: function(res){ if(res.credential) socialVerify('/auth/google', { token: res.credential }); }
+    });
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+  aScreen('register');
+
+  document.getElementById('btn-tg').addEventListener('click', startTelegram);
+
+  document.getElementById('btn-google').addEventListener('click', function(){
+    if(!window.google || !google.accounts || !google.accounts.oauth2){
+      msg('Google пока не отвечает. Обновите страницу и повторите.', 'err');
+      return;
+    }
+    google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: 'email profile',
+      callback: function(res){ if(res.access_token) socialVerify('/auth/google', { token: res.access_token }); }
+    }).requestAccessToken();
+  });
+
+  document.getElementById('btn-yandex').addEventListener('click', function(){
+    window.location.href = 'https://oauth.yandex.ru/authorize?response_type=token&client_id=' + YANDEX_CLIENT_ID + '&redirect_uri=' + REDIRECT_URI + '&state=yandex';
+  });
+
+  document.getElementById('btn-vk').addEventListener('click', function(){
+    window.location.href = 'https://oauth.vk.com/authorize?client_id=' + VK_CLIENT_ID + '&display=page&redirect_uri=' + REDIRECT_URI + '&scope=email&response_type=token&v=5.131&state=vk';
+  });
+
+  /* Enter отправляет форму активного экрана */
+  document.querySelector('.pane').addEventListener('keydown', function(ev){
+    if(ev.key !== 'Enter') return;
+    ev.preventDefault();
+    const btn = document.querySelector('#s-' + A.screen + ' .btn');
+    if(btn && !btn.disabled) btn.click();
+  });
+
+  ['vf-code','rs-code'].forEach(function(id){
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('input', function(){
+      this.value = this.value.replace(/\D/g, '').slice(0, 6);
+    });
+  });
+
+  /* ?mode=login открывает сразу вход */
+  try {
+    const q = new URLSearchParams(location.search);
+    if(q.get('mode') === 'login') aScreen('login');
+  } catch(e){}
+});
+</script>
+</body>
+</html>
