@@ -1669,7 +1669,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
                   <div class="eyebrow" style="margin-bottom:10px" data-t="mx_pay_eyebrow">Полный разбор</div>
                   <h3 class="h2" style="margin-bottom:8px" data-t="mx_pay_title">22 позиции с текстом целиком</h3>
                   <p class="sub" style="margin-bottom:16px" data-t="mx_pay_text">Открывается навсегда: личное и социальное предназначение, линии денег и любви, родовые задачи.</p>
-                  <button class="btn btn-brass btn-wide" onclick="openSheet('mxbuy')"><span data-t="mx_pay_btn">Открыть разбор</span> · <span class="num" id="mx-price">—</span></button>
+                  <button class="btn btn-brass btn-wide" onclick="goPlans('matrix.full')" data-t="mx_pay_btn">Открыть разбор</button>
                 </div>
               </div>
             </div>
@@ -1877,7 +1877,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
   <div class="reading" id="mxp-text" style="margin-top:14px"></div>
   <div id="mxp-locked" style="display:none">
     <p class="sheet-sub" data-t="mxp_locked">Эта позиция входит в полный разбор матрицы.</p>
-    <button class="btn btn-brass btn-wide" onclick="openSheet('mxbuy')" data-t="mx_pay_btn">Открыть разбор</button>
+    <button class="btn btn-brass btn-wide" onclick="goPlans('matrix.full')" data-t="mx_pay_btn">Открыть разбор</button>
   </div>
 </div>
 
@@ -4213,6 +4213,7 @@ function fillMxBuy(){
   document.getElementById('mxb-rub-val').textContent = S.mx.prices.rub + ' ₽';
 }
 async function mxPayRub(){
+  if(!featOk('matrix.full')){ goPlans('matrix.full'); return; }
   toast(tt('wait'));
   const data = await api('/matrix/invoice-rub', 'POST', { reading_id: S.mx.reading_id });
   if(data && data.success && data.invoice_url){
