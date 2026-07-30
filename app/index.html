@@ -1136,7 +1136,10 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 
         <!-- ============ СЕГОДНЯ ============ -->
         <section class="view" id="v-home">
-          <div class="eyebrow" id="home-eyebrow" style="margin-bottom:22px">—</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap">
+            <div class="eyebrow" id="home-eyebrow">—</div>
+            <button class="tag" id="home-plan" onclick="goPlans()" style="cursor:pointer;border:0">—</button>
+          </div>
 
           <div class="today">
             <div>
@@ -1303,7 +1306,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <div style="text-align:center">
             <div class="eyebrow" style="margin-bottom:12px" data-t="subs_eyebrow">NEOTARO · ПОДПИСКА</div>
             <h1 class="h1" data-t="subs_title">Выберите свой уровень доступа</h1>
-            <p class="sub" style="margin:12px auto 0;max-width:56ch" data-t="subs_lead">Больше свободы для ежедневной практики: глубокие разборы, расклады без списания энергии и персональные настройки проводника.</p>
+            <p class="sub" style="margin:12px auto 0;max-width:56ch" data-t="subs_lead">Энергия каждый месяц, глубокие разборы и закрытые расклады, которых нет на бесплатном тарифе.</p>
           </div>
 
           <div class="plx">
@@ -1331,6 +1334,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
             <div style="flex:1;min-width:180px">
               <h1 class="h2" id="pf-name">—</h1>
               <p class="label" style="margin-top:6px" id="pf-since">—</p>
+              <button class="tag" id="pf-plan" onclick="goPlans()" style="margin-top:10px;cursor:pointer;border:0">—</button>
             </div>
             <button class="btn btn-quiet btn-sm" onclick="openSheet('name')" data-t="pf_edit">Изменить имя</button>
           </div>
@@ -1570,7 +1574,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
               <div class="nk-pay-in">
                 <div class="eyebrow" data-t="as_pay_eyebrow">Подписка NEOTARO</div>
                 <h2 class="h2" style="margin-top:10px" data-t="as_pay_title">Открыть весь разбор карты</h2>
-                <p class="sub" style="margin-top:10px;max-width:56ch" data-t="as_pay_lead">Одна подписка на всё: все разделы натальной карты, личные транзиты на каждый день, без списания энергии.</p>
+                <p class="sub" style="margin-top:10px;max-width:56ch" data-t="as_pay_lead">Одна подписка на всё: все разделы натальной карты, личные транзиты на каждый день и энергия каждый месяц.</p>
                 <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
                   <button class="btn btn-brass" onclick="goPlans()" data-t="as_pay_cta">Смотреть тарифы</button>
                 </div>
@@ -1741,7 +1745,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
   </div>
   <div id="daily-wait" style="display:none;text-align:center;padding:26px 0">
     <span class="spin"></span>
-    <p class="label" style="margin-top:14px" data-t="daily_reading">Оракул смотрит карту</p>
+    <p class="label" style="margin-top:14px" data-t="daily_reading">Ора����ул смотрит карту</p>
   </div>
   <div class="reading" id="daily-text"></div>
   <div class="sheet-acts">
@@ -2046,10 +2050,10 @@ const STR = {
   sub_cancel_confirm:{ru:'Отменить подписку? Доступ сохранится до конца оплаченного периода.',en:'Cancel the subscription? Access stays until the end of the paid period.',es:'¿Cancelar la suscripción? El acceso dura hasta el final del periodo pagado.',fr:'Résilier l’abonnement ? L’accès reste jusqu’à la fin de la période payée.',de:'Abo kündigen? Zugang bleibt bis zum Ende der bezahlten Periode.'},
   sub_cancel_done:{ru:'Подписка отменена — доступ до конца периода',en:'Subscription canceled — access until the end of the period',es:'Suscripción cancelada — acceso hasta el final del periodo',fr:'Abonnement résilié — accès jusqu’à la fin de la période',de:'Abo gekündigt — Zugang bis Periodenende'},
   sub_free_title:{ru:'Бесплатный тариф',en:'Free plan',es:'Plan gratis',fr:'Offre gratuite',de:'Gratis-Tarif'},
-  sub_free_note:{ru:'ПРО и ДЕЛЮКС открывают больше возможностей',en:'PRO and DELUXE unlock more',es:'PRO y DELUXE abren más',fr:'PRO et DELUXE ouvrent plus',de:'PRO und DELUXE öffnen mehr'},
+  sub_free_note:{ru:'ПЛЮС и ПРО дают энергию каждый месяц и закрытые разделы',en:'PLUS and PRO give monthly energy and locked sections',es:'PLUS y PRO dan energía mensual y secciones cerradas',fr:'PLUS et PRO donnent de l’énergie chaque mois et les sections verrouillées',de:'PLUS und PRO geben monatliche Energie und gesperrte Bereiche'},
   subs_eyebrow:{ru:'NEOTARO · ПОДПИСКА',en:'NEOTARO · MEMBERSHIP',es:'NEOTARO · SUSCRIPCIÓN',fr:'NEOTARO · ABONNEMENT',de:'NEOTARO · MITGLIEDSCHAFT'},
   subs_title:{ru:'Выберите свой уровень доступа',en:'Choose your level of access',es:'Elige tu nivel de acceso',fr:'Choisissez votre niveau d’accès',de:'Wähle deinen Zugang'},
-  subs_lead:{ru:'Больше свободы для ежедневной практики: глубокие разборы, расклады без списания энергии и персональные настройки проводника.',en:'More freedom for daily practice: deeper readings, spreads without energy charges, and personal guide settings.',es:'Más libertad para tu práctica diaria: análisis profundos, tiradas sin gastar energía y ajustes personales.',fr:'Plus de liberté au quotidien : analyses approfondies, tirages sans dépenser d’énergie et réglages personnalisés.',de:'Mehr Freiheit für deine tägliche Praxis: tiefere Deutungen, Legungen ohne Energieverbrauch und persönliche Einstellungen.'},
+  subs_lead:{ru:'Энергия каждый месяц, глубокие разборы и закрытые расклады, которых нет на бесплатном тарифе.',en:'Monthly energy, deeper readings and locked spreads the free plan does not have.',es:'Más libertad para tu práctica diaria: análisis profundos, tiradas sin gastar energía y ajustes personales.',fr:'Plus de liberté au quotidien : analyses approfondies, tirages sans dépenser d’énergie et réglages personnalisés.',de:'Mehr Freiheit für deine tägliche Praxis: tiefere Deutungen, Legungen ohne Energieverbrauch und persönliche Einstellungen.'},
   shop_eyebrow:{ru:'РАЗОВАЯ ПОКУПКА',en:'ONE-TIME PURCHASE',es:'COMPRA ÚNICA',fr:'ACHAT UNIQUE',de:'EINMALIGER KAUF'},
   shop_title:{ru:'Нужна только энергия?',en:'Only need energy?',es:'¿Solo necesitas energía?',fr:'Besoin seulement d’énergie ?',de:'Brauchst du nur Energie?'},
   shop_lead:{ru:'Пакеты не сгорают и подходят, если подписка пока не нужна.',en:'Packs never expire and work well if you do not need a subscription yet.',es:'Los paquetes no caducan si aún no necesitas una suscripción.',fr:'Les packs n’expirent pas si vous ne souhaitez pas encore vous abonner.',de:'Pakete verfallen nicht, wenn du noch kein Abo brauchst.'},
@@ -2189,9 +2193,12 @@ const STR = {
   astro_free:{ru:'Расчёт и колесо карты — бесплатно, энергия не списывается',en:'The chart and the wheel are free, no energy is spent',es:'El cálculo y la rueda son gratis, no gastas energía',fr:'Le calcul et la roue sont gratuits, aucune énergie dépensée',de:'Berechnung und Rad sind kostenlos, keine Energie nötig'},
   as_pay_cta:{ru:'Смотреть тарифы',en:'See plans',es:'Ver planes',fr:'Voir les offres',de:'Tarife ansehen'},
   shop_energy_lock_title:{ru:'Пополнение энергии — в подписке',en:'Energy top-ups come with a plan',es:'La recarga de energía es con suscripción',fr:'La recharge d’énergie est dans l’abonnement',de:'Energie-Aufladung gibt es im Abo'},
-  shop_energy_lock_note:{ru:'На бесплатном тарифе энергия восстанавливается сама каждый день и за серию входов. Больше энергии — в ПРО и ДЕЛЮКС: там же диалог и расклады вообще без списания.',en:'On the free plan energy refills daily and with streaks. More energy lives in PRO and DELUXE — along with chats and spreads that cost no energy at all.',es:'En el plan gratis la energía se recarga sola cada día. Más energía está en PRO y DELUXE, junto con chats y tiradas sin coste.',fr:'Au gratuit, l’énergie se recharge chaque jour. Plus d’énergie dans PRO et DELUXE — avec dialogues et tirages sans dépense.',de:'Im Gratis-Tarif lädt sich Energie täglich selbst auf. Mehr Energie gibt es in PRO und DELUXE — zusammen mit Chats und Legungen ganz ohne Verbrauch.'},
+  shop_energy_lock_note:{ru:'На бесплатном тарифе энергия восстанавливается сама каждый день и за серию входов. ПЛЮС даёт 150 энергии каждый месяц, ПРО — 350, и только на них можно докупать пакеты.',en:'On the free plan energy refills daily and with streaks. PLUS grants 150 energy every month, PRO grants 350 — and only they can buy extra packs.',es:'En el plan gratis la energía se recarga sola cada día. PLUS da 150 de energía al mes, PRO da 350, y solo ellos pueden comprar paquetes.',fr:'Au gratuit, l’énergie se recharge chaque jour. PLUS donne 150 d’énergie par mois, PRO 350 — eux seuls peuvent acheter des packs.',de:'Im Gratis-Tarif lädt sich Energie täglich auf. PLUS gibt 150 Energie pro Monat, PRO 350 — nur sie können Pakete kaufen.'},
   pl_save:{ru:'выгода {sum} ₽',en:'save {sum} ₽',es:'ahorras {sum} ₽',fr:'économie de {sum} ₽',de:'spare {sum} ₽'},
   pw_in:{ru:'Доступно в {plan}',en:'Available in {plan}',es:'Disponible en {plan}',fr:'Disponible dans {plan}',de:'Verfügbar in {plan}'},
+  plan_badge_free:{ru:'Бесплатный',en:'Free',es:'Gratis',fr:'Gratuit',de:'Gratis'},
+  plan_badge_free_hint:{ru:'Ваш тариф: Бесплатный. Нажмите, чтобы сравнить тарифы',en:'Your plan: Free. Tap to compare plans',es:'Tu plan: Gratis. Toca para comparar',fr:'Votre offre : Gratuit. Touchez pour comparer',de:'Dein Tarif: Gratis. Tippen zum Vergleichen'},
+  plan_badge_paid_hint:{ru:'Ваш активный тариф',en:'Your active plan',es:'Tu plan activo',fr:'Votre offre active',de:'Dein aktiver Tarif'},
   pw_open_plans:{ru:'Посмотреть тарифы',en:'See plans',es:'Ver planes',fr:'Voir les offres',de:'Tarife ansehen'},
   pw_locked_toast:{ru:'Это открывается в {plan}',en:'This opens with {plan}',es:'Se abre con {plan}',fr:'Disponible avec {plan}',de:'Öffnet sich mit {plan}'},
   cmp_title:{ru:'Что входит в тарифы',en:'What each plan includes',es:'Qué incluye cada plan',fr:'Ce que comprend chaque offre',de:'Was jeder Tarif enthält'},
@@ -2206,7 +2213,7 @@ const STR = {
   cmp_note:{ru:'Отменить можно в любой момент — доступ останется до конца оплаченного периода. Уже открытые разделы остаются навсегда.',en:'Cancel anytime — access lasts until the end of the paid period. Sections you opened stay yours for good.',es:'Cancela cuando quieras; el acceso dura hasta el final del periodo.',fr:'Annulez à tout moment ; l’accès dure jusqu’à la fin de la période.',de:'Jederzeit kündbar — Zugang bis zum Ende der bezahlten Periode.'},
   as_pay_eyebrow:{ru:'Подписка NEOTARO',en:'NEOTARO subscription',es:'Suscripción NEOTARO',fr:'Abonnement NEOTARO',de:'NEOTARO-Abo'},
   as_pay_title:{ru:'Открыть весь разбор карты',en:'Unlock the whole chart reading',es:'Abrir toda la lectura',fr:'Ouvrir toute la lecture',de:'Ganze Deutung freischalten'},
-  as_pay_lead:{ru:'Одна подписка на всё: все разделы натальной карты, личные транзиты на каждый день, без списания энергии.',en:'One subscription for everything: all chart sections, daily personal transits, no energy spent.',es:'Una suscripción para todo: todas las secciones, tránsitos diarios, sin gastar energía.',fr:'Un abonnement pour tout : toutes les sections, transits quotidiens, sans énergie.',de:'Ein Abo für alles: alle Abschnitte, tägliche Transite, ohne Energie.'},
+  as_pay_lead:{ru:'Одна подписка на всё: все разделы натальной карты, личные транзиты на каждый день и энергия каждый месяц.',en:'One subscription for everything: all chart sections, daily personal transits and monthly energy.',es:'Una suscripción para todo: todas las secciones, tránsitos diarios y energía cada mes.',fr:'Un abonnement pour tout : toutes les sections, transits quotidiens et de l’énergie chaque mois.',de:'Ein Abo für alles: alle Abschnitte, tägliche Transite und monatliche Energie.'},
   as_pay_note:{ru:'Открытые разделы останутся у вас навсегда, даже после отмены подписки. Отменить можно в любой момент.',en:'Sections you have opened stay yours forever, even after cancelling. Cancel anytime.',es:'Las secciones abiertas son tuyas para siempre, incluso tras cancelar. Cancela cuando quieras.',fr:'Les sections ouvertes restent à vous pour toujours, même après résiliation. Résiliez à tout moment.',de:'Geöffnete Abschnitte bleiben dauerhaft Ihnen, auch nach Kündigung. Jederzeit kündbar.'},
   as_plan_open:{ru:'Оформить',en:'Subscribe',es:'Suscribirse',fr:'S’abonner',de:'Abonnieren'},
   as_plan_month:{ru:'в месяц',en:'per month',es:'al mes',fr:'par mois',de:'pro Monat'},
@@ -2231,7 +2238,7 @@ const STR = {
   sec_year:{ru:'Год вперёд',en:'The year ahead',es:'El año que viene',fr:'L’année à venir',de:'Das kommende Jahr'},
   as_ask_text:{ru:'Расскажи подробно о моей натальной карте и что она говорит обо мне сейчас.',en:'Tell me about my natal chart in detail and what it says about me right now.'},
 
-  mx_nobirth_title:{ru:'Сначала дата рождения',en:'Start with your birth date'},
+  mx_nobirth_title:{ru:'Сначала дата рож��ения',en:'Start with your birth date'},
   mx_nobirth_text:{ru:'Матрица строится из чисел даты рождения. Добавьте её — и октаграмма соберётся сразу.',en:'The matrix is built from the digits of your birth date. Add it and the octagram assembles at once.'},
   mx_nobirth_btn:{ru:'Добавить дату рождения',en:'Add birth date'},
   mx_tap:{ru:'Коснитесь точки, чтобы прочитать её',en:'Tap a point to read it'},
@@ -2244,7 +2251,7 @@ const STR = {
   mx_buy_title:{ru:'Полный разбор матрицы',en:'Full matrix reading'},
   mx_buy_sub:{ru:'Одна оплата — доступ остаётся навсегда.',en:'One payment — access stays for good.'},
   mxp_locked:{ru:'Эта позиция входит в полный разбор матрицы.',en:'This position is part of the full matrix reading.'},
-  mx_writing:{ru:'Оракул ещё пишет эту часть…',en:'The oracle is still writing this part…'},
+  mx_writing:{ru:'Оракул ��щё пишет эту часть…',en:'The oracle is still writing this part…'},
   mx_opened:{ru:'Разбор открыт',en:'Reading opened'},
 
   chat_name:{ru:'Оракул',en:'Oracle',es:'Oráculo',fr:'Oracle',de:'Orakel'},
@@ -2845,7 +2852,7 @@ function arcName(n){
   return (i >= 0 && i < 22) ? list[i] : String(n);
 }
 const MXP = {
-  ru:{a:'Характер и личность',b:'Таланты и эмоции',c:'Задача из прошлого',d:'Кармическая зона',center:'Зона комфорта',f:'Род отца — духовное',g:'Род матери — духовное',h:'Точка баланса',i:'Род отца — материальное',sky:'Небо: духовное предназначение',earth:'Земля: материальное предназначение',personal_purpose:'Личное предназначение · до 40',social_purpose:'Социальное предназначение · 40–60',general_purpose:'Общее предназначение · 60+',love:'Линия любви',money:'Линия денег',karmic_tail:'Кармический хвост'},
+  ru:{a:'Характер и личность',b:'Таланты и эмоции',c:'Задача из прошлого',d:'Кармическая зона',center:'Зона комфорт��',f:'Род отца — духовное',g:'Род матери — духовное',h:'Точка баланса',i:'Род отца — материальное',sky:'Небо: духовное предназначение',earth:'Земля: материальное предназначение',personal_purpose:'Личное предназначение · до 40',social_purpose:'Социальное предназначение · 40–60',general_purpose:'Общее предназначение · 60+',love:'Линия любви',money:'Линия денег',karmic_tail:'Кармический хвост'},
   en:{a:'Character and personality',b:'Talents and emotions',c:'Task from the past',d:'Karmic zone',center:'Comfort zone',f:'Father line — spiritual',g:'Mother line — spiritual',h:'Balance point',i:'Father line — material',sky:'Sky: spiritual purpose',earth:'Earth: material purpose',personal_purpose:'Personal purpose · before 40',social_purpose:'Social purpose · 40–60',general_purpose:'General purpose · 60+',love:'Love line',money:'Money line',karmic_tail:'Karmic tail'}
 };
 const MX_ORDER = ['center','a','b','c','d','f','g','h','i','sky','earth','personal_purpose','social_purpose','general_purpose','love','money','karmic_tail'];
@@ -2961,14 +2968,16 @@ async function renderSpreads(){
     if(!items.length) return;
     html += `<div class="orn" style="margin:22px 0 6px"><span class="eyebrow">${esc(tt(key))}</span></div>`;
     items.forEach(s => {
-      // Замок берётся из реестра тарифов, а не из факта оплаты когда-то.
-      const locked = !!s.is_premium && !featOk('spread.premium');
-      const noCost = featOk('spread.no_energy');
-      const price = (s.price === 0 || noCost)
+      // Какой тариф нужен, решает бэкенд (поле feature): глубокие расклады — spread.elite (ПРО),
+      // остальные сложные — spread.premium (ПЛЮС). Фронт не хранит эти правила у себя.
+      const feat = s.feature || (s.is_premium ? 'spread.premium' : null);
+      const locked = !!feat && !featOk(feat);
+      // Энергия тратится у всех, включая подписчиков: цена показывается всегда.
+      const price = s.price === 0
         ? `<span class="tag">${esc(tt('free'))}</span>`
         : `<span class="tag"><span class="num">${s.price}</span> ${esc(tt('energy_unit'))}</span>`;
-      const end = locked ? lockTag('spread.premium') : price;
-      html += `<button class="rowcard${locked ? ' locked' : ''}" onclick="${locked ? `goPlans('spread.premium')` : `pickSpread('${s.id}')`}">
+      const end = locked ? lockTag(feat) : price;
+      html += `<button class="rowcard${locked ? ' locked' : ''}" onclick="${locked ? `goPlans('${feat}')` : `pickSpread('${s.id}')`}">
         <span class="idx num">${s.cards_count}</span>
         <span class="mid"><strong>${esc(s.name)}</strong><span>${esc(s.description || '')}</span></span>
         <span class="end">${end}</span>
@@ -3241,7 +3250,7 @@ const DREAM_SYMBOLS = [
   { ru:['Падение','Потеря контроля там, где вы держитесь из последних сил.'], en:['Falling','Losing control where you are holding on too hard.'], g:'fall' },
   { ru:['Дом','Ваша личность: комнаты — её части.'], en:['A house','Your psyche: the rooms are its parts.'], g:'house' },
   { ru:['Погоня','То, от чего вы отказываетесь встретиться лицом к лицу.'], en:['Being chased','What you refuse to face directly.'], g:'loop' },
-  { ru:['Смерть','Почти никогда о смерти — чаще о конце роли.'], en:['Death','Almost never literal — usually the end of a role.'], g:'endrole' },
+  { ru:['Смерть','Почти никогда о смерти — чаще о ��онце роли.'], en:['Death','Almost never literal — usually the end of a role.'], g:'endrole' },
   { ru:['Незнакомец','Ваша тень: черты, которые вы не признаёте своими.'], en:['A stranger','Your shadow: traits you do not claim as yours.'], g:'shadow' }
 ];
 function renderDreamSymbols(){
@@ -3404,6 +3413,23 @@ function paintProfile(){
   if(nrow) nrow.style.display = bridge.isWeb ? 'none' : '';
   paintZodiac();
   paintEnergy();
+  paintPlanBadge();
+}
+
+/* Человек должен видеть свой тариф без захода в магазин — и на главной, и в профиле.
+   Название берётся из access.plan_title, то есть из БД: переименовал тариф — поменялось везде. */
+function paintPlanBadge(){
+  const acc = S.access || {};
+  const paid = !!acc.paid;
+  const title = acc.plan_title || (paid ? String(acc.plan || '').toUpperCase() : tt('plan_badge_free'));
+  const label = paid ? title : tt('plan_badge_free');
+  ['home-plan', 'pf-plan'].forEach(function(id){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.textContent = label;
+    el.classList.toggle('tag-warm', paid);
+    el.title = paid ? tt('plan_badge_paid_hint') : tt('plan_badge_free_hint');
+  });
 }
 function formatDate(iso){
   const p = String(iso).slice(0, 10).split('-');
@@ -3648,7 +3674,7 @@ async function setLang(code){
 
 /* ---------- приглашения ---------- */
 function refLink(){
-  /* Бэкенд ищет пригласившего по ВНУТРЕННЕМУ id (User.id) — он приходит в ref_code.
+  /* Бэкенд ищет ��ригласившего по ВНУТРЕННЕМУ id (User.id) — он приходит в ref_code.
      bridge.userId — это tg_id / google_id, по нему рефка не находилась и молча терялась. */
   const id = S.refCode || bridge.userId;
   const base = (window.location && window.location.origin && window.location.origin.indexOf('http') === 0) ? window.location.origin : 'https://neotaro.ru';
@@ -3745,7 +3771,7 @@ async function claimBonus(){
 }
 
 /* ============================ НАТАЛЬНАЯ КАРТА ============================ */
-/* Вся математика и все тексты приходят с бэка. Здесь только отрисовка:
+/* Вся математика и все тексты приходят с бэка. Здесь только отри��овка:
    дублировать астрологические расчёты на фронте — гарантированно расхождение цифр. */
 const NK_SIGN = {
   aries:['Овен','Aries','Aries','B\u00e9lier','Widder'],
@@ -3981,7 +4007,7 @@ async function openAstroSection(key){
    ---------------------------------------------------------------------------
    Никаких if(plan==='pro') в верстке. Всё решает бэкенд в access.features,
    а текст «Доступно в ПРО» берётся из required_plan_title — поэтому
-   перенос фичи в другой тариф не требует правки фронта вообще.
+   пер��нос фичи в другой тариф не требует правки фронта вообще.
    =========================================================================== */
 const IC_LOCK = '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
 const IC_OK   = '<svg viewBox="0 0 24 24"><path d="M5 13l4.5 4.5L19 7"/></svg>';
@@ -4024,6 +4050,7 @@ async function refreshAccess(){
     S.access = d.access;
     if(typeof renderSpreads === 'function' && S.view === 'spreads') renderSpreads();
     if(typeof paintProfile === 'function') paintProfile();
+    if(typeof paintPlanBadge === 'function') paintPlanBadge();
   }
   return S.access;
 }
