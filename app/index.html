@@ -139,7 +139,7 @@
             neon: {
               indigo: '#8FA3DE',        /* звёздная сталь */
               fuchsia: '#C9A0DC',       /* сиреневая дымка */
-              amber: '#D9AE5F',         /* старое золото — главный акцент */
+              amber: '#D9AE5F',         /* ста��ое золото — главный акцент */
               purple: '#A78FD6',        /* аметист */
               cyan: '#87B7C6',          /* лунная вода */
               rose: '#C4899B',          /* пыльная роза */
@@ -2771,6 +2771,8 @@ function absorbUser(d){
   if(typeof d.energy === 'number') S.energy = d.energy;
   if(typeof d.streak === 'number') S.streak = d.streak;
   if(typeof d.referrals_count === 'number') S.refs = d.referrals_count;
+  /* ref_code — внутренний id из базы. Именно его ждёт бэкенд в start_param. */
+  if(d.ref_code) S.refCode = d.ref_code;
   if(typeof d.has_purchased === 'boolean') S.purchased = d.has_purchased;
   if(typeof d.notifications_enabled === 'boolean') S.notif = d.notifications_enabled;
   if(d.first_name) S.name = d.first_name;
@@ -3646,7 +3648,9 @@ async function setLang(code){
 
 /* ---------- приглашения ---------- */
 function refLink(){
-  const id = bridge.userId;
+  /* Бэкенд ищет пригласившего по ВНУТРЕННЕМУ id (User.id) — он приходит в ref_code.
+     bridge.userId — это tg_id / google_id, по нему рефка не находилась и молча терялась. */
+  const id = S.refCode || bridge.userId;
   const base = (window.location && window.location.origin && window.location.origin.indexOf('http') === 0) ? window.location.origin : 'https://neotaro.ru';
   return base + '/?ref=' + (id || '');
 }
