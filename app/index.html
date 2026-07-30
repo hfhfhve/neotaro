@@ -1671,6 +1671,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
                   <div class="eyebrow" style="margin-bottom:10px" data-t="mx_pay_eyebrow">Полный разбор</div>
                   <h3 class="h2" style="margin-bottom:8px" data-t="mx_pay_title">22 позиции с текстом целиком</h3>
                   <p class="sub" style="margin-bottom:16px" data-t="mx_pay_text">Открывается навсегда: личное и социальное предназначение, линии денег и любви, родовые задачи.</p>
+                  <div id="mx-lock" style="margin-bottom:14px"></div>
                   <button class="btn btn-brass btn-wide" onclick="goPlans('matrix.full')" data-t="mx_pay_btn">Открыть разбор</button>
                 </div>
               </div>
@@ -1879,6 +1880,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
   <div class="reading" id="mxp-text" style="margin-top:14px"></div>
   <div id="mxp-locked" style="display:none">
     <p class="sheet-sub" data-t="mxp_locked">Эта позиция входит в полный разбор матрицы.</p>
+    <div id="mxp-lock" style="margin-bottom:12px"></div>
     <button class="btn btn-brass btn-wide" onclick="goPlans('matrix.full')" data-t="mx_pay_btn">Открыть разбор</button>
   </div>
 </div>
@@ -4225,7 +4227,10 @@ function renderMatrix(){
   document.getElementById('mx-center-arc').textContent = p.center + ' · ' + arcName(p.center);
   document.getElementById('mx-center-text').textContent = (d.teaser && d.teaser.center) || tt('mx_writing');
   document.getElementById('mx-karma-text').textContent = (d.teaser && d.teaser.karma_hook) || tt('mx_writing');
-  document.getElementById('mx-price').textContent = d.prices ? (d.prices.rub + ' ₽') : '—';
+  const _ml1 = document.getElementById('mx-lock');
+  if(_ml1) _ml1.innerHTML = d.is_paid ? '' : lockTag('matrix.full');
+  const _ml2 = document.getElementById('mxp-lock');
+  if(_ml2) _ml2.innerHTML = d.is_paid ? '' : lockTag('matrix.full');
   document.getElementById('mx-paywall').style.display = d.is_paid ? 'none' : 'block';
   if(d.is_paid && S.mxText){
     if(S.mxText.center) document.getElementById('mx-center-text').textContent = S.mxText.center;
@@ -4265,15 +4270,9 @@ function fillMxBuy(){
   document.getElementById('mxb-rub-val').textContent = S.mx.prices.rub + ' ₽';
 }
 async function mxPayRub(){
-  if(!featOk('matrix.full')){ goPlans('matrix.full'); return; }
-  toast(tt('wait'));
-  const data = await api('/matrix/invoice-rub', 'POST', { reading_id: S.mx.reading_id });
-  if(data && data.success && data.invoice_url){
-    closeSheets();
-    bridge.openLink(data.invoice_url);
-    toast(tt('mx_writing'));
-    mxFetch(0);
-  } else toast(tt('err'));
+  // Витрина прежняя, действие одно — переход в магазин за подпиской.
+  closeSheets();
+  goPlans('matrix.full');
 }
 async function mxFetch(attempt){
   if(attempt > 45 || !S.mx || !S.mx.reading_id){ hideToast(); return; }
