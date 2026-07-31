@@ -139,7 +139,7 @@
             neon: {
               indigo: '#8FA3DE',        /* звёздная сталь */
               fuchsia: '#C9A0DC',       /* сиреневая дымка */
-              amber: '#D9AE5F',         /* ста��ое золото — главный акцент */
+              amber: '#D9AE5F',         /* старое золото — главный акцент */
               purple: '#A78FD6',        /* аметист */
               cyan: '#87B7C6',          /* лунная вода */
               rose: '#C4899B',          /* пыльная роза */
@@ -665,6 +665,40 @@ body.chat-mode .chat-head{padding-top:16px}
 
 @media (max-width:900px){.scroll{padding-bottom:calc(var(--dock) + var(--sab) + 48px)}}
 
+/* ============ МОБИЛЬНАЯ НАВИГАЦИЯ v2 ============ */
+.m-only{display:none}
+button.alm{width:100%;text-align:left;background:none;border:0;border-right:1px solid var(--line-soft);color:inherit;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .18s}
+button.alm:last-child{border-right:none}
+button.alm:hover{background:rgba(217,174,95,.05)}
+button.alm:active{background:rgba(217,174,95,.1)}
+.alm-go{display:block;margin-top:7px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);opacity:.75}
+.tb-row{display:flex;align-items:center;gap:7px}
+.tb-bar{display:block;width:64px;height:2px;border-radius:2px;background:rgba(147,160,192,.18);overflow:hidden}
+.tb-fill{display:block;height:100%;width:3%;background:linear-gradient(90deg,#B8873F,var(--brass-pale));transition:width .5s ease}
+.prx{display:grid;grid-template-columns:1fr;gap:10px}
+.prow{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:15px 16px;border:1px solid var(--line-soft);border-radius:14px;background:rgba(18,24,41,.55);color:inherit;transition:border-color .2s,background .2s;-webkit-tap-highlight-color:transparent}
+.prow:active{border-color:var(--line);background:rgba(18,24,41,.85)}
+.prow .pg{width:27px;flex:0 0 auto;color:var(--brass);display:flex;align-items:center;justify-content:center}
+.prow .pg .ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round}
+.prow .pm{flex:1;min-width:0}
+.prow .pm b{display:block;font-family:var(--serif);font-weight:400;font-size:17px;color:var(--ivory);margin-bottom:3px}
+.prow .pm span{display:block;font-size:12.5px;line-height:1.45;color:var(--mist)}
+.prow .pe{flex:0 0 auto;color:var(--brass);opacity:.75;font-family:var(--mono);font-size:14px}
+@media(max-width:900px){
+  .m-only{display:block}
+  .m-hide{display:none!important}
+  .dock-btn .tx{font-size:9.5px;letter-spacing:.07em}
+  .dock-btn{min-height:58px}
+  .tb-energy{flex-direction:column;align-items:flex-end;gap:4px;padding:6px 13px 7px}
+  .alm .k{font-size:9.5px;letter-spacing:.14em}
+  .label{font-size:10.5px;letter-spacing:.13em}
+  .eyebrow{font-size:10px;letter-spacing:.16em}
+  .tile p{font-size:13.5px}
+  .switch{width:48px;height:28px}
+  .switch::after{width:20px;height:20px}
+  .switch.is-on::after{transform:translateX(20px)}
+}
+
 /* ============ ГОЛОСОВОЙ ВВОД ============ */
 .mic{width:44px;height:44px;flex:0 0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--line-cold);background:rgba(35,44,71,.4);color:var(--brass-pale);transition:transform .16s,border-color .2s,background .2s}
 .mic:hover{border-color:var(--brass);background:rgba(217,174,95,.1)}
@@ -1144,7 +1178,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
       <button class="btn btn-brass" type="submit" data-t="auth_reset_btn">Сохранить пароль</button>
       <div class="auth-links">
         <button type="button" class="auth-link" id="auth-resend-2" onclick="authResend('reset')" data-t="auth_resend">Отправить код заново</button>
-        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_back">На��ад</button>
+        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_back">Назад</button>
       </div>
     </form>
 
@@ -1203,9 +1237,9 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
         <div class="tb-mark">NEOTARO</div>
         <div class="tb-date" id="tb-date">—</div>
       </div>
-      <button class="tb-energy" onclick="go('shop')">
-        <span class="v num" id="m-energy-2">0</span>
-        <span class="u" data-t="energy_unit">энергия</span>
+      <button class="tb-energy" onclick="go('shop')" aria-label="Энергия, тарифы и подписка">
+        <span class="tb-row"><span class="v num" id="m-energy-2">0</span><span class="u" data-t="energy_unit">энергия</span></span>
+        <span class="tb-bar"><i class="tb-fill" id="tb-fill"></i></span>
       </button>
     </header>
 
@@ -1243,11 +1277,11 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
                   <img id="dial-img" alt="" style="display:none">
                 </button>
               </div>
-              <div class="dial-cap" id="dial-cap" data-t="dial_cap">78 арканов · одна карта в сутки</div>
+              <div class="dial-cap m-hide" id="dial-cap" data-t="dial_cap">78 арканов · одна карта в сутки</div>
             </div>
 
             <div class="today-copy">
-              <div class="arc" id="home-arc" data-t="home_arc_empty">карта дня ещё не открыта</div>
+              <div class="arc m-hide" id="home-arc" data-t="home_arc_empty">карта дня ещё не открыта</div>
               <h1 class="h1" id="home-title" data-t="home_title_empty">Карта ждёт, пока вы её не перевернёте</h1>
               <p class="lead" id="home-lead" data-t="home_lead_empty">Нажмите на карту в центре циферблата. Один аркан из семидесяти восьми закрепится за этими сутками — с разбором от оракула.</p>
               <div class="today-acts">
@@ -1260,18 +1294,18 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <div class="hair"></div>
 
           <div class="almanac">
-            <div class="alm"><div class="k" data-t="alm_lunar">Лунный день</div><div class="v num" id="alm-lunar">—</div></div>
-            <div class="alm"><div class="k" data-t="alm_phase">Фаза</div><div class="v" id="alm-phase" style="font-size:15px;font-family:var(--sans);color:var(--ivory);font-weight:500">—</div></div>
-            <div class="alm"><div class="k" data-t="alm_sign">Ваш знак</div><div class="v" id="alm-sign" style="font-size:15px;font-family:var(--sans);color:var(--ivory);font-weight:500">—</div></div>
-            <div class="alm"><div class="k" data-t="alm_streak">Дней подряд</div><div class="v num" id="alm-streak">0</div></div>
+            <button class="alm" type="button" onclick="go('calendar')"><div class="k" data-t="alm_lunar">Лунный день</div><div class="v num" id="alm-lunar">—</div><span class="alm-go m-only" data-t="alm_go_day">Разбор дня →</span></button>
+            <button class="alm" type="button" onclick="go('calendar')"><div class="k" data-t="alm_phase">Фаза</div><div class="v" id="alm-phase" style="font-size:15px;font-family:var(--sans);color:var(--ivory);font-weight:500">—</div><span class="alm-go m-only" data-t="alm_go_day">Разбор дня →</span></button>
+            <button class="alm" type="button" onclick="openStatInfo('sign')"><div class="k" data-t="alm_sign">Ваш знак</div><div class="v" id="alm-sign" style="font-size:15px;font-family:var(--sans);color:var(--ivory);font-weight:500">—</div><span class="alm-go m-only" data-t="alm_go_sign">Что это значит →</span></button>
+            <button class="alm" type="button" onclick="openSheet('bonus')"><div class="k" data-t="alm_streak">Дней подряд</div><div class="v num" id="alm-streak">0</div><span class="alm-go m-only" data-t="alm_go_rewards">Награды →</span></button>
           </div>
 
           <div id="home-bonus-slot" style="margin-top:14px"></div>
 
           <div class="hair"></div>
 
-          <div class="orn"><span class="eyebrow" data-t="home_practices">Практики</span></div>
-          <div class="grid grid-3">
+          <div class="orn m-hide"><span class="eyebrow" data-t="home_practices">Практики</span></div>
+          <div class="grid grid-3 m-hide">
             <button class="tile" onclick="go('spreads')">
               <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg></span>
               <h4 data-t="nav_spreads">Расклады</h4>
@@ -1318,13 +1352,30 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 
           <div class="hair"></div>
 
-          <div class="panel panel-pad" style="display:flex;gap:22px;align-items:center;flex-wrap:wrap">
+          <div class="panel panel-pad m-hide" style="display:flex;gap:22px;align-items:center;flex-wrap:wrap">
             <div style="flex:1;min-width:220px">
               <div class="eyebrow" style="margin-bottom:10px" data-t="ref_eyebrow">Приглашения</div>
               <h3 class="h2" style="margin-bottom:8px" data-t="ref_title">Приведите своего человека</h3>
-              <p class="sub" data-t="ref_text">За каждого, кто зарегис��рируется по вашей ссылке, на баланс приходит бонус энергии.</p>
+              <p class="sub" data-t="ref_text">За каждого, кто зарегистрируется по вашей ссылке, на баланс приходит бонус энергии.</p>
             </div>
             <button class="btn btn-line" onclick="openSheet('referral')" data-t="ref_btn">Показать ссылку</button>
+          </div>
+        </section>
+
+        <!-- ============ ПРАКТИКИ (только мобильная навигация) ============ -->
+        <section class="view" id="v-practices">
+          <div class="eyebrow" style="margin-bottom:12px" data-t="nav_practices">Практики</div>
+          <h1 class="h1" data-t="prx_title">С чего начнём сегодня?</h1>
+          <p class="sub" style="margin-top:10px;max-width:52ch" data-t="prx_lead">Семь практик — каждая отвечает на свой тип вопроса.</p>
+          <div class="prx" style="margin-top:22px">
+            <button class="prow" onclick="go('spreads')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg></span><span class="pm"><b data-t="nav_spreads">Расклады</b><span data-t="tile_spreads">Задайте вопрос и получите разбор позиций — от одной карты до Кельтского креста.</span></span><span class="pe">→</span></button>
+            <button class="prow" onclick="go('dream')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 3.4a8.6 8.6 0 100 17.2 8.9 8.9 0 01-3.6-8.6 8.9 8.9 0 013.6-8.6z"/></svg></span><span class="pm"><b data-t="nav_dream">Сонник</b><span data-t="tile_dream">Опишите сон — разберём символы по Юнгу и архетипам.</span></span><span class="pe">→</span></button>
+            <button class="prow" onclick="go('astro')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg></span><span class="pm"><b data-t="nav_astro">Космо-паспорт</b><span data-t="tile_astro">Дата, время и город рождения — личная карта светил.</span></span><span class="pe">→</span></button>
+            <button class="prow" onclick="go('syn')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg></span><span class="pm"><b data-t="nav_syn">Совместимость</b><span data-t="tile_syn">Две даты рождения — где связь держит, а где рвётся.</span></span><span class="pe">→</span></button>
+            <button class="prow" onclick="go('matrix')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></span><span class="pm"><b data-t="nav_matrix">Матрица судьбы</b><span data-t="tile_matrix">Двадцать два аркана в октаграмме вашей даты рождения.</span></span><span class="pe">→</span></button>
+            <button class="prow" onclick="go('calendar')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg></span><span class="pm"><b data-t="nav_calendar">Лунный день</b><span data-t="tile_calendar">Что сегодня идёт легко, а что лучше отложить.</span></span><span class="pe">→</span></button>
+            <button class="prow" onclick="go('chat')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.6h16v10.2H9.6L4 19.6z"/><path d="M8 9.4h8M8 12.4h5"/></svg></span><span class="pm"><b data-t="nav_chat">Оракул</b><span data-t="tile_chat">Свободный разговор: карты, звёзды, сны и сложные вопросы.</span></span><span class="pe">→</span></button>
+            <button class="prow" onclick="go('shop')" style="margin-top:6px"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 2.8L5.6 13.6h4.8l-1.2 7.6 8-11.2h-4.8z"/></svg></span><span class="pm"><b data-t="prx_plans">Тарифы и энергия</b><span data-t="prx_plans_hint">Подписка, пакеты энергии и что входит в каждый уровень</span></span><span class="pe">→</span></button>
           </div>
         </section>
 
@@ -1470,7 +1521,8 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <div id="pf-sub" style="margin-top:14px"></div>
 
           <div class="stack" style="margin-top:14px">
-            <button class="rowcard" onclick="openSheet('referral')">
+            <button class="rowcard" onclick="goPlans()"><span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 2.8L5.6 13.6h4.8l-1.2 7.6 8-11.2h-4.8z"/></svg></span><span class="mid"><strong data-t="pf_plans">Тарифы и подписка</strong><span data-t="pf_plans_hint">Сравнить уровни, продлить или купить энергию</span></span><span class="end">→</span></button>
+        <button class="rowcard" onclick="openSheet('referral')">
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.6" cy="8.6" r="3.6"/><path d="M3.4 20c.8-3.6 3.2-5.4 6.2-5.4 1.3 0 2.5.3 3.5 1"/><path d="M17.4 12.6v6M14.4 15.6h6"/></svg></span>
               <span class="mid"><strong data-t="ref_btn2">Пригласить друга</strong><span data-t="ref_text">Ссылка на сайт и бонус за каждого</span></span>
               <span class="end"><span class="tag" id="pf-refs-2">0</span></span>
@@ -1577,7 +1629,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <div class="panel panel-pad" style="margin-top:24px;max-width:720px">
             <label class="field-lab" for="dream-in" data-t="dream_label">Содержание сна</label>
             <textarea id="dream-in" class="field" rows="6" data-ph="dream_ph" placeholder="Мне снилось, что я падаю в тёмную воду, и вода оказалась тёплой…"></textarea>
-            <button class="mic-wide is-off" id="dream-mic" type="button" data-t="v_speak_dream"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></svg>Рассказать сон голосом</button>
+            <button class="mic-wide is-off" id="dream-mic" type="button"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></svg><span data-t="v_speak_dream">Рассказать сон голосом</span></button>
             <button class="btn btn-brass btn-wide" style="margin-top:16px" onclick="sendDream()" data-t="dream_btn">Разобрать сон</button>
           </div>
           <div class="hair"></div>
@@ -1855,9 +1907,8 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
     <nav class="dock">
       <div class="dock-in">
         <button class="dock-btn" data-nav="home" onclick="go('home')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7"/></svg></span><span class="tx" data-t="nav_home">Сегодня</span></button>
-        <button class="dock-btn" data-nav="spreads" onclick="go('spreads')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg></span><span class="tx" data-t="nav_spreads">Расклады</span></button>
+        <button class="dock-btn" data-nav="practices" onclick="go('practices')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.4" y="3.4" width="7.2" height="7.2" rx="1.7"/><rect x="13.4" y="3.4" width="7.2" height="7.2" rx="1.7"/><rect x="3.4" y="13.4" width="7.2" height="7.2" rx="1.7"/><rect x="13.4" y="13.4" width="7.2" height="7.2" rx="1.7"/></svg></span><span class="tx" data-t="nav_practices">Практики</span></button>
         <button class="dock-btn" data-nav="chat" onclick="go('chat')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.6h16v10.2H9.6L4 19.6z"/><path d="M8 9.4h8M8 12.4h5"/></svg></span><span class="tx" data-t="nav_chat">Оракул</span></button>
-        <button class="dock-btn" data-nav="shop" onclick="go('shop')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 2.8L5.6 13.6h4.8l-1.2 7.6 8-11.2h-4.8z"/></svg></span><span class="tx" data-t="nav_shop_short">Энергия</span></button>
         <button class="dock-btn" data-nav="profile" onclick="go('profile')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="3.8"/><path d="M4.8 20.4c.9-3.9 3.7-5.8 7.2-5.8s6.3 1.9 7.2 5.8"/></svg></span><span class="tx" data-t="nav_profile">Профиль</span></button>
       </div>
     </nav>
@@ -1879,7 +1930,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
   </div>
   <div id="daily-wait" style="display:none;text-align:center;padding:26px 0">
     <span class="spin"></span>
-    <p class="label" style="margin-top:14px" data-t="daily_reading">Ора����ул смотрит карту</p>
+    <p class="label" style="margin-top:14px" data-t="daily_reading">Оракул смотрит карту</p>
   </div>
   <div class="reading" id="daily-text"></div>
   <div class="sheet-acts">
@@ -2099,6 +2150,17 @@ const STR = {
   nav_shop_short:{ru:'Тарифы',en:'Plans',es:'Planes',fr:'Offres',de:'Tarife'},
   nav_profile:{ru:'Профиль',en:'Profile',es:'Perfil',fr:'Profil',de:'Profil'},
   rail_practice:{ru:'Практики',en:'Practices',es:'Prácticas',fr:'Pratiques',de:'Praktiken'},
+  nav_practices:{ru:'Практики',en:'Practices',es:'Prácticas',fr:'Pratiques',de:'Praktiken'},
+  v_speak_dream:{ru:'Рассказать сон голосом',en:'Tell your dream aloud',es:'Cuenta tu sueño en voz alta',fr:'Racontez votre rêve à voix haute',de:'Traum laut erzählen'},
+  alm_go_day:{ru:'Разбор дня →',en:'Day reading →',es:'Análisis del día →',fr:'Analyse du jour →',de:'Tagesdeutung →'},
+  alm_go_sign:{ru:'Что это значит →',en:'What it means →',es:'Qué significa →',fr:'Ce que cela signifie →',de:'Was das bedeutet →'},
+  alm_go_rewards:{ru:'Награды →',en:'Rewards →',es:'Recompensas →',fr:'Récompenses →',de:'Belohnungen →'},
+  prx_title:{ru:'С чего начнём сегодня?',en:'Where do we start today?',es:'¿Por dónde empezamos hoy?',fr:'Par où commence-t-on\u2009?',de:'Womit fangen wir heute an?'},
+  prx_lead:{ru:'Семь практик — каждая отвечает на свой тип вопроса.',en:'Seven practices \u2014 each answers a different kind of question.',es:'Siete prácticas, cada una para un tipo de pregunta.',fr:'Sept pratiques, chacune pour un type de question.',de:'Sieben Praktiken für je eine Art von Frage.'},
+  prx_plans:{ru:'Тарифы и энергия',en:'Plans & energy',es:'Planes y energía',fr:'Offres et énergie',de:'Tarife & Energie'},
+  prx_plans_hint:{ru:'Подписка, пакеты энергии и что входит в каждый уровень',en:'Subscription, energy packs and what each tier includes',es:'Suscripción, paquetes de energía y qué incluye cada nivel',fr:'Abonnement, packs d\u2019énergie et contenu de chaque offre',de:'Abo, Energiepakete und Leistungen je Stufe'},
+  pf_plans:{ru:'Тарифы и подписка',en:'Plans & subscription',es:'Planes y suscripción',fr:'Offres et abonnement',de:'Tarife & Abo'},
+  pf_plans_hint:{ru:'Сравнить уровни, продлить или купить энергию',en:'Compare tiers, renew or buy energy',es:'Comparar niveles, renovar o comprar energía',fr:'Comparer les offres, renouveler ou acheter de l\u2019énergie',de:'Stufen vergleichen, verlängern oder Energie kaufen'},
   rail_account:{ru:'Кабинет',en:'Account',es:'Cuenta',fr:'Compte',de:'Konto'},
   energy_unit:{ru:'энергия',en:'energy',es:'energía',fr:'énergie',de:'energie'},
   energy_top_up:{ru:'Пополнить →',en:'Add more →',es:'Añadir →',fr:'Ajouter →',de:'Aufladen →'},
@@ -2197,7 +2259,7 @@ const STR = {
   ref_copied:{ru:'Ссылка скопирована',en:'Link copied',es:'Enlace copiado',fr:'Lien copié',de:'Link kopiert'},
   ref_share:{ru:'Поделиться',en:'Share',es:'Compartir',fr:'Partager',de:'Teilen'},
   ref_list:{ru:'Кто пришёл',en:'Who joined',es:'Quién se unió',fr:'Qui a rejoint',de:'Wer beigetreten ist'},
-  ref_empty:{ru:'Пока никто не вошёл по ссылке. Отправьте её тем, кто точно поймё��.',en:'Nobody has joined yet. Send it to someone who will get it.'},
+  ref_empty:{ru:'Пока никто не вошёл по ссылке. Отправьте её тем, кто точно поймёт.',en:'Nobody has joined yet. Send it to someone who will get it.'},
   ref_remind:{ru:'Напомнить',en:'Remind',es:'Recordar',fr:'Rappeler',de:'Erinnern'},
   ref_done:{ru:'Засчитан',en:'Counted',es:'Contado',fr:'Compté',de:'Gezählt'},
   ref_pending:{ru:'Ждём входа',en:'Waiting',es:'Esperando',fr:'En attente',de:'Wartet'},
@@ -2420,7 +2482,7 @@ const STR = {
   sec_year:{ru:'Год вперёд',en:'The year ahead',es:'El año que viene',fr:'L’année à venir',de:'Das kommende Jahr'},
   as_ask_text:{ru:'Расскажи подробно о моей натальной карте и что она говорит обо мне сейчас.',en:'Tell me about my natal chart in detail and what it says about me right now.'},
 
-  mx_nobirth_title:{ru:'Сначала дата рож��ения',en:'Start with your birth date'},
+  mx_nobirth_title:{ru:'Сначала дата рождения',en:'Start with your birth date'},
   mx_nobirth_text:{ru:'Матрица строится из чисел даты рождения. Добавьте её — и октаграмма соберётся сразу.',en:'The matrix is built from the digits of your birth date. Add it and the octagram assembles at once.'},
   mx_nobirth_btn:{ru:'Добавить дату рождения',en:'Add birth date'},
   mx_tap:{ru:'Коснитесь точки, чтобы прочитать её',en:'Tap a point to read it'},
@@ -2433,7 +2495,7 @@ const STR = {
   mx_buy_title:{ru:'Полный разбор матрицы',en:'Full matrix reading'},
   mx_buy_sub:{ru:'Одна оплата — доступ остаётся навсегда.',en:'One payment — access stays for good.'},
   mxp_locked:{ru:'Эта позиция входит в полный разбор матрицы.',en:'This position is part of the full matrix reading.'},
-  mx_writing:{ru:'Оракул ��щё пишет эту часть…',en:'The oracle is still writing this part…'},
+  mx_writing:{ru:'Оракул ещё пишет эту часть…',en:'The oracle is still writing this part…'},
   mx_opened:{ru:'Разбор открыт',en:'Reading opened'},
 
   chat_name:{ru:'Оракул',en:'Oracle',es:'Oráculo',fr:'Oracle',de:'Orakel'},
@@ -2854,7 +2916,7 @@ const LOADERS = {
   dream: () => renderDreamSymbols(),
   memory: () => loadMemory()
 };
-function go(view){
+function go(view, fromPop){
   S.view = view;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('is-on'));
   const el = document.getElementById('v-' + view);
@@ -2865,11 +2927,29 @@ function go(view){
   const vc = document.getElementById('v-chat');
   if(vc) vc.style.display = isChat ? 'flex' : 'none';
   const navKey = (view === 'table') ? 'spreads' : ((view === 'memory' || view === 'settings') ? 'profile' : view);
-  document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('is-on', b.dataset.nav === navKey));
+  /* мобильный док группирует практики в одну вкладку, десктопная рельса светится точным пунктом */
+  const DOCK_GROUP = { spreads:'practices', table:'practices', dream:'practices', astro:'practices',
+                       syn:'practices', matrix:'practices', calendar:'practices',
+                       shop:'profile', memory:'profile', settings:'profile' };
+  const dockKey = DOCK_GROUP[view] || navKey;
+  document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('is-on', b.dataset.nav === navKey || b.dataset.nav === dockKey));
   if(!isChat) document.getElementById('scroll').scrollTop = 0;
+  /* системная кнопка 'Назад' на телефоне должна возвращать на экран назад, а не выкидывать с сайта */
+  if(!fromPop){
+    try {
+      const st = history.state;
+      if(!st || st.v !== view) history.pushState({ v: view }, '', '#' + view);
+    } catch(e){}
+  }
   if(LOADERS[view]) LOADERS[view]();
   bridge.haptic();
 }
+
+window.addEventListener('popstate', function(e){
+  let v = (e.state && e.state.v) || (location.hash || '').replace('#', '') || 'home';
+  if(!document.getElementById('v-' + v)) v = 'home';
+  go(v, true);
+});
 
 /* ---------- энергия в интерфейсе ---------- */
 function paintEnergy(){
@@ -2881,6 +2961,11 @@ function paintEnergy(){
   if(fill){
     const max = Math.max(S.energyMax, S.energy);
     fill.style.width = Math.max(3, Math.round(S.energy / max * 100)) + '%';
+  }
+  const tbf = document.getElementById('tb-fill');
+  if(tbf){
+    const tmax = Math.max(S.energyMax, S.energy, 1);
+    tbf.style.width = Math.max(3, Math.round(S.energy / tmax * 100)) + '%';
   }
   const st = document.getElementById('pf-streak'), al = document.getElementById('alm-streak');
   if(st) st.textContent = S.streak;
@@ -3213,7 +3298,8 @@ async function boot(){
   paintProfile();
   loadProfileSub();
   paintDaily();
-  go('home');
+  const startHash = (location.hash || '').replace('#', '');
+  go(startHash && document.getElementById('v-' + startHash) ? startHash : 'home');
   loadCalendar();
   loadBonusBanner();
   renderSpreads();
@@ -3238,7 +3324,7 @@ function arcName(n){
   return (i >= 0 && i < 22) ? list[i] : String(n);
 }
 const MXP = {
-  ru:{a:'Характер и личность',b:'Таланты и эмоции',c:'Задача из прошлого',d:'Кармическая зона',center:'Зона комфорт��',f:'Род отца — духовное',g:'Род матери — духовное',h:'Точка баланса',i:'Род отца — материальное',sky:'Небо: духовное предназначение',earth:'Земля: материальное предназначение',personal_purpose:'Личное предназначение · до 40',social_purpose:'Социальное предназначение · 40–60',general_purpose:'Общее предназначение · 60+',love:'Линия любви',money:'Линия денег',karmic_tail:'Кармический хвост'},
+  ru:{a:'Характер и личность',b:'Таланты и эмоции',c:'Задача из прошлого',d:'Кармическая зона',center:'Зона комфорта',f:'Род отца — духовное',g:'Род матери — духовное',h:'Точка баланса',i:'Род отца — материальное',sky:'Небо: духовное предназначение',earth:'Земля: материальное предназначение',personal_purpose:'Личное предназначение · до 40',social_purpose:'Социальное предназначение · 40–60',general_purpose:'Общее предназначение · 60+',love:'Линия любви',money:'Линия денег',karmic_tail:'Кармический хвост'},
   en:{a:'Character and personality',b:'Talents and emotions',c:'Task from the past',d:'Karmic zone',center:'Comfort zone',f:'Father line — spiritual',g:'Mother line — spiritual',h:'Balance point',i:'Father line — material',sky:'Sky: spiritual purpose',earth:'Earth: material purpose',personal_purpose:'Personal purpose · before 40',social_purpose:'Social purpose · 40–60',general_purpose:'General purpose · 60+',love:'Love line',money:'Money line',karmic_tail:'Karmic tail'}
 };
 const MX_ORDER = ['center','a','b','c','d','f','g','h','i','sky','earth','personal_purpose','social_purpose','general_purpose','love','money','karmic_tail'];
@@ -3636,7 +3722,7 @@ const DREAM_SYMBOLS = [
   { ru:['Падение','Потеря контроля там, где вы держитесь из последних сил.'], en:['Falling','Losing control where you are holding on too hard.'], g:'fall' },
   { ru:['Дом','Ваша личность: комнаты — её части.'], en:['A house','Your psyche: the rooms are its parts.'], g:'house' },
   { ru:['Погоня','То, от чего вы отказываетесь встретиться лицом к лицу.'], en:['Being chased','What you refuse to face directly.'], g:'loop' },
-  { ru:['Смерть','Почти никогда о смерти — чаще о ��онце роли.'], en:['Death','Almost never literal — usually the end of a role.'], g:'endrole' },
+  { ru:['Смерть','Почти никогда о смерти — чаще о конце роли.'], en:['Death','Almost never literal — usually the end of a role.'], g:'endrole' },
   { ru:['Незнакомец','Ваша тень: черты, которые вы не признаёте своими.'], en:['A stranger','Your shadow: traits you do not claim as yours.'], g:'shadow' }
 ];
 function renderDreamSymbols(){
@@ -4063,7 +4149,7 @@ async function setLang(code){
 
 /* ---------- приглашения ---------- */
 function refLink(){
-  /* Бэкенд ищет ��ригласившего по ВНУТРЕННЕМУ id (User.id) — он приходит в ref_code.
+  /* Бэкенд ищет пригласившего по ВНУТРЕННЕМУ id (User.id) — он приходит в ref_code.
      bridge.userId — это tg_id / google_id, по нему рефка не находилась и молча терялась. */
   const id = S.refCode || bridge.userId;
   const base = (window.location && window.location.origin && window.location.origin.indexOf('http') === 0) ? window.location.origin : 'https://neotaro.ru';
@@ -4160,7 +4246,7 @@ async function claimBonus(){
 }
 
 /* ============================ НАТАЛЬНАЯ КАРТА ============================ */
-/* Вся математика и все тексты приходят с бэка. Здесь только отри��овка:
+/* Вся математика и все тексты приходят с бэка. Здесь только отрисовка:
    дублировать астрологические расчёты на фронте — гарантированно расхождение цифр. */
 const NK_SIGN = {
   aries:['Овен','Aries','Aries','B\u00e9lier','Widder'],
@@ -4302,7 +4388,7 @@ function hookKind(k){
 }
 
 /* Заголовки тизеров собираются из посчитанных данных — человек видит, что
-   система действительно разобрала его карту, а не показывает пуст��й замок. */
+   система действительно разобрала его карту, а не показывает пустой замок. */
 function hookText(h){
   const p = h.payload || {};
   if(h.kind === 'stellium') return (p.bodies || []).map(nkBody).join(' \u00b7 ') + ' \u2014 ' + (p.where ? nkSign(p.where) : '');
@@ -4396,7 +4482,7 @@ async function openAstroSection(key){
    ---------------------------------------------------------------------------
    Никаких if(plan==='pro') в верстке. Всё решает бэкенд в access.features,
    а текст «Доступно в ПРО» берётся из required_plan_title — поэтому
-   пер��нос фичи в другой тариф не требует правки фронта вообще.
+   перенос фичи в другой тариф не требует правки фронта вообще.
    =========================================================================== */
 const IC_LOCK = '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
 const IC_OK   = '<svg viewBox="0 0 24 24"><path d="M5 13l4.5 4.5L19 7"/></svg>';
