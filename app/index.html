@@ -2237,7 +2237,7 @@ const STR = {
   auth_forgot:{ru:'Забыли пароль?',en:'Forgot password?',es:'¿Olvidó la contraseña?',fr:'Mot de passe oublié ?',de:'Passwort vergessen?'},
   auth_to_reg:{ru:'Создать аккаунт',en:'Create account',es:'Crear cuenta',fr:'Créer un compte',de:'Konto erstellen'},
   auth_to_login:{ru:'У меня уже есть аккаунт',en:'I already have an account',es:'Ya tengo una cuenta',fr:'J’ai déjà un compte',de:'Ich habe bereits ein Konto'},
-  auth_back:{ru:'Назад',en:'Back',es:'Atrás',fr:'Retour',de:'Zurück'},
+  auth_back:{ru:'Наз��д',en:'Back',es:'Atrás',fr:'Retour',de:'Zurück'},
   auth_resend:{ru:'Отправить код заново',en:'Send the code again',es:'Reenviar el código',fr:'Renvoyer le code',de:'Code erneut senden'},
   auth_resend_in:{ru:'Повторно — через {sec} с',en:'Resend in {sec} s',es:'Reenviar en {sec} s',fr:'Renvoyer dans {sec} s',de:'Erneut in {sec} s'},
   auth_forgot_note:{ru:'Пришлём код на почту — по нему зададите новый пароль.',en:'We will email you a code to set a new password.',es:'Le enviaremos un código para crear una nueva contraseña.',fr:'Nous enverrons un code pour définir un nouveau mot de passe.',de:'Wir senden einen Code für ein neues Passwort.'},
@@ -2331,7 +2331,7 @@ const STR = {
   need_q:{ru:'Напишите вопрос — без него карты молчат',en:'Write a question — without it the cards stay silent'},
 
   sub_title:{ru:'Подписка',en:'Subscription',es:'Suscripción',fr:'Abonnement',de:'Abo'},
-  sub_until:{ru:'действует до {date}',en:'active until {date}',es:'activa hasta {date}',fr:'active jusqu’au {date}',de:'aktiv bis {date}'},
+  sub_until:{ru:'действует ��о {date}',en:'active until {date}',es:'activa hasta {date}',fr:'active jusqu’au {date}',de:'aktiv bis {date}'},
   sub_canceled:{ru:'автопродление выключено',en:'auto-renewal off',es:'renovación desactivada',fr:'renouvellement désactivé',de:'Auto-Verlängerung aus'},
   sub_cancel_btn:{ru:'Отменить подписку',en:'Cancel subscription',es:'Cancelar suscripción',fr:'Résilier l’abonnement',de:'Abo kündigen'},
   sub_cancel_confirm:{ru:'Отменить подписку? Доступ сохранится до конца оплаченного периода.',en:'Cancel the subscription? Access stays until the end of the paid period.',es:'¿Cancelar la suscripción? El acceso dura hasta el final del periodo pagado.',fr:'Résilier l’abonnement ? L’accès reste jusqu’à la fin de la période payée.',de:'Abo kündigen? Zugang bleibt bis zum Ende der bezahlten Periode.'},
@@ -2927,6 +2927,7 @@ async function loadProfileSub(){
   if(!box) return;
   const d = await api('/subscription/status', 'GET', {}, true);
   if(!d || !d.success || !d.access){ box.innerHTML = ''; return; }
+  S.recurring = !!d.recurring_enabled;
   const acc = d.access, sub = d.subscription;
   if(acc.paid && sub){
     const dateStr = sub.expires_at
@@ -4783,6 +4784,7 @@ function handleGate(d){
 /* После оплаты/триала обновляем доступы без перезагрузки страницы. */
 async function refreshAccess(){
   const d = await api('/subscription/status', 'GET', {}, true);
+  if(d && d.success) S.recurring = !!d.recurring_enabled;
   if(d && d.success && d.access && d.access.features){
     S.access = d.access;
     if(typeof renderSpreads === 'function' && S.view === 'spreads') renderSpreads();
@@ -4915,7 +4917,7 @@ async function astroSubscribe(plan){
   /* Явное согласие на автосписания ДО оплаты. Без него любой спор с банком
      проигран заранее: подтвердить, что человека предупредили, будет нечем. */
   const per = (S.per === 'year') ? tt('per_year') : tt('per_month');
-  if(!confirm(tt('sub_recurring_consent').replace('{per}', per))) return;
+  if(S.recurring && !confirm(tt('sub_recurring_consent').replace('{per}', per))) return;
   toast(tt('wait'));
   const d = await api('/subscription/invoice-rub', 'POST', { plan: plan, period: S.per });
   hideToast();
