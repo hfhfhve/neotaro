@@ -666,6 +666,7 @@ body.chat-mode .chat-head{padding-top:16px}
 @media (max-width:900px){.scroll{padding-bottom:calc(var(--dock) + var(--sab) + 48px)}}
 
 /* ============ МОБИЛЬНАЯ НАВИГАЦИЯ v2 ============ */
+.cl-mk{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;margin-top:1px;border:1px solid;border-radius:50%;font-family:var(--mono);font-size:12px;line-height:1;font-weight:600;opacity:.9}
 .vback{display:none;align-items:center;gap:8px;margin:0 0 18px;padding:9px 15px 9px 11px;border:1px solid var(--line-soft);border-radius:999px;background:rgba(18,24,41,.6);color:var(--mist);font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .2s,border-color .2s}
 .vback svg{width:15px;height:15px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .vback:active{border-color:var(--line);color:var(--ivory)}
@@ -2431,6 +2432,7 @@ const STR = {
   cl_dos:{ru:'Идёт легко',en:'Flows easily',es:'Fluye fácil',fr:'Coule facilement',de:'Läuft leicht'},
   cl_donts:{ru:'Лучше отложить',en:'Better postponed',es:'Mejor posponer',fr:'À reporter',de:'Besser verschieben'},
   cl_love:{ru:'Любовь',en:'Love',es:'Amor',fr:'Amour',de:'Liebe'},
+  cl_horo_empty:{ru:'Прогноз на сегодня ещё готовится — загляните чуть позже.',en:'Today’s forecast is still being prepared — check back a bit later.',es:'El pronóstico de hoy se está preparando: vuelve más tarde.',fr:'Les prévisions du jour sont en cours de préparation — revenez plus tard.',de:'Die heutige Prognose wird noch erstellt — schauen Sie später vorbei.'},
   cl_money:{ru:'Финансы',en:'Money',es:'Finanzas',fr:'Finances',de:'Finanzen'},
   cl_energy:{ru:'Силы',en:'Vitality',es:'Vitalidad',fr:'Énergie',de:'Kraft'},
   cl_intuition:{ru:'Интуиция',en:'Intuition',es:'Intuición',fr:'Intuition',de:'Intuition'},
@@ -3878,10 +3880,10 @@ async function loadCalendar(){
   set('cl-desc', f.description || '');
   set('alm-lunar', f.lunar_day || '—');
   set('alm-phase', f.phase_type || '—');
-  const li = items => (items || []).map(x => `<li style="display:flex;gap:10px"><span style="color:var(--brass);flex:0 0 auto">·</span><span class="sub" style="color:var(--ivory);opacity:.88">${esc(x)}</span></li>`).join('');
+  const li = (items, sign, color) => (items || []).map(x => `<li style="display:flex;gap:10px;align-items:flex-start"><span class="cl-mk" style="color:${color};border-color:${color}">${sign}</span><span class="sub" style="color:var(--ivory);opacity:.88">${esc(x)}</span></li>`).join('');
   const dos = document.getElementById('cl-dos'), donts = document.getElementById('cl-donts');
-  if(dos) dos.innerHTML = li(f.dos);
-  if(donts) donts.innerHTML = li(f.donts);
+  if(dos) dos.innerHTML = li(f.dos, '+', 'var(--verdigris)');
+  if(donts) donts.innerHTML = li(f.donts, '\u2212', 'var(--ember)');
   if(f.matrix){
     set('cl-love', f.matrix.love || '—');
     set('cl-money', f.matrix.finance || '—');
@@ -3890,7 +3892,7 @@ async function loadCalendar(){
   }
   if(data.zodiac){ set('cl-sign', data.zodiac); set('alm-sign', data.zodiac); }
   const h = document.getElementById('cl-horo');
-  if(h) h.innerHTML = clean(data.horoscope || '');
+  if(h) h.innerHTML = data.horoscope ? clean(data.horoscope) : `<span class="sub" style="opacity:.7">${esc(tt('cl_horo_empty'))}</span>`;
 }
 
 /* ============================ ПРОФИЛЬ ============================ */
