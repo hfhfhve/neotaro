@@ -2317,6 +2317,9 @@ const STR = {
   cat_career:{ru:'Дело и деньги',en:'Work and money',es:'Trabajo y dinero',fr:'Travail et argent',de:'Arbeit und Geld'},
   cat_deep:{ru:'Глубинные',en:'Deep work',es:'Profundas',fr:'Profondes',de:'Tiefenarbeit'},
   cat_elite:{ru:'Большие расклады · ПРО',en:'Grand spreads · PRO',es:'Tiradas mayores · PRO',fr:'Grands tirages · PRO',de:'Grosse Legungen · PRO'},
+  pl_energy_mo:{ru:'⚡ {n} энергии каждый месяц',en:'⚡ {n} energy every month',es:'⚡ {n} de energía cada mes',fr:'⚡ {n} d’énergie chaque mois',de:'⚡ {n} Energie jeden Monat'},
+  shop_disc_on:{ru:'Твоя скидка −{n}% уже в цене',en:'Your −{n}% discount is already applied',es:'Tu descuento −{n}% ya está aplicado',fr:'Votre remise −{n}% est déjà appliquée',de:'Dein −{n}% Rabatt ist bereits enthalten'},
+  shop_disc_off:{ru:'С подпиской все пакеты дешевле — до −{n}%',en:'With a plan every pack is up to −{n}% cheaper',es:'Con suscripción todo hasta −{n}% más barato',fr:'Avec un abonnement, jusqu’à −{n}% de moins',de:'Mit Abo bis zu −{n}% günstiger'},
   table_q_label:{ru:'Ваш вопрос',en:'Your question',es:'Tu pregunta',fr:'Votre question',de:'Deine Frage'},
   table_q_ph:{ru:'Спрашивайте о одной ситуации: что происходит, чего вы хотите и что мешает.',en:'Ask about one situation: what is happening, what you want, what is in the way.'},
   table_hint:{ru:'Открытые вопросы дают больше',en:'Open questions give more'},
@@ -3938,12 +3941,30 @@ async function loadShop(){
   const data = await api('/shop/items', 'GET');
   if(!data || !data.success || !data.items){ box.innerHTML = `<div class="empty"><div class="g">${IC.bolt}</div><p>${esc(tt('err'))}</p></div>`; return; }
   S.shop = data.items;
-  box.innerHTML = data.items.map(it => {
+  /* Скидка по тарифу должна быть ВИДНА. Раньше бэк её считал, а экран показывал
+     просто итоговую цифру — подписчик не видел, что ему сделали дешевле, а free
+     не видел причины подписаться ровно в тот момент, когда уже готов платить. */
+  const dpct = Number(data.discount_pct || 0);
+  const maxd = Number((S.plansData && (S.plansData.plans || []).reduce(function(m, p){
+    return Math.max(m, Number(p.shop_discount_pct || 0));
+  }, 0)) || 0);
+  let note = '';
+  if(dpct > 0){
+    note = '<div class="panel panel-pad" style="grid-column:1/-1;padding:12px 16px;border-color:var(--verdigris)">'
+         + '<span class="label" style="color:var(--verdigris)">' + esc(tt('shop_disc_on').replace('{n}', dpct)) + '</span></div>';
+  } else if(maxd > 0){
+    note = '<div class="panel panel-pad" style="grid-column:1/-1;padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">'
+         + '<span class="label" style="flex:1;min-width:180px">' + esc(tt('shop_disc_off').replace('{n}', maxd)) + '</span>'
+         + '<button class="btn btn-line" onclick="goPlans(\'energy.monthly\')">' + esc(tt('pw_open_plans')) + '</button></div>';
+  }
+  box.innerHTML = note + data.items.map(it => {
     const price = it.price_rub != null ? (it.price_rub + ' ₽') : (it.price_usd + ' $');
+    const base = (it.price_rub_base && it.price_rub != null && it.price_rub_base > it.price_rub)
+      ? '<span class="plx-old">' + Math.round(it.price_rub_base) + ' ₽</span> ' : '';
     return `<button class="tile" onclick="pickPack('${it.id}')">
       <span class="tg num">${it.amount}</span>
       <h4>${esc(tt('energy_unit'))}</h4>
-      <p><span class="num">${price}</span></p>
+      <p>${base}<span class="num">${price}</span></p>
       <span class="foot">${esc(tt('shop_pick'))} →</span>
     </button>`;
   }).join('');
@@ -3984,7 +4005,7 @@ function pickPack(id){
   if(!it) return;
   S.shopPick = it;
   document.getElementById('buy-title').textContent = it.amount + ' ' + tt('energy_unit');
-  document.getElementById('buy-sub').textContent = tt('shop_note');
+  document.getElementById('buy-sub').textContent = (it.discount_pct ? tt('shop_disc_on').replace('{n}', it.discount_pct) + ' · ' : '') + tt('shop_note');
   document.getElementById('buy-rub-val').textContent = (it.price_rub != null ? it.price_rub + ' ₽' : it.price_usd + ' $');
   openSheet('buy');
 }
@@ -4755,6 +4776,8 @@ function paintPlans(){
           (yearly ? '<span class="plx-old">' + Math.round(p.price_rub) + ' \u20bd</span>' : '') +
           '<span class="num">' + price + '</span><span class="cur">\u20bd</span><span class="per">' + esc(tt('pl_month')) + '</span></div>' +
         '<div class="plx-bill">' + bill + '</div>' +
+        /* Главное содержание подписки — энергия. Число приходит из БД. */
+        (p.monthly_energy ? '<div class="plx-bill" style="color:var(--brass)">' + esc(tt('pl_energy_mo').replace('{n}', p.monthly_energy)) + '</div>' : '') +
         (saved > 0 ? '<span class="plx-save">' + esc(tt('pl_save').replace('{sum}', saved)) + '</span>' : '') +
         (hl.length ? '<ul class="plx-hl">' + hl.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '') +
         (isCur
