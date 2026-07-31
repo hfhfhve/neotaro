@@ -36,6 +36,15 @@
     "url": "https://neotaro.ru/"
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "NEOTARO",
+    "url": "https://neotaro.ru/",
+    "logo": "https://neotaro.ru/apple-touch-icon.png"
+  }
+  </script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -666,6 +675,13 @@ body.chat-mode .chat-head{padding-top:16px}
 @media (max-width:900px){.scroll{padding-bottom:calc(var(--dock) + var(--sab) + 48px)}}
 
 /* ============ МОБИЛЬНАЯ НАВИГАЦИЯ v2 ============ */
+/* потянуть вниз = обновить (только телефон) */
+.ptr{position:fixed;left:50%;top:calc(var(--sat) + 4px);z-index:60;display:none;width:34px;height:34px;margin-left:-17px;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--line);background:rgba(11,15,30,.94);opacity:0;transform:translateY(-52px);pointer-events:none;will-change:transform,opacity}
+.ptr i{display:block;width:15px;height:15px;border-radius:50%;border:1.6px solid var(--line-soft);border-top-color:var(--brass)}
+.ptr.is-busy{opacity:1 !important;transform:translateY(6px) !important;transition:transform .2s ease,opacity .2s ease}
+.ptr.is-busy i{animation:sp .7s linear infinite}
+.ptr.is-off{opacity:0 !important;transform:translateY(-52px) !important;transition:transform .28s ease,opacity .28s ease}
+@media (max-width:900px){.ptr{display:flex}}
 .cl-mk{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;margin-top:1px;border:1px solid;border-radius:50%;font-family:var(--mono);font-size:12px;line-height:1;font-weight:600;opacity:.9}
 .vback{display:none;align-items:center;gap:8px;margin:0 0 18px;padding:9px 15px 9px 11px;border:1px solid var(--line-soft);border-radius:999px;background:rgba(18,24,41,.6);color:var(--mist);font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .2s,border-color .2s}
 .vback svg{width:15px;height:15px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
@@ -1258,6 +1274,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
     </header>
 
     <div class="scroll" id="scroll">
+      <div class="ptr" id="ptr" aria-hidden="true"><i></i></div>
       <div class="wrap">
 
         <button class="vback" id="vback" type="button" onclick="goBack()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg><span data-t="vback_practices">Практики</span></button>
@@ -1302,7 +1319,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
               <p class="lead" id="home-lead" data-t="home_lead_empty">Нажмите на карту в центре циферблата. Один аркан из семидесяти восьми закрепится за этими сутками — с разбором от оракула.</p>
               <div class="today-acts">
                 <button class="btn btn-brass" onclick="openDaily()" id="home-cta" data-t="home_cta_empty">Перевернуть карту</button>
-                <button class="btn btn-line" onclick="go('spreads')" data-t="home_cta_spreads">Собрать расклад</button>
+                <button class="btn btn-line" onclick="goSpreadCta()" data-t="home_cta_spreads">Собрать расклад</button>
               </div>
             </div>
           </div>
@@ -2948,6 +2965,131 @@ const LOADERS = {
 var BACK_TO = null;
 var BACKABLE = ['spreads','table','dream','astro','syn','matrix','calendar'];
 function goBack(){ go(BACK_TO || 'practices'); }
+
+/* На телефоне «Собрать расклад» ведёт в Практики — там виден весь набор.
+   На ПК плитки практик и так на главной, поэтому поведение прежнее. */
+function goSpreadCta(){
+  var mob = window.matchMedia && window.matchMedia('(max-width:900px)').matches;
+  go(mob ? 'practices' : 'spreads');
+}
+
+/* ---------- потянуть вниз = обновить ---------- */
+async function refreshCurrent(){
+  if(typeof refreshAccess === 'function'){ try{ await refreshAccess(); }catch(e){} }
+  if(typeof paintEnergy === 'function'){ try{ paintEnergy(); }catch(e){} }
+  if(typeof paintDates === 'function'){ try{ paintDates(); }catch(e){} }
+
+  var view = (typeof S !== 'undefined' && S.view) ? S.view : 'home';
+  var f = (typeof LOADERS !== 'undefined') ? LOADERS[view] : null;
+  if(f){ try{ await f(); }catch(e){} }
+
+  if(view === 'home'){
+    if(typeof paintDaily === 'function'){ try{ paintDaily(); }catch(e){} }
+    if(typeof loadCalendar === 'function'){ try{ await loadCalendar(); }catch(e){} }
+    if(typeof loadBonusBanner === 'function'){ try{ await loadBonusBanner(); }catch(e){} }
+  }
+}
+
+(function initPullToRefresh(){
+  function setup(){
+    var sc = document.getElementById('scroll');
+    var ptr = document.getElementById('ptr');
+    if(!sc || !ptr) return;
+
+    var TH = 70;          // порог срабатывания
+    var MAXP = 104;       // дальше не тянется
+    var startY = 0, dist = 0, pulling = false, busy = false, armed = false;
+
+    function isMobile(){
+      return window.matchMedia && window.matchMedia('(max-width:900px)').matches;
+    }
+
+    function paint(d){
+      ptr.classList.remove('is-off');
+      ptr.style.transition = '';
+      ptr.style.transform = 'translateY(' + (d - 52) + 'px)';
+      ptr.style.opacity = Math.min(d / TH, 1);
+      var ic = ptr.firstElementChild;
+      if(ic) ic.style.transform = 'rotate(' + Math.round(d * 3.2) + 'deg)';
+    }
+
+    function reset(){
+      dist = 0;
+      ptr.style.transform = '';
+      ptr.style.opacity = '';
+      ptr.classList.add('is-off');
+      var ic = ptr.firstElementChild;
+      if(ic) ic.style.transform = '';
+      setTimeout(function(){ ptr.classList.remove('is-off'); }, 300);
+    }
+
+    async function run(){
+      busy = true;
+      ptr.classList.remove('is-off');
+      ptr.classList.add('is-busy');
+      ptr.style.transform = '';
+      ptr.style.opacity = '';
+      var started = Date.now();
+      try{ await refreshCurrent(); }catch(e){}
+      // минимум 550 мс, иначе спиннер моргает и кажется, что ничего не произошло
+      var left = 550 - (Date.now() - started);
+      if(left > 0) await new Promise(function(r){ setTimeout(r, left); });
+      ptr.classList.remove('is-busy');
+      reset();
+      busy = false;
+    }
+
+    sc.addEventListener('touchstart', function(e){
+      armed = false;
+      pulling = false;
+      if(busy || !isMobile()) return;
+      if(e.touches.length !== 1) return;
+      if(sc.scrollTop > 0) return;
+      startY = e.touches[0].clientY;
+      armed = true;
+      dist = 0;
+    }, {passive:true});
+
+    sc.addEventListener('touchmove', function(e){
+      if(!armed || busy) return;
+      var d = e.touches[0].clientY - startY;
+      if(d <= 0){
+        if(pulling){ pulling = false; reset(); }
+        return;
+      }
+      if(sc.scrollTop > 0){
+        armed = false;
+        if(pulling){ pulling = false; reset(); }
+        return;
+      }
+      pulling = true;
+      dist = Math.min(d * 0.55, MAXP);
+      paint(dist);
+      // гасим родной оверскролл, чтобы не дёргалась вся страница
+      if(e.cancelable) e.preventDefault();
+    }, {passive:false});
+
+    function finish(){
+      if(!armed){ return; }
+      armed = false;
+      if(!pulling){ return; }
+      pulling = false;
+      if(dist >= TH){
+        try{ if(window.bridge && bridge.haptic) bridge.haptic(); }catch(e){}
+        run();
+      } else {
+        reset();
+      }
+    }
+
+    sc.addEventListener('touchend', finish, {passive:true});
+    sc.addEventListener('touchcancel', finish, {passive:true});
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
+  else setup();
+})();
+
 function go(view, fromPop){
   const prevView = S.view;
   S.view = view;
