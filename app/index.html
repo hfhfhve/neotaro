@@ -2316,6 +2316,7 @@ const STR = {
   cat_love:{ru:'Отношения',en:'Relationships',es:'Relaciones',fr:'Relations',de:'Beziehungen'},
   cat_career:{ru:'Дело и деньги',en:'Work and money',es:'Trabajo y dinero',fr:'Travail et argent',de:'Arbeit und Geld'},
   cat_deep:{ru:'Глубинные',en:'Deep work',es:'Profundas',fr:'Profondes',de:'Tiefenarbeit'},
+  cat_elite:{ru:'Большие расклады · ПРО',en:'Grand spreads · PRO',es:'Tiradas mayores · PRO',fr:'Grands tirages · PRO',de:'Grosse Legungen · PRO'},
   table_q_label:{ru:'Ваш вопрос',en:'Your question',es:'Tu pregunta',fr:'Votre question',de:'Deine Frage'},
   table_q_ph:{ru:'Спрашивайте о одной ситуации: что происходит, чего вы хотите и что мешает.',en:'Ask about one situation: what is happening, what you want, what is in the way.'},
   table_hint:{ru:'Открытые вопросы дают больше',en:'Open questions give more'},
@@ -3602,7 +3603,7 @@ async function renderSpreads(){
     if(!data || !data.success || !data.spreads){ box.innerHTML = `<div class="empty"><div class="g">${IC.cards}</div><p>${esc(tt('err'))}</p></div>`; return; }
     S.spreads = data.spreads;
   }
-  const cats = [['basic','cat_basic'],['love','cat_love'],['career','cat_career'],['deep','cat_deep']];
+  const cats = [['elite','cat_elite'],['basic','cat_basic'],['love','cat_love'],['career','cat_career'],['deep','cat_deep']];
   let html = '';
   cats.forEach(([id, key]) => {
     const items = S.spreads.filter(s => s.category === id);
