@@ -1403,7 +1403,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 
           <div class="orn prx-grp"><span class="eyebrow" data-t="prx_grp_cards">Карты и сны</span></div>
           <div class="pgrid">
-            <button class="pcell" onclick="go('spreads')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg><b data-t="nav_spreads">Расклады</b><span data-t="prx_h_spreads">Карты на вопрос</span></button>
+            <button class="pcell" onclick="go('spreads')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg><b data-t="nav_spreads">Расклады</b><span data-t="prx_h_spreads">Карты на воп��ос</span></button>
             <button class="pcell" onclick="go('dream')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 3.4a8.6 8.6 0 100 17.2 8.9 8.9 0 01-3.6-8.6 8.9 8.9 0 013.6-8.6z"/></svg><b data-t="nav_dream">Сонник</b><span data-t="prx_h_dream">Толкование снов</span></button>
           </div>
 
@@ -1638,7 +1638,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <button class="btn btn-quiet btn-sm" onclick="go('settings')" style="margin-bottom:14px">← <span data-t="pf_settings">Настройки</span></button>
           <div class="eyebrow" style="margin-bottom:12px" data-t="mem_title">Хроника</div>
           <h1 class="h1" data-t="mem_h1">Оракул помнит вашу историю</h1>
-          <p class="sub" data-t="mem_lead">Здесь всё, что оракул запомнил из ваших разговоров, раскладов и снов. Вы управляете этим полностью: любую запись можно убрать в один касательный жест.</p>
+          <p class="sub" data-t="mem_lead">Здесь всё, что оракул запомнил из ваших разговоров, раскладов и снов. Вы управляете эти�� полностью: любую запись можно убрать в один касательный жест.</p>
 
           <div class="stack" style="margin-top:18px">
             <div class="rowcard">
@@ -2336,6 +2336,17 @@ const STR = {
   sub_cancel_btn:{ru:'Отменить подписку',en:'Cancel subscription',es:'Cancelar suscripción',fr:'Résilier l’abonnement',de:'Abo kündigen'},
   sub_cancel_confirm:{ru:'Отменить подписку? Доступ сохранится до конца оплаченного периода.',en:'Cancel the subscription? Access stays until the end of the paid period.',es:'¿Cancelar la suscripción? El acceso dura hasta el final del periodo pagado.',fr:'Résilier l’abonnement ? L’accès reste jusqu’à la fin de la période payée.',de:'Abo kündigen? Zugang bleibt bis zum Ende der bezahlten Periode.'},
   sub_cancel_done:{ru:'Подписка отменена — доступ до конца периода',en:'Subscription canceled — access until the end of the period',es:'Suscripción cancelada — acceso hasta el final del periodo',fr:'Abonnement résilié — accès jusqu’à la fin de la période',de:'Abo gekündigt — Zugang bis Periodenende'},
+  pm_block:{ru:'Способ оплаты',en:'Payment method',es:'Método de pago',fr:'Moyen de paiement',de:'Zahlungsmethode'},
+  pm_next:{ru:'следующее списание {date} — {sum} ₽',en:'next charge on {date} — {sum} ₽',es:'próximo cargo {date} — {sum} ₽',fr:'prochain prélèvement {date} — {sum} ₽',de:'nächste Abbuchung {date} — {sum} ₽'},
+  pm_unbind_btn:{ru:'Отвязать',en:'Unbind',es:'Desvincular',fr:'Délier',de:'Entfernen'},
+  pm_unbind_note:{ru:'доступ сохранится до конца оплаченного периода',en:'access stays until the end of the paid period',es:'el acceso dura hasta el final del periodo pagado',fr:'l’accès reste jusqu’à la fin de la période payée',de:'Zugang bleibt bis zum Ende der bezahlten Periode'},
+  pm_unbind_confirm:{ru:'Отвязать способ оплаты? Автопродление отключится, доступ сохранится до конца оплаченного периода.',en:'Unbind the payment method? Auto-renewal will stop, access stays until the end of the paid period.',es:'¿Desvincular el método de pago? La renovación se detiene, el acceso dura hasta el final del periodo pagado.',fr:'Délier le moyen de paiement ? Le renouvellement s’arrête, l’accès reste jusqu’à la fin de la période payée.',de:'Zahlungsmethode entfernen? Auto-Verlängerung stoppt, Zugang bleibt bis zum Ende der bezahlten Periode.'},
+  pm_unbind_done:{ru:'Способ оплаты отвязан',en:'Payment method unbound',es:'Método de pago desvinculado',fr:'Moyen de paiement délié',de:'Zahlungsmethode entfernt'},
+  pm_failed:{ru:'последнее списание не прошло — проверьте карту',en:'last charge failed — check your card',es:'el último cargo falló — revise su tarjeta',fr:'dernier prélèvement échoué — vérifiez la carte',de:'letzte Abbuchung fehlgeschlagen — Karte prüfen'},
+  per_month:{ru:'месяц',en:'month',es:'mes',fr:'mois',de:'Monat'},
+  per_year:{ru:'год',en:'year',es:'año',fr:'an',de:'Jahr'},
+  sub_recurring_consent:{ru:'Подписка продлевается автоматически раз в {per}, пока вы её не отмените. Отменить и отвязать карту можно в любой момент: Профиль → Подписка. Продолжить?',en:'The subscription renews automatically every {per} until you cancel. You can cancel and unbind the card anytime: Profile → Subscription. Continue?',es:'La suscripción se renueva automáticamente cada {per} hasta que la cancele. Puede cancelar y desvincular la tarjeta cuando quiera: Perfil → Suscripción. ¿Continuar?',fr:'L’abonnement se renouvelle automatiquement chaque {per} jusqu’à résiliation. Vous pouvez résilier et délier la carte à tout moment : Profil → Abonnement. Continuer ?',de:'Das Abo verlängert sich automatisch jeden {per}, bis Sie kündigen. Kündigen und Karte entfernen jederzeit möglich: Profil → Abo. Fortfahren?'},
+  sub_terms_btn:{ru:'Условия подписки',en:'Subscription terms',es:'Condiciones de suscripción',fr:'Conditions d’abonnement',de:'Abo-Bedingungen'},
   sub_free_title:{ru:'Бесплатный тариф',en:'Free plan',es:'Plan gratis',fr:'Offre gratuite',de:'Gratis-Tarif'},
   sub_free_note:{ru:'ПЛЮС и ПРО дают энергию каждый месяц и закрытые разделы',en:'PLUS and PRO give monthly energy and locked sections',es:'PLUS y PRO dan energía mensual y secciones cerradas',fr:'PLUS et PRO donnent de l’énergie chaque mois et les sections verrouillées',de:'PLUS und PRO geben monatliche Energie und gesperrte Bereiche'},
   subs_eyebrow:{ru:'NEOTARO · ПОДПИСКА',en:'NEOTARO · MEMBERSHIP',es:'NEOTARO · SUSCRIPCIÓN',fr:'NEOTARO · ABONNEMENT',de:'NEOTARO · MITGLIEDSCHAFT'},
@@ -2375,7 +2386,7 @@ const STR = {
   th_sub:{ru:'Выбор сохраняется и переносится на все ваши устройства.',en:'Your choice is saved and follows you across devices.',es:'Tu elección se guarda y te sigue en todos los dispositivos.',fr:'Votre choix est enregistré et vous suit sur tous vos appareils.',de:'Deine Wahl wird gespeichert und gilt auf allen Geräten.'},
   th_saved:{ru:'Оформление изменено',en:'Appearance changed',es:'Apariencia cambiada',fr:'Apparence modifiée',de:'Erscheinungsbild geändert'},
   th_ink:{ru:'Чернила',en:'Ink',es:'Tinta',fr:'Encre',de:'Tinte'},
-  th_ink_note:{ru:'Ночной атлас, как было',en:'The night atlas, as before',es:'El atlas nocturno, como antes',fr:'L’atlas nocturne, comme avant',de:'Der Nachtatlas, wie zuvor'},
+  th_ink_note:{ru:'Ночной ��тлас, как было',en:'The night atlas, as before',es:'El atlas nocturno, como antes',fr:'L’atlas nocturne, comme avant',de:'Der Nachtatlas, wie zuvor'},
   th_obsidian:{ru:'Обсидиан',en:'Obsidian',es:'Obsidiana',fr:'Obsidienne',de:'Obsidian'},
   th_obsidian_note:{ru:'Глубокий чёрный градиент',en:'Deep black gradient',es:'Degradado negro profundo',fr:'Dégradé noir profond',de:'Tiefschwarzer Verlauf'},
   th_dawn:{ru:'Рассвет',en:'Dawn',es:'Alba',fr:'Aube',de:'Morgen'},
@@ -2922,7 +2933,31 @@ async function loadProfileSub(){
       ? new Date(sub.expires_at).toLocaleDateString(S.lang || 'ru', { day:'numeric', month:'long', year:'numeric' })
       : '—';
     const cancelled = !!sub.cancel_at_period_end;
-    // Кнопки самостоятельной отмены здесь больше нет — только статус и апгрейд.
+
+    /* Блок "Способ оплаты" — требование ЮKassa для автоплатежей:
+       покупатель должен отвязать карту САМ, без обращения в поддержку.
+       Рядом — что привязано и когда/сколько спишут, иначе кнопка висит в вакууме. */
+    let pmHtml = '';
+    if(sub.has_payment_method){
+      const nextStr = sub.next_charge_at
+        ? new Date(sub.next_charge_at).toLocaleDateString(S.lang || 'ru', { day:'numeric', month:'long' })
+        : '';
+      const nextLine = (sub.next_charge_at && sub.next_charge_amount)
+        ? esc(tt('pm_next').replace('{date}', nextStr).replace('{sum}', Math.round(sub.next_charge_amount)))
+        : esc(tt('pm_unbind_note'));
+      pmHtml = `<div style="border-top:1px solid rgba(128,128,128,.25);margin-top:14px;padding-top:14px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+        <div>
+          <div class="label">${esc(tt('pm_block'))}</div>
+          <div style="margin-top:4px">${esc(sub.payment_method_title || tt('pm_block'))}</div>
+          <div class="label" style="margin-top:4px">${nextLine}</div>
+          ${sub.failed_charges ? `<div class="label" style="margin-top:4px;opacity:.9">${esc(tt('pm_failed'))}</div>` : ''}
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-quiet btn-sm" onclick="unbindPaymentMethod()">${esc(tt('pm_unbind_btn'))}</button>
+          ${cancelled ? '' : `<button class="btn btn-quiet btn-sm" onclick="cancelSub()">${esc(tt('sub_cancel_btn'))}</button>`}
+        </div>
+      </div>`;
+    }
     box.innerHTML = `<div class="panel panel-pad">
       <div style="display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap">
         <div>
@@ -2935,6 +2970,8 @@ async function loadProfileSub(){
           <button class="btn btn-quiet btn-sm" onclick="goPlans()">${esc(tt('sub_manage_btn'))}</button>
         </div>
       </div>
+      ${pmHtml}
+      <div class="label" style="margin-top:12px"><a href="#" onclick="showSubTerms();return false">${esc(tt('sub_terms_btn'))}</a></div>
     </div>`;
   } else {
     box.innerHTML = `<button class="rowcard" onclick="goPlans()">
@@ -2950,6 +2987,40 @@ async function cancelSub(){
   const d = await api('/subscription/cancel', 'POST');
   if(d && d.success){ toast(tt('sub_cancel_done')); loadProfileSub(); refreshAccess(); }
   else toast(tt('err'));
+}
+
+/* Отвязка способа оплаты. Именно эта кнопка — условие ЮKassa для
+   включения автоплатежей. Отдельная от cancelSub(): "отменить подписку" и
+   "убрать мою карту" — для человека два разных действия. */
+async function unbindPaymentMethod(){
+  if(!confirm(tt('pm_unbind_confirm'))) return;
+  if(bridge.haptic) bridge.haptic();
+  const d = await api('/subscription/payment-method/unbind', 'POST', {}, true);
+  if(d && d.success){ toast(tt('pm_unbind_done')); loadProfileSub(); refreshAccess(); }
+  else toast(tt('err'));
+}
+
+/* Условия подписки — оверлей без отдельной страницы и без зависимостей.
+   На этот текст смотрят ЮKassa и банк при споре "я не соглашался на списание". */
+function showSubTerms(){
+  const old = document.getElementById('sub-terms-ov');
+  if(old){ old.remove(); return; }
+  const ov = document.createElement('div');
+  ov.id = 'sub-terms-ov';
+  ov.setAttribute('style', 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.72);display:flex;align-items:flex-end;justify-content:center;padding:0');
+  ov.onclick = function(e){ if(e.target === ov) ov.remove(); };
+  ov.innerHTML = '<div style="background:var(--panel,#12172b);color:inherit;max-width:640px;width:100%;max-height:86vh;overflow:auto;border-radius:18px 18px 0 0;padding:22px 20px 30px;line-height:1.55;font-size:14px">' +
+    '<div class="h3" style="margin-bottom:4px">Условия подписки NEOTARO</div>' +
+    '<div class="label" style="margin-bottom:14px">Редакция от 31 июля 2026</div>' +
+    '<p><b>Что входит.</b> Подписка даёт доступ к закрытым разделам NEOTARO и начисление энергии каждый период. Состав тарифов и цены указаны на экране тарифов.</p>' +
+    '<p><b>Стоимость и периодичность.</b> Сумма и срок (месяц или год) показываются до оплаты. Оплата проводится через ЮKassa; реквизиты карты сервис не получает и не хранит.</p>' +
+    '<p><b>Автопродление.</b> После первой оплаты подписка продлевается автоматически на тот же срок и по той же цене, пока вы её не отмените. Списание происходит в день окончания оплаченного периода. За сутки до списания приходит напоминание. Если платёж не прошёл, мы повторяем попытку до четырёх раз в течение 11 дней, после чего подписка останавливается, а карта отвязывается.</p>' +
+    '<p><b>Отмена и отвязка карты.</b> Отключить автопродление и отвязать способ оплаты можно самостоятельно и в любой момент: Профиль → Подписка → Способ оплаты → Отвязать. Обращаться в поддержку для этого не нужно. После отмены доступ сохраняется до конца уже оплаченного периода.</p>' +
+    '<p><b>Возврат.</b> Если списание произошло ошибочно или сервис был недоступен, напишите нам — разберёмся и вернём средства.</p>' +
+    '<p><b>Контакты.</b> support@neotaro.ru, Телеграм: @neurotarot_supportbot</p>' +
+    '<button class="btn btn-line btn-wide" style="margin-top:16px" onclick="document.getElementById(\'sub-terms-ov\').remove()">Закрыть</button>' +
+    '</div>';
+  document.body.appendChild(ov);
 }
 
 /* ---------- навигация ---------- */
@@ -4841,6 +4912,10 @@ async function renderShopPlans(force){
 async function renderAstroPlans(force){ return renderShopPlans(force); }
 
 async function astroSubscribe(plan){
+  /* Явное согласие на автосписания ДО оплаты. Без него любой спор с банком
+     проигран заранее: подтвердить, что человека предупредили, будет нечем. */
+  const per = (S.per === 'year') ? tt('per_year') : tt('per_month');
+  if(!confirm(tt('sub_recurring_consent').replace('{per}', per))) return;
   toast(tt('wait'));
   const d = await api('/subscription/invoice-rub', 'POST', { plan: plan, period: S.per });
   hideToast();
