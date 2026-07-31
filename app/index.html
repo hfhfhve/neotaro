@@ -666,6 +666,19 @@ body.chat-mode .chat-head{padding-top:16px}
 @media (max-width:900px){.scroll{padding-bottom:calc(var(--dock) + var(--sab) + 48px)}}
 
 /* ============ МОБИЛЬНАЯ НАВИГАЦИЯ v2 ============ */
+.vback{display:none;align-items:center;gap:8px;margin:0 0 18px;padding:9px 15px 9px 11px;border:1px solid var(--line-soft);border-radius:999px;background:rgba(18,24,41,.6);color:var(--mist);font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .2s,border-color .2s}
+.vback svg{width:15px;height:15px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.vback:active{border-color:var(--line);color:var(--ivory)}
+.prx-grp{margin:26px 0 12px}
+.prx-grp:first-of-type{margin-top:16px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pcell{display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:16px 13px 15px;border:1px solid var(--line-soft);border-radius:14px;background:rgba(18,24,41,.55);color:inherit;text-align:left;cursor:pointer;transition:border-color .2s,background .2s;-webkit-tap-highlight-color:transparent}
+.pcell:active{border-color:var(--line);background:rgba(18,24,41,.85)}
+.pcell .ic{width:26px;height:26px;fill:none;stroke:var(--brass);stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round}
+.pcell b{font-family:var(--serif);font-weight:400;font-size:16px;line-height:1.25;color:var(--ivory)}
+.pcell span{font-size:12px;line-height:1.4;color:var(--mist)}
+@media(max-width:900px){.vback.is-on{display:inline-flex}}
+@media(max-width:360px){.pgrid{grid-template-columns:1fr}}
 .m-only{display:none}
 button.alm{width:100%;text-align:left;background:none;border:0;border-right:1px solid var(--line-soft);color:inherit;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .18s}
 button.alm:last-child{border-right:none}
@@ -1246,6 +1259,8 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
     <div class="scroll" id="scroll">
       <div class="wrap">
 
+        <button class="vback" id="vback" type="button" onclick="goBack()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg><span data-t="vback_practices">Практики</span></button>
+
         <!-- ============ СЕГОДНЯ ============ -->
         <section class="view" id="v-home">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap">
@@ -1362,20 +1377,24 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           </div>
         </section>
 
-        <!-- ============ ПРАКТИКИ (только мобильная навигация) ============ -->
+        <!-- ============ ПРАКТИКИ (мобильная вкладка) ============ -->
         <section class="view" id="v-practices">
-          <div class="eyebrow" style="margin-bottom:12px" data-t="nav_practices">Практики</div>
-          <h1 class="h1" data-t="prx_title">С чего начнём сегодня?</h1>
-          <p class="sub" style="margin-top:10px;max-width:52ch" data-t="prx_lead">Семь практик — каждая отвечает на свой тип вопроса.</p>
-          <div class="prx" style="margin-top:22px">
-            <button class="prow" onclick="go('spreads')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg></span><span class="pm"><b data-t="nav_spreads">Расклады</b><span data-t="tile_spreads">Задайте вопрос и получите разбор позиций — от одной карты до Кельтского креста.</span></span><span class="pe">→</span></button>
-            <button class="prow" onclick="go('dream')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 3.4a8.6 8.6 0 100 17.2 8.9 8.9 0 01-3.6-8.6 8.9 8.9 0 013.6-8.6z"/></svg></span><span class="pm"><b data-t="nav_dream">Сонник</b><span data-t="tile_dream">Опишите сон — разберём символы по Юнгу и архетипам.</span></span><span class="pe">→</span></button>
-            <button class="prow" onclick="go('astro')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg></span><span class="pm"><b data-t="nav_astro">Космо-паспорт</b><span data-t="tile_astro">Дата, время и город рождения — личная карта светил.</span></span><span class="pe">→</span></button>
-            <button class="prow" onclick="go('syn')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg></span><span class="pm"><b data-t="nav_syn">Совместимость</b><span data-t="tile_syn">Две даты рождения — где связь держит, а где рвётся.</span></span><span class="pe">→</span></button>
-            <button class="prow" onclick="go('matrix')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></span><span class="pm"><b data-t="nav_matrix">Матрица судьбы</b><span data-t="tile_matrix">Двадцать два аркана в октаграмме вашей даты рождения.</span></span><span class="pe">→</span></button>
-            <button class="prow" onclick="go('calendar')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg></span><span class="pm"><b data-t="nav_calendar">Лунный день</b><span data-t="tile_calendar">Что сегодня идёт легко, а что лучше отложить.</span></span><span class="pe">→</span></button>
-            <button class="prow" onclick="go('chat')"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.6h16v10.2H9.6L4 19.6z"/><path d="M8 9.4h8M8 12.4h5"/></svg></span><span class="pm"><b data-t="nav_chat">Оракул</b><span data-t="tile_chat">Свободный разговор: карты, звёзды, сны и сложные вопросы.</span></span><span class="pe">→</span></button>
-            <button class="prow" onclick="go('shop')" style="margin-top:6px"><span class="pg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 2.8L5.6 13.6h4.8l-1.2 7.6 8-11.2h-4.8z"/></svg></span><span class="pm"><b data-t="prx_plans">Тарифы и энергия</b><span data-t="prx_plans_hint">Подписка, пакеты энергии и что входит в каждый уровень</span></span><span class="pe">→</span></button>
+          <span class="eyebrow" data-t="nav_practices">Практики</span>
+          <h1 class="h1" data-t="practices_title">Практики</h1>
+          <p class="sub" data-t="practices_lead">Выберите, с чего начнём</p>
+
+          <div class="orn prx-grp"><span class="eyebrow" data-t="prx_grp_cards">Карты и сны</span></div>
+          <div class="pgrid">
+            <button class="pcell" onclick="go('spreads')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg><b data-t="nav_spreads">Расклады</b><span data-t="prx_h_spreads">Карты на вопрос</span></button>
+            <button class="pcell" onclick="go('dream')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 3.4a8.6 8.6 0 100 17.2 8.9 8.9 0 01-3.6-8.6 8.9 8.9 0 013.6-8.6z"/></svg><b data-t="nav_dream">Сонник</b><span data-t="prx_h_dream">Толкование снов</span></button>
+          </div>
+
+          <div class="orn prx-grp"><span class="eyebrow" data-t="prx_grp_astro">Астрология</span></div>
+          <div class="pgrid">
+            <button class="pcell" onclick="go('astro')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg><b data-t="nav_astro">Космо-паспорт</b><span data-t="prx_h_astro">Натальная карта</span></button>
+            <button class="pcell" onclick="go('syn')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg><b data-t="nav_syn">Совместимость</b><span data-t="prx_h_syn">Вы и партнёр</span></button>
+            <button class="pcell" onclick="go('matrix')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg><b data-t="nav_matrix">Матрица судьбы</b><span data-t="prx_h_matrix">Код по дате рождения</span></button>
+            <button class="pcell" onclick="go('calendar')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg><b data-t="nav_calendar">Лунный день</b><span data-t="prx_h_calendar">Луна сегодня</span></button>
           </div>
         </section>
 
@@ -1521,7 +1540,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <div id="pf-sub" style="margin-top:14px"></div>
 
           <div class="stack" style="margin-top:14px">
-            <button class="rowcard" onclick="goPlans()"><span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 2.8L5.6 13.6h4.8l-1.2 7.6 8-11.2h-4.8z"/></svg></span><span class="mid"><strong data-t="pf_plans">Тарифы и подписка</strong><span data-t="pf_plans_hint">Сравнить уровни, продлить или купить энергию</span></span><span class="end">→</span></button>
+            <button class="rowcard" onclick="goPlans()"><span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 2.8L5.6 13.6h4.8l-1.2 7.6 8-11.2h-4.8z"/></svg></span><span class="rc-m"><b data-t="pf_plans">Тарифы и энергия</b><span data-t="pf_plans_hint">Подписка, покупка энергии</span></span><span class="rc-go">→</span></button>
         <button class="rowcard" onclick="openSheet('referral')">
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.6" cy="8.6" r="3.6"/><path d="M3.4 20c.8-3.6 3.2-5.4 6.2-5.4 1.3 0 2.5.3 3.5 1"/><path d="M17.4 12.6v6M14.4 15.6h6"/></svg></span>
               <span class="mid"><strong data-t="ref_btn2">Пригласить друга</strong><span data-t="ref_text">Ссылка на сайт и бонус за каждого</span></span>
@@ -1908,6 +1927,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
       <div class="dock-in">
         <button class="dock-btn" data-nav="home" onclick="go('home')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7"/></svg></span><span class="tx" data-t="nav_home">Сегодня</span></button>
         <button class="dock-btn" data-nav="practices" onclick="go('practices')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.4" y="3.4" width="7.2" height="7.2" rx="1.7"/><rect x="13.4" y="3.4" width="7.2" height="7.2" rx="1.7"/><rect x="3.4" y="13.4" width="7.2" height="7.2" rx="1.7"/><rect x="13.4" y="13.4" width="7.2" height="7.2" rx="1.7"/></svg></span><span class="tx" data-t="nav_practices">Практики</span></button>
+        <button class="dock-btn" data-nav="shop" onclick="go('shop')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 2.8L5.6 13.6h4.8l-1.2 7.6 8-11.2h-4.8z"/></svg></span><span class="tx" data-t="nav_shop_short">Тарифы</span></button>
         <button class="dock-btn" data-nav="chat" onclick="go('chat')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.6h16v10.2H9.6L4 19.6z"/><path d="M8 9.4h8M8 12.4h5"/></svg></span><span class="tx" data-t="nav_chat">Оракул</span></button>
         <button class="dock-btn" data-nav="profile" onclick="go('profile')"><span class="gl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="3.8"/><path d="M4.8 20.4c.9-3.9 3.7-5.8 7.2-5.8s6.3 1.9 7.2 5.8"/></svg></span><span class="tx" data-t="nav_profile">Профиль</span></button>
       </div>
@@ -2151,16 +2171,23 @@ const STR = {
   nav_profile:{ru:'Профиль',en:'Profile',es:'Perfil',fr:'Profil',de:'Profil'},
   rail_practice:{ru:'Практики',en:'Practices',es:'Prácticas',fr:'Pratiques',de:'Praktiken'},
   nav_practices:{ru:'Практики',en:'Practices',es:'Prácticas',fr:'Pratiques',de:'Praktiken'},
+  practices_title:{ru:'Практики',en:'Practices',es:'Prácticas',fr:'Pratiques',de:'Praktiken'},
+  practices_lead:{ru:'Выберите, с чего начнём',en:'Choose where to start',es:'Elige por dónde empezar',fr:'Choisissez par où commencer',de:'Wählen Sie den Anfang'},
+  prx_grp_cards:{ru:'Карты и сны',en:'Cards & dreams',es:'Cartas y sueños',fr:'Cartes et rêves',de:'Karten & Träume'},
+  prx_grp_astro:{ru:'Астрология',en:'Astrology',es:'Astrología',fr:'Astrologie',de:'Astrologie'},
+  prx_h_spreads:{ru:'Карты на вопрос',en:'Cards for your question',es:'Cartas para tu pregunta',fr:'Cartes pour votre question',de:'Karten für Ihre Frage'},
+  prx_h_dream:{ru:'Толкование снов',en:'Dream meanings',es:'Significado de sueños',fr:'Interprétation des rêves',de:'Traumdeutung'},
+  prx_h_astro:{ru:'Натальная карта',en:'Your natal chart',es:'Tu carta natal',fr:'Votre thème natal',de:'Ihr Geburtshoroskop'},
+  prx_h_syn:{ru:'Вы и партнёр',en:'You and your partner',es:'Tú y tu pareja',fr:'Vous et votre partenaire',de:'Sie und Ihr Partner'},
+  prx_h_matrix:{ru:'Код по дате рождения',en:'Code from your birth date',es:'Código de tu fecha de nacimiento',fr:'Code de votre date de naissance',de:'Code aus Ihrem Geburtsdatum'},
+  prx_h_calendar:{ru:'Луна сегодня',en:'The moon today',es:'La luna hoy',fr:'La lune aujourd’hui',de:'Der Mond heute'},
+  vback_practices:{ru:'Практики',en:'Practices',es:'Prácticas',fr:'Pratiques',de:'Praktiken'},
+  pf_plans:{ru:'Тарифы и энергия',en:'Plans & energy',es:'Planes y energía',fr:'Forfaits et énergie',de:'Tarife & Energie'},
+  pf_plans_hint:{ru:'Подписка, покупка энергии',en:'Subscription, buy energy',es:'Suscripción, comprar energía',fr:'Abonnement, acheter de l’énergie',de:'Abo, Energie kaufen'},
   v_speak_dream:{ru:'Рассказать сон голосом',en:'Tell your dream aloud',es:'Cuenta tu sueño en voz alta',fr:'Racontez votre rêve à voix haute',de:'Traum laut erzählen'},
   alm_go_day:{ru:'Разбор дня →',en:'Day reading →',es:'Análisis del día →',fr:'Analyse du jour →',de:'Tagesdeutung →'},
   alm_go_sign:{ru:'Что это значит →',en:'What it means →',es:'Qué significa →',fr:'Ce que cela signifie →',de:'Was das bedeutet →'},
   alm_go_rewards:{ru:'Награды →',en:'Rewards →',es:'Recompensas →',fr:'Récompenses →',de:'Belohnungen →'},
-  prx_title:{ru:'С чего начнём сегодня?',en:'Where do we start today?',es:'¿Por dónde empezamos hoy?',fr:'Par où commence-t-on\u2009?',de:'Womit fangen wir heute an?'},
-  prx_lead:{ru:'Семь практик — каждая отвечает на свой тип вопроса.',en:'Seven practices \u2014 each answers a different kind of question.',es:'Siete prácticas, cada una para un tipo de pregunta.',fr:'Sept pratiques, chacune pour un type de question.',de:'Sieben Praktiken für je eine Art von Frage.'},
-  prx_plans:{ru:'Тарифы и энергия',en:'Plans & energy',es:'Planes y energía',fr:'Offres et énergie',de:'Tarife & Energie'},
-  prx_plans_hint:{ru:'Подписка, пакеты энергии и что входит в каждый уровень',en:'Subscription, energy packs and what each tier includes',es:'Suscripción, paquetes de energía y qué incluye cada nivel',fr:'Abonnement, packs d\u2019énergie et contenu de chaque offre',de:'Abo, Energiepakete und Leistungen je Stufe'},
-  pf_plans:{ru:'Тарифы и подписка',en:'Plans & subscription',es:'Planes y suscripción',fr:'Offres et abonnement',de:'Tarife & Abo'},
-  pf_plans_hint:{ru:'Сравнить уровни, продлить или купить энергию',en:'Compare tiers, renew or buy energy',es:'Comparar niveles, renovar o comprar energía',fr:'Comparer les offres, renouveler ou acheter de l\u2019énergie',de:'Stufen vergleichen, verlängern oder Energie kaufen'},
   rail_account:{ru:'Кабинет',en:'Account',es:'Cuenta',fr:'Compte',de:'Konto'},
   energy_unit:{ru:'энергия',en:'energy',es:'energía',fr:'énergie',de:'energie'},
   energy_top_up:{ru:'Пополнить →',en:'Add more →',es:'Añadir →',fr:'Ajouter →',de:'Aufladen →'},
@@ -2916,7 +2943,11 @@ const LOADERS = {
   dream: () => renderDreamSymbols(),
   memory: () => loadMemory()
 };
+var BACK_TO = null;
+var BACKABLE = ['spreads','table','dream','astro','syn','matrix','calendar'];
+function goBack(){ go(BACK_TO || 'practices'); }
 function go(view, fromPop){
+  const prevView = S.view;
   S.view = view;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('is-on'));
   const el = document.getElementById('v-' + view);
@@ -2927,26 +2958,20 @@ function go(view, fromPop){
   const vc = document.getElementById('v-chat');
   if(vc) vc.style.display = isChat ? 'flex' : 'none';
   const navKey = (view === 'table') ? 'spreads' : ((view === 'memory' || view === 'settings') ? 'profile' : view);
-  /* мобильный док группирует практики в одну вкладку, десктопная рельса светится точным пунктом */
-  const DOCK_GROUP = { spreads:'practices', table:'practices', dream:'practices', astro:'practices',
-                       syn:'practices', matrix:'practices', calendar:'practices',
-                       shop:'profile', memory:'profile', settings:'profile' };
-  const dockKey = DOCK_GROUP[view] || navKey;
-  document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('is-on', b.dataset.nav === navKey || b.dataset.nav === dockKey));
+  const groupKey = BACKABLE.indexOf(navKey) !== -1 ? 'practices' : navKey;
+  document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('is-on', b.dataset.nav === navKey || b.dataset.nav === groupKey));
   if(!isChat) document.getElementById('scroll').scrollTop = 0;
-  /* системная кнопка 'Назад' на телефоне должна возвращать на экран назад, а не выкидывать с сайта */
-  if(!fromPop){
-    try {
-      const st = history.state;
-      if(!st || st.v !== view) history.pushState({ v: view }, '', '#' + view);
-    } catch(e){}
-  }
+  if(prevView === 'practices' && BACKABLE.indexOf(view) !== -1) BACK_TO = 'practices';
+  else if(BACKABLE.indexOf(view) === -1) BACK_TO = null;
+  const vb = document.getElementById('vback');
+  if(vb) vb.classList.toggle('is-on', !!BACK_TO);
+  if(!fromPop){ try{ if(!history.state || history.state.v !== view) history.pushState({ v: view }, '', '#' + view); }catch(e){} }
   if(LOADERS[view]) LOADERS[view]();
   bridge.haptic();
 }
 
 window.addEventListener('popstate', function(e){
-  let v = (e.state && e.state.v) || (location.hash || '').replace('#', '') || 'home';
+  let v = (e.state && e.state.v) || (location.hash || '').replace('#','') || 'home';
   if(!document.getElementById('v-' + v)) v = 'home';
   go(v, true);
 });
@@ -3298,8 +3323,8 @@ async function boot(){
   paintProfile();
   loadProfileSub();
   paintDaily();
-  const startHash = (location.hash || '').replace('#', '');
-  go(startHash && document.getElementById('v-' + startHash) ? startHash : 'home');
+  var _h = (location.hash || '').replace('#','');
+  go(_h && document.getElementById('v-' + _h) ? _h : 'home');
   loadCalendar();
   loadBonusBanner();
   renderSpreads();
