@@ -81,7 +81,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="NEOTARO">
   <meta property="og:image" content="https://neotaro.ru/og-cover.png">
-  <!-- Убраны три шрифта иконок Phosphor: блокировали отрисовку, а на странице
+  <!-- Убраны три шрифта иконок Phosphor: блокировали отрисовку, �� на странице
        нет ни одной иконки оттуда. html2canvas тоже убран — его никто не вызывал. -->
   <!-- DOMPurify теперь defer: он нужен при выводе ответов, а не при загрузке.
        Функция clean() уже умеет работать без него. -->
@@ -266,7 +266,7 @@
   --sab:env(safe-area-inset-bottom,0px);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
+html,body{height:100%;height:100dvh}
 body{
   background:var(--ink-950);
   color:var(--ivory);
@@ -301,7 +301,7 @@ img{display:block;max-width:100%}
 .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
 
 /* ---------- каркас ---------- */
-#shell{position:relative;z-index:1;display:flex;height:100%;overflow:hidden}
+#shell{position:relative;z-index:1;display:flex;height:100%;height:100dvh;overflow:hidden}
 
 /* левая гравированная колонка (десктоп) */
 .rail{
@@ -673,6 +673,13 @@ textarea.field{resize:none;line-height:1.55}
   .grid-3,.grid-2{grid-template-columns:1fr}
   .today-acts .btn{width:100%}
   .dial{max-width:268px}
+}
+/* страховка: если управление пальцем — телефонный вид независимо от того,
+   какую ширину сообщил браузер */
+@media(pointer:coarse) and (max-width:1100px){
+  .rail{display:none}
+  .topbar{display:flex}
+  .dock{display:block}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
@@ -1349,7 +1356,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
               <p class="lead" id="home-lead" data-t="home_lead_empty">Нажмите на карту в центре циферблата. Один аркан из семид��сяти восьми закрепится за этими сутками — с разбором от оракула.</p>
               <div class="today-acts">
                 <button class="btn btn-brass" onclick="openDaily()" id="home-cta" data-t="home_cta_empty">Перевернуть карту</button>
-                <button class="btn btn-line" onclick="goSpreadCta()" data-t="home_cta_spreads">Собрать раскладддд</button> 
+                <button class="btn btn-line" onclick="goSpreadCta()" data-t="home_cta_spreads">Собрать расклад</button>
               </div>
             </div>
           </div>
@@ -2106,7 +2113,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 <div class="sheet" id="sheet-name">
   <div class="sheet-grip"></div>
   <h3 data-t="name_title">Как к вам обращаться</h3>
-  <p class="sheet-sub" data-t="name_sub">Этим именем вас называет оракул и подписываются расклады.</p>
+  <p class="sheet-sub" data-t="name_sub">Этим именем вас называет оракул и под��исываются расклады.</p>
   <input class="field" id="name-in" maxlength="40" placeholder="Тимур">
   <div class="sheet-acts"><button class="btn btn-brass btn-wide" onclick="saveName()" data-t="save">Сохранить</button></div>
 </div>
@@ -2158,7 +2165,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
   </div>
 </div>
 
-<!-- установка на iPhone: Safari не умеет ставить приложение сам, только руками -->
+<!-- установка на iPhone: Safari не умеет ставить приложение сам, только ру��ами -->
 <div class="sheet" id="sheet-ios">
   <div class="sheet-grip"></div>
   <h3 data-t="ios_title">Установить на iPhone</h3>
@@ -2316,7 +2323,7 @@ const STR = {
   home_lead_empty:{ru:'Нажмите на карту в центре циферблата. Один аркан из семидесяти восьми закрепится за этими сутками — с разбором от оракула.',en:'Tap the card at the centre of the dial. One arcanum out of seventy-eight is fixed to this day, with a reading from the oracle.'},
   home_cta_empty:{ru:'Перевернуть карту',en:'Turn the card over',es:'Dar vuelta la carta',fr:'Retourner la carte',de:'Karte umdrehen'},
   home_cta_open:{ru:'Читать разбор',en:'Read the interpretation',es:'Leer la lectura',fr:'Lire l\u2019interprétation',de:'Deutung lesen'},
-  home_cta_spreads:{ru:'Собрать раскладддд',en:'Lay out a spread',es:'Hacer una tirada',fr:'Faire un tirage',de:'Legung erstellen'},
+  home_cta_spreads:{ru:'Собрать расклад',en:'Lay out a spread',es:'Hacer una tirada',fr:'Faire un tirage',de:'Legung erstellen'},
   home_arc_open:{ru:'аркан этих суток',en:'arcanum of this day'},
   alm_lunar:{ru:'Лунный день',en:'Lunar day',es:'Día lunar',fr:'Jour lunaire',de:'Mondtag'},
   alm_phase:{ru:'Фаза',en:'Phase',es:'Fase',fr:'Phase',de:'Phase'},
@@ -2433,9 +2440,9 @@ const STR = {
   ios_s3_hint:{ru:'Иконка появится на экране, дальше открывайте оттуда',en:'The icon appears on your screen — open it from there',es:'El icono aparecerá en la pantalla; ábrelo desde ahí',fr:'L’icône apparaît sur l’écran, ouvrez-la de là',de:'Das Symbol erscheint auf dem Bildschirm — starte von dort'},
   ios_ok:{ru:'Понятно',en:'Got it',es:'Entendido',fr:'Compris',de:'Alles klar'},
   pf_push:{ru:'Карта дня по утрам',en:'Daily card each morning',es:'Carta del día cada mañana',fr:'Carte du jour chaque matin',de:'Tageskarte jeden Morgen'},
-  pf_push_hint:{ru:'Одно уведомление в сутки, можно выключить в любой момент',en:'One notification a day, switch it off anytime',es:'Una notificación al día, desactívala cuando quieras',fr:'Une notification par jour, désactivable à tout moment',de:'Eine Nachricht pro Tag, jederzeit abschaltbar'},
+  pf_push_hint:{ru:'Одно уведомление в су��ки, можно выключить в любой момент',en:'One notification a day, switch it off anytime',es:'Una notificación al día, desactívala cuando quieras',fr:'Une notification par jour, désactivable à tout moment',de:'Eine Nachricht pro Tag, jederzeit abschaltbar'},
   pf_push_ios:{ru:'Сначала добавьте приложение на экран — iPhone иначе не разрешает уведомления',en:'Add the app to your home screen first — iPhone allows notifications only then',es:'Primero añade la app a la pantalla de inicio: el iPhone no permite avisos antes',fr:'Ajoutez d’abord l’application à l’écran d’accueil : l’iPhone l’exige',de:'Füge die App zuerst zum Startbildschirm hinzu — sonst erlaubt das iPhone keine Hinweise'},
-  push_on:{ru:'Готово. Карта дня будет приходить по утрам',en:'Done. The daily card will arrive each morning',es:'Listo. La carta del día llegará cada mañana',fr:'C’est fait. La carte du jour arrivera chaque matin',de:'Fertig. Die Tageskarte kommt jeden Morgen'},
+  push_on:{ru:'Готово. Карта дня будет п��иходить по утрам',en:'Done. The daily card will arrive each morning',es:'Listo. La carta del día llegará cada mañana',fr:'C’est fait. La carte du jour arrivera chaque matin',de:'Fertig. Die Tageskarte kommt jeden Morgen'},
   push_off:{ru:'Уведомления выключены',en:'Notifications are off',es:'Notificaciones desactivadas',fr:'Notifications désactivées',de:'Benachrichtigungen aus'},
   push_denied:{ru:'Браузер запретил уведомления. Разрешите их в настройках сайта',en:'The browser blocked notifications. Allow them in site settings',es:'El navegador bloqueó los avisos. Permítelos en los ajustes del sitio',fr:'Le navigateur a bloqué les notifications. Autorisez-les dans les réglages du site',de:'Der Browser hat Hinweise blockiert. Erlaube sie in den Website-Einstellungen'},
   push_fail:{ru:'Не вышло включить уведомления, попробуйте позже',en:'Could not enable notifications, try again later',es:'No se pudieron activar las notificaciones, inténtalo luego',fr:'Impossible d’activer les notifications, réessayez plus tard',de:'Benachrichtigungen konnten nicht aktiviert werden, versuche es später'},
@@ -2521,7 +2528,7 @@ const STR = {
   need_name:{ru:'Введите имя',en:'Enter a name',es:'Escribe un nombre',fr:'Entrez un nom',de:'Namen eingeben'},
 
   dream_title:{ru:'Сон говорит символами — разберём каждый',en:'A dream speaks in symbols — we read each one'},
-  dream_lead:{ru:'Пишите как помните: место, люди, действия, что чувствовали на пробуждении. Толкование придёт в диалог с оракулом.',en:'Write it as you remember: place, people, actions, and how you felt on waking. The interpretation arrives in your oracle chat.'},
+  dream_lead:{ru:'Пишите как помните: место, люди, действия, что чувствовали на пробуждении. Толк��вание придёт в диалог с оракулом.',en:'Write it as you remember: place, people, actions, and how you felt on waking. The interpretation arrives in your oracle chat.'},
   dream_label:{ru:'Содержание сна',en:'What happened in the dream'},
   dream_ph:{ru:'Мне снилось, что я падаю в тёмную воду, и вода оказалась тёплой…',en:'I dreamt I was falling into dark water, and the water turned out to be warm…'},
   dream_btn:{ru:'Разобрать сон',en:'Interpret the dream',es:'Interpretar el sueño',fr:'Interpréter le rêve',de:'Traum deuten'},
