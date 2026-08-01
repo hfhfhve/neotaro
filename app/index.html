@@ -26,8 +26,22 @@
   <meta name="description" content="NEOTARO — расклады Таро с ИИ-толкователем, натальная карта, матрица судьбы, совместимость, сонник и лунный календарь. Вытяните карту дня бесплатно.">
   <meta property="og:title" content="NEOTARO — ночной атлас Таро">
   <meta property="og:description" content="Расклады Таро, астрология, матрица судьбы и лунный календарь — в одном тихом ночном пространстве.">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+  <script>
+  /* Скрипты Telegram и VK грузим ТОЛЬКО внутри Telegram и VK.
+     Раньше они висели в шапке у всех и блокировали отрисовку:
+     пока telegram.org или unpkg.com не ответят, браузер не рисует НИЧЕГО.
+     На российском мобильном интернете эти домены отвечают через раз —
+     отсюда и белый экран на полминуты. В обычном браузере они бесполезны. */
+  (function(){
+    var q = location.search + location.hash;
+    if (/tgWebApp/.test(q) || window.TelegramWebviewProxy || window.TelegramWebview) {
+      document.write('<scr' + 'ipt src="https://telegram.org/js/telegram-web-app.js"><\/scr' + 'ipt>');
+    }
+    if (/vk_app_id|vk_user_id/.test(q)) {
+      document.write('<scr' + 'ipt src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"><\/scr' + 'ipt>');
+    }
+  })();
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -46,7 +60,15 @@
   }
   </script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Был cdn.tailwindcss.com — полмегабайта компилятора, который грузился
+       до отрисовки ради четырёх классов. Всё остальное оформление и так своё,
+       в теге <style> ниже. Заменён на четыре строчки CSS. -->
+  <style>
+    .bg-space-900{background:#0B0F1E}
+    .min-h-screen{min-height:100vh}
+    .hidden{display:none}
+    .grid{display:grid}
+  </style>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
   <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
@@ -59,12 +81,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="NEOTARO">
   <meta property="og:image" content="https://neotaro.ru/og-cover.png">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Убраны три шрифта иконок Phosphor: блокировали отрисовку, а на странице
+       нет ни одной иконки оттуда. html2canvas тоже убран — его никто не вызывал. -->
+  <!-- DOMPurify теперь defer: он нужен при выводе ответов, а не при загрузке.
+       Функция clean() уже умеет работать без него. -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js" defer></script>
   <meta name="robots" content="noindex, nofollow">
   <style>/* home: library + prose + faq + footer (inline, no external file) */
 :root{--gold:#D9AE5F;--gold-pale:#E9D9AC;--gold-bright:#F0DDB0;--ivory:#F2EDE0;--mist:#9AA3BF;--blue:#8FA3DE;--ink-900:#0B0F1E;--ink-800:#121829;--ink-700:#1A2138;--ink-600:#232C47;--line:rgba(217,174,95,.22);--line-soft:rgba(217,174,95,.12);--serif:'Cormorant Garamond',Georgia,serif;--sans:'Manrope',system-ui,sans-serif}
@@ -134,6 +155,9 @@
        существующая разметка и JS-генерируемый HTML автоматически
        переходят на новую палитру «Ночного атласа».
        ================================================================== */
+    /* Tailwind больше не грузится, но палитра ниже оставлена как справочник цветов.
+       Заглушка нужна, чтобы строка не упала с ошибкой без самого Tailwind. */
+    window.tailwind = window.tailwind || {};
     tailwind.config = {
       theme: {
         extend: {
@@ -2257,7 +2281,7 @@ const STR = {
   auth_resend:{ru:'Отправить код заново',en:'Send the code again',es:'Reenviar el código',fr:'Renvoyer le code',de:'Code erneut senden'},
   auth_resend_in:{ru:'Повторно — через {sec} с',en:'Resend in {sec} s',es:'Reenviar en {sec} s',fr:'Renvoyer dans {sec} s',de:'Erneut in {sec} s'},
   auth_forgot_note:{ru:'Пришлём код на почту — по нему зададите новый пароль.',en:'We will email you a code to set a new password.',es:'Le enviaremos un código para crear una nueva contraseña.',fr:'Nous enverrons un code pour définir un nouveau mot de passe.',de:'Wir senden einen Code für ein neues Passwort.'},
-  auth_code_note:{ru:'Код из 6 цифр отправлен на {email}. Если письма нет — проверьте папку «Спам».',en:'A 6-digit code was sent to {email}. No email? Check the spam folder.',es:'Enviamos un código de 6 dígitos a {email}. Revise la carpeta de spam.',fr:'Un code à 6 chiffres a été envoyé à {email}. Vérifiez les spams.',de:'Ein 6-stelliger Code ging an {email}. Prüfen Sie den Spam-Ordner.'},
+  auth_code_note:{ru:'��од из 6 цифр отправлен на {email}. Если письма нет — проверьте папку «Спам».',en:'A 6-digit code was sent to {email}. No email? Check the spam folder.',es:'Enviamos un código de 6 dígitos a {email}. Revise la carpeta de spam.',fr:'Un code à 6 chiffres a été envoyé à {email}. Vérifiez les spams.',de:'Ein 6-stelliger Code ging an {email}. Prüfen Sie den Spam-Ordner.'},
   auth_title_reg:{ru:'Создание кабинета',en:'Create your account',es:'Crear tu cuenta',fr:'Créer votre compte',de:'Konto erstellen'},
   auth_title_code:{ru:'Код из письма',en:'Code from the email',es:'Código del correo',fr:'Code reçu par e-mail',de:'Code aus der E-Mail'},
   auth_title_forgot:{ru:'Восстановление доступа',en:'Password recovery',es:'Recuperar acceso',fr:'Récupération',de:'Zugang wiederherstellen'},
@@ -2350,7 +2374,7 @@ const STR = {
   sub_until:{ru:'действует до {date}',en:'active until {date}',es:'activa hasta {date}',fr:'active jusqu’au {date}',de:'aktiv bis {date}'},
   sub_canceled:{ru:'автопродление выключено',en:'auto-renewal off',es:'renovación desactivada',fr:'renouvellement désactivé',de:'Auto-Verlängerung aus'},
   sub_cancel_btn:{ru:'Отменить подписку',en:'Cancel subscription',es:'Cancelar suscripción',fr:'Résilier l’abonnement',de:'Abo kündigen'},
-  sub_cancel_confirm:{ru:'Отменить подписку? Доступ сохранится до конца оплаченного периода.',en:'Cancel the subscription? Access stays until the end of the paid period.',es:'¿Cancelar la suscripción? El acceso dura hasta el final del periodo pagado.',fr:'Résilier l’abonnement ? L’accès reste jusqu’à la fin de la période payée.',de:'Abo kündigen? Zugang bleibt bis zum Ende der bezahlten Periode.'},
+  sub_cancel_confirm:{ru:'Отменить подписку? Доступ сохранится до конца оплачен��ого периода.',en:'Cancel the subscription? Access stays until the end of the paid period.',es:'¿Cancelar la suscripción? El acceso dura hasta el final del periodo pagado.',fr:'Résilier l’abonnement ? L’accès reste jusqu’à la fin de la période payée.',de:'Abo kündigen? Zugang bleibt bis zum Ende der bezahlten Periode.'},
   sub_cancel_done:{ru:'Подписка отменена — доступ до конца периода',en:'Subscription canceled — access until the end of the period',es:'Suscripción cancelada — acceso hasta el final del periodo',fr:'Abonnement résilié — accès jusqu’à la fin de la période',de:'Abo gekündigt — Zugang bis Periodenende'},
   pm_block:{ru:'Способ оплаты',en:'Payment method',es:'Método de pago',fr:'Moyen de paiement',de:'Zahlungsmethode'},
   pm_next:{ru:'следующее списание {date} — {sum} ₽',en:'next charge on {date} — {sum} ₽',es:'próximo cargo {date} — {sum} ₽',fr:'prochain prélèvement {date} — {sum} ₽',de:'nächste Abbuchung {date} — {sum} ₽'},
@@ -4826,7 +4850,7 @@ function lockTag(key){
   return '<span class="tag tag-lock">' + IC_LOCK + ' ' + esc(lockText(key)) + '</span>';
 }
 /* Одна точка входа в тарифы из любого места приложения.
-   Подписки живут ТОЛЬКО в магазине — никаких дублей экрана оплаты. */
+   Подп��ски живут ТОЛЬКО в магазине — никаких дублей экрана оплаты. */
 function goPlans(key){
   if(key) toast(tt('pw_locked_toast').replace('{plan}', planTitleFor(key)));
   go('shop');
@@ -5726,7 +5750,7 @@ async function pwaInstall(){
 
 /* ============================================================
    ВЕБ-ПУШИ
-   Разрешение спрашиваем ТОЛЬКО по нажатию на переключатель.
+   Разрешение спрашиваем ТОЛЬКО по нажатию на пер��ключатель.
    Автозапрос при входе — самый быстрый способ получить вечное «запретить»:
    браузер больше никогда не спросит, и человек потерян навсегда.
    ============================================================ */
