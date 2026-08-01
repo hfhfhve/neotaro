@@ -5,8 +5,8 @@
    опасно — люди застрянут на старой версии.
    ============================================================ */
 
-const SW_VERSION = 'neotaro-v1';
-const SHELL_CACHE = 'neotaro-shell-v1';
+const SW_VERSION = 'neotaro-v2';
+const SHELL_CACHE = 'neotaro-shell-v2';
 
 /* Что держим на случай обрыва связи. Только оболочка и иконки,
    никаких данных пользователя. */
@@ -41,9 +41,14 @@ self.addEventListener('message', event => {
 });
 
 /* ---------- сеть ----------
-   Только переходы по страницам, и только сначала сеть.
-   API живёт на другом домене (api.neotaro.ru) и сюда не попадает —
-   ответы с раскладами и профилем кэшировать нельзя. */
+   Только переходы по страницам. API живёт на другом домене
+   (api.neotaro.ru) и сюда вообще не попадает.
+
+   ВАЖНО: страницы ЗДЕСЬ НЕ КЭШИРУЮТСЯ на лету. Раньше ответ клонировался
+   и параллельно писался в кэш — браузер обязан держать в памяти весь
+   поток, пока обе копии не дочитаны. На телефонах это вешало загрузку
+   насмерть на половине страницы. Сеть отдаётся браузеру напрямую,
+   кэш трогаем только когда сети нет совсем. */
 self.addEventListener('fetch', event => {
   const req = event.request;
   if (req.method !== 'GET') return;
@@ -53,15 +58,14 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    fetch(req)
-      .then(res => {
-        const copy = res.clone();
-        caches.open(SHELL_CACHE).then(c => c.put(req, copy)).catch(() => {});
-        return res;
-      })
-      .catch(() =>
-        caches.match(req).then(hit => hit || caches.match('/app/'))
-      )
+    fetch(req).catch(() =>
+      caches.match('/app/').then(hit => hit || new Response(
+        '<!doctype html><meta charset="utf-8"><title>NEOTARO</title>' +
+        '<body style="background:#0B0F1E;color:#D9AE5F;font:16px/1.5 system-ui;text-align:center;padding:80px 24px">' +
+        '<h1>Нет связи</h1><p>Проверьте интернет и обновите страницу.</p>',
+        { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+      ))
+    )
   );
 });
 
