@@ -1403,7 +1403,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 
           <div class="orn prx-grp"><span class="eyebrow" data-t="prx_grp_cards">Карты и сны</span></div>
           <div class="pgrid">
-            <button class="pcell" onclick="go('spreads')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg><b data-t="nav_spreads">Расклады</b><span data-t="prx_h_spreads">Карты на воп��ос</span></button>
+            <button class="pcell" onclick="go('spreads')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg><b data-t="nav_spreads">Расклады</b><span data-t="prx_h_spreads">Карты на вопрос</span></button>
             <button class="pcell" onclick="go('dream')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 3.4a8.6 8.6 0 100 17.2 8.9 8.9 0 01-3.6-8.6 8.9 8.9 0 013.6-8.6z"/></svg><b data-t="nav_dream">Сонник</b><span data-t="prx_h_dream">Толкование снов</span></button>
           </div>
 
@@ -1470,9 +1470,19 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
         <!-- ============ МАГАЗИН ============ -->
         <section class="view" id="v-shop">
           <div style="text-align:center">
-            <div class="eyebrow" style="margin-bottom:12px" data-t="subs_eyebrow">NEOTARO · ПОДПИСКА</div>
-            <h1 class="h1" data-t="subs_title">Выберите свой уровень доступа</h1>
-            <p class="sub" style="margin:12px auto 0;max-width:56ch" data-t="subs_lead">Энергия каждый месяц, глубокие разборы и закрытые расклады, которых нет на бесплатном тарифе.</p>
+            <div class="eyebrow" style="margin-bottom:12px" data-t="shop_eyebrow">ЭНЕРГИЯ</div>
+            <h1 class="h1" data-t="shop_title">Пополнить энергию</h1>
+            <p class="sub" style="margin:12px auto 0;max-width:56ch" data-t="shop_lead">Энергия тратится на расклады, разборы и вопросы оракулу. Пакеты не сгорают.</p>
+          </div>
+          <div id="shop-offer" style="margin-top:20px"></div>
+          <div id="shop-list" class="grid grid-3"></div>
+          <p class="label" style="margin-top:18px;line-height:1.7" id="shop-note" data-t="shop_note">Оплата банковской картой. Энергия зачисляется сразу после подтверждения.</p>
+
+          <div class="plx-divider"><span>✦</span></div>
+          <div style="text-align:center;margin-top:26px">
+            <div class="eyebrow" style="margin-bottom:10px" data-t="subs_eyebrow">NEOTARO · ПОДПИСКА</div>
+            <h2 class="h2" data-t="subs_title">С подпиской энергия дешевле</h2>
+            <p class="sub" style="margin:9px auto 0;max-width:56ch" data-t="subs_lead">Энергия приходит каждый месяц сама, все пакеты дешевле, плюс закрытые расклады и глубокие разборы.</p>
           </div>
 
           <div class="plx">
@@ -1481,15 +1491,6 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
             <div class="plx-cmp" id="shop-sub-cmp"></div>
           </div>
 
-          <div class="plx-divider"><span>✦</span></div>
-          <div style="text-align:center;margin-top:26px">
-            <div class="eyebrow" style="margin-bottom:10px" data-t="shop_eyebrow">РАЗОВАЯ ПОКУПКА</div>
-            <h2 class="h2" data-t="shop_title">Нужна только энергия?</h2>
-            <p class="sub" style="margin:9px auto 0;max-width:52ch" data-t="shop_lead">Пакеты не сгорают и подходят, если подписка пока не нужна.</p>
-          </div>
-          <div id="shop-offer" style="margin-top:20px"></div>
-          <div id="shop-list" class="grid grid-3"></div>
-          <p class="label" style="margin-top:22px;line-height:1.7" id="shop-note" data-t="shop_note">Оплата банковской картой. Энергия зачисляется сразу после подтверждения.</p>
         </section>
 
         <!-- ============ ПРОФИЛЬ ============ -->
@@ -1507,51 +1508,36 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
                 </div>
                 <p class="label" style="margin-top:6px" id="pf-since">—</p>
               </div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <button class="btn btn-quiet btn-sm" onclick="openSheet('name')" data-t="pf_edit">Изменить имя</button>
-                <button class="btn btn-quiet btn-sm" onclick="go('settings')" data-t="pf_settings">Настройки</button>
-              </div>
+              <button class="btn btn-quiet btn-sm" onclick="openSheet('name')" data-t="pf_edit">Изменить имя</button>
             </div>
 
             <div class="hair" style="margin:18px 0 14px"></div>
 
-            <div style="display:flex;gap:26px;flex-wrap:wrap">
-              <div style="min-width:96px">
+            <div style="display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap">
+              <div style="min-width:92px">
                 <div class="label" data-t="energy_unit">Энергия</div>
                 <div class="h3 num" id="pf-energy" style="margin-top:4px">0</div>
               </div>
-              <div style="min-width:96px">
+              <div style="min-width:92px">
                 <div class="label" data-t="alm_streak">Дней подряд</div>
                 <div class="h3 num" id="pf-streak" style="margin-top:4px">0</div>
               </div>
-              <div style="min-width:96px">
+              <div style="min-width:92px">
                 <div class="label" data-t="pf_refs">Приглашено</div>
                 <div class="h3 num" id="pf-refs" style="margin-top:4px">0</div>
               </div>
-              <div style="min-width:110px">
-                <div class="label" data-t="pf_birth">Дата рождения</div>
-                <div class="h3 num" id="pf-birth" style="margin-top:4px;font-size:17px">—</div>
-              </div>
+              <button class="btn btn-line btn-sm" onclick="goPlans()" style="margin-left:auto" data-t="pf_topup">Пополнить энергию</button>
+              <span id="pf-birth" style="display:none">—</span>
             </div>
           </div>
 
-          <!-- Знак / стихия / планета — одной строкой вместо трёх одинаковых карточек -->
-          <div class="panel panel-pad" style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:stretch">
-            <button class="pf-zi" onclick="openStatInfo('sign')" style="flex:1;min-width:132px;background:none;border:0;padding:0;text-align:left;cursor:pointer;color:inherit">
-              <div class="label" data-t="pf_sign">Знак</div>
-              <div class="h3" id="pf-sign" style="margin-top:6px">—</div>
-            </button>
-            <button class="pf-zi" onclick="openStatInfo('element')" style="flex:1;min-width:132px;background:none;border:0;padding:0;text-align:left;cursor:pointer;color:inherit">
-              <div class="label" data-t="pf_element">Стихия</div>
-              <div class="h3" id="pf-element" style="margin-top:6px">—</div>
-            </button>
-            <button class="pf-zi" onclick="openStatInfo('planet')" style="flex:1;min-width:132px;background:none;border:0;padding:0;text-align:left;cursor:pointer;color:inherit">
-              <div class="label" data-t="pf_planet">Планета</div>
-              <div class="h3" id="pf-planet" style="margin-top:6px">—</div>
-            </button>
-            <div style="align-self:center">
-              <span class="label stat-more" data-t="stat_more">Что это значит</span>
-            </div>
+          <!-- Знак / стихия / планета — одна компактная строка вместо трёх карточек -->
+          <div class="panel panel-pad" style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <span class="label" data-t="pf_zodiac">Ваш знак</span>
+            <button class="tag" id="pf-sign" onclick="openStatInfo('sign')" style="cursor:pointer;border:0">—</button>
+            <button class="tag" id="pf-element" onclick="openStatInfo('element')" style="cursor:pointer;border:0">—</button>
+            <button class="tag" id="pf-planet" onclick="openStatInfo('planet')" style="cursor:pointer;border:0">—</button>
+            <span class="label stat-more" style="margin-left:auto" data-t="stat_more">Что это значит</span>
           </div>
 
           <!-- Подписка -->
@@ -1607,7 +1593,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <div class="stack">
             <button class="rowcard" onclick="openSheet('lang')">
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M3.4 12h17.2M12 3.2c2.4 2.4 3.6 5.4 3.6 8.8s-1.2 6.4-3.6 8.8c-2.4-2.4-3.6-5.4-3.6-8.8S9.6 5.6 12 3.2z"/></svg></span>
-              <span class="mid"><strong data-t="pf_lang">Язык интерфейса</strong><span data-t="pf_lang_hint">На нём же говор��т оракул</span></span>
+              <span class="mid"><strong data-t="pf_lang">Язык интерфейса</strong><span data-t="pf_lang_hint">На нём же говорит оракул</span></span>
               <span class="end"><span id="pf-lang" style="color:var(--brass-pale);font-size:13px">Русский</span></span>
             </button>
             <button class="rowcard" onclick="openSheet('theme')">
@@ -1638,7 +1624,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <button class="btn btn-quiet btn-sm" onclick="go('settings')" style="margin-bottom:14px">← <span data-t="pf_settings">Настройки</span></button>
           <div class="eyebrow" style="margin-bottom:12px" data-t="mem_title">Хроника</div>
           <h1 class="h1" data-t="mem_h1">Оракул помнит вашу историю</h1>
-          <p class="sub" data-t="mem_lead">Здесь всё, что оракул запомнил из ваших разговоров, раскладов и снов. Вы управляете эти�� полностью: любую запись можно убрать в один касательный жест.</p>
+          <p class="sub" data-t="mem_lead">Здесь всё, что оракул запомнил из ваших разговоров, раскладов и снов. Вы управляете этим полностью: любую запись можно убрать в один касательный жест.</p>
 
           <div class="stack" style="margin-top:18px">
             <div class="rowcard">
@@ -1730,14 +1716,14 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
               </div>
               <p class="label" style="margin-top:8px" data-t="as_time_why">Точное время открывает дома, асцендент и разделы про деньги и карьеру. Погрешность до 15 минут не критична.</p>
               <div class="city-wrap" style="margin-top:14px">
-                <label class="field-lab" for="as-city-q" data-t="f_city">Город рожден������я</label>
+                <label class="field-lab" for="as-city-q" data-t="f_city">Город рождения</label>
                 <div id="as-city-picked" class="city-picked" style="display:none">
                   <span class="pin"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M3.4 12h17.2M12 3.2c2.4 2.4 3.6 5.4 3.6 8.8s-1.2 6.4-3.6 8.8c-2.4-2.4-3.6-5.4-3.6-8.8S9.6 5.6 12 3.2z"/></svg></span>
                   <span class="nm" id="as-city-name">—</span>
                   <button type="button" class="again" onclick="clearCity()" data-t="city_change">Изменить</button>
                 </div>
                 <div id="as-city-find">
-                  <input id="as-city-q" class="field" autocomplete="off" data-ph="city_ph" placeholder="Начните вводить — выберите из с��иска" oninput="cityInput()" onkeydown="if(event.key==='Enter'){event.preventDefault();searchCity();}">
+                  <input id="as-city-q" class="field" autocomplete="off" data-ph="city_ph" placeholder="Начните вводить — выберите из списка" oninput="cityInput()" onkeydown="if(event.key==='Enter'){event.preventDefault();searchCity();}">
                   <div class="city-list" id="as-city-list"></div>
                   <p class="label" style="margin-top:10px" data-t="city_hint">Город нужно выбрать из списка — от него считаются дома и асцендент.</p>
                 </div>
@@ -2237,7 +2223,7 @@ const STR = {
   auth_forgot:{ru:'Забыли пароль?',en:'Forgot password?',es:'¿Olvidó la contraseña?',fr:'Mot de passe oublié ?',de:'Passwort vergessen?'},
   auth_to_reg:{ru:'Создать аккаунт',en:'Create account',es:'Crear cuenta',fr:'Créer un compte',de:'Konto erstellen'},
   auth_to_login:{ru:'У меня уже есть аккаунт',en:'I already have an account',es:'Ya tengo una cuenta',fr:'J’ai déjà un compte',de:'Ich habe bereits ein Konto'},
-  auth_back:{ru:'Наз��д',en:'Back',es:'Atrás',fr:'Retour',de:'Zurück'},
+  auth_back:{ru:'Назад',en:'Back',es:'Atrás',fr:'Retour',de:'Zurück'},
   auth_resend:{ru:'Отправить код заново',en:'Send the code again',es:'Reenviar el código',fr:'Renvoyer le code',de:'Code erneut senden'},
   auth_resend_in:{ru:'Повторно — через {sec} с',en:'Resend in {sec} s',es:'Reenviar en {sec} s',fr:'Renvoyer dans {sec} s',de:'Erneut in {sec} s'},
   auth_forgot_note:{ru:'Пришлём код на почту — по нему зададите новый пароль.',en:'We will email you a code to set a new password.',es:'Le enviaremos un código para crear una nueva contraseña.',fr:'Nous enverrons un code pour définir un nouveau mot de passe.',de:'Wir senden einen Code für ein neues Passwort.'},
@@ -2250,12 +2236,12 @@ const STR = {
   auth_ok_sent:{ru:'Письмо отправлено.',en:'The email is on its way.',es:'Correo enviado.',fr:'E-mail envoyé.',de:'E-Mail gesendet.'},
   e_email_invalid:{ru:'Проверьте адрес почты.',en:'Check the email address.',es:'Revise el correo.',fr:'Vérifiez l’adresse e-mail.',de:'Prüfen Sie die E-Mail-Adresse.'},
   e_email_exists:{ru:'Такая почта уже зарегистрирована — войдите или восстановите пароль.',en:'This email is already registered — sign in or reset the password.',es:'Este correo ya está registrado.',fr:'Cet e-mail est déjà enregistré.',de:'Diese E-Mail ist bereits registriert.'},
-  e_password_short:{ru:'Пароль короче 8 символов.',en:'The password is shorter than 8 characters.',es:'La contrase��a tiene menos de 8 caracteres.',fr:'Le mot de passe fait moins de 8 caractères.',de:'Das Passwort ist kürzer als 8 Zeichen.'},
+  e_password_short:{ru:'Пароль короче 8 символов.',en:'The password is shorter than 8 characters.',es:'La contraseña tiene menos de 8 caracteres.',fr:'Le mot de passe fait moins de 8 caractères.',de:'Das Passwort ist kürzer als 8 Zeichen.'},
   e_password_long:{ru:'Слишком длинный пароль.',en:'The password is too long.',es:'Contraseña demasiado larga.',fr:'Mot de passe trop long.',de:'Passwort zu lang.'},
   e_password_mismatch:{ru:'Пароли не совпадают.',en:'The passwords do not match.',es:'Las contraseñas no coinciden.',fr:'Les mots de passe ne correspondent pas.',de:'Die Passwörter stimmen nicht überein.'},
   e_invalid_credentials:{ru:'Неверная почта или пароль.',en:'Wrong email or password.',es:'Correo o contraseña incorrectos.',fr:'E-mail ou mot de passe incorrect.',de:'E-Mail oder Passwort falsch.'},
   e_use_social_login:{ru:'Этот аккаунт создан через Telegram или Google. Войдите тем же способом или задайте пароль через «Забыли пароль».',en:'This account was created via Telegram or Google. Use that method or set a password via “Forgot password”.',es:'Esta cuenta se creó con Telegram o Google.',fr:'Ce compte a été créé via Telegram ou Google.',de:'Dieses Konto wurde über Telegram oder Google erstellt.'},
-  e_code_invalid:{ru:'Код не п��дходит. Проверьте цифры из последнего письма.',en:'Wrong code. Check the digits from the latest email.',es:'Código incorrecto.',fr:'Code incorrect.',de:'Falscher Code.'},
+  e_code_invalid:{ru:'Код не подходит. Проверьте цифры из последнего письма.',en:'Wrong code. Check the digits from the latest email.',es:'Código incorrecto.',fr:'Code incorrect.',de:'Falscher Code.'},
   e_code_expired:{ru:'Код истёк. Запросите новый.',en:'The code expired. Request a new one.',es:'El código caducó.',fr:'Le code a expiré.',de:'Der Code ist abgelaufen.'},
   e_code_not_found:{ru:'Код не найден. Запросите новый.',en:'No active code. Request a new one.',es:'No hay código activo.',fr:'Aucun code actif.',de:'Kein aktiver Code.'},
   e_code_attempts:{ru:'Слишком много попыток. Запросите новый код.',en:'Too many attempts. Request a new code.',es:'Demasiados intentos.',fr:'Trop de tentatives.',de:'Zu viele Versuche.'},
@@ -2331,7 +2317,7 @@ const STR = {
   need_q:{ru:'Напишите вопрос — без него карты молчат',en:'Write a question — without it the cards stay silent'},
 
   sub_title:{ru:'Подписка',en:'Subscription',es:'Suscripción',fr:'Abonnement',de:'Abo'},
-  sub_until:{ru:'действует ��о {date}',en:'active until {date}',es:'activa hasta {date}',fr:'active jusqu’au {date}',de:'aktiv bis {date}'},
+  sub_until:{ru:'действует до {date}',en:'active until {date}',es:'activa hasta {date}',fr:'active jusqu’au {date}',de:'aktiv bis {date}'},
   sub_canceled:{ru:'автопродление выключено',en:'auto-renewal off',es:'renovación desactivada',fr:'renouvellement désactivé',de:'Auto-Verlängerung aus'},
   sub_cancel_btn:{ru:'Отменить подписку',en:'Cancel subscription',es:'Cancelar suscripción',fr:'Résilier l’abonnement',de:'Abo kündigen'},
   sub_cancel_confirm:{ru:'Отменить подписку? Доступ сохранится до конца оплаченного периода.',en:'Cancel the subscription? Access stays until the end of the paid period.',es:'¿Cancelar la suscripción? El acceso dura hasta el final del periodo pagado.',fr:'Résilier l’abonnement ? L’accès reste jusqu’à la fin de la période payée.',de:'Abo kündigen? Zugang bleibt bis zum Ende der bezahlten Periode.'},
@@ -2376,6 +2362,8 @@ const STR = {
   pf_element:{ru:'Стихия',en:'Element',es:'Elemento',fr:'Élément',de:'Element'},
   pf_planet:{ru:'Планета',en:'Planet',es:'Planeta',fr:'Planète',de:'Planet'},
   pf_refs:{ru:'Приглашено',en:'Invited',es:'Invitados',fr:'Invités',de:'Eingeladen'},
+  pf_topup:{ru:'Пополнить энергию',en:'Top up energy',es:'Recargar energía',fr:'Recharger l’énergie',de:'Energie aufladen'},
+  pf_zodiac:{ru:'Ваш знак',en:'Your sign',es:'Tu signo',fr:'Votre signe',de:'Dein Zeichen'},
   pf_birth:{ru:'Дата рождения',en:'Date of birth',es:'Fecha de nacimiento',fr:'Date de naissance',de:'Geburtsdatum'},
   pf_birth_hint:{ru:'Нужна для знака, матрицы и гороскопа',en:'Needed for your sign, matrix and horoscope'},
   pf_settings:{ru:'Настройки',en:'Settings',es:'Ajustes',fr:'Réglages',de:'Einstellungen'},
@@ -2391,7 +2379,7 @@ const STR = {
   th_sub:{ru:'Выбор сохраняется и переносится на все ваши устройства.',en:'Your choice is saved and follows you across devices.',es:'Tu elección se guarda y te sigue en todos los dispositivos.',fr:'Votre choix est enregistré et vous suit sur tous vos appareils.',de:'Deine Wahl wird gespeichert und gilt auf allen Geräten.'},
   th_saved:{ru:'Оформление изменено',en:'Appearance changed',es:'Apariencia cambiada',fr:'Apparence modifiée',de:'Erscheinungsbild geändert'},
   th_ink:{ru:'Чернила',en:'Ink',es:'Tinta',fr:'Encre',de:'Tinte'},
-  th_ink_note:{ru:'Ночной ��тлас, как было',en:'The night atlas, as before',es:'El atlas nocturno, como antes',fr:'L’atlas nocturne, comme avant',de:'Der Nachtatlas, wie zuvor'},
+  th_ink_note:{ru:'Ночной атлас, как было',en:'The night atlas, as before',es:'El atlas nocturno, como antes',fr:'L’atlas nocturne, comme avant',de:'Der Nachtatlas, wie zuvor'},
   th_obsidian:{ru:'Обсидиан',en:'Obsidian',es:'Obsidiana',fr:'Obsidienne',de:'Obsidian'},
   th_obsidian_note:{ru:'Глубокий чёрный градиент',en:'Deep black gradient',es:'Degradado negro profundo',fr:'Dégradé noir profond',de:'Tiefschwarzer Verlauf'},
   th_dawn:{ru:'Рассвет',en:'Dawn',es:'Alba',fr:'Aube',de:'Morgen'},
@@ -2424,10 +2412,10 @@ const STR = {
   mem_h1:{ru:'Оракул помнит вашу историю',en:'The oracle remembers your story',es:'El oráculo recuerda tu historia',fr:'L\'oracle se souvient de votre histoire',de:'Das Orakel erinnert sich an deine Geschichte'},
   mem_lead:{ru:'Здесь всё, что оракул запомнил из ваших разговоров, раскладов и снов. Любую запись можно убрать.',en:'Everything the oracle has learned from your talks, spreads and dreams. Remove any entry at any time.',es:'Todo lo que el oráculo aprendió de tus charlas, tiradas y sueños. Puedes borrar cualquier entrada.',fr:'Tout ce que l\'oracle a retenu de vos échanges, tirages et rêves. Supprimez ce que vous voulez.',de:'Alles, was das Orakel aus deinen Gesprächen, Legungen und Träumen weiß. Jeder Eintrag lässt sich löschen.'},
   mem_on:{ru:'Запоминать меня',en:'Remember me',es:'Recordarme',fr:'Se souvenir de moi',de:'An mich erinnern'},
-  mem_on_hint:{ru:'Если выключить — каждый разговор на��нётся с чистого листа',en:'Turn off and every talk starts from a blank page',es:'Si lo apagas, cada charla empieza de cero',fr:'Désactivé, chaque échange repart de zéro',de:'Aus: Jedes Gespräch startet bei null'},
+  mem_on_hint:{ru:'Если выключить — каждый разговор начнётся с чистого листа',en:'Turn off and every talk starts from a blank page',es:'Si lo apagas, cada charla empieza de cero',fr:'Désactivé, chaque échange repart de zéro',de:'Aus: Jedes Gespräch startet bei null'},
   mem_digest:{ru:'Общая картина',en:'The big picture',es:'La imagen general',fr:'Vue d\'ensemble',de:'Das Gesamtbild'},
   mem_empty:{ru:'Пока пусто. Поговорите с оракулом или сделайте расклад — хроника начнёт заполняться сама.',en:'Empty for now. Talk to the oracle or pull a spread — the chronicle fills itself.',es:'Aún vacío. Habla con el oráculo o haz una tirada: la crónica se llenará sola.',fr:'Encore vide. Parlez à l\'oracle ou tirez les cartes : la chronique se remplira seule.',de:'Noch leer. Sprich mit dem Orakel oder lege die Karten — die Chronik füllt sich von selbst.'},
-  mem_off_note:{ru:'Память выклю��ена. Старые записи сохранены, но оракул их не видит.',en:'Memory is off. Old entries are kept but the oracle cannot see them.',es:'Memoria apagada. Las entradas se guardan, pero el oráculo no las ve.',fr:'Mémoire désactivée. Les entrées restent mais l\'oracle ne les voit pas.',de:'Gedächtnis aus. Einträge bleiben, aber das Orakel sieht sie nicht.'},
+  mem_off_note:{ru:'Память выключена. Старые записи сохранены, но оракул их не видит.',en:'Memory is off. Old entries are kept but the oracle cannot see them.',es:'Memoria apagada. Las entradas se guardan, pero el oráculo no las ve.',fr:'Mémoire désactivée. Les entrées restent mais l\'oracle ne les voit pas.',de:'Gedächtnis aus. Einträge bleiben, aber das Orakel sieht sie nicht.'},
   mem_forget_all:{ru:'Стереть всю память',en:'Erase all memory',es:'Borrar toda la memoria',fr:'Effacer toute la mémoire',de:'Gesamtes Gedächtnis löschen'},
   mem_confirm:{ru:'Стереть всё безвозвратно?',en:'Erase everything permanently?',es:'¿Borrar todo definitivamente?',fr:'Tout effacer définitivement ?',de:'Alles unwiderruflich löschen?'},
   mem_done:{ru:'Готово',en:'Done',es:'Listo',fr:'Terminé',de:'Fertig'},
@@ -2488,7 +2476,7 @@ const STR = {
   as_edit:{ru:'Изменить данные',en:'Change the details',es:'Cambiar los datos',fr:'Modifier les données',de:'Daten ändern'},
   as_h1:{ru:'Ваша натальная карта',en:'Your natal chart',es:'Tu carta natal',fr:'Votre carte du ciel',de:'Ihr Geburtshoroskop'},
   as_asc:{ru:'Асцендент',en:'Ascendant',es:'Ascendente',fr:'Ascendant',de:'Aszendent'},
-  as_sections:{ru:'Разбор кар��ы',en:'Chart reading',es:'Lectura de la carta',fr:'Lecture de la carte',de:'Deutung'},
+  as_sections:{ru:'Разбор карты',en:'Chart reading',es:'Lectura de la carta',fr:'Lecture de la carte',de:'Deutung'},
   as_prog:{ru:'открыто {a} из {b} разделов',en:'{a} of {b} sections opened',es:'{a} de {b} secciones abiertas',fr:'{a} sur {b} sections ouvertes',de:'{a} von {b} Abschnitten offen'},
   as_calc:{ru:'Считаем положения планет…',en:'Calculating planetary positions…',es:'Calculando posiciones planetarias…',fr:'Calcul des positions planétaires…',de:'Planetenpositionen werden berechnet…'},
   as_writing:{ru:'Пишем разбор…',en:'Writing the reading…',es:'Escribiendo la lectura…',fr:'Rédaction en cours…',de:'Deutung wird geschrieben…'},
@@ -2520,11 +2508,11 @@ const STR = {
   pl_year_note:{ru:'{sum} ₽ в год, списание раз в год',en:'{sum} ₽ per year, billed yearly',es:'{sum} ₽ al año',fr:'{sum} ₽ par an',de:'{sum} ₽ pro Jahr'},
   pl_current:{ru:'Ваш тариф',en:'Your plan',es:'Tu plan',fr:'Votre offre',de:'Dein Tarif'},
   pl_trial:{ru:'{n} дня бесплатно',en:'{n} days free',es:'{n} días gratis',fr:'{n} jours offerts',de:'{n} Tage gratis'},
-  cmp_note:{ru:'Отменить можно в любой момент — доступ останется до конца оплаченного периода. Уже открытые разделы остаются нав��егда.',en:'Cancel anytime — access lasts until the end of the paid period. Sections you opened stay yours for good.',es:'Cancela cuando quieras; el acceso dura hasta el final del periodo.',fr:'Annulez à tout moment ; l’accès dure jusqu’à la fin de la période.',de:'Jederzeit kündbar — Zugang bis zum Ende der bezahlten Periode.'},
+  cmp_note:{ru:'Отменить можно в любой момент — доступ останется до конца оплаченного периода. Уже открытые разделы остаются навсегда.',en:'Cancel anytime — access lasts until the end of the paid period. Sections you opened stay yours for good.',es:'Cancela cuando quieras; el acceso dura hasta el final del periodo.',fr:'Annulez à tout moment ; l’accès dure jusqu’à la fin de la période.',de:'Jederzeit kündbar — Zugang bis zum Ende der bezahlten Periode.'},
   as_pay_eyebrow:{ru:'Подписка NEOTARO',en:'NEOTARO subscription',es:'Suscripción NEOTARO',fr:'Abonnement NEOTARO',de:'NEOTARO-Abo'},
   as_pay_title:{ru:'Открыть весь разбор карты',en:'Unlock the whole chart reading',es:'Abrir toda la lectura',fr:'Ouvrir toute la lecture',de:'Ganze Deutung freischalten'},
   as_pay_lead:{ru:'Одна подписка на всё: разбор карты про любовь, деньги и карьеру, большие расклады Таро и энергия каждый месяц.',en:'One subscription for everything: your chart on love, money and career, big tarot spreads and energy every month.',es:'Una suscripción para todo: tu carta sobre amor, dinero y carrera, tiradas grandes y energía cada mes.',fr:'Un abonnement pour tout : votre carte sur l’amour, l’argent et la carrière, grands tirages et de l’énergie chaque mois.',de:'Ein Abo für alles: deine Karte zu Liebe, Geld und Karriere, große Legungen und Energie jeden Monat.'},
-  as_pay_note:{ru:'Открытые ра��делы останутся у вас навсегда, даже после отмены подписки. Отменить можно в любой момент.',en:'Sections you have opened stay yours forever, even after cancelling. Cancel anytime.',es:'Las secciones abiertas son tuyas para siempre, incluso tras cancelar. Cancela cuando quieras.',fr:'Les sections ouvertes restent à vous pour toujours, même après résiliation. Résiliez à tout moment.',de:'Geöffnete Abschnitte bleiben dauerhaft Ihnen, auch nach Kündigung. Jederzeit kündbar.'},
+  as_pay_note:{ru:'Открытые разделы останутся у вас навсегда, даже после отмены подписки. Отменить можно в любой момент.',en:'Sections you have opened stay yours forever, even after cancelling. Cancel anytime.',es:'Las secciones abiertas son tuyas para siempre, incluso tras cancelar. Cancela cuando quieras.',fr:'Les sections ouvertes restent à vous pour toujours, même après résiliation. Résiliez à tout moment.',de:'Geöffnete Abschnitte bleiben dauerhaft Ihnen, auch nach Kündigung. Jederzeit kündbar.'},
   as_plan_open:{ru:'Оформить',en:'Subscribe',es:'Suscribirse',fr:'S’abonner',de:'Abonnieren'},
   as_plan_month:{ru:'в месяц',en:'per month',es:'al mes',fr:'par mois',de:'pro Monat'},
   as_plan_best:{ru:'Выбор большинства',en:'Most popular',es:'Más elegido',fr:'Le plus choisi',de:'Beliebteste Wahl'},
@@ -2535,7 +2523,7 @@ const STR = {
   hk_strong:{ru:'Планета в силе',en:'Planet in strength',es:'Planeta fuerte',fr:'Planète en force',de:'Planet in Stärke'},
   hk_weak:{ru:'Планета в падении',en:'Planet in fall',es:'Planeta en caída',fr:'Planète en chute',de:'Planet im Fall'},
   hk_retro:{ru:'Ретроградные планеты',en:'Retrograde planets',es:'Planetas retrógrados',fr:'Planètes rétrogrades',de:'Rückläufige Planeten'},
-  sec_core:{ru:'Кто вы по сут��',en:'Who you are at the core',es:'Quién eres en esencia',fr:'Qui vous êtes au fond',de:'Wer Sie im Kern sind'},
+  sec_core:{ru:'Кто вы по сути',en:'Who you are at the core',es:'Quién eres en esencia',fr:'Qui vous êtes au fond',de:'Wer Sie im Kern sind'},
   sec_emotions:{ru:'Чувства и внутренняя безопасность',en:'Feelings and inner safety',es:'Emociones y seguridad interior',fr:'Émotions et sécurité intérieure',de:'Gefühle und innere Sicherheit'},
   sec_mind:{ru:'Ум, речь и решения',en:'Mind, speech and decisions',es:'Mente, palabra y decisiones',fr:'Esprit, parole et décisions',de:'Verstand, Sprache, Entscheidungen'},
   sec_love:{ru:'Любовь и сценарии отношений',en:'Love and relationship patterns',es:'Amor y patrones de pareja',fr:'Amour et schémas relationnels',de:'Liebe und Beziehungsmuster'},
@@ -3038,10 +3026,10 @@ function showSubTerms(){
   ov.innerHTML = '<div style="background:var(--panel,#12172b);color:inherit;max-width:640px;width:100%;max-height:86vh;overflow:auto;border-radius:18px 18px 0 0;padding:22px 20px 30px;line-height:1.55;font-size:14px">' +
     '<div class="h3" style="margin-bottom:4px">Условия подписки NEOTARO</div>' +
     '<div class="label" style="margin-bottom:14px">Редакция от 31 июля 2026</div>' +
-    '<p><b>Что входит.</b> Подписка даёт доступ к закрытым разделам NEOTARO и начисление энергии каждый период. ��остав тарифов и цены указаны на экране тарифов.</p>' +
+    '<p><b>Что входит.</b> Подписка даёт доступ к закрытым разделам NEOTARO и начисление энергии каждый период. Состав тарифов и цены указаны на экране тарифов.</p>' +
     '<p><b>Стоимость и периодичность.</b> Сумма и срок (месяц или год) показываются до оплаты. Оплата проводится через ЮKassa; реквизиты карты сервис не получает и не хранит.</p>' +
     '<p><b>Автопродление.</b> После первой оплаты подписка продлевается автоматически на тот же срок и по той же цене, пока вы её не отмените. Списание происходит в день окончания оплаченного периода. За сутки до списания приходит напоминание. Если платёж не прошёл, мы повторяем попытку до четырёх раз в течение 11 дней, после чего подписка останавливается, а карта отвязывается.</p>' +
-    '<p><b>Отмена и отвязка карты.</b> Отключить автопродление и отвязать способ оплаты ��ожно самостоятельно и в любой момент: Профиль → Подписка → Способ оплаты → Отвязать. Обращаться в поддержку для этого не нужно. После отмены доступ сохраняется до конца уже оплаченного периода.</p>' +
+    '<p><b>Отмена и отвязка карты.</b> Отключить автопродление и отвязать способ оплаты можно самостоятельно и в любой момент: Профиль → Подписка → Способ оплаты → Отвязать. Обращаться в поддержку для этого не нужно. После отмены доступ сохраняется до конца уже оплаченного периода.</p>' +
     '<p><b>Возврат.</b> Если списание произошло ошибочно или сервис был недоступен, напишите нам — разберёмся и вернём средства.</p>' +
     '<p><b>Контакты.</b> support@neotaro.ru, Телеграм: @neurotarot_supportbot</p>' +
     '<button class="btn btn-line btn-wide" style="margin-top:16px" onclick="document.getElementById(\'sub-terms-ov\').remove()">Закрыть</button>' +
@@ -4021,7 +4009,7 @@ async function loadShop(){
   renderShopPlans();
   const box = document.getElementById('shop-list');
 
-  // Бесплатный тариф: энергия не продаётся — только ежедневное вос��тановление.
+  // Бесплатный тариф: энергия не продаётся — только ежедневное восстановление.
   // Показываем это красиво, а не ошибкой после оплаты.
   if(!featOk('shop.energy')){
     document.getElementById('shop-offer').innerHTML = '';
@@ -4534,7 +4522,7 @@ async function claimBonus(){
 }
 
 /* ============================ НАТАЛЬНАЯ КАРТА ============================ */
-/* Вся ��атематика и все тексты приходят с бэка. Здесь только отрисовка:
+/* Вся математика и все тексты приходят с бэка. Здесь только отрисовка:
    дублировать астрологические расчёты на фронте — гарантированно расхождение цифр. */
 const NK_SIGN = {
   aries:['Овен','Aries','Aries','B\u00e9lier','Widder'],
@@ -5301,7 +5289,7 @@ function vSwipes(lock){
   }catch(e){}
 }
 
-/* multipart-аналог api(): Content-Type убираем, чтобы бра��зер сам поставил boundary */
+/* multipart-аналог api(): Content-Type убираем, чтобы браузер сам поставил boundary */
 async function apiUpload(endpoint, blob, filename, fields){
   const h = bridge.headers();
   delete h['Content-Type'];
@@ -5533,7 +5521,7 @@ function vApplyCfg(cfg){
   });
 }
 
-// ловим stt-конфиг из любого ответа бэка (/get-user отдаёт его ��а старте)
+// ловим stt-конфиг из любого ответа бэка (/get-user отдаёт его на старте)
 if(!window.__vApiHooked){
   window.__vApiHooked = true;
   const _api = api;
