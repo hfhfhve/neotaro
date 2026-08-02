@@ -17,7 +17,6 @@
     "url": "https://neotaro.ru/"
   }
   </script>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
   <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
@@ -1178,7 +1177,7 @@ body.chat-mode .chat-head{padding-top:16px}
 <div class="foot-brand">
 <a class="brand" href="/">NEO<b>TARO</b></a>
 <p class="foot-about">Онлайн-Таро, сонник и нумерология с ИИ-оракулом. Карта дня, расклады и толкование снов — без регистрации.</p>
-<a class="btn-gold foot-cta" href="/">Открыть карту дня</a>
+<a class="btn-gold foot-cta" href="/login/">Открыть карту дня</a>
 </div>
 <nav class="foot-col" aria-label="Сонник">
 <div class="fc-title">Сонник</div>
@@ -1256,130 +1255,12 @@ const APP_URL = "/app/";
   }
 })();
 
-const YANDEX_CLIENT_ID = "e911ccd5d3ff43deb575bf71ac3143b1";
-const VK_CLIENT_ID = "ВСТАВЬ_ВК_ID";
-const GOOGLE_CLIENT_ID = "67067405192-tfq2sj5kdk7no312f76lg4fenac49k08.apps.googleusercontent.com";
-const REDIRECT_URI = window.location.origin;
-let nlPollTimer = null;
-
-function nlResetLogin(errText){
-  if(nlPollTimer){ clearInterval(nlPollTimer); nlPollTimer = null; }
-  const status = document.getElementById('web-login-status');
-  const btn = document.getElementById('tg-login-btn');
-  if(status){
-    status.classList.remove('nl-active');
-    status.innerHTML = errText ? '<div class="nl-err">' + errText + '</div>' : '';
-    if(errText) status.classList.add('nl-active');
-  }
-  if(btn){ btn.classList.remove('nl-hidden'); btn.disabled = false; }
-}
-window.nlResetLogin = nlResetLogin;
-
-async function startWebLogin(){
-  const btn = document.getElementById('tg-login-btn');
-  const status = document.getElementById('web-login-status');
-  if(btn) btn.disabled = true;
-  try {
-    const r = await fetch(API_URL + '/auth/web-code', { method: 'POST' });
-    const data = await r.json();
-    if(!data || !data.code || !data.url) throw new Error('no code');
-    if(btn) btn.classList.add('nl-hidden');
-    if(status){
-      status.innerHTML = '<div class="nl-wait"><div class="nl-spin"></div><div class="nl-wait-t">Подтвердите вход в Telegram</div><div class="nl-wait-s">Мы открыли чат с ботом — нажмите там «Подтвердить вход» и вернитесь сюда.</div><a class="nl-open" href="' + data.url + '" target="_blank" rel="noopener">Открыть Telegram</a><button class="nl-cancel" onclick="nlResetLogin()">Отмена</button></div>';
-      status.classList.add('nl-active');
-    }
-    window.open(data.url, '_blank');
-    let ticks = 0;
-    nlPollTimer = setInterval(async () => {
-      ticks++;
-      if(ticks > 150){ nlResetLogin('Время вышло. Попробуйте ещё раз.'); return; }
-      try {
-        const pr = await fetch(API_URL + '/auth/web-poll', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: data.code }) });
-        const pd = await pr.json();
-        if(pd && pd.status === 'ok' && pd.token){
-          clearInterval(nlPollTimer); nlPollTimer = null;
-          localStorage.setItem('neotaro_token', pd.token);
-          localStorage.setItem('neotaro_user', JSON.stringify(pd.user || {}));
-          location.replace(APP_URL);
-        } else if(pd && pd.status === 'expired'){
-          nlResetLogin('Ссылка устарела. Попробуйте ещё раз.');
-        }
-      } catch(e) {}
-    }, 2000);
-  } catch(e) {
-    nlResetLogin('Не получилось связаться с сервером. Попробуйте ещё раз.');
-  }
-}
-
-async function verifyTokenOnBackend(endpoint, bodyData){
-  const status = document.getElementById('web-login-status');
-  const authCard = document.getElementById('auth-card');
-  if(status){ status.classList.add('nl-active'); status.innerHTML = '<div class="nl-wait"><div class="nl-spin"></div><div class="nl-wait-t">Сверяем ваш вход…</div></div>'; }
-  if(authCard) authCard.style.pointerEvents = 'none';
-  try {
-    const response = await fetch(API_URL + endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(bodyData) });
-    const data = await response.json();
-    if(data.success && data.token){
-      localStorage.setItem('neotaro_token', data.token);
-      localStorage.setItem('neotaro_user', JSON.stringify(data.user || {}));
-      location.replace(APP_URL);
-    } else {
-      if(authCard) authCard.style.pointerEvents = 'auto';
-      nlResetLogin('Войти не удалось. Попробуйте ещё раз или выберите другой способ.');
-    }
-  } catch(e) {
-    if(authCard) authCard.style.pointerEvents = 'auto';
-    nlResetLogin('Сеть не ответила. Проверьте соединение и повторите.');
-  }
-}
-
-window.addEventListener('load', function(){
-  if(window.google && google.accounts && google.accounts.id){
-    google.accounts.id.initialize({
-      client_id: GOOGLE_CLIENT_ID,
-      callback: function(response){ if(response.credential) verifyTokenOnBackend('/auth/google', { token: response.credential }); }
-    });
-  }
-});
-
-document.addEventListener('DOMContentLoaded', function(){
-  const tgBtn = document.getElementById('tg-login-btn');
-  if(tgBtn) tgBtn.addEventListener('click', startWebLogin);
-
-  const gBtn = document.getElementById('google-login-btn');
-  if(gBtn) gBtn.addEventListener('click', function(){
-    if(!window.google || !google.accounts || !google.accounts.oauth2){ nlResetLogin('Google пока не отвечает. Обновите страницу и повторите.'); return; }
-    google.accounts.oauth2.initTokenClient({
-      client_id: GOOGLE_CLIENT_ID,
-      scope: 'email profile',
-      callback: function(response){ if(response.access_token) verifyTokenOnBackend('/auth/google', { token: response.access_token }); }
-    }).requestAccessToken();
-  });
-
-  const yBtn = document.getElementById('yandex-login-btn');
-  if(yBtn) yBtn.addEventListener('click', function(){
-    window.location.href = 'https://oauth.yandex.ru/authorize?response_type=token&client_id=' + YANDEX_CLIENT_ID + '&redirect_uri=' + REDIRECT_URI + '&state=yandex';
-  });
-
-  const vBtn = document.getElementById('vk-login-btn');
-  if(vBtn) vBtn.addEventListener('click', function(){
-    window.location.href = 'https://oauth.vk.com/authorize?client_id=' + VK_CLIENT_ID + '&display=page&redirect_uri=' + REDIRECT_URI + '&scope=email&response_type=token&v=5.131&state=vk';
-  });
-
-  const hash = window.location.hash.substring(1);
-  if(hash){
-    const params = new URLSearchParams(hash);
-    const token = params.get('access_token');
-    const state = params.get('state');
-    if(token && state === 'yandex'){
-      window.history.replaceState(null, null, window.location.pathname);
-      verifyTokenOnBackend('/auth/yandex', { token: token });
-    } else if(token && state === 'vk'){
-      window.history.replaceState(null, null, window.location.pathname);
-      verifyTokenOnBackend('/auth/vk', { token: token, email: params.get('email'), user_id: params.get('user_id') });
-    }
-  }
-});
+/* Блок авторизации удалён.
+   Здесь лежали Telegram / Google / Yandex / VK — около 140 строк.
+   Все они вешались на tg-login-btn, google-login-btn, yandex-login-btn,
+   vk-login-btn, auth-card, web-login-status — ни одного из этих id
+   в разметке лендинга нет. Код не выполнялся никогда.
+   Вход живёт только на /login/. */
 </script>
 </body>
 </html>
