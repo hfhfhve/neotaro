@@ -18,7 +18,7 @@
   --line:rgba(217,174,95,.22);
 }
 *{box-sizing:border-box}
-html,body{height:100%}
+html,body{min-height:100%}
 body{
   margin:0; background:var(--ink-950); color:var(--ivory);
   font-family:'Manrope',system-ui,-apple-system,sans-serif;
@@ -168,9 +168,9 @@ body{
 /* ---------- Мобильные ---------- */
 @media (max-width:900px){
   body{padding:0;align-items:stretch}
-  .auth{grid-template-columns:1fr;border-radius:0;border:none;min-height:100vh;box-shadow:none}
+  .auth{grid-template-columns:1fr;border-radius:0;border:none;min-height:100vh;min-height:100dvh;box-shadow:none}
   .art{display:none}
-  .pane{padding:28px 22px 24px;min-height:100vh}
+  .pane{padding:28px 22px calc(24px + env(safe-area-inset-bottom))}
   .h1{font-size:25px}
   .socials{gap:8px}
 }
