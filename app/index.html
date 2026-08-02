@@ -526,7 +526,22 @@ textarea.field{resize:none;line-height:1.55}
 .zbtn .zk{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}
 .zbtn .zv{display:block;margin-top:6px;font-size:15px;color:var(--ivory);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .zbtn .zgo{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--brass);font-size:13px;opacity:.8}
-@media(max-width:560px){.zrow{grid-template-columns:1fr}}
+/* Знак / стихия / управитель остаются в одну строку и на телефоне.
+   Раньше здесь было grid-template-columns:1fr — три карточки вставали столбиком.
+   Чтобы три колонки поместились: убираем стрелку и режем отступы. */
+@media(max-width:560px){
+  .zrow{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .zbtn{padding:11px 9px 11px 10px}
+  .zbtn .zk{font-size:8px;letter-spacing:.09em}
+  .zbtn .zv{font-size:13px;margin-top:5px}
+  .zbtn .zgo{display:none}
+}
+@media(max-width:380px){
+  .zrow{gap:6px}
+  .zbtn{padding:10px 7px}
+  .zbtn .zk{font-size:7.5px;letter-spacing:.06em}
+  .zbtn .zv{font-size:11.5px}
+}
 
 /* ---------- чат ---------- */
 .chat{display:flex;flex-direction:column;height:100%}
@@ -1609,10 +1624,10 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 
           <div class="orn" style="margin:22px 0 6px"><span class="eyebrow" data-t="pf_grp_app">Приложение</span></div>
           <div class="stack">
-            <button class="rowcard" id="pf-install-row" hidden onclick="pwaInstall()">
+            <button class="rowcard" id="pf-install-row" style="display:none" onclick="pwaInstall()">
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6v11M7.8 10.4L12 14.6l4.2-4.2"/><path d="M4.6 16.8v3.2h14.8v-3.2"/></svg></span>
               <span class="mid"><strong data-t="pf_install">Установить приложение</strong><span data-t="pf_install_hint">Иконка на экране, запуск без браузера</span></span>
-              <span class="end" id="pf-install-end">→</span>
+              <span class="end">→</span>
             </button>
             <div class="rowcard" id="pf-push-row" style="display:none">
               <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4a5.6 5.6 0 00-5.6 5.6c0 4.2-1.6 5.8-1.6 5.8h14.4s-1.6-1.6-1.6-5.8A5.6 5.6 0 0012 3.4z"/><path d="M10.2 18.2a2 2 0 003.6 0"/></svg></span>
@@ -2475,9 +2490,6 @@ const STR = {
   pwa_done:{ru:'Готово — иконка на экране',en:'Done — the icon is on your screen',es:'Listo: el icono está en la pantalla',fr:'C’est fait — l’icône est sur l’écran',de:'Fertig — das Symbol ist da'},
   pwa_later:{ru:'Хорошо, можно установить позже',en:'No problem, you can install later',es:'Vale, puedes instalarla luego',fr:'Très bien, vous pourrez installer plus tard',de:'Gut, du kannst später installieren'},
   pwa_manual:{ru:'Откройте меню браузера и выберите «Установить приложение»',en:'Open the browser menu and choose “Install app”',es:'Abre el menú del navegador y elige «Instalar app»',fr:'Ouvrez le menu du navigateur et choisissez « Installer l’application »',de:'Öffne das Browser-Menü und wähle „App installieren“'},
-  pwa_already:{ru:'Приложение уже установлено — откройте его с домашнего экрана',en:'Already installed — open it from your home screen',es:'Ya está instalada: ábrela desde la pantalla de inicio',fr:'Déjà installée — ouvrez-la depuis l’écran d’accueil',de:'Bereits installiert — öffne sie vom Startbildschirm'},
-  pf_install_done:{ru:'Приложение установлено',en:'App installed',es:'Aplicación instalada',fr:'Application installée',de:'App installiert'},
-  pf_install_done_hint:{ru:'Иконка на домашнем экране — запуск без браузера',en:'Icon on your home screen — opens without the browser',es:'Icono en la pantalla de inicio, se abre sin navegador',fr:'Icône sur l’écran d’accueil — ouverture sans navigateur',de:'Symbol auf dem Startbildschirm — Start ohne Browser'},
   ios_title:{ru:'Установить на iPhone',en:'Install on iPhone',es:'Instalar en iPhone',fr:'Installer sur iPhone',de:'Auf dem iPhone installieren'},
   ios_sub:{ru:'Safari ставит приложение только вручную. Три шага, полминуты.',en:'Safari only installs apps manually. Three steps, half a minute.',es:'Safari solo instala apps manualmente. Tres pasos, medio minuto.',fr:'Safari n’installe qu’à la main. Trois étapes, trente secondes.',de:'Safari installiert nur manuell. Drei Schritte, eine halbe Minute.'},
   ios_s1:{ru:'Нажмите «Поделиться»',en:'Tap “Share”',es:'Pulsa «Compartir»',fr:'Appuyez sur « Partager »',de:'Tippe auf „Teilen“'},
@@ -5804,97 +5816,41 @@ function pwaIsIOS(){
 
 let pwaPrompt = null;
 
-/* Факт установки надо помнить самим. Браузер об этом не расскажет:
-   beforeinstallprompt после установки больше не приходит, а
-   display-mode:standalone виден только когда приложение уже запущено
-   из иконки — в обычной вкладке он всегда false. */
-const PWA_FLAG = 'neotaro_pwa_installed';
-
-function pwaMarkInstalled(){
-  try{ localStorage.setItem(PWA_FLAG, '1'); }catch(e){}
-}
-function pwaWasInstalled(){
-  try{ return localStorage.getItem(PWA_FLAG) === '1'; }catch(e){ return false; }
-}
-
 /* Chrome сам просится установиться — перехватываем и показываем
    своей строкой в профиле, чтобы не мешать баннером посреди расклада. */
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   pwaPrompt = e;
-  /* Приглашение снова пришло — значит приложения на устройстве нет
-     (пользователь мог его удалить). Снимаем флаг, иначе строка
-     навсегда застрянет в состоянии «установлено». */
-  try{ localStorage.removeItem(PWA_FLAG); }catch(e){}
   pwaPaintInstallRow();
 });
 
 window.addEventListener('appinstalled', () => {
   pwaPrompt = null;
-  pwaMarkInstalled();
   pwaPaintInstallRow();
   try{ toast(tt('pwa_done')); }catch(e){}
 });
 
-/* Строка НЕ исчезает после установки — она меняет состояние.
-   Пропадает только там, где установка невозможна в принципе:
-   внутри Telegram и VK, где своё окно. */
+/* Строка видна только тем, кому есть что ставить: Chrome дал приглашение
+   либо это iPhone в Safari, где всё делается руками.
+   Внутри Telegram и VK установка не нужна — там уже своё окно. */
 function pwaPaintInstallRow(){
   const row = document.getElementById('pf-install-row');
   if(!row) return;
-
   const inApp = (typeof bridge !== 'undefined') ? (bridge.isTG || bridge.isVK) : false;
-  if(inApp){ row.hidden = true; return; }
-
-  const standalone = pwaStandalone();
-  if(standalone) pwaMarkInstalled();
-  const installed = standalone || pwaWasInstalled();
-
-  row.hidden = false;
-  row.dataset.state = installed ? 'installed' : 'idle';
-
-  const title = row.querySelector('.mid strong');
-  const hint  = row.querySelector('.mid span');
-  const end   = document.getElementById('pf-install-end');
-
-  /* Меняем именно data-t, а не textContent: иначе applyStrings()
-     при смене языка вернёт старый ключ и надпись отъедет. */
-  if(title){
-    title.dataset.t = installed ? 'pf_install_done' : 'pf_install';
-    title.textContent = tt(title.dataset.t);
-  }
-  if(hint){
-    hint.dataset.t = installed ? 'pf_install_done_hint' : 'pf_install_hint';
-    hint.textContent = tt(hint.dataset.t);
-  }
-  if(end) end.textContent = installed ? '✓' : '→';
+  const show = !pwaStandalone() && !inApp && (!!pwaPrompt || pwaIsIOS());
+  row.style.display = show ? '' : 'none';
 }
 
 async function pwaInstall(){
-  if(pwaStandalone()){
-    pwaMarkInstalled();
-    pwaPaintInstallRow();
-    toast(tt('pwa_already'));
-    return;
-  }
-
   if(pwaPrompt){
     pwaPrompt.prompt();
     let res = null;
     try{ res = await pwaPrompt.userChoice; }catch(e){}
     pwaPrompt = null;
-    if(res && res.outcome === 'accepted'){
-      /* appinstalled придёт следом и покажет тост, но флаг ставим
-         сразу: на части андроидов событие не доезжает. */
-      pwaMarkInstalled();
-    } else {
-      toast(tt('pwa_later'));
-    }
     pwaPaintInstallRow();
+    if(res && res.outcome !== 'accepted') toast(tt('pwa_later'));
     return;
   }
-
-  if(pwaWasInstalled()){ toast(tt('pwa_already')); return; }
   if(pwaIsIOS()){ openSheet('ios'); return; }
   toast(tt('pwa_manual'));
 }
