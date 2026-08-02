@@ -1,0 +1,39 @@
+name: Build sitemap
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate sitemap.xml
+        run: python3 gen_sitemap.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- sitemap.xml; then
+            echo "sitemap.xml не изменился, коммит не нужен"
+          else
+            git add sitemap.xml
+            git commit -m "chore: regenerate sitemap.xml [skip ci]"
+            git push
+            echo "sitemap.xml обновлён"
+          fi
