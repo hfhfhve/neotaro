@@ -1,0 +1,66 @@
+name: IndexNow ping
+
+# 1) Автоматически при каждом пуше, где изменились .html
+# 2) Вручную: Actions -> IndexNow ping -> Run workflow (можно отправить весь сайт)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.html'
+  workflow_dispatch:
+    inputs:
+      submit_all:
+        description: 'Отправить ВСЕ страницы сайта, а не только изменённые'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+env:
+  HOST: neotaro.ru
+  KEY: 32f8e23132da6aefc8d1324da62775cd
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Build URL list
+        id: build
+        env:
+          SUBMIT_ALL: ${{ github.event_name == 'workflow_dispatch' && inputs.submit_all }}
+        run: |
+          python3 build_indexnow_list.py
+
+      - name: Submit to IndexNow
+        run: |
+          if [ ! -s urls.json ]; then
+            echo "Нечего отправлять."
+            exit 0
+          fi
+          echo "--- Отправляем в IndexNow ---"
+          head -c 800 urls.json; echo
+          CODE=$(curl -sS -o response.txt -w "%{http_code}" \
+            -X POST "https://api.indexnow.org/IndexNow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data-binary @urls.json)
+          echo "HTTP $CODE"
+          cat response.txt || true
+          echo
+          case "$CODE" in
+            200|202) echo "OK — принято." ;;
+            400) echo "::error::400 — неверный формат запроса"; exit 1 ;;
+            403) echo "::error::403 — ключ не найден или не совпадает. Проверь https://$HOST/$KEY.txt"; exit 1 ;;
+            422) echo "::error::422 — URL не принадлежат домену"; exit 1 ;;
+            429) echo "::warning::429 — слишком часто, попробуй позже" ;;
+            *) echo "::warning::Неожиданный код $CODE" ;;
+          esac
