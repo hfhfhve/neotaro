@@ -4,7 +4,7 @@
   <meta name="yandex-verification" content="4829483e1c30ff58" />
   <meta name="theme-color" content="#0B0F1E">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>NEOTARO — Таро, астрология и матрица судьбы онлайн</title>
   <meta name="description" content="NEOTARO — расклады Таро с ИИ-толкователем, натальная карта, матрица судьбы, совместимость, сонник и лунный календарь. Вытяните карту дня бесплатно.">
   <meta property="og:title" content="NEOTARO — ночной атлас Таро">
@@ -927,13 +927,176 @@ body.chat-mode .chat-head{padding-top:16px}
       .lp-foot a:hover { color: #F0DDB0; }
       .lp-foot i { color: rgba(217,174,95,.4); font-style: normal; }
 
+      /* ---------- Быстрый расклад да/нет ---------- */
+      /* Подпись поля для скринридеров: визуально скрыта, но доступна. */
+      .lp-sr {
+        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+      }
+      .yn { padding: 0 0 10px; }
+      .yn-card {
+        position: relative; border-radius: 20px; padding: 34px 32px 30px;
+        background: linear-gradient(165deg, rgba(242,237,224,.055), rgba(242,237,224,.014));
+        border: 1px solid rgba(217,174,95,.26);
+        box-shadow: 0 30px 70px rgba(4,6,14,.45);
+      }
+      .yn-card::before {
+        content: ''; position: absolute; top: 0; left: 40px; right: 40px; height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(233,200,126,.65), transparent);
+      }
+      .yn-kicker {
+        font-size: 10.5px; font-weight: 800; letter-spacing: .26em; text-transform: uppercase;
+        color: rgba(217,174,95,.8); margin-bottom: 14px;
+      }
+      .yn-h { font-family: 'Prata', serif; font-weight: 400; font-size: 27px; line-height: 1.25; color: #F2EDE0; margin: 0 0 10px; }
+      .yn-sub { font-size: 14px; line-height: 1.6; color: rgba(242,237,224,.55); margin: 0 0 20px; max-width: 560px; }
+
+      .yn-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+      .yn-chip {
+        font-family: inherit; cursor: pointer;
+        padding: 8px 14px; border-radius: 99px; font-size: 12.5px;
+        color: rgba(242,237,224,.66);
+        background: rgba(242,237,224,.04);
+        border: 1px solid rgba(242,237,224,.12);
+        transition: border-color .18s ease, color .18s ease;
+      }
+      .yn-chip:hover { border-color: rgba(217,174,95,.45); color: #F0DDB0; }
+
+      .yn-field { position: relative; }
+      /* font-size ровно 16px — на iOS меньший размер заставляет Safari зумить при фокусе. */
+      .yn-field textarea {
+        width: 100%; box-sizing: border-box; resize: none;
+        padding: 15px 16px; border-radius: 13px;
+        background: rgba(8,11,20,.6);
+        border: 1px solid rgba(217,174,95,.22);
+        color: #F2EDE0; font-family: inherit; font-size: 16px; line-height: 1.5;
+        outline: none; transition: border-color .18s ease;
+      }
+      .yn-field textarea::placeholder { color: rgba(242,237,224,.3); }
+      .yn-field textarea:focus { border-color: rgba(217,174,95,.55); }
+      .yn-meta { display: flex; justify-content: flex-end; margin: 6px 2px 0; font-size: 11px; color: rgba(242,237,224,.35); }
+
+      .yn-go {
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        width: 100%; margin-top: 14px; padding: 16px 20px;
+        border-radius: 13px; border: none; cursor: pointer;
+        font-family: inherit; font-size: 14.5px; font-weight: 800; letter-spacing: .04em;
+        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
+        box-shadow: 0 10px 30px rgba(217,174,95,.24);
+        transition: transform .18s ease, box-shadow .18s ease;
+      }
+      .yn-go:hover { transform: translateY(-1px); box-shadow: 0 14px 38px rgba(217,174,95,.34); }
+      .yn-go:disabled { opacity: .6; cursor: wait; transform: none; }
+      .yn-go i { font-size: 19px; }
+      .yn-note { margin-top: 10px; font-size: 11.5px; color: rgba(242,237,224,.34); text-align: center; min-height: 15px; }
+      .yn-note.yn-bad { color: #C4899B; }
+
+      .yn-out { margin-top: 24px; border-top: 1px solid rgba(217,174,95,.16); padding-top: 22px; animation: yn-in .5s ease both; }
+      @keyframes yn-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+      .yn-drawn { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+      .yn-mini {
+        flex: none; width: 62px; height: 100px; border-radius: 9px;
+        background: linear-gradient(160deg, #F2E9CF, #E4D3A8);
+        border: 1px solid #C7A254;
+        display: flex; align-items: center; justify-content: center;
+        color: #8A6B29; font-size: 26px;
+        animation: yn-flip .7s cubic-bezier(.2,.9,.3,1.2) both;
+      }
+      @keyframes yn-flip { from { transform: rotateY(90deg); } to { transform: rotateY(0); } }
+      .yn-verdict { font-family: 'Prata', serif; font-size: 26px; color: #E9C87E; line-height: 1.2; }
+      .yn-cardname { margin-top: 5px; font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: rgba(242,237,224,.45); }
+
+      .yn-text-wrap { position: relative; }
+      .yn-text { font-size: 15px; line-height: 1.75; color: rgba(242,237,224,.74); }
+      .yn-text b { color: #F0DDB0; font-weight: 600; }
+      /* Градиент гасит последние строки — текст обрывается визуально, а не резко. */
+      .yn-fade {
+        position: absolute; left: 0; right: 0; bottom: 0; height: 96px; pointer-events: none;
+        background: linear-gradient(180deg, rgba(11,15,30,0), rgba(11,15,30,.86) 62%, #0B0F1E);
+      }
+      .yn-lock { position: relative; margin-top: -10px; text-align: center; }
+      .yn-lock-t { font-family: 'Prata', serif; font-size: 20px; color: #F2EDE0; margin-bottom: 8px; }
+      .yn-lock-s { font-size: 13.5px; line-height: 1.6; color: rgba(242,237,224,.5); margin: 0 auto 18px; max-width: 430px; }
+      .yn-lock-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+        padding: 15px 30px; border-radius: 13px; text-decoration: none;
+        font-size: 14px; font-weight: 800;
+        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
+        box-shadow: 0 10px 30px rgba(217,174,95,.28);
+        transition: transform .18s ease;
+      }
+      .yn-lock-btn:hover { transform: translateY(-1px); }
+      .yn-lock-note { margin-top: 12px; font-size: 11.5px; color: rgba(242,237,224,.32); }
+
       /* ---------- Адаптив лендинга ---------- */
+      /* Длинные заголовки и слова вроде «ИИ-толкователем» не должны распирать макет. */
+      .lp-h1, .lp-h2, .lp-lede, .lp-sub, .yn-h, .yn-sub,
+      .lp-tile p, .lp-tile h3, .lp-step p, .lp-step h3 { overflow-wrap: break-word; }
+
       @media (max-width: 900px) {
         .lp-hero { grid-template-columns: 1fr; padding: 56px 0 64px; gap: 40px; }
         .lp-fan { height: 380px; }
         .lp-nav { display: none; }
         .lp-grid, .lp-steps { grid-template-columns: 1fr; }
         .lp-wrap { padding: 0 20px; }
+      }
+
+      @media (max-width: 620px) {
+        .lp-wrap { padding: 0 18px; }
+
+        /* Главный виновник обрезанного текста: nowrap на строке
+           «Таро · Астрология · Матрица судьбы» плюс разрядка .32em. */
+        .lp-eyebrow { white-space: normal; font-size: 10px; letter-spacing: .2em; gap: 10px; margin-bottom: 18px; }
+        .lp-eyebrow::before { width: 22px; flex: none; }
+
+        /* clamp с нижней границей 40px не влезал в узкие экраны. */
+        .lp-h1 { font-size: clamp(30px, 8.4vw, 44px); margin-bottom: 18px; }
+        .lp-lede { font-size: 15px; margin-bottom: 26px; }
+        .lp-hero { padding: 40px 0 52px; gap: 30px; }
+        .lp-cta-row { gap: 10px; }
+        .lp-cta, .lp-cta-ghost { width: 100%; box-sizing: border-box; justify-content: center; padding: 15px 20px; }
+
+        .lp-top { padding: 18px 0 16px; gap: 12px; }
+        .lp-brand { font-size: 15px; letter-spacing: .2em; gap: 8px; }
+        .lp-top-cta { padding: 9px 16px; font-size: 11px; letter-spacing: .1em; }
+
+        .lp-sec { padding: 52px 0; }
+        .lp-sec-head { margin-bottom: 30px; }
+        .lp-h2 { font-size: 26px; }
+        .lp-final .lp-h2 { font-size: 26px; }
+        .lp-kicker { letter-spacing: .2em; font-size: 10px; }
+        .lp-tile { padding: 20px 18px; }
+        .lp-auth-sec { padding: 56px 0 64px; }
+        .lp-auth-card { padding: 28px 20px 24px; }
+        .lp-foot { font-size: 10px; letter-spacing: .08em; gap: 10px; }
+
+        /* Веер карт был шире экрана: одно только кольцо — 420px. */
+        .lp-fan { height: 300px; }
+        .lp-ring { width: 260px; height: 260px; }
+        .lp-card { width: 104px; height: 174px; margin: -87px 0 0 -52px; border-radius: 10px; }
+        .lp-card::after { font-size: 22px; }
+        .lp-face-inner { padding: 10px 8px; inset: 6px; }
+        .lp-face-num { font-size: 12px; }
+        .lp-face-name { font-size: 8.5px; letter-spacing: .22em; margin-right: -.22em; }
+        .lp-face-inner svg { width: 44px; height: 44px; }
+
+        .yn-card { padding: 24px 18px 22px; border-radius: 16px; }
+        .yn-card::before { left: 24px; right: 24px; }
+        .yn-h { font-size: 22px; }
+        .yn-sub { font-size: 13.5px; }
+        .yn-verdict { font-size: 22px; }
+        .yn-mini { width: 54px; height: 88px; font-size: 22px; }
+        .yn-lock-btn { width: 100%; box-sizing: border-box; }
+      }
+
+      @media (max-width: 380px) {
+        .lp-h1 { font-size: 29px; }
+        .lp-brand { font-size: 13px; letter-spacing: .12em; }
+        .lp-top-cta { padding: 8px 12px; letter-spacing: .05em; }
+        .lp-fan { height: 250px; }
+        .lp-ring { width: 216px; height: 216px; }
+        .lp-card { width: 88px; height: 148px; margin: -74px 0 0 -44px; }
+        .yn-drawn { gap: 12px; }
       }
       @media (prefers-reduced-motion: reduce) {
         .lp-face { animation: none; }
@@ -955,7 +1118,7 @@ body.chat-mode .chat-head{padding-top:16px}
         </a>
         <nav class="lp-nav">
           <a href="#lp-tools">Что внутри</a>
-          <a href="#lp-library">Библиотека</a>
+          <a href="#lp-library">Библиоте��а</a>
           <a href="/sonnik/">Сонник</a>
           <a href="/karty/">Карты</a>
           <a href="#lp-faq">Вопросы</a>
@@ -966,7 +1129,7 @@ body.chat-mode .chat-head{padding-top:16px}
       <section class="lp-hero">
         <div>
           <div class="lp-eyebrow">Таро · Астрология · Матрица судьбы</div>
-          <h1 class="lp-h1">Карты уже знают.<br><em>Осталось спросить.</em></h1>
+          <h1 class="lp-h1">Карты уже знают.<br><em>Осталось спроси��ь.</em></h1>
           <p class="lp-lede">NEOTARO — ночной кабинет гаданий: расклады Таро с ИИ‑толкователем, натальная карта, матрица судьбы, совместимость и лунный календарь. Без эзотерического тумана — только вы, вопрос и колода.</p>
           <div class="lp-cta-row">
             <a class="lp-cta" href="/login/"><i class="ph-fill ph-sparkle" aria-hidden="true"></i>Войти и вытянуть карту дня</a>
@@ -989,6 +1152,52 @@ body.chat-mode .chat-head{padding-top:16px}
                 <circle cx="32" cy="32" r="3.4" fill="#F2E9CF"/>
               </svg>
               <span class="lp-face-name">Звезда</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="yn" id="yn">
+        <div class="yn-card">
+          <div class="yn-kicker">Бесплатно · без регистрации</div>
+          <h2 class="yn-h">Спросите карты прямо сейчас</h2>
+          <p class="yn-sub">Один вопрос, одна карта, прямой ответ. Формулируйте так, чтобы ответить можно было «да» или «нет».</p>
+
+          <div class="yn-chips">
+            <button type="button" class="yn-chip">Стоит ли мне сейчас менять работу?</button>
+            <button type="button" class="yn-chip">Вернётся ли этот человек?</button>
+            <button type="button" class="yn-chip">Получится ли задуманное в этом месяце?</button>
+          </div>
+
+          <div class="yn-field">
+            <label for="yn-q" class="lp-sr">Ваш вопрос</label>
+            <textarea id="yn-q" rows="2" maxlength="140" placeholder="Например: получу ли я эту должность?"></textarea>
+            <div class="yn-meta"><span id="yn-count">0 / 140</span></div>
+          </div>
+
+          <button type="button" class="yn-go" id="yn-go">
+            <i class="ph-fill ph-sparkle" aria-hidden="true"></i>
+            <span id="yn-go-label">Вытянуть карту</span>
+          </button>
+          <div class="yn-note" id="yn-note">Ответ приходит примерно за десять секунд.</div>
+
+          <div class="yn-out" id="yn-out" hidden>
+            <div class="yn-drawn">
+              <div class="yn-mini" aria-hidden="true">✦</div>
+              <div>
+                <div class="yn-verdict" id="yn-verdict"></div>
+                <div class="yn-cardname" id="yn-cardname"></div>
+              </div>
+            </div>
+            <div class="yn-text-wrap">
+              <div class="yn-text" id="yn-text"></div>
+              <div class="yn-fade" aria-hidden="true"></div>
+            </div>
+            <div class="yn-lock" id="yn-lock">
+              <div class="yn-lock-t">Дальше — самое важное</div>
+              <p class="yn-lock-s">Полный разбор с советом и сроками открывается в кабинете. Вход занимает около десяти секунд.</p>
+              <a class="yn-lock-btn" id="yn-lock-btn" href="/login/?from=yesno">Смотреть расклад полностью</a>
+              <div class="yn-lock-note">И ещё карта дня, расклады на 10 схем и натальная карта — бесплатно</div>
             </div>
           </div>
         </div>
@@ -1053,7 +1262,7 @@ body.chat-mode .chat-head{padding-top:16px}
           <div class="lp-step">
             <span class="lp-step-num">III</span>
             <h3>Прочтите послание</h3>
-            <p>Оракул толкует расклад целиком и остаётся рядом: обсудите детали в чате, пока не станет ясно.</p>
+            <p>Оракул толкует раскла�� целиком и остаётся рядом: обсудите детали в чате, пока не станет ясно.</p>
           </div>
         </div>
       </section>
@@ -1152,7 +1361,7 @@ body.chat-mode .chat-head{padding-top:16px}
         <div class="lp-faq">
           <details><summary>Гадание на Таро онлайн бесплатно — правда бесплатно?</summary><p class="a">Да. Карта дня открывается раз в сутки бесплатно и без оплаты чего-либо, а вся библиотека разборов — значения 78 карт, расклады, сонник, числа и матрица — доступна вообще без входа. Энергия и Звезды нужны только для больших раскладов и длинных диалогов с оракулом.</p></details>
           <details><summary>Нужна ли регистрация?</summary><p class="a">Чтобы читать разборы — нет. Чтобы вытянуть карту дня и сохранять историю — да, вход занимает около десяти секунд через Telegram, Google, Яндекс или VK. Пароль придумывать не нужно.</p></details>
-          <details><summary>Чем ИИ-оракул отличается от обычного описания карты?</summary><p class="a">Обычное описание одинаково для всех. Оракул видит ваш вопрос, конкретные позиции расклада и порядок карт, помнит предыдущие сообщения и объясняет связь между картами. Можно спорить и уточнять — это диалог, а не справка.</p></details>
+          <details><summary>Чем ИИ-оракул отличается от обычного описания карты?</summary><p class="a">Обычное описание одинаково для всех. Оракул видит ваш вопрос, конкретные позиции расклада и порядок карт, помнит предыдущие сообщения и объясняет связ�� между картами. Можно спорить и уточнять — это диалог, а не справка.</p></details>
           <details><summary>Насколько точны предсказания?</summary><p class="a">Карты не сообщают дату событий и не гарантируют исход. Они хорошо показывают расстановку сил, ваши мотивы и слепые зоны. Точность стоит мерить не совпадением с будущим, а тем, стало ли вам яснее, что делать сейчас.</p></details>
           <details><summary>На чем основан сонник?</summary><p class="a">На аналитической психологии Карла Юнга и архетипических значениях символов, а не на народных приметах. У каждого символа есть ядро, но смысл меняют детали сна и ваш контекст — поэтому каждая страница разбирает несколько сценариев.</p></details>
           <details><summary>Что нужно для натальной карты?</summary><p class="a">Дата рождения, максимально точное время и город. Время влияет на асцендент и дома: разница в час может сместить весь рисунок карты. Если время неизвестно, разбор все равно возможен, но по Солнцу и Луне.</p></details>
@@ -1261,6 +1470,112 @@ const APP_URL = "/app/";
    vk-login-btn, auth-card, web-login-status — ни одного из этих id
    в разметке лендинга нет. Код не выполнялся никогда.
    Вход живёт только на /login/. */
+
+/* ==================== БЫСТРЫЙ РАСКЛАД ДА/НЕТ ==================== */
+(function(){
+  const q  = document.getElementById('yn-q');
+  const go = document.getElementById('yn-go');
+  if(!q || !go) return;
+
+  const label = document.getElementById('yn-go-label');
+  const count = document.getElementById('yn-count');
+  const note  = document.getElementById('yn-note');
+  const out   = document.getElementById('yn-out');
+  const vEl   = document.getElementById('yn-verdict');
+  const cEl   = document.getElementById('yn-cardname');
+  const tEl   = document.getElementById('yn-text');
+  const lock  = document.getElementById('yn-lock');
+  const LIMIT = 140;
+  let busy = false;
+
+  function setNote(text, bad){
+    note.textContent = text || '';
+    note.classList.toggle('yn-bad', !!bad);
+  }
+
+  /* Сервер присылает текст с <b> и <br>. Экранируем всё,
+     потом возвращаем только эти два тега — дешёвле, чем тянуть DOMPurify ради одного блока. */
+  function safeHtml(raw){
+    return String(raw || '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/&lt;b&gt;/g, '<b>').replace(/&lt;\/b&gt;/g, '</b>')
+      .replace(/&lt;br\s*\/?&gt;/g, '<br>');
+  }
+
+  q.addEventListener('input', function(){
+    count.textContent = q.value.length + ' / ' + LIMIT;
+  });
+
+  document.querySelectorAll('.yn-chip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      q.value = chip.textContent.trim();
+      count.textContent = q.value.length + ' / ' + LIMIT;
+      q.focus();
+    });
+  });
+
+  /* Enter оставляем для переноса строки, отправка — Ctrl/Cmd+Enter. */
+  q.addEventListener('keydown', function(e){
+    if((e.metaKey || e.ctrlKey) && e.key === 'Enter') go.click();
+  });
+
+  go.addEventListener('click', function(){
+    if(busy) return;
+    const text = q.value.trim();
+    if(text.length < 8){
+      setNote('Сформулируйте вопрос чуть подробнее — хотя бы несколько слов.', true);
+      q.focus();
+      return;
+    }
+
+    busy = true;
+    go.disabled = true;
+    label.textContent = 'Карты тасуются…';
+    setNote('Обычно это занимает около десяти секунд.');
+
+    fetch(API_URL + '/free/yesno', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: text })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!data || !data.success){
+        const msg = data && data.message;
+        if(msg === 'limit'){
+          /* Лимит — тоже точка конверсии, показываем призыв, а не голую ошибку. */
+          out.hidden = false;
+          vEl.textContent = 'На сегодня всё';
+          cEl.textContent = '';
+          tEl.innerHTML = 'Бесплатные вопросы на сегодня закончились. В кабинете ограничений нет.';
+          lock.hidden = false;
+          setNote('');
+        } else if(msg === 'bad_question'){
+          setNote('Похоже, это не вопрос к картам. Попробуйте переформулировать.', true);
+        } else {
+          setNote('Связь со звёздами прервалась. Попробуйте ещё раз через минуту.', true);
+        }
+        return;
+      }
+
+      vEl.textContent = data.verdict || 'Ответ получен';
+      cEl.textContent = data.card ? ('Выпал аркан · ' + data.card) : '';
+      tEl.innerHTML = safeHtml(data.teaser);
+      lock.hidden = false;
+      out.hidden = false;
+      setNote('');
+      try { out.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch(e){}
+    })
+    .catch(function(){
+      setNote('Не удалось связаться с сервером. Проверьте интернет и попробуйте снова.', true);
+    })
+    .then(function(){
+      busy = false;
+      go.disabled = false;
+      label.textContent = 'Задать другой вопрос';
+    });
+  });
+})();
 </script>
 </body>
 </html>
