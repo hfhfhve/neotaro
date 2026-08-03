@@ -8,9 +8,9 @@
     var TC = {ink:'#0B0F1E', obsidian:'#000000', dawn:'#FDF9F0'};
     var pref = 'obsidian';
     try {
-      /* neo_theme_pick ставится только когда человек РУЧНУЮ выбрал тему.
-         Без этой проверки старый дефолт 'ink' уже лежит в localStorage почти
-         у всех, и смена дефолта не подействовала бы ни на кого. */
+      /* neo_theme_pick ставится только при РУЧНОМ выборе темы. Без этой проверки
+         старый дефолт 'ink' уже лежит в localStorage почти у всех,
+         и смена дефолта не подействовала бы ни на кого. */
       var picked = localStorage.getItem('neo_theme_pick');
       var saved  = localStorage.getItem('neo_theme');
       pref = picked ? (saved || 'obsidian') : 'obsidian';
@@ -88,7 +88,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="NEOTARO">
   <meta property="og:image" content="https://neotaro.ru/og-cover.png">
-  <!-- Убраны три шрифта иконок Phosphor: блокировали отрисовку, а на странице
+  <!-- Убраны три шрифта иконок Phosphor: блокировали отрисовку, �� на странице
        нет ни одной иконки оттуда. html2canvas тоже убран — его никто не вызывал. -->
   <!-- DOMPurify теперь defer: он нужен при выводе ответов, а не при загрузке.
        Функция clean() уже умеет работать без него. -->
@@ -2122,7 +2122,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
   <p class="sheet-sub" data-t="ref_text2">Отправьте её любым способом. Каждая первая регистрация по ссылке приносит вам бонус.</p>
   <input class="field num" id="ref-link" readonly style="font-size:13px">
   <div class="sheet-acts">
-    <button class="btn btn-brass btn-wide" onclick="copyRef()" data-t="ref_copy">Ск��пировать ссылку</button>
+    <button class="btn btn-brass btn-wide" onclick="copyRef()" data-t="ref_copy">Скопировать ссылку</button>
     <button class="btn btn-line btn-wide" onclick="shareRef()" data-t="ref_share">Поделиться</button>
   </div>
   <div class="hair"></div>
@@ -2350,7 +2350,7 @@ const STR = {
   auth_reset_btn:{ru:'Сохранить пароль',en:'Save password',es:'Guardar contraseña',fr:'Enregistrer le mot de passe',de:'Passwort speichern'},
   auth_forgot:{ru:'Забыли пароль?',en:'Forgot password?',es:'¿Olvidó la contraseña?',fr:'Mot de passe oublié ?',de:'Passwort vergessen?'},
   auth_to_reg:{ru:'Создать аккаунт',en:'Create account',es:'Crear cuenta',fr:'Créer un compte',de:'Konto erstellen'},
-  auth_to_login:{ru:'У меня уже есть аккаунт',en:'I already have an account',es:'Ya tengo una cuenta',fr:'J’ai déjà un compte',de:'Ich habe bereits ein Konto'},
+  auth_to_login:{ru:'У меня уже ��сть аккаунт',en:'I already have an account',es:'Ya tengo una cuenta',fr:'J’ai déjà un compte',de:'Ich habe bereits ein Konto'},
   auth_back:{ru:'Назад',en:'Back',es:'Atrás',fr:'Retour',de:'Zurück'},
   auth_resend:{ru:'Отправить код заново',en:'Send the code again',es:'Reenviar el código',fr:'Renvoyer le code',de:'Code erneut senden'},
   auth_resend_in:{ru:'Повторно — через {sec} с',en:'Resend in {sec} s',es:'Reenviar en {sec} s',fr:'Renvoyer dans {sec} s',de:'Erneut in {sec} s'},
@@ -2952,8 +2952,34 @@ function closeSheets(){
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeSheets(); });
 
 /* ---------- ворота ---------- */
+/* Куда уводить неавторизованного гостя.
+   '/login/' — сразу форма входа, '/' — лендинг в корне. Меняется одной строкой. */
+const AUTH_REDIRECT_URL = '/login/';
+let _bouncing = false;
+
+function bounceToAuth(){
+  /* Запросов в полёте может быть несколько, и каждый может принести 401.
+     Без этого флага получим пачку редиректов подряд. */
+  if(_bouncing) return;
+  _bouncing = true;
+  try {
+    localStorage.removeItem('neotaro_token');
+    localStorage.removeItem('neotaro_user');
+  } catch(e){}
+  /* Запоминаем, куда человек шёл, чтобы после входа вернуть его туда же. */
+  var next = '';
+  try {
+    next = '?next=' + encodeURIComponent(location.pathname + location.search + location.hash);
+  } catch(e){}
+  /* replace, а не href: иначе кнопка «назад» вернёт на /app/ и всё повторится. */
+  location.replace(AUTH_REDIRECT_URL + next);
+}
+
 function showGate(which){
-  // Вход теперь живёт внутри приложения, а не на отдельной странице сайта.
+  /* Веб-гостя больше не держим во внутреннем экране входа, а уводим на /login/.
+     В Telegram и VK редиректить нельзя: там авторизация идёт по initData,
+     токена в localStorage нет и быть не должно — иначе выкинем своих же юзеров. */
+  if(which === 'login' && bridge.isWeb){ bounceToAuth(); return; }
   ['boot','login','down'].forEach(g => document.getElementById('gate-' + g).classList.add('hidden'));
   if(which) document.getElementById('gate-' + which).classList.remove('hidden');
   document.getElementById('shell').style.display = which ? 'none' : 'flex';
