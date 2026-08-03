@@ -1,0 +1,45 @@
+name: Add favicon to all pages
+
+# Запуск вручную: GitHub -> Actions -> "Add favicon to all pages" -> Run workflow
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Только показать, ничего не менять'
+        type: boolean
+        default: true
+      force:
+        description: 'Переписать блок даже там, где он уже есть'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  favicon:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run add_favicon.py
+        run: |
+          ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
+          echo "python3 add_favicon.py . $ARGS"
+          python3 add_favicon.py . $ARGS
+
+      - name: Commit and push
+        if: ${{ inputs.dry_run == false }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "Ничего не изменилось - коммит не нужен."
+          else
+            git add -A
+            git commit -m "chore: add favicon links to all pages [skip ci]"
+            git push
+          fi
