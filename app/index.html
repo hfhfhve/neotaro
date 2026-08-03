@@ -2,17 +2,24 @@
 <html lang="ru">
 <head>
   <meta name="yandex-verification" content="4829483e1c30ff58" />
-  <meta name="theme-color" content="#0B0F1E" id="meta-theme-color">
+  <meta name="theme-color" content="#000000" id="meta-theme-color">
   <script>/* тема до первой отрисовки — иначе будет вспышка */
   (function(){
     var TC = {ink:'#0B0F1E', obsidian:'#000000', dawn:'#FDF9F0'};
-    var pref = 'ink';
-    try { pref = localStorage.getItem('neo_theme') || 'ink'; } catch(e){}
-    if(['ink','obsidian','dawn','auto'].indexOf(pref) < 0) pref = 'ink';
+    var pref = 'obsidian';
+    try {
+      /* neo_theme_pick ставится только когда человек РУЧНУЮ выбрал тему.
+         Без этой проверки старый дефолт 'ink' уже лежит в localStorage почти
+         у всех, и смена дефолта не подействовала бы ни на кого. */
+      var picked = localStorage.getItem('neo_theme_pick');
+      var saved  = localStorage.getItem('neo_theme');
+      pref = picked ? (saved || 'obsidian') : 'obsidian';
+    } catch(e){}
+    if(['ink','obsidian','dawn','auto'].indexOf(pref) < 0) pref = 'obsidian';
     var real = pref;
     if(pref === 'auto'){
       var mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)');
-      real = (mq && mq.matches) ? 'dawn' : 'ink';
+      real = (mq && mq.matches) ? 'dawn' : 'obsidian';
     }
     var h = document.documentElement;
     h.setAttribute('data-theme', real);
@@ -1746,7 +1753,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
         <section class="view" id="v-dream">
           <div class="eyebrow" style="margin-bottom:12px" data-t="nav_dream">Сонник</div>
           <h1 class="h1" data-t="dream_title">Сон говорит символами — разберём каждый</h1>
-          <p class="sub" style="margin-top:12px;max-width:52ch" data-t="dream_lead">Пишите как помните: место, люди, действия, что чувствовали на пробуждении. Толкование придёт в диалог с оракулом.</p>
+          <p class="sub" style="margin-top:12px;max-width:52ch" data-t="dream_lead">Пишите как помните: место, л��ди, действия, что чувствовали на пробуждении. Толкование придёт в диалог с оракулом.</p>
           <div class="panel panel-pad" style="margin-top:24px;max-width:720px">
             <label class="field-lab" for="dream-in" data-t="dream_label">Содержание сна</label>
             <textarea id="dream-in" class="field" rows="6" data-ph="dream_ph" placeholder="Мне снилось, что я падаю в тёмную воду, и вода оказалась тёплой…"></textarea>
@@ -2094,7 +2101,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 <div class="sheet" id="sheet-history">
   <div class="sheet-grip"></div>
   <h3 data-t="hist_title">Мои расклады</h3>
-  <p class="sheet-sub" data-t="hist_sub">Все разборы сохраняются целиком — вернитесь к любому.</p>
+  <p class="sheet-sub" data-t="hist_sub">��се разборы сохраняются целиком — вернитесь к любому.</p>
   <div id="hist-list" class="stack"></div>
   <button class="btn btn-quiet btn-wide" id="hist-more" onclick="loadHistory()" style="margin-top:14px;display:none" data-t="hist_more">Показать ещё</button>
 </div>
@@ -2115,7 +2122,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
   <p class="sheet-sub" data-t="ref_text2">Отправьте её любым способом. Каждая первая регистрация по ссылке приносит вам бонус.</p>
   <input class="field num" id="ref-link" readonly style="font-size:13px">
   <div class="sheet-acts">
-    <button class="btn btn-brass btn-wide" onclick="copyRef()" data-t="ref_copy">Скопировать ссылку</button>
+    <button class="btn btn-brass btn-wide" onclick="copyRef()" data-t="ref_copy">Ск��пировать ссылку</button>
     <button class="btn btn-line btn-wide" onclick="shareRef()" data-t="ref_share">Поделиться</button>
   </div>
   <div class="hair"></div>
@@ -4492,12 +4499,12 @@ const THEMES = [
   {code:'auto',     sw:['#0B0F1E','#FDF9F0','#D9AE5F']}
 ];
 const THEME_TC = {ink:'#0B0F1E', obsidian:'#000000', dawn:'#FDF9F0'};
-let themePref = (window.__themeBoot && window.__themeBoot.pref) || 'ink';
+let themePref = (window.__themeBoot && window.__themeBoot.pref) || 'obsidian';
 
 function resolveTheme(pref){
   if(pref !== 'auto') return pref;
   const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)');
-  return (mq && mq.matches) ? 'dawn' : 'ink';
+  return (mq && mq.matches) ? 'dawn' : 'obsidian';
 }
 function applyThemeDom(){
   const real = resolveTheme(themePref);
@@ -4505,7 +4512,7 @@ function applyThemeDom(){
   h.setAttribute('data-theme', real);
   h.setAttribute('data-theme-pref', themePref);
   const m = document.getElementById('meta-theme-color');
-  if(m) m.setAttribute('content', THEME_TC[real] || '#0B0F1E');
+  if(m) m.setAttribute('content', THEME_TC[real] || '#000000');
   try { localStorage.setItem('neo_theme', themePref); } catch(e){}
   paintThemeLabel();
 }
@@ -4525,6 +4532,8 @@ function renderThemes(){
 async function setTheme(code){
   if(!THEMES.some(t => t.code === code)) return;
   themePref = code;
+  /* Отмечаем осознанный выбор, чтобы буткрипт больше не навязывал дефолт. */
+  try { localStorage.setItem('neo_theme_pick', '1'); } catch(e){}
   applyThemeDom();
   renderThemes();
   closeSheets();
@@ -5810,7 +5819,7 @@ function pwaStandalone(){
 }
 function pwaIsIOS(){
   const ua = navigator.userAgent || '';
-  // iPad с iPadOS притворяется макбуком, ловим его по тачскрину
+  // iPad с iPadOS при��воряется макбуком, ловим его по тачскрину
   return /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
 }
 
