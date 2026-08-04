@@ -1,4 +1,4 @@
-з#!/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 add_metrika.py (v2) — ставит счётчик Яндекс.Метрики во ВСЕ .html файлы neotaro.ru.
