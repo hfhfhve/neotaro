@@ -1,0 +1,79 @@
+name: Fix contact email
+
+# Запуск вручную: GitHub -> Actions -> "Fix contact email" -> Run workflow
+#
+# Меняет личный gmail на support@neotaro.ru во всех файлах сайта.
+# Скрипт одноразовый: после успешного прогона и скрипт, и этот файл можно удалить.
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Только показать, ничего не менять'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  mail:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Run fix_mail.py
+        run: |
+          ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          echo "python3 fix_mail.py . $ARGS"
+          python3 fix_mail.py . $ARGS
+
+      - name: Check JSON-LD
+        if: ${{ inputs.dry_run == false }}
+        run: |
+          python3 - <<'PYEOF'
+          import re, io, json, os, sys
+
+          RE = re.compile(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', re.S | re.I)
+          bad = 0
+          checked = 0
+
+          for dirpath, dirnames, filenames in os.walk('.'):
+              dirnames[:] = [d for d in dirnames if d not in ('.git', '.github', 'node_modules')]
+              for fn in filenames:
+                  if not fn.lower().endswith(('.html', '.htm')):
+                      continue
+                  p = os.path.join(dirpath, fn)
+                  try:
+                      src = io.open(p, encoding='utf-8').read()
+                  except Exception:
+                      continue
+                  for b in RE.findall(src):
+                      if not b.strip():
+                          continue
+                      checked += 1
+                      try:
+                          json.loads(b)
+                      except Exception as e:
+                          bad += 1
+                          print('BROKEN JSON-LD in %s: %s' % (p, e))
+
+          print('Проверено блоков JSON-LD: %d, битых: %d' % (checked, bad))
+          if bad:
+              print('::error::Сломана разметка JSON-LD — коммит отменён')
+              sys.exit(1)
+          PYEOF
+
+      - name: Commit and push
+        if: ${{ inputs.dry_run == false }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "Ничего не изменилось - коммит не нужен."
+          else
+            git add -A
+            git commit -m "chore: use support@neotaro.ru as contact email [skip ci]"
+            git push
+          fi
