@@ -1,0 +1,68 @@
+name: Add Yandex Metrika to all pages
+
+# Запуск вручную: GitHub -> Actions -> "Add Yandex Metrika to all pages" -> Run workflow
+on:
+  workflow_dispatch:
+    inputs:
+      metrika_id:
+        description: 'Номер счётчика (можно оставить пустым, тогда возьмётся из переменной METRIKA_ID)'
+        type: string
+        default: ''
+      dry_run:
+        description: 'Только показать, ничего не менять'
+        type: boolean
+        default: true
+      force:
+        description: 'Переписать блок даже там, где он уже есть'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  metrika:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Resolve counter id
+        id: cid
+        env:
+          INPUT_ID: ${{ inputs.metrika_id }}
+          VAR_ID: ${{ vars.METRIKA_ID }}
+        run: |
+          ID="$INPUT_ID"
+          if [ -z "$ID" ]; then ID="$VAR_ID"; fi
+          case "$ID" in
+            ''|*[!0-9]*)
+              echo "::error::Нет номера счётчика. Задай его в поле metrika_id при запуске или создай переменную METRIKA_ID в Settings -> Secrets and variables -> Actions -> Variables."
+              exit 1
+              ;;
+          esac
+          echo "id=$ID" >> "$GITHUB_OUTPUT"
+          echo "Счётчик: $ID"
+
+      - name: Run add_metrika.py
+        env:
+          METRIKA_ID: ${{ steps.cid.outputs.id }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
+          echo "python3 add_metrika.py . $ARGS"
+          python3 add_metrika.py . $ARGS
+
+      - name: Commit and push
+        if: ${{ inputs.dry_run == false }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "Ничего не изменилось - коммит не нужен."
+          else
+            git add -A
+            git commit -m "chore: add Yandex Metrika counter to all pages [skip ci]"
+            git push
+          fi
