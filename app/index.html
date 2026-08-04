@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <meta charset="UTF-8">
   <meta name="yandex-verification" content="4829483e1c30ff58" />
   <meta name="theme-color" content="#000000" id="meta-theme-color">
   <script>/* тема до первой отрисовки — иначе будет вспышка */
@@ -27,7 +28,6 @@
     window.__themeBoot = {pref: pref, real: real, TC: TC};
   })();
   </script>
-  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <!-- neotaro-metrika -->
 <script type="text/javascript">
@@ -53,6 +53,29 @@
    };
    window.neoHit = function(url, options){
      try { if (typeof ym === 'function') ym(111297297, 'hit', url, options || {}); } catch(e){}
+   };
+
+   /* Покупки шлём только через это: Метрика получает сумму в order_price,
+      иначе в отчётах не будет ни выручки, ни окупаемости каналов. */
+   window.neoPurchase = function(name, price, extra){
+     var p = extra || {};
+     var val = parseFloat(price);
+     if (!isNaN(val) && val > 0) { p.order_price = val; p.currency = 'RUB'; }
+     if (window.neoGoal) window.neoGoal(name, p);
+   };
+
+   /* Кто этот человек. Даёт склейку устройств и сегменты "платит / не платит". */
+   window.neoUser = function(id, params){
+     try {
+       if (typeof ym !== 'function') return;
+       if (id) ym(111297297, 'setUserID', String(id));
+       if (params) ym(111297297, 'userParams', params);
+     } catch(e){}
+   };
+
+   /* ClientID нужен, чтобы потом сверять оплаты с ЮKassa на сервере. */
+   window.neoClientId = function(cb){
+     try { if (typeof ym === 'function') ym(111297297, 'getClientID', cb); } catch(e){}
    };
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/111297297" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
@@ -1129,7 +1152,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 .nk-plan li{font-family:var(--sans);font-size:12.5px;color:#C9CBD8;line-height:1.5;padding-left:15px;position:relative}
 .nk-plan li:before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;background:var(--brass);transform:rotate(45deg)}
 .nk-plan .btn{margin-top:auto}
-/* ====== Экран тарифов: спокойная люксовая подача ====== */
+/* ====== Экран тарифов: спокойная люкс��в��я подача ====== */
 .plx{margin-top:8px}
 .plx-per{display:flex;justify-content:center;margin:28px 0 24px}
 .plx-seg{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--ink-900)}
@@ -1252,7 +1275,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
     </svg>
   </div>
   <h2 id="auth-title" data-t="gate_title">Вход в кабинет</h2>
-  <p id="auth-lead" data-t="gate_text">Войдите через Telegram или по почте — всё сохраняется в одном кабинете.</p>
+  <p id="auth-lead" data-t="gate_text">Войдите через Telegram или по по��те — всё сохраняется в одном кабинете.</p>
 
   <div class="auth-box">
     <div id="auth-social">
@@ -1510,7 +1533,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <div class="orn prx-grp"><span class="eyebrow" data-t="prx_grp_astro">Астрология</span></div>
           <div class="pgrid">
             <button class="pcell" onclick="go('astro')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg><b data-t="nav_astro">Космо-паспорт</b><span data-t="prx_h_astro">Натальная карта</span></button>
-            <button class="pcell" onclick="go('syn')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg><b data-t="nav_syn">Совместимость</b><span data-t="prx_h_syn">Вы и партнёр</span></button>
+            <button class="pcell" onclick="go('syn')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg><b data-t="nav_syn">Совместимость</b><span data-t="prx_h_syn">В�� и п����ртнёр</span></button>
             <button class="pcell" onclick="go('matrix')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg><b data-t="nav_matrix">Матрица судьбы</b><span data-t="prx_h_matrix">Код по дате рождения</span></button>
             <button class="pcell" onclick="go('calendar')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg><b data-t="nav_calendar">Лунный день</b><span data-t="prx_h_calendar">Луна сегодня</span></button>
           </div>
@@ -1757,7 +1780,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <button class="btn btn-quiet btn-sm" onclick="go('settings')" style="margin-bottom:14px">← <span data-t="pf_settings">Настройки</span></button>
           <div class="eyebrow" style="margin-bottom:12px" data-t="mem_title">Хроника</div>
           <h1 class="h1" data-t="mem_h1">Оракул помнит вашу историю</h1>
-          <p class="sub" data-t="mem_lead">Здесь всё, что оракул запомнил из ваших разговоров, раскладов и снов. Вы управляете этим полностью: любую запись можно убрать в один касательный жест.</p>
+          <p class="sub" data-t="mem_lead">Здесь всё, что оракул запомнил из ва��их разговоров, раскладов и снов. Вы управляете этим полностью: любую запись можно убрать в один касательный жест.</p>
 
           <div class="stack" style="margin-top:18px">
             <div class="rowcard">
@@ -1837,7 +1860,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <!-- ФОРМА -->
           <div id="astro-empty">
             <h1 class="h1" data-t="astro_title">Три точки задают всю карту</h1>
-            <p class="sub" style="margin-top:12px;max-width:52ch" data-t="astro_lead">Дата, точное время и город рождения. Если время неизвестно — отметьте это, расчёт пройдёт без домов.</p>
+            <p class="sub" style="margin-top:12px;max-width:52ch" data-t="astro_lead">Дата, точное время и город рождения. Если время неизвестно — отметьте это, расчёт пройдёт без до��ов.</p>
             <div class="panel panel-pad" style="margin-top:24px;max-width:640px">
               <div class="row">
                 <div><label class="field-lab" for="as-d" data-t="f_day">День</label><input id="as-d" class="field num" inputmode="numeric" maxlength="2" placeholder="07"></div>
@@ -1867,7 +1890,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
                 <span class="sub" data-t="f_unknown">Время рождения неизвестно</span>
               </label>
               <button class="btn btn-brass btn-wide" style="margin-top:20px" onclick="saveAstro()" id="as-save" data-t="astro_btn">Построить карту</button>
-              <p class="label" style="margin-top:12px" data-t="astro_free">Расчёт и колесо карты — бесплатно, энергия не списывается</p>
+              <p class="label" style="margin-top:12px" data-t="astro_free">Расчёт и колесо ��арты — бесплатно, энергия не списывается</p>
             </div>
           </div>
 
@@ -2317,7 +2340,7 @@ const STR = {
   city_change:{ru:'Изменить',en:'Change',es:'Cambiar',fr:'Modifier',de:'\u00c4ndern'},
   city_searching:{ru:'Ищем города…',en:'Looking for cities\u2026'},
   city_none:{ru:'Такого города не нашлось. Проверьте написание или введите ближайший крупный город.',en:'No city like that. Check the spelling or enter the nearest large city.'},
-  city_neterr:{ru:'Справочник городов не ответил. Повторите через пару секунд.',en:'The city directory did not respond. Try again in a moment.'},
+  city_neterr:{ru:'С��равочник городов не ответил. Повторите через пару секунд.',en:'The city directory did not respond. Try again in a moment.'},
   city_pick_first:{ru:'Выберите город из списка поиска',en:'Pick a city from the search list'},
   nav_home:{ru:'Сегодня',en:'Today',es:'Hoy',fr:'Aujourd\u2019hui',de:'Heute'},
   nav_chat:{ru:'Оракул',en:'Oracle',es:'Oráculo',fr:'Oracle',de:'Orakel'},
@@ -2476,7 +2499,7 @@ const STR = {
   sub_until:{ru:'действует до {date}',en:'active until {date}',es:'activa hasta {date}',fr:'active jusqu’au {date}',de:'aktiv bis {date}'},
   sub_canceled:{ru:'автопродление выключено',en:'auto-renewal off',es:'renovación desactivada',fr:'renouvellement désactivé',de:'Auto-Verlängerung aus'},
   sub_cancel_btn:{ru:'Отменить подписку',en:'Cancel subscription',es:'Cancelar suscripción',fr:'Résilier l’abonnement',de:'Abo kündigen'},
-  sub_cancel_confirm:{ru:'Отменить подписку? Доступ сохранится до конца оплаченного периода.',en:'Cancel the subscription? Access stays until the end of the paid period.',es:'¿Cancelar la suscripción? El acceso dura hasta el final del periodo pagado.',fr:'Résilier l’abonnement ? L’accès reste jusqu’à la fin de la période payée.',de:'Abo kündigen? Zugang bleibt bis zum Ende der bezahlten Periode.'},
+  sub_cancel_confirm:{ru:'От��енить подписку? Доступ сохранится до конца оплаченного периода.',en:'Cancel the subscription? Access stays until the end of the paid period.',es:'¿Cancelar la suscripción? El acceso dura hasta el final del periodo pagado.',fr:'Résilier l’abonnement ? L’accès reste jusqu’à la fin de la période payée.',de:'Abo kündigen? Zugang bleibt bis zum Ende der bezahlten Periode.'},
   sub_cancel_done:{ru:'Подписка отменена — доступ до конца периода',en:'Subscription canceled — access until the end of the period',es:'Suscripción cancelada — acceso hasta el final del periodo',fr:'Abonnement résilié — accès jusqu’à la fin de la période',de:'Abo gekündigt — Zugang bis Periodenende'},
   pm_block:{ru:'Способ оплаты',en:'Payment method',es:'Método de pago',fr:'Moyen de paiement',de:'Zahlungsmethode'},
   pm_next:{ru:'следующее списание {date} — {sum} ₽',en:'next charge on {date} — {sum} ₽',es:'próximo cargo {date} — {sum} ₽',fr:'prochain prélèvement {date} — {sum} ₽',de:'nächste Abbuchung {date} — {sum} ₽'},
@@ -2498,9 +2521,9 @@ const STR = {
   sub_free_note:{ru:'ПЛЮС и ПРО дают энергию каждый месяц и закрытые разделы',en:'PLUS and PRO give monthly energy and locked sections',es:'PLUS y PRO dan energía mensual y secciones cerradas',fr:'PLUS et PRO donnent de l’énergie chaque mois et les sections verrouillées',de:'PLUS und PRO geben monatliche Energie und gesperrte Bereiche'},
   subs_eyebrow:{ru:'NEOTARO · ПОДПИСКА',en:'NEOTARO · MEMBERSHIP',es:'NEOTARO · SUSCRIPCIÓN',fr:'NEOTARO · ABONNEMENT',de:'NEOTARO · MITGLIEDSCHAFT'},
   subs_title:{ru:'Выберите свой уровень доступа',en:'Choose your level of access',es:'Elige tu nivel de acceso',fr:'Choisissez votre niveau d’accès',de:'Wähle deinen Zugang'},
-  subs_lead:{ru:'Энергия каждый месяц, глубокие разборы и закрытые расклады, которых нет на бесплатном тарифе.',en:'Monthly energy, deeper readings and locked spreads the free plan does not have.',es:'Más libertad para tu práctica diaria: análisis profundos, tiradas sin gastar energía y ajustes personales.',fr:'Plus de liberté au quotidien : analyses approfondies, tirages sans dépenser d’énergie et réglages personnalisés.',de:'Mehr Freiheit für deine tägliche Praxis: tiefere Deutungen, Legungen ohne Energieverbrauch und persönliche Einstellungen.'},
+  subs_lead:{ru:'Энергия каждый месяц, глубокие разборы и закрытые раскл��ды, которых нет на бесплатном тарифе.',en:'Monthly energy, deeper readings and locked spreads the free plan does not have.',es:'Más libertad para tu práctica diaria: análisis profundos, tiradas sin gastar energía y ajustes personales.',fr:'Plus de liberté au quotidien : analyses approfondies, tirages sans dépenser d’énergie et réglages personnalisés.',de:'Mehr Freiheit für deine tägliche Praxis: tiefere Deutungen, Legungen ohne Energieverbrauch und persönliche Einstellungen.'},
   shop_eyebrow:{ru:'РАЗОВАЯ ПОКУПКА',en:'ONE-TIME PURCHASE',es:'COMPRA ÚNICA',fr:'ACHAT UNIQUE',de:'EINMALIGER KAUF'},
-  shop_title:{ru:'Нужна только энергия?',en:'Only need energy?',es:'¿Solo necesitas energía?',fr:'Besoin seulement d’énergie ?',de:'Brauchst du nur Energie?'},
+  shop_title:{ru:'Нужна ��оль��о энергия?',en:'Only need energy?',es:'¿Solo necesitas energía?',fr:'Besoin seulement d’énergie ?',de:'Brauchst du nur Energie?'},
   shop_lead:{ru:'Пакеты не сгорают и подходят, если подписка пока не нужна.',en:'Packs never expire and work well if you do not need a subscription yet.',es:'Los paquetes no caducan si aún no necesitas una suscripción.',fr:'Les packs n’expirent pas si vous ne souhaitez pas encore vous abonner.',de:'Pakete verfallen nicht, wenn du noch kein Abo brauchst.'},
   shop_note:{ru:'Оплата банковской картой. Энергия зачисляется сразу после подтверждения.',en:'Card payment. Energy arrives right after confirmation.'},
   shop_pick:{ru:'Выбрать',en:'Choose',es:'Elegir',fr:'Choisir',de:'Wählen'},
@@ -2694,7 +2717,7 @@ const STR = {
   pl_year_note:{ru:'{sum} ₽ в год, списание раз в год',en:'{sum} ₽ per year, billed yearly',es:'{sum} ₽ al año',fr:'{sum} ₽ par an',de:'{sum} ₽ pro Jahr'},
   pl_current:{ru:'Ваш тариф',en:'Your plan',es:'Tu plan',fr:'Votre offre',de:'Dein Tarif'},
   pl_trial:{ru:'{n} дня бесплатно',en:'{n} days free',es:'{n} días gratis',fr:'{n} jours offerts',de:'{n} Tage gratis'},
-  cmp_note:{ru:'Отменить можно в любой момент — доступ останется до конца оплаченного периода. Уже открытые разделы остаются навсегда.',en:'Cancel anytime — access lasts until the end of the paid period. Sections you opened stay yours for good.',es:'Cancela cuando quieras; el acceso dura hasta el final del periodo.',fr:'Annulez à tout moment ; l’accès dure jusqu’à la fin de la période.',de:'Jederzeit kündbar — Zugang bis zum Ende der bezahlten Periode.'},
+  cmp_note:{ru:'Отменить можно �� любой момент — доступ останется до конца оплаченного периода. Уже открытые разделы остаются навсегда.',en:'Cancel anytime — access lasts until the end of the paid period. Sections you opened stay yours for good.',es:'Cancela cuando quieras; el acceso dura hasta el final del periodo.',fr:'Annulez à tout moment ; l’accès dure jusqu’à la fin de la période.',de:'Jederzeit kündbar — Zugang bis zum Ende der bezahlten Periode.'},
   as_pay_eyebrow:{ru:'Подписка NEOTARO',en:'NEOTARO subscription',es:'Suscripción NEOTARO',fr:'Abonnement NEOTARO',de:'NEOTARO-Abo'},
   as_pay_title:{ru:'Открыть весь разбор карты',en:'Unlock the whole chart reading',es:'Abrir toda la lectura',fr:'Ouvrir toute la lecture',de:'Ganze Deutung freischalten'},
   as_pay_lead:{ru:'Одна подписка на всё: разбор карты про любовь, деньги и карьеру, большие расклады Таро и энергия каждый месяц.',en:'One subscription for everything: your chart on love, money and career, big tarot spreads and energy every month.',es:'Una suscripción para todo: tu carta sobre amor, dinero y carrera, tiradas grandes y energía cada mes.',fr:'Un abonnement pour tout : votre carte sur l’amour, l’argent et la carrière, grands tirages et de l’énergie chaque mois.',de:'Ein Abo für alles: deine Karte zu Liebe, Geld und Karriere, große Legungen und Energie jeden Monat.'},
@@ -2965,7 +2988,7 @@ function openSheet(id){
   if(id === 'sub'){
     renderSubSheet();
     if(window.neoGoal) neoGoal('paywall_view', { place: 'sub_sheet' }); /* neotaro-goal */
-    /* Собственный адрес нужен для скриншотов ЮКассы и для кнопки "назад". */
+    /* Собственный адре�� нужен для скриншотов ЮКассы и для кнопки "назад". */
     try{ history.pushState({ v: S.view, sheet:'sub' }, '', '#subscription'); }catch(e){}
   }
 }
@@ -3152,7 +3175,7 @@ async function loadProfileSub(){
   renderSubSheet();
 }
 
-/* В профиле подписка — одна строка. Карта, автопродление и отмена
+/* В профиле подписка — одна строк��. Карта, автопро��ление и отмена
    нужны раз в несколько месяцев — им не место на главном экране. */
 function subRowHtml(d){
   const acc = d.access, sub = d.subscription;
@@ -3474,7 +3497,7 @@ function paintEnergy(){
     const n = document.getElementById(id);
     if(n) n.textContent = S.energy;
   });
-  /* В профиле число крупное и без разделителей читается как каша. */
+  /* В профиле число крупное и без разделителей ч��тается как каша. */
   const pe = document.getElementById('pf-energy');
   if(pe) pe.textContent = fmtNum(S.energy);
   const rh = document.getElementById('pf-ref-hint');
@@ -3641,7 +3664,7 @@ async function authLogin(e){
   authMsg(tt('wait'), true);
   const res = await api('/auth/login', 'POST', { email, password: pass }, true);
   authBusy(form, false);
-  if(res && res.success){ authEnter(res); return false; }
+  if(res && res.success){ if(window.neoGoal) neoGoal('signin', { method: 'email' }); /* neotaro-goal */ authEnter(res); return false; }
   if(res && res.message === 'email_not_verified'){
     // Пароль верный, но почта не подтверждена — сервер уже отправил код.
     authGoCode(email, 'verify', res);
@@ -3664,7 +3687,7 @@ async function authRegister(e){
   authMsg(tt('wait'), true);
   const res = await api('/auth/register', 'POST', { name, email, password: pass, password2: pass2, lang }, true);
   authBusy(form, false);
-  if(res && res.success){ authGoCode(email, 'verify', res); return false; }
+  if(res && res.success){ if(window.neoGoal) neoGoal('register', { method: 'email' }); /* neotaro-goal */ authGoCode(email, 'verify', res); return false; }
   authErr(res && res.message);
   return false;
 }
@@ -3678,7 +3701,7 @@ async function authVerify(e){
   authMsg(tt('wait'), true);
   const res = await api('/auth/verify', 'POST', { email: AUTH.email, code }, true);
   authBusy(form, false);
-  if(res && res.success){ clearInterval(AUTH.timer); authEnter(res); return false; }
+  if(res && res.success){ if(window.neoGoal) neoGoal('verify_email'); /* neotaro-goal */ clearInterval(AUTH.timer); authEnter(res); return false; }
   authErr(res && res.message);
   return false;
 }
@@ -3745,12 +3768,14 @@ function logout(){
   if(bridge.isWeb){ location.href = SITE_URL; return; }
   location.reload();
 }
-function openSupport(){ bridge.openTelegram(SUPPORT_LINK); }
+function openSupport(){ if(window.neoGoal) neoGoal('support_open'); /* neotaro-goal */ bridge.openTelegram(SUPPORT_LINK); }
 
 /* ---------- радар оплаты ---------- */
-function watchPayment(onPaid){
+/* meta = { goal, price, kind, item } — чтобы в Метрику ушла сумма, а не голый факт оплаты. */
+function watchPayment(onPaid, meta){
   clearInterval(S.poll);
   const before = S.energy;
+  const m = meta || S.payMeta || {};
   let ticks = 0;
   S.poll = setInterval(async () => {
     ticks++;
@@ -3762,8 +3787,33 @@ function watchPayment(onPaid){
       hideToast();
       toast(tt('pay_done'));
       bridge.haptic('ok');
-      if(window.neoGoal) neoGoal('purchase'); /* neotaro-goal */
+      if(window.neoPurchase) neoPurchase(m.goal || 'purchase_energy', m.price, { kind: m.kind || 'energy', item: m.item || '' }); /* neotaro-goal */
+      if(window.neoGoal) neoGoal('purchase'); /* neotaro-goal: общая цель "любая оплата" */
+      S.payMeta = null;
       if(onPaid) onPaid();
+    }
+  }, 4000);
+}
+
+/* Подписка не добавляет энергию, поэтому watchPayment её не видит.
+   Здесь ждём именно появления доступа — без этого главная конверсия терялась. */
+function watchSubscription(amount, plan, period){
+  clearInterval(S.subPoll);
+  const wasPaid = !!(S.access && S.access.paid);
+  let ticks = 0;
+  S.subPoll = setInterval(async () => {
+    ticks++;
+    if(ticks > 75){ clearInterval(S.subPoll); return; }
+    const d = await api('/subscription/status', 'GET', {}, true);
+    if(d && d.success && d.access && d.access.paid && !wasPaid){
+      clearInterval(S.subPoll);
+      if(window.neoPurchase) neoPurchase('purchase_sub', amount, { kind: 'subscription', plan: plan || '', period: period || '' }); /* neotaro-goal */
+      if(window.neoGoal) neoGoal('purchase'); /* neotaro-goal */
+      hideToast();
+      toast(tt('pay_done'));
+      bridge.haptic('ok');
+      if(typeof refreshAccess === 'function') refreshAccess();
+      if(typeof loadProfileSub === 'function') loadProfileSub();
     }
   }, 4000);
 }
@@ -3787,6 +3837,18 @@ function absorbUser(d){
   if(d.access && d.access.features) S.access = d.access;
   S.energyMax = Math.max(30, S.energy);
   paintEnergy();
+  /* Метрика узнаёт, кто это и платит ли он. Без этого нет сегментов в отчётах. */
+  try{
+    if(window.neoUser){
+      var _paid = !!(S.access && S.access.paid);
+      window.neoUser(S.refCode || null, {
+        plan: (S.access && (S.access.plan || S.access.plan_title)) || (_paid ? 'paid' : 'free'),
+        is_paid: _paid,
+        has_purchased: !!S.purchased,
+        platform: bridge.isWeb ? 'web' : (bridge.isTG ? 'telegram' : 'other')
+      });
+    }
+  }catch(e){}
 }
 
 async function boot(){
@@ -3935,6 +3997,7 @@ async function drawDaily(){
     fillDaily(data.card);
     paintDaily();
     bridge.haptic('ok');
+    if(window.neoGoal) neoGoal('daily_card'); /* neotaro-goal */
   } else {
     document.getElementById('daily-draw').style.display = 'flex';
     toast(tt('err'));
@@ -4066,12 +4129,17 @@ function openBuySpread(price){
 }
 async function paySpreadRub(){
   toast(tt('wait'));
+  /* Цену берём с того же экрана, который видит человек. */
+  const _price = neoReadPrice('bs-rub-val');
+  const _meta = { goal: 'purchase_spread', price: _price, kind: 'spread', item: (S.spread && S.spread.id) || '' };
+  S.payMeta = _meta;
+  if(window.neoGoal) neoGoal('purchase_start', { kind: 'spread', item: _meta.item, order_price: _price || undefined }); /* neotaro-goal */
   const data = await api('/shop/invoice-direct-spread-rub', 'POST', { spread_id: S.spread.id });
   if(data && data.success && data.invoice_url){
     closeSheets();
     bridge.openLink(data.invoice_url);
     toast(tt('pay_wait'));
-    watchPayment(dealSpread);
+    watchPayment(dealSpread, _meta);
   } else toast(tt('err'));
 }
 
@@ -4116,7 +4184,7 @@ const CHIPS = [
   { key:'card', ru:'Карта дня', en:'Daily card', text:{ru:'Расскажи про мою карту дня',en:'Tell me about my card of the day'} },
   { key:'love', ru:'Отношения', en:'Relationships', text:{ru:'Что сейчас происходит в моих отношениях?',en:'What is happening in my relationships right now?'} },
   { key:'work', ru:'Работа', en:'Work', text:{ru:'Как мне сейчас лучше поступить с работой?',en:'What is the best move for my work right now?'} },
-  { key:'dream', ru:'Сон', en:'Dream', text:{ru:'Растолкуй мой сон: ',en:'Interpret my dream: '} },
+  { key:'dream', ru:'��он', en:'Dream', text:{ru:'Растолкуй мой сон: ',en:'Interpret my dream: '} },
   { key:'day', ru:'Совет на день', en:'Advice for today', text:{ru:'Дай совет на сегодня',en:'Give me advice for today'} }
 ];
 function renderChips(){
@@ -4230,6 +4298,16 @@ async function sendChat(){
   const t = document.getElementById('typing');
   if(t) t.remove();
   if(data && data.success){
+    /* Первый ответ оракула отмечаем один раз — это активация, а не рутина. */
+    if(window.neoGoal){ /* neotaro-goal */
+      neoGoal('chat_message', { input: vmeta ? 'voice' : 'text' });
+      try{
+        if(!localStorage.getItem('neo_first_chat')){
+          localStorage.setItem('neo_first_chat', '1');
+          neoGoal('chat_start');
+        }
+      }catch(e){}
+    }
     S.chat.push({ type:'ai', text: data.response, time: new Date().toLocaleTimeString(lang, { hour:'2-digit', minute:'2-digit' }) });
     if(typeof data.energy === 'number'){ S.energy = data.energy; paintEnergy(); }
     bridge.haptic('ok');
@@ -4281,7 +4359,7 @@ function sendDream(){
   }, 350);
 }
 
-/* ============================ МАГАЗИН ============================ */
+/* ============================ ��АГАЗИН ============================ */
 async function loadShop(){
   // Подписки — главный продукт экрана. Пакеты энергии загружаются независимо ниже.
   renderShopPlans();
@@ -4381,16 +4459,31 @@ function pickOffer(stars, rub){
   document.getElementById('buy-rub-val').textContent = rub + ' ₽';
   openSheet('buy');
 }
+/* Цена уже нарисована в UI — читаем её оттуда, чтобы не дублировать расчёты. */
+function neoReadPrice(elId){
+  try{
+    const el = document.getElementById(elId);
+    if(!el) return null;
+    const raw = (el.textContent || '').replace(/\s/g, '').replace(/[^\d.,]/g, '').replace(',', '.');
+    const v = parseFloat(raw);
+    return isNaN(v) ? null : v;
+  }catch(e){ return null; }
+}
+
 async function payRub(){
   if(!S.shopPick) return;
   toast(tt('wait'));
+  const _price = neoReadPrice('buy-rub-val');
+  const _meta = { goal: 'purchase_energy', price: _price, kind: 'energy', item: (S.shopPick && S.shopPick.id) || '' };
+  S.payMeta = _meta;
+  if(window.neoGoal) neoGoal('purchase_start', { kind: 'energy', item: _meta.item, order_price: _price || undefined }); /* neotaro-goal */
   const data = await api('/shop/invoice-rub', 'POST', { item_id: S.shopPick.id });
   if(handleGate(data)){ closeSheets(); return; }
   if(data && data.success && data.invoice_url){
     closeSheets();
     bridge.openLink(data.invoice_url);
     toast(tt('pay_wait'));
-    watchPayment(loadShop);
+    watchPayment(loadShop, _meta);
   } else toast(tt('err'));
 }
 
@@ -4433,7 +4526,7 @@ function paintProfile(){
   if(S.since){
     const d = new Date(S.since);
     /* В русском "с июль 2026" — неграмотно. Полная дата даёт родительный падеж,
-       оттуда и берём месяц, отбрасывая число. */
+       оттуда и бер��м месяц, отбрасывая число. */
     let ms = '';
     try{
       if(String(lang).slice(0,2) === 'ru'){
@@ -5071,9 +5164,11 @@ function lockTag(key){
    Подписки живут ТОЛЬКО в магазине — никаких дублей экрана оплаты. */
 function goPlans(key){
   if(key) toast(tt('pw_locked_toast').replace('{plan}', planTitleFor(key)));
+  /* Вход в тарифы — вершина воронки оплаты. Знаем, откуда пришли. */
+  if(window.neoGoal) neoGoal('plans_view', { from: key || 'menu' }); /* neotaro-goal */
   go('shop');
 }
-/* Ответ бэка subscription_required обрабатывается везде одинаково. */
+/* Ответ бэка subscription_required обрабатываетс�� везде одинаково. */
 function handleGate(d){
   if(!d || d.success) return false;
   const msg = d.message || d.paywall;
@@ -5087,7 +5182,7 @@ function handleGate(d){
   setTimeout(function(){ goPlans(null); }, 900);
   return true;
 }
-/* После оплаты/триала обновляем доступы без перезагрузки страницы. */
+/* После оплаты/триала обновляем доступы без перезагрузки с��раницы. */
 async function refreshAccess(){
   const d = await api('/subscription/status', 'GET', {}, true);
   if(d && d.success) S.recurring = !!d.recurring_enabled;
@@ -5236,7 +5331,12 @@ async function astroSubscribe(plan){
   if(window.neoGoal) neoGoal('purchase_start', { kind: 'subscription', plan: plan, period: S.per }); /* neotaro-goal */
   const d = await api('/subscription/invoice-rub', 'POST', { plan: plan, period: S.per });
   hideToast();
-  if(d && d.success && d.url){ bridge.openLink ? bridge.openLink(d.url) : window.open(d.url, '_blank'); return; }
+  if(d && d.success && d.url){
+    bridge.openLink ? bridge.openLink(d.url) : window.open(d.url, '_blank');
+    /* Ставим радар на доступ: подписка раньше вообще не считалась как конверсия. */
+    watchSubscription(d.amount, plan, S.per);
+    return;
+  }
   toast(tt('err'));
 }
 
@@ -5636,7 +5736,7 @@ function vShow(on){
 }
 function vWork(on){ vBuild(); vWorkTx.textContent = vt('v_work'); vPanel.classList.toggle('is-work', !!on); }
 
-/* ---------- рекордер ---------- */
+/* ---------- рекор��ер ---------- */
 const REC = {
   stream:null, mr:null, chunks:[], mime:'', ctx:null, analyser:null, buf:null,
   raf:0, t0:0, timer:0, active:false, aborted:false, target:null,
@@ -5955,7 +6055,7 @@ async function pwaInstall(){
           });
         });
       })
-      .catch(function(err){ console.warn('[pwa] service worker не зарегистрирован:', err); });
+      .catch(function(err){ console.warn('[pwa] service worker не ��арегистрирован:', err); });
   });
 
   let reloaded = false;
@@ -6060,6 +6160,7 @@ async function togglePush(){
 
     pushOn = true;
     paintPushRow();
+    if(window.neoGoal) neoGoal('push_subscribe'); /* neotaro-goal */
     toast(tt('push_on'));
     // Пробное уведомление: человек сразу видит, что именно будет приходить.
     try{ await api('/push/test', 'POST', {}); }catch(e){}
