@@ -159,7 +159,7 @@
   /* Скрипты Telegram и VK грузим ТОЛЬКО внутри Telegram и VK.
      Раньше они висели в шапке у всех и блокировали отрисовку:
      пока telegram.org или unpkg.com не ответят, браузер не рисует НИЧЕГО.
-     На российском мобильном интернете эти домены отвеча��т через раз —
+     На российском мобильном интернете эти домены отвеча���т через раз —
      отсюда и белый экран на полминуты. В обычном браузере они бесполезны. */
   (function(){
     var q = location.search + location.hash;
@@ -647,7 +647,7 @@ textarea.field{resize:none;line-height:1.55}
 .rowcard .end{flex:0 0 auto;display:flex;align-items:center;gap:9px}
 .stack{display:flex;flex-direction:column;gap:10px}
 /* Знак / стихия / управитель: раньше это были ярлыки-наклейки, и никто не догадывался,
-   что по ним можно нажать. Теперь это кноп��и со стрелкой. */
+   что по ним можно нажать. Теперь это ��ноп��и со стрелкой. */
 .zrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
 .zbtn{position:relative;display:block;width:100%;text-align:left;padding:13px 32px 13px 15px;border:1px solid var(--line-soft);border-radius:12px;background:rgba(18,24,41,.72);transition:border-color .2s,background .2s,transform .1s}
 .zbtn:hover{border-color:var(--line);background:rgba(24,32,58,.8)}
@@ -2240,6 +2240,10 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
   <p class="sheet-sub" id="ho-q"></p>
   <div class="spread-out" id="ho-cards"></div>
   <div class="reading" id="ho-text"></div>
+  <div style="display:flex;gap:8px;margin-top:16px">
+    <button class="btn btn-line" style="flex:1" onclick="discussHistory()" data-t="hist_discuss">Обсудить с оракулом</button>
+    <button class="btn btn-quiet" onclick="deleteHistory()" data-t="hist_delete">Удалить</button>
+  </div>
 </div>
 
 <!-- реферальная ссылка -->
@@ -2380,7 +2384,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 <script>
 /* ============================================================
    NEOTARO — кабинет. Ядро: связь с бэкендом, языки, навигация.
-   Контракт API полностью совпадает с преж��им фронтендом.
+   Контракт API полностью совпада��т с преж��им фронтендом.
    ============================================================ */
 const API_URL = "https://api.neotaro.ru/api";
 const SITE_URL = "/";
@@ -2768,7 +2772,7 @@ const STR = {
   as_open:{ru:'Открыто',en:'Opened',es:'Abierto',fr:'Ouvert',de:'Offen'},
   as_locked:{ru:'По подписке',en:'Subscription',es:'Suscripción',fr:'Abonnement',de:'Abo'},
   as_free1:{ru:'Бесплатно',en:'Free',es:'Gratis',fr:'Gratuit',de:'Gratis'},
-  as_need_time:{ru:'Нужно время рождения',en:'Birth time required',es:'Se necesita la hora',fr:'Heure de naissance requise',de:'Geburtszeit nötig'},
+  as_need_time:{ru:'Нужно время рожде��ия',en:'Birth time required',es:'Se necesita la hora',fr:'Heure de naissance requise',de:'Geburtszeit nötig'},
   as_need_time_note:{ru:'Этот раздел строится на домах, а дома без точного времени рождения посчитать невозможно.',en:'This section is based on houses, and houses cannot be calculated without an exact birth time.',es:'Esta sección se basa en las casas, que no pueden calcularse sin la hora exacta.',fr:'Cette section repose sur les maisons, impossibles à calculer sans l’heure exacte.',de:'Dieser Abschnitt basiert auf Häusern, die ohne exakte Geburtszeit nicht berechenbar sind.'},
   as_time_why:{ru:'Точное время открывает дома, асцендент и разделы про деньги и карьеру. Погрешность до 15 минут не критична.',en:'An exact time unlocks houses, the ascendant and the money and career sections. Being off by 15 minutes is fine.',es:'La hora exacta desbloquea casas, ascendente y las secciones de dinero y carrera. Un margen de 15 minutos no importa.',fr:'L’heure exacte débloque les maisons, l’ascendant et les sections argent et carrière. Une marge de 15 minutes est acceptable.',de:'Die exakte Zeit erschließt Häuser, Aszendent sowie Geld- und Karriereabschnitte. 15 Minuten Abweichung sind unkritisch.'},
   as_notime:{ru:'Время рождения не указано, поэтому дома и асцендент не рассчитаны. Мы не станем выдумывать их наугад.',en:'No birth time, so houses and the ascendant are not calculated. We will not invent them.',es:'Sin hora de nacimiento no calculamos casas ni ascendente. No los inventamos.',fr:'Sans heure de naissance, ni maisons ni ascendant ne sont calculés. Nous ne les inventons pas.',de:'Ohne Geburtszeit keine Häuser und kein Aszendent. Wir erfinden sie nicht.'},
@@ -2814,7 +2818,7 @@ const STR = {
   sec_love:{ru:'Любовь и сценарии отношений',en:'Love and relationship patterns',es:'Amor y patrones de pareja',fr:'Amour et schémas relationnels',de:'Liebe und Beziehungsmuster'},
   sec_drive:{ru:'Воля, злость и выгорание',en:'Drive, anger and burnout',es:'Impulso, ira y desgaste',fr:'Élan, colère et épuisement',de:'Antrieb, Wut und Burnout'},
   sec_money:{ru:'Деньги и ресурсы',en:'Money and resources',es:'Dinero y recursos',fr:'Argent et ressources',de:'Geld und Ressourcen'},
-  sec_career:{ru:'Предназначение и карьера',en:'Vocation and career',es:'Vocación y carrera',fr:'Vocation et carrière',de:'Berufung und Karriere'},
+  sec_career:{ru:'Предна��начение и карьера',en:'Vocation and career',es:'Vocación y carrera',fr:'Vocation et carrière',de:'Berufung und Karriere'},
   sec_shadow:{ru:'Тень и кризисные точки',en:'Shadow and crisis points',es:'Sombra y puntos de crisis',fr:'Ombre et points de crise',de:'Schatten und Krisenpunkte'},
   sec_karma:{ru:'Кармическая ось',en:'Karmic axis',es:'Eje kármico',fr:'Axe karmique',de:'Karmische Achse'},
   sec_strengths:{ru:'Сильные стороны и таланты',en:'Strengths and talents',es:'Fortalezas y talentos',fr:'Forces et talents',de:'Stärken und Talente'},
@@ -2867,6 +2871,10 @@ const STR = {
   hist_sub:{ru:'Все разборы сохраняются целиком — вернитесь к любому.',en:'Every reading is stored in full — come back to any of them.'},
   hist_more:{ru:'Показать ещё',en:'Show more',es:'Ver más',fr:'Voir plus',de:'Mehr zeigen'},
   hist_empty:{ru:'Здесь появятся ваши расклады — вместе с вопросами и картами.',en:'Your spreads will appear here, together with the questions and the cards.'},
+  hist_discuss:{ru:'Обсудить с оракулом',en:'Discuss with the oracle'},
+  hist_delete:{ru:'Удалить',en:'Delete'},
+  hist_del_ask:{ru:'Удалить этот расклад? Вернуть его будет нельзя.',en:'Delete this spread? This cannot be undone.'},
+  hist_deleted:{ru:'Расклад удалён',en:'Spread deleted'},
 
   lang_title:{ru:'Язык интерфейса',en:'Interface language'},
   lang_sub:{ru:'На выбранном языке будет говорить и оракул.',en:'The oracle will speak the language you choose.'},
@@ -3027,7 +3035,7 @@ const S = {
   spreads: [], spread: null,
   chat: [], chatOffset: 0, chatMore: false, chatLoading: false, chatReady: false,
   shop: [], shopPick: null, offer: null,
-  history: [], histOffset: 0, histMore: false,
+  history: [], histOffset: 0, histMore: false, histCur: -1,
   mx: null, mxText: null,
   access: {plan:'free', plan_title:'', level:0, paid:false, features:{}},
   plansData: null, per: 'month',
@@ -3472,7 +3480,7 @@ async function unbindPaymentMethod(){
 }
 
 /* Условия подписки — оверлей без отдельной страницы и без зависимостей.
-   На этот текст смотрят ЮKassa и банк при споре "я не соглашался на спи��ание". */
+   На этот текст смотрят ЮKassa и банк при споре "я не со��лашался на спи��ание". */
 function showSubTerms(){
   const old = document.getElementById('sub-terms-ov');
   if(old){ old.remove(); return; }
@@ -4379,11 +4387,43 @@ async function loadHistory(){
 function openHistory(i){
   const h = S.history[i];
   if(!h) return;
+  S.histCur = i;
   openSheet('histone');
   document.getElementById('ho-name').textContent = histName(h);
   document.getElementById('ho-q').textContent = h.question ? '«' + h.question + '»' : '';
   document.getElementById('ho-cards').innerHTML = histCards(h);
   document.getElementById('ho-text').innerHTML = clean(h.interpretation || '');
+}
+/* Обсуждение старого расклада. Саму трактовку кладём в скрытый контекст,
+   чтобы оракул видел карты и текст, но человек не видел простыню в своём сообщении.
+   Обрезаем до 1200 символов: сервер режет всю реплику на 2500. */
+function discussHistory(){
+  const h = S.history[S.histCur];
+  if(!h) return;
+  const cards = (h.cards || []).map(c => (c && typeof c === 'object') ? c.id : c).join(', ');
+  window.cardDiscussContext =
+    'Ранее был расклад «' + histName(h) + '».'
+    + (h.question ? ' Вопрос человека: ' + h.question : ' Без вопроса.')
+    + (cards ? ' Номера карт: ' + cards + '.' : '')
+    + ' Трактовка: ' + String(h.interpretation || '').slice(0, 1200);
+  closeSheets();
+  go('chat');
+  if(window.neoGoal) neoGoal('chat_start', { from: 'history' }); /* neotaro-goal */
+  setTimeout(() => {
+    document.getElementById('chat-in').value = tt('spread_ask_text') + (h.question || histName(h));
+    sendChat();
+  }, 350);
+}
+async function deleteHistory(){
+  const h = S.history[S.histCur];
+  if(!h || !h.id) return;
+  if(!confirm(tt('hist_del_ask'))) return;
+  const data = await api('/tarot/history/delete', 'POST', { id: h.id });
+  if(!data || !data.success){ toast(tt('err')); return; }
+  closeSheets();
+  toast(tt('hist_deleted'));
+  S.history = []; S.histOffset = 0; S.histCur = -1;
+  setTimeout(() => openSheet('history'), 220);
 }
 
 /* ============================ ОРАКУЛ ============================ */
