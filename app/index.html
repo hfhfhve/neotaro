@@ -139,7 +139,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="NEOTARO">
   <meta property="og:image" content="https://neotaro.ru/og-cover.png">
-  <!-- Убраны три шрифта иконок Phosphor: блокировали отрисовку, �� на странице
+  <!-- Убраны три шрифта иконок Phosphor: блокировали отрисовку, а на странице
        нет ни одной иконки оттуда. html2canvas тоже убран — его никто не вызывал. -->
   <!-- DOMPurify теперь defer: он нужен при выводе ответов, а не при загрузке.
        Функция clean() уже умеет работать без него. -->
@@ -1157,7 +1157,6 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 .nk-plan li{font-family:var(--sans);font-size:12.5px;color:#C9CBD8;line-height:1.5;padding-left:15px;position:relative}
 .nk-plan li:before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;background:var(--brass);transform:rotate(45deg)}
 .nk-plan .btn{margin-top:auto}
-/* ====== Экран тарифов: спокойная люкс��в��я подача ====== */
 .plx{margin-top:8px}
 .plx-per{display:flex;justify-content:center;margin:28px 0 24px}
 .plx-seg{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--ink-900)}
@@ -1280,7 +1279,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
     </svg>
   </div>
   <h2 id="auth-title" data-t="gate_title">Вход в кабинет</h2>
-  <p id="auth-lead" data-t="gate_text">Войдите через Telegram или по по����те — всё сохраняется в одном кабинете.</p>
+  <p id="auth-lead" data-t="gate_text">Войдите через Telegram или по почте — всё сохраняется в одном кабинете.</p>
 
   <div class="auth-box">
     <div id="auth-social">
@@ -1538,7 +1537,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <div class="orn prx-grp"><span class="eyebrow" data-t="prx_grp_astro">Астрология</span></div>
           <div class="pgrid">
             <button class="pcell" onclick="go('astro')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg><b data-t="nav_astro">Космо-паспорт</b><span data-t="prx_h_astro">Натальная карта</span></button>
-            <button class="pcell" onclick="go('syn')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg><b data-t="nav_syn">Совместимость</b><span data-t="prx_h_syn">В�� и п����ртнёр</span></button>
+            <button class="pcell" onclick="go('syn')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg><b data-t="nav_syn">Совместимость</b><span data-t="prx_h_syn">Вы и партнёр</span></button>
             <button class="pcell" onclick="go('matrix')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg><b data-t="nav_matrix">Матрица судьбы</b><span data-t="prx_h_matrix">Код по дате рождения</span></button>
             <button class="pcell" onclick="go('calendar')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg><b data-t="nav_calendar">Лунный ден��</b><span data-t="prx_h_calendar">Луна сегодня</span></button>
           </div>
@@ -1548,7 +1547,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
         <section class="view" id="v-spreads">
           <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:26px">
             <div>
-              <div class="eyebrow" style="margin-bottom:12px" data-t="nav_spreads">Расклад��</div>
+              <div class="eyebrow" style="margin-bottom:12px" data-t="nav_spreads">Расклады</div>
               <h1 class="h1" data-t="spreads_title">Вопрос важнее количества карт</h1>
               <p class="sub" style="margin-top:12px;max-width:52ch" data-t="spreads_lead">Выберите схему, сформулируйте вопрос — карты лягут по позициям, а разбор придёт целиком.</p>
             </div>
@@ -1600,7 +1599,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <div style="text-align:center">
             <div class="eyebrow" style="margin-bottom:12px" data-t="subs_eyebrow">NEOTARO · ПОДПИСКА</div>
             <h1 class="h1" data-t="subs_title">Выберите свой уровень доступа</h1>
-            <p class="sub" style="margin:12px auto 0;max-width:56ch" data-t="subs_lead">Энергия каждый месяц, глубокие разборы и закрытые расклады, которых нет на бесплатном тар��фе.</p>
+            <p class="sub" style="margin:12px auto 0;max-width:56ch" data-t="subs_lead">Энергия каждый месяц, глубокие разборы и закрытые расклады, которых нет на бесплатном тарифе.</p>
           </div>
 
           <div class="plx">
@@ -1785,7 +1784,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <button class="btn btn-quiet btn-sm" onclick="go('settings')" style="margin-bottom:14px">← <span data-t="pf_settings">Настройки</span></button>
           <div class="eyebrow" style="margin-bottom:12px" data-t="mem_title">Хроника</div>
           <h1 class="h1" data-t="mem_h1">Оракул помнит вашу историю</h1>
-          <p class="sub" data-t="mem_lead">Здесь всё, что оракул запомнил из ва��их разговоров, раскладов и снов. Вы управляете этим полностью: любую запись можно убрать в один касательный жест.</p>
+          <p class="sub" data-t="mem_lead">Здесь всё, что оракул запомнил из ваших разговоров, раскладов и снов. Вы управляете этим полностью: любую запись можно убрать в один касательный жест.</p>
 
           <div class="stack" style="margin-top:18px">
             <div class="rowcard">
@@ -1809,7 +1808,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
         <section class="view" id="v-dream">
           <div class="eyebrow" style="margin-bottom:12px" data-t="nav_dream">Сонник</div>
           <h1 class="h1" data-t="dream_title">Сон говорит символами — разберём каждый</h1>
-          <p class="sub" style="margin-top:12px;max-width:52ch" data-t="dream_lead">Пишите как помните: место, л��ди, действия, что чувствовали на пробуждении. Толкование придёт в диалог с оракулом.</p>
+          <p class="sub" style="margin-top:12px;max-width:52ch" data-t="dream_lead">Пишите как помните: место, люди, действия, что чувствовали на пробуждении. Толкование придёт в диалог с оракулом.</p>
           <div class="panel panel-pad" style="margin-top:24px;max-width:720px">
             <label class="field-lab" for="dream-in" data-t="dream_label">Содержание сна</label>
             <textarea id="dream-in" class="field" rows="6" data-ph="dream_ph" placeholder="Мне снилось, что я падаю в тёмную воду, и вода оказалась тёплой…"></textarea>
@@ -1865,7 +1864,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <!-- ФОРМА -->
           <div id="astro-empty">
             <h1 class="h1" data-t="astro_title">Три точки задают всю карту</h1>
-            <p class="sub" style="margin-top:12px;max-width:52ch" data-t="astro_lead">Дата, точное время и город рождения. Если время неизвестно — отметьте это, расчёт п��ойдёт без до��ов.</p>
+            <p class="sub" style="margin-top:12px;max-width:52ch" data-t="astro_lead">Дата, точное время и город рождения. Если время неизвестно — отметьте это, расчёт пройдёт без допов.</p>
             <div class="panel panel-pad" style="margin-top:24px;max-width:640px">
               <div class="row">
                 <div><label class="field-lab" for="as-d" data-t="f_day">День</label><input id="as-d" class="field num" inputmode="numeric" maxlength="2" placeholder="07"></div>
@@ -1895,7 +1894,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
                 <span class="sub" data-t="f_unknown">Время рождения неизвестно</span>
               </label>
               <button class="btn btn-brass btn-wide" style="margin-top:20px" onclick="saveAstro()" id="as-save" data-t="astro_btn">Построить карту</button>
-              <p class="label" style="margin-top:12px" data-t="astro_free">Расчёт и колесо ��арты — бесплатно, энергия не списывается</p>
+              <p class="label" style="margin-top:12px" data-t="astro_free">Расчёт и колесо карты — бесплатно, энергия не списывается</p>
             </div>
           </div>
 
@@ -2157,7 +2156,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 <div class="sheet" id="sheet-history">
   <div class="sheet-grip"></div>
   <h3 data-t="hist_title">Мои расклады</h3>
-  <p class="sheet-sub" data-t="hist_sub">��се разборы сохраняются целиком — вернитесь к любому.</p>
+  <p class="sheet-sub" data-t="hist_sub">все разборы сохраняются целиком — вернитесь к любому.</p>
   <div id="hist-list" class="stack"></div>
   <button class="btn btn-quiet btn-wide" id="hist-more" onclick="loadHistory()" style="margin-top:14px;display:none" data-t="hist_more">Показать ещё</button>
 </div>
@@ -2345,7 +2344,7 @@ const STR = {
   city_change:{ru:'Изменить',en:'Change',es:'Cambiar',fr:'Modifier',de:'\u00c4ndern'},
   city_searching:{ru:'Ищем города…',en:'Looking for cities\u2026'},
   city_none:{ru:'Такого города не нашлось. Проверьте написание или введите ближайший крупный город.',en:'No city like that. Check the spelling or enter the nearest large city.'},
-  city_neterr:{ru:'С��равочник городов не ответил. Повторите через пару секунд.',en:'The city directory did not respond. Try again in a moment.'},
+  city_neterr:{ru:'Справочник городов не ответил. Повторите через пару секунд.',en:'The city directory did not respond. Try again in a moment.'},
   city_pick_first:{ru:'Выберите город из списка поиска',en:'Pick a city from the search list'},
   nav_home:{ru:'Сегодня',en:'Today',es:'Hoy',fr:'Aujourd\u2019hui',de:'Heute'},
   nav_chat:{ru:'Оракул',en:'Oracle',es:'Oráculo',fr:'Oracle',de:'Orakel'},
@@ -2370,7 +2369,7 @@ const STR = {
   prx_h_matrix:{ru:'Код по дате рождения',en:'Code from your birth date',es:'Código de tu fecha de nacimiento',fr:'Code de votre date de naissance',de:'Code aus Ihrem Geburtsdatum'},
   prx_h_calendar:{ru:'Луна сегодня',en:'The moon today',es:'La luna hoy',fr:'La lune aujourd’hui',de:'Der Mond heute'},
   vback_practices:{ru:'Практики',en:'Practices',es:'Prácticas',fr:'Pratiques',de:'Praktiken'},
-  pf_plans:{ru:'��арифы и энергия',en:'Plans & energy',es:'Planes y energía',fr:'Forfaits et énergie',de:'Tarife & Energie'},
+  pf_plans:{ru:'Тарифы и энергия',en:'Plans & energy',es:'Planes y energía',fr:'Forfaits et énergie',de:'Tarife & Energie'},
   pf_plans_hint:{ru:'Подписка, покупка энергии',en:'Subscription, buy energy',es:'Suscripción, comprar energía',fr:'Abonnement, acheter de l’énergie',de:'Abo, Energie kaufen'},
   v_speak_dream:{ru:'Рассказать сон голосом',en:'Tell your dream aloud',es:'Cuenta tu sueño en voz alta',fr:'Racontez votre rêve à voix haute',de:'Traum laut erzählen'},
   alm_go_day:{ru:'Разбор дня →',en:'Day reading →',es:'Análisis del día →',fr:'Analyse du jour →',de:'Tagesdeutung →'},
@@ -2406,7 +2405,7 @@ const STR = {
   auth_reset_btn:{ru:'Сохранить пароль',en:'Save password',es:'Guardar contraseña',fr:'Enregistrer le mot de passe',de:'Passwort speichern'},
   auth_forgot:{ru:'Забыли пароль?',en:'Forgot password?',es:'¿Olvidó la contraseña?',fr:'Mot de passe oublié ?',de:'Passwort vergessen?'},
   auth_to_reg:{ru:'Создать аккаунт',en:'Create account',es:'Crear cuenta',fr:'Créer un compte',de:'Konto erstellen'},
-  auth_to_login:{ru:'У меня уже ��сть аккаунт',en:'I already have an account',es:'Ya tengo una cuenta',fr:'J’ai déjà un compte',de:'Ich habe bereits ein Konto'},
+  auth_to_login:{ru:'У меня уже есть аккаунт',en:'I already have an account',es:'Ya tengo una cuenta',fr:'J’ai déjà un compte',de:'Ich habe bereits ein Konto'},
   auth_back:{ru:'Назад',en:'Back',es:'Atrás',fr:'Retour',de:'Zurück'},
   auth_resend:{ru:'Отправить код заново',en:'Send the code again',es:'Reenviar el código',fr:'Renvoyer le code',de:'Code erneut senden'},
   auth_resend_in:{ru:'Повторно — через {sec} с',en:'Resend in {sec} s',es:'Reenviar en {sec} s',fr:'Renvoyer dans {sec} s',de:'Erneut in {sec} s'},
@@ -2476,7 +2475,7 @@ const STR = {
   ref_list:{ru:'Кто пришёл',en:'Who joined',es:'Quién se unió',fr:'Qui a rejoint',de:'Wer beigetreten ist'},
   ref_empty:{ru:'Пока никто не вошёл по ссылке. Отправьте её тем, кто точно поймёт.',en:'Nobody has joined yet. Send it to someone who will get it.'},
   ref_remind:{ru:'Напомнить',en:'Remind',es:'Recordar',fr:'Rappeler',de:'Erinnern'},
-  ref_done:{ru:'Засч��тан',en:'Counted',es:'Contado',fr:'Compté',de:'Gezählt'},
+  ref_done:{ru:'Засчитан',en:'Counted',es:'Contado',fr:'Compté',de:'Gezählt'},
   ref_pending:{ru:'Ждём входа',en:'Waiting',es:'Esperando',fr:'En attente',de:'Wartet'},
 
   spreads_title:{ru:'Вопрос важнее количества карт',en:'The question matters more than the card count'},
@@ -2491,10 +2490,10 @@ const STR = {
   shop_disc_on:{ru:'Твоя скидка −{n}% уже в цене',en:'Your −{n}% discount is already applied',es:'Tu descuento −{n}% ya está aplicado',fr:'Votre remise −{n}% est déjà appliquée',de:'Dein −{n}% Rabatt ist bereits enthalten'},
   shop_disc_off:{ru:'С подпиской все пакеты дешевле — до −{n}%',en:'With a plan every pack is up to −{n}% cheaper',es:'Con suscripción todo hasta −{n}% más barato',fr:'Avec un abonnement, jusqu’à −{n}% de moins',de:'Mit Abo bis zu −{n}% günstiger'},
   table_q_label:{ru:'Ваш вопрос',en:'Your question',es:'Tu pregunta',fr:'Votre question',de:'Deine Frage'},
-  table_q_ph:{ru:'Спрашивайте о одн��й ситуации: что происходит, чего вы хотите и что мешает.',en:'Ask about one situation: what is happening, what you want, what is in the way.'},
+  table_q_ph:{ru:'Спрашивайте о одной ситуации: что происходит, чего вы хотите и что мешает.',en:'Ask about one situation: what is happening, what you want, what is in the way.'},
   table_hint:{ru:'Открытые вопросы дают больше',en:'Open questions give more'},
   table_deal:{ru:'Разложить карты',en:'Lay out the cards',es:'Extender las cartas',fr:'Étaler les cartes',de:'Karten legen'},
-  table_shuffling:{ru:'Тасуем колоду и чит��ем позиции',en:'Shuffling the deck and reading the positions'},
+  table_shuffling:{ru:'Тасуем колоду и читаем позиции',en:'Shuffling the deck and reading the positions'},
   table_reading:{ru:'Разбор',en:'Reading',es:'Lectura',fr:'Lecture',de:'Deutung'},
   table_discuss:{ru:'Обсудить с оракулом',en:'Discuss with the oracle'},
   table_again:{ru:'Другой расклад',en:'Another spread',es:'Otra tirada',fr:'Autre tirage',de:'Andere Legung'},
@@ -2504,7 +2503,7 @@ const STR = {
   sub_until:{ru:'действует до {date}',en:'active until {date}',es:'activa hasta {date}',fr:'active jusqu’au {date}',de:'aktiv bis {date}'},
   sub_canceled:{ru:'автопродление выключено',en:'auto-renewal off',es:'renovación desactivada',fr:'renouvellement désactivé',de:'Auto-Verlängerung aus'},
   sub_cancel_btn:{ru:'Отменить подписку',en:'Cancel subscription',es:'Cancelar suscripción',fr:'Résilier l’abonnement',de:'Abo kündigen'},
-  sub_cancel_confirm:{ru:'От��енить подписку? Доступ сохранится до конца оплаченного периода.',en:'Cancel the subscription? Access stays until the end of the paid period.',es:'¿Cancelar la suscripción? El acceso dura hasta el final del periodo pagado.',fr:'Résilier l’abonnement ? L’accès reste jusqu’à la fin de la période payée.',de:'Abo kündigen? Zugang bleibt bis zum Ende der bezahlten Periode.'},
+  sub_cancel_confirm:{ru:'Отменить подписку? Доступ сохранится до конца оплаченного периода.',en:'Cancel the subscription? Access stays until the end of the paid period.',es:'¿Cancelar la suscripción? El acceso dura hasta el final del periodo pagado.',fr:'Résilier l’abonnement ? L’accès reste jusqu’à la fin de la période payée.',de:'Abo kündigen? Zugang bleibt bis zum Ende der bezahlten Periode.'},
   sub_cancel_done:{ru:'Подписка отменена — доступ до конца периода',en:'Subscription canceled — access until the end of the period',es:'Suscripción cancelada — acceso hasta el final del periodo',fr:'Abonnement résilié — accès jusqu’à la fin de la période',de:'Abo gekündigt — Zugang bis Periodenende'},
   pm_block:{ru:'Способ оплаты',en:'Payment method',es:'Método de pago',fr:'Moyen de paiement',de:'Zahlungsmethode'},
   pm_next:{ru:'следующее списание {date} — {sum} ₽',en:'next charge on {date} — {sum} ₽',es:'próximo cargo {date} — {sum} ₽',fr:'prochain prélèvement {date} — {sum} ₽',de:'nächste Abbuchung {date} — {sum} ₽'},
@@ -2526,9 +2525,9 @@ const STR = {
   sub_free_note:{ru:'ПЛЮС и ПРО дают энергию каждый месяц и закрытые разделы',en:'PLUS and PRO give monthly energy and locked sections',es:'PLUS y PRO dan energía mensual y secciones cerradas',fr:'PLUS et PRO donnent de l’énergie chaque mois et les sections verrouillées',de:'PLUS und PRO geben monatliche Energie und gesperrte Bereiche'},
   subs_eyebrow:{ru:'NEOTARO · ПОДПИСКА',en:'NEOTARO · MEMBERSHIP',es:'NEOTARO · SUSCRIPCIÓN',fr:'NEOTARO · ABONNEMENT',de:'NEOTARO · MITGLIEDSCHAFT'},
   subs_title:{ru:'Выберите свой уровень доступа',en:'Choose your level of access',es:'Elige tu nivel de acceso',fr:'Choisissez votre niveau d’accès',de:'Wähle deinen Zugang'},
-  subs_lead:{ru:'Энергия каждый месяц, глубокие разборы и закрытые раскл��ды, которых нет на бесплатном тарифе.',en:'Monthly energy, deeper readings and locked spreads the free plan does not have.',es:'Más libertad para tu práctica diaria: análisis profundos, tiradas sin gastar energía y ajustes personales.',fr:'Plus de liberté au quotidien : analyses approfondies, tirages sans dépenser d’énergie et réglages personnalisés.',de:'Mehr Freiheit für deine tägliche Praxis: tiefere Deutungen, Legungen ohne Energieverbrauch und persönliche Einstellungen.'},
+  subs_lead:{ru:'Энергия каждый месяц, глубокие разборы и закрытые расклады, которых нет на бесплатном тарифе.',en:'Monthly energy, deeper readings and locked spreads the free plan does not have.',es:'Más libertad para tu práctica diaria: análisis profundos, tiradas sin gastar energía y ajustes personales.',fr:'Plus de liberté au quotidien : analyses approfondies, tirages sans dépenser d’énergie et réglages personnalisés.',de:'Mehr Freiheit für deine tägliche Praxis: tiefere Deutungen, Legungen ohne Energieverbrauch und persönliche Einstellungen.'},
   shop_eyebrow:{ru:'РАЗОВАЯ ПОКУПКА',en:'ONE-TIME PURCHASE',es:'COMPRA ÚNICA',fr:'ACHAT UNIQUE',de:'EINMALIGER KAUF'},
-  shop_title:{ru:'Нужна ��оль��о энергия?',en:'Only need energy?',es:'¿Solo necesitas energía?',fr:'Besoin seulement d’énergie ?',de:'Brauchst du nur Energie?'},
+  shop_title:{ru:'Нужна только энергия?',en:'Only need energy?',es:'¿Solo necesitas energía?',fr:'Besoin seulement d’énergie ?',de:'Brauchst du nur Energie?'},
   shop_lead:{ru:'Пакеты не сгорают и подходят, если подписка пока не нужна.',en:'Packs never expire and work well if you do not need a subscription yet.',es:'Los paquetes no caducan si aún no necesitas una suscripción.',fr:'Les packs n’expirent pas si vous ne souhaitez pas encore vous abonner.',de:'Pakete verfallen nicht, wenn du noch kein Abo brauchst.'},
   shop_note:{ru:'Оплата банковской картой. Энергия зачисляется сразу после подтверждения.',en:'Card payment. Energy arrives right after confirmation.'},
   shop_pick:{ru:'Выбрать',en:'Choose',es:'Elegir',fr:'Choisir',de:'Wählen'},
@@ -2722,7 +2721,7 @@ const STR = {
   pl_year_note:{ru:'{sum} ₽ в год, списание раз в год',en:'{sum} ₽ per year, billed yearly',es:'{sum} ₽ al año',fr:'{sum} ₽ par an',de:'{sum} ₽ pro Jahr'},
   pl_current:{ru:'Ваш тариф',en:'Your plan',es:'Tu plan',fr:'Votre offre',de:'Dein Tarif'},
   pl_trial:{ru:'{n} дня бесплатно',en:'{n} days free',es:'{n} días gratis',fr:'{n} jours offerts',de:'{n} Tage gratis'},
-  cmp_note:{ru:'Отменить можно �� любой момент — доступ останется до конца оплаченного периода. Уже открытые разделы остаются навсегда.',en:'Cancel anytime — access lasts until the end of the paid period. Sections you opened stay yours for good.',es:'Cancela cuando quieras; el acceso dura hasta el final del periodo.',fr:'Annulez à tout moment ; l’accès dure jusqu’à la fin de la période.',de:'Jederzeit kündbar — Zugang bis zum Ende der bezahlten Periode.'},
+  cmp_note:{ru:'Отменить можно в любой момент — доступ останется до конца оплаченного периода. Уже открытые разделы остаются навсегда.',en:'Cancel anytime — access lasts until the end of the paid period. Sections you opened stay yours for good.',es:'Cancela cuando quieras; el acceso dura hasta el final del periodo.',fr:'Annulez à tout moment ; l’accès dure jusqu’à la fin de la période.',de:'Jederzeit kündbar — Zugang bis zum Ende der bezahlten Periode.'},
   as_pay_eyebrow:{ru:'Подписка NEOTARO',en:'NEOTARO subscription',es:'Suscripción NEOTARO',fr:'Abonnement NEOTARO',de:'NEOTARO-Abo'},
   as_pay_title:{ru:'Открыть весь разбор карты',en:'Unlock the whole chart reading',es:'Abrir toda la lectura',fr:'Ouvrir toute la lecture',de:'Ganze Deutung freischalten'},
   as_pay_lead:{ru:'Одна подписка на всё: разбор карты про любовь, деньги и карьеру, большие расклады Таро и энергия каждый месяц.',en:'One subscription for everything: your chart on love, money and career, big tarot spreads and energy every month.',es:'Una suscripción para todo: tu carta sobre amor, dinero y carrera, tiradas grandes y energía cada mes.',fr:'Un abonnement pour tout : votre carte sur l’amour, l’argent et la carrière, grands tirages et de l’énergie chaque mois.',de:'Ein Abo für alles: deine Karte zu Liebe, Geld und Karriere, große Legungen und Energie jeden Monat.'},
@@ -2992,8 +2991,7 @@ function openSheet(id){
   if(id === 'mxbuy') fillMxBuy();
   if(id === 'sub'){
     renderSubSheet();
-    if(window.neoGoal) neoGoal('paywall_view', { place: 'sub_sheet' }); /* neotaro-goal */
-    /* Собственный адре�� нужен для скриншотов ЮКассы и для кнопки "назад". */
+    if(window.neoGoal) neoGoal('paywall_view', { place: 'sub_sheet' });
     try{ history.pushState({ v: S.view, sheet:'sub' }, '', '#subscription'); }catch(e){}
   }
 }
@@ -3286,9 +3284,6 @@ async function loadProfileSub(){
   box.innerHTML = subRowHtml(d);
   renderSubSheet();
 }
-
-/* В профиле подписка — одна строк��. Карта, автопро��ление и отмена
-   нужны раз в несколько месяцев — им не место на главном экране. */
 function subRowHtml(d){
   const acc = d.access, sub = d.subscription;
   if(!(acc.paid && sub)){
@@ -3609,7 +3604,6 @@ function paintEnergy(){
     const n = document.getElementById(id);
     if(n) n.textContent = S.energy;
   });
-  /* В профиле число крупное и без разделителей ч��тается как каша. */
   const pe = document.getElementById('pf-energy');
   if(pe) pe.textContent = fmtNum(S.energy);
   const rh = document.getElementById('pf-ref-hint');
@@ -4296,7 +4290,7 @@ const CHIPS = [
   { key:'card', ru:'Карта дня', en:'Daily card', text:{ru:'Расскажи про мою карту дня',en:'Tell me about my card of the day'} },
   { key:'love', ru:'Отношения', en:'Relationships', text:{ru:'Что сейчас происходит в моих отношениях?',en:'What is happening in my relationships right now?'} },
   { key:'work', ru:'Работа', en:'Work', text:{ru:'Как мне сейчас лучше поступить с работой?',en:'What is the best move for my work right now?'} },
-  { key:'dream', ru:'��он', en:'Dream', text:{ru:'Растолкуй мой сон: ',en:'Interpret my dream: '} },
+  { key:'dream', ru:'сон', en:'Dream', text:{ru:'Растолкуй мой сон: ',en:'Interpret my dream: '} },
   { key:'day', ru:'Совет на день', en:'Advice for today', text:{ru:'Дай совет на сегодня',en:'Give me advice for today'} }
 ];
 function renderChips(){
@@ -4471,7 +4465,7 @@ function sendDream(){
   }, 350);
 }
 
-/* ============================ ��АГАЗИН ============================ */
+/* ============================ МАГАЗИН ============================ */
 async function loadShop(){
   // Подписки — главный продукт экрана. Пакеты энергии загружаются независимо ниже.
   renderShopPlans();
@@ -4638,7 +4632,7 @@ function paintProfile(){
   if(S.since){
     const d = new Date(S.since);
     /* В русском "с июль 2026" — неграмотно. Полная дата даёт родительный падеж,
-       оттуда и бер��м месяц, отбрасывая число. */
+       оттуда и берем месяц, отбрасывая число. */
     let ms = '';
     try{
       if(String(lang).slice(0,2) === 'ru'){
@@ -5280,7 +5274,7 @@ function goPlans(key){
   if(window.neoGoal) neoGoal('plans_view', { from: key || 'menu' }); /* neotaro-goal */
   go('shop');
 }
-/* Ответ бэка subscription_required обрабатываетс�� везде одинаково. */
+/* Ответ бэка subscription_required обрабатывается везде одинаково. */
 function handleGate(d){
   if(!d || d.success) return false;
   const msg = d.message || d.paywall;
@@ -5294,7 +5288,7 @@ function handleGate(d){
   setTimeout(function(){ goPlans(null); }, 900);
   return true;
 }
-/* После оплаты/триала обновляем доступы без перезагрузки с��раницы. */
+/* После оплаты/триала обновляем доступы без перезагрузки страницы. */
 async function refreshAccess(){
   const d = await api('/subscription/status', 'GET', {}, true);
   if(d && d.success) S.recurring = !!d.recurring_enabled;
@@ -5847,8 +5841,6 @@ function vShow(on){
   vSwipes(!!on);
 }
 function vWork(on){ vBuild(); vWorkTx.textContent = vt('v_work'); vPanel.classList.toggle('is-work', !!on); }
-
-/* ---------- рекор��ер ---------- */
 const REC = {
   stream:null, mr:null, chunks:[], mime:'', ctx:null, analyser:null, buf:null,
   raf:0, t0:0, timer:0, active:false, aborted:false, target:null,
@@ -6101,7 +6093,6 @@ function pwaStandalone(){
 }
 function pwaIsIOS(){
   const ua = navigator.userAgent || '';
-  // iPad с iPadOS при��воряется макбуком, ловим его по тачскрину
   return /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
 }
 
@@ -6167,7 +6158,7 @@ async function pwaInstall(){
           });
         });
       })
-      .catch(function(err){ console.warn('[pwa] service worker не ��арегистрирован:', err); });
+      .catch(function(err){ console.warn('[pwa] service worker не зарегистрирован:', err); });
   });
 
   let reloaded = false;
@@ -6226,7 +6217,6 @@ async function loadPushState(){
 async function togglePush(){
   if(!pushSupported()) return;
 
-  // iPhone в браузере: ��начала на экран Домой, иначе запрос просто не сработает.
   if(pwaIsIOS() && !pwaStandalone()){ openSheet('ios'); return; }
 
   const reg = await navigator.serviceWorker.ready;
