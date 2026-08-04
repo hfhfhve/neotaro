@@ -674,9 +674,14 @@ textarea.field{resize:none;line-height:1.55}
   padding:10px 24px calc(var(--sab) + 26px);
 }
 .sheet.is-on{transform:translate(-50%,0);visibility:visible;pointer-events:auto}
+/* свайп вниз: пока палец на экране, анимация выключена, шторка идёт за пальцем */
+.sheet.is-drag{transition:none}
+.sheet{overscroll-behavior:contain}
 .stat-card{display:block;width:100%;cursor:pointer;font:inherit;color:inherit}
 .stat-card .stat-more{color:var(--brass);opacity:.9}
-.sheet-grip{width:38px;height:3px;border-radius:2px;background:rgba(147,160,192,.3);margin:6px auto 18px}
+.sheet-grip{width:38px;height:3px;border-radius:2px;background:rgba(147,160,192,.3);margin:6px auto 18px;position:relative;cursor:grab}
+/* невидимая зона захвата вокруг полоски — по ней удобно тянуть пальцем */
+.sheet-grip::after{content:'';position:absolute;left:-40px;right:-40px;top:-14px;bottom:-16px}
 .sheet h3{font-family:var(--serif);font-weight:400;font-size:22px;color:var(--brass-pale);margin-bottom:6px}
 .sheet .sheet-sub{font-size:13.5px;color:var(--mist);margin-bottom:20px;line-height:1.55}
 .sheet-acts{display:flex;flex-direction:column;gap:10px;margin-top:22px}
@@ -1275,7 +1280,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
     </svg>
   </div>
   <h2 id="auth-title" data-t="gate_title">Вход в кабинет</h2>
-  <p id="auth-lead" data-t="gate_text">Войдите через Telegram или по по��те — всё сохраняется в одном кабинете.</p>
+  <p id="auth-lead" data-t="gate_text">Войдите через Telegram или по по����те — всё сохраняется в одном кабинете.</p>
 
   <div class="auth-box">
     <div id="auth-social">
@@ -1535,7 +1540,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
             <button class="pcell" onclick="go('astro')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg><b data-t="nav_astro">Космо-паспорт</b><span data-t="prx_h_astro">Натальная карта</span></button>
             <button class="pcell" onclick="go('syn')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg><b data-t="nav_syn">Совместимость</b><span data-t="prx_h_syn">В�� и п����ртнёр</span></button>
             <button class="pcell" onclick="go('matrix')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg><b data-t="nav_matrix">Матрица судьбы</b><span data-t="prx_h_matrix">Код по дате рождения</span></button>
-            <button class="pcell" onclick="go('calendar')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg><b data-t="nav_calendar">Лунный день</b><span data-t="prx_h_calendar">Луна сегодня</span></button>
+            <button class="pcell" onclick="go('calendar')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg><b data-t="nav_calendar">Лунный ден��</b><span data-t="prx_h_calendar">Луна сегодня</span></button>
           </div>
         </section>
 
@@ -1543,7 +1548,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
         <section class="view" id="v-spreads">
           <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:26px">
             <div>
-              <div class="eyebrow" style="margin-bottom:12px" data-t="nav_spreads">Расклады</div>
+              <div class="eyebrow" style="margin-bottom:12px" data-t="nav_spreads">Расклад��</div>
               <h1 class="h1" data-t="spreads_title">Вопрос важнее количества карт</h1>
               <p class="sub" style="margin-top:12px;max-width:52ch" data-t="spreads_lead">Выберите схему, сформулируйте вопрос — карты лягут по позициям, а разбор придёт целиком.</p>
             </div>
@@ -1595,7 +1600,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <div style="text-align:center">
             <div class="eyebrow" style="margin-bottom:12px" data-t="subs_eyebrow">NEOTARO · ПОДПИСКА</div>
             <h1 class="h1" data-t="subs_title">Выберите свой уровень доступа</h1>
-            <p class="sub" style="margin:12px auto 0;max-width:56ch" data-t="subs_lead">Энергия каждый месяц, глубокие разборы и закрытые расклады, которых нет на бесплатном тарифе.</p>
+            <p class="sub" style="margin:12px auto 0;max-width:56ch" data-t="subs_lead">Энергия каждый месяц, глубокие разборы и закрытые расклады, которых нет на бесплатном тар��фе.</p>
           </div>
 
           <div class="plx">
@@ -1860,7 +1865,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
           <!-- ФОРМА -->
           <div id="astro-empty">
             <h1 class="h1" data-t="astro_title">Три точки задают всю карту</h1>
-            <p class="sub" style="margin-top:12px;max-width:52ch" data-t="astro_lead">Дата, точное время и город рождения. Если время неизвестно — отметьте это, расчёт пройдёт без до��ов.</p>
+            <p class="sub" style="margin-top:12px;max-width:52ch" data-t="astro_lead">Дата, точное время и город рождения. Если время неизвестно — отметьте это, расчёт п��ойдёт без до��ов.</p>
             <div class="panel panel-pad" style="margin-top:24px;max-width:640px">
               <div class="row">
                 <div><label class="field-lab" for="as-d" data-t="f_day">День</label><input id="as-d" class="field num" inputmode="numeric" maxlength="2" placeholder="07"></div>
@@ -2365,7 +2370,7 @@ const STR = {
   prx_h_matrix:{ru:'Код по дате рождения',en:'Code from your birth date',es:'Código de tu fecha de nacimiento',fr:'Code de votre date de naissance',de:'Code aus Ihrem Geburtsdatum'},
   prx_h_calendar:{ru:'Луна сегодня',en:'The moon today',es:'La luna hoy',fr:'La lune aujourd’hui',de:'Der Mond heute'},
   vback_practices:{ru:'Практики',en:'Practices',es:'Prácticas',fr:'Pratiques',de:'Praktiken'},
-  pf_plans:{ru:'Тарифы и энергия',en:'Plans & energy',es:'Planes y energía',fr:'Forfaits et énergie',de:'Tarife & Energie'},
+  pf_plans:{ru:'��арифы и энергия',en:'Plans & energy',es:'Planes y energía',fr:'Forfaits et énergie',de:'Tarife & Energie'},
   pf_plans_hint:{ru:'Подписка, покупка энергии',en:'Subscription, buy energy',es:'Suscripción, comprar energía',fr:'Abonnement, acheter de l’énergie',de:'Abo, Energie kaufen'},
   v_speak_dream:{ru:'Рассказать сон голосом',en:'Tell your dream aloud',es:'Cuenta tu sueño en voz alta',fr:'Racontez votre rêve à voix haute',de:'Traum laut erzählen'},
   alm_go_day:{ru:'Разбор дня →',en:'Day reading →',es:'Análisis del día →',fr:'Analyse du jour →',de:'Tagesdeutung →'},
@@ -2471,7 +2476,7 @@ const STR = {
   ref_list:{ru:'Кто пришёл',en:'Who joined',es:'Quién se unió',fr:'Qui a rejoint',de:'Wer beigetreten ist'},
   ref_empty:{ru:'Пока никто не вошёл по ссылке. Отправьте её тем, кто точно поймёт.',en:'Nobody has joined yet. Send it to someone who will get it.'},
   ref_remind:{ru:'Напомнить',en:'Remind',es:'Recordar',fr:'Rappeler',de:'Erinnern'},
-  ref_done:{ru:'Засчитан',en:'Counted',es:'Contado',fr:'Compté',de:'Gezählt'},
+  ref_done:{ru:'Засч��тан',en:'Counted',es:'Contado',fr:'Compté',de:'Gezählt'},
   ref_pending:{ru:'Ждём входа',en:'Waiting',es:'Esperando',fr:'En attente',de:'Wartet'},
 
   spreads_title:{ru:'Вопрос важнее количества карт',en:'The question matters more than the card count'},
@@ -2486,10 +2491,10 @@ const STR = {
   shop_disc_on:{ru:'Твоя скидка −{n}% уже в цене',en:'Your −{n}% discount is already applied',es:'Tu descuento −{n}% ya está aplicado',fr:'Votre remise −{n}% est déjà appliquée',de:'Dein −{n}% Rabatt ist bereits enthalten'},
   shop_disc_off:{ru:'С подпиской все пакеты дешевле — до −{n}%',en:'With a plan every pack is up to −{n}% cheaper',es:'Con suscripción todo hasta −{n}% más barato',fr:'Avec un abonnement, jusqu’à −{n}% de moins',de:'Mit Abo bis zu −{n}% günstiger'},
   table_q_label:{ru:'Ваш вопрос',en:'Your question',es:'Tu pregunta',fr:'Votre question',de:'Deine Frage'},
-  table_q_ph:{ru:'Спрашивайте о одной ситуации: что происходит, чего вы хотите и что мешает.',en:'Ask about one situation: what is happening, what you want, what is in the way.'},
+  table_q_ph:{ru:'Спрашивайте о одн��й ситуации: что происходит, чего вы хотите и что мешает.',en:'Ask about one situation: what is happening, what you want, what is in the way.'},
   table_hint:{ru:'Открытые вопросы дают больше',en:'Open questions give more'},
   table_deal:{ru:'Разложить карты',en:'Lay out the cards',es:'Extender las cartas',fr:'Étaler les cartes',de:'Karten legen'},
-  table_shuffling:{ru:'Тасуем колоду и читаем позиции',en:'Shuffling the deck and reading the positions'},
+  table_shuffling:{ru:'Тасуем колоду и чит��ем позиции',en:'Shuffling the deck and reading the positions'},
   table_reading:{ru:'Разбор',en:'Reading',es:'Lectura',fr:'Lecture',de:'Deutung'},
   table_discuss:{ru:'Обсудить с оракулом',en:'Discuss with the oracle'},
   table_again:{ru:'Другой расклад',en:'Another spread',es:'Otra tirada',fr:'Autre tirage',de:'Andere Legung'},
@@ -3002,6 +3007,113 @@ function closeSheets(){
   }catch(e){}
 }
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeSheets(); });
+
+/* ---------- свайп вниз, чтобы закрыть шторку ---------- */
+/* На телефоне человек рефлекторно смахивает шторку вниз, а не ищет пустое место.
+   Пороги сделаны строгими, чтобы случайное касание НИЧЕГО не закрывало:
+     - жест считается свайпом только после 14px вниз и только если он явно
+       вертикальный (вниз больше, чем вбок, в 1.4 раза);
+     - закрывает либо протяжка на 100px, либо быстрый бросок;
+     - если шторка прокручена внутри — сначала скролл до верха, жест не перебивается;
+     - поля ввода, селекты и внутренние скроллы игнорируются. */
+(function(){
+  var CLOSE_PX = 100;   /* насколько надо протащить, чтобы закрылось */
+  var START_PX = 14;    /* до этого сдвига — обычный тап, не трогаем */
+  var FLICK_V  = 0.6;   /* px/ms — резкий бросок закрывает раньше */
+  var FLICK_PX = 48;    /* но даже бросок требует осознанного сдвига */
+  var d = null;
+
+  function isWide(){
+    try{ return window.matchMedia('(min-width:900px)').matches; }catch(e){ return false; }
+  }
+
+  /* Где жест начинать нельзя: поля ввода, слайдеры и прокрученные блоки. */
+  function blocked(el, sheet){
+    while(el && el !== sheet){
+      if(el.nodeType === 1){
+        var tag = el.tagName;
+        if(tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return true;
+        if(el.isContentEditable) return true;
+        if(el.getAttribute && el.getAttribute('data-noswipe') !== null) return true;
+        if(el.scrollHeight - el.clientHeight > 4 && el.scrollTop > 0) return true;
+      }
+      el = el.parentNode;
+    }
+    return false;
+  }
+
+  document.addEventListener('touchstart', function(e){
+    d = null;
+    if(isWide()) return;                                  /* на широком экране это окно по центру, свайп не нужен */
+    if(!e.touches || e.touches.length !== 1) return;       /* два пальца — это зум, не наш случай */
+    var t = e.target;
+    var sheet = (t && t.closest) ? t.closest('.sheet.is-on') : null;
+    if(!sheet) return;
+    if(sheet.scrollTop > 0) return;                        /* сначала доскроллить шторку до верха */
+    if(blocked(t, sheet)) return;
+    d = {
+      sheet: sheet,
+      y0: e.touches[0].clientY,
+      x0: e.touches[0].clientX,
+      t0: Date.now(),
+      dy: 0,
+      h: sheet.offsetHeight || 420,
+      live: false,
+      dead: false
+    };
+  }, { passive: true });
+
+  document.addEventListener('touchmove', function(e){
+    if(!d || d.dead) return;
+    if(!e.touches || e.touches.length !== 1){ d.dead = true; return; }
+    var dy = e.touches[0].clientY - d.y0;
+    var dx = e.touches[0].clientX - d.x0;
+
+    if(!d.live){
+      if(dy < -6){ d.dead = true; return; }                       /* тянет вверх — это скролл */
+      if(Math.abs(dx) > 10 && Math.abs(dy) < Math.abs(dx) * 1.4){  /* горизонтальный жест — не наш */
+        d.dead = true; return;
+      }
+      if(dy < START_PX) return;                                    /* ещё не жест, просто касание */
+      if(Math.abs(dy) < Math.abs(dx) * 1.4){ d.dead = true; return; }
+      d.live = true;
+      d.t0 = Date.now();                                           /* скорость считаем с момента реального свайпа */
+      d.y0 = e.touches[0].clientY;
+      d.sheet.classList.add('is-drag');
+      dy = 0;
+    }
+
+    if(dy < 0) dy = Math.max(-22, dy / 5);                         /* вверх — резинка, чтобы не улетало */
+    d.dy = dy;
+    d.sheet.style.transform = 'translate(-50%,' + dy + 'px)';
+    var scrim = document.getElementById('scrim');
+    if(scrim && dy > 0){
+      scrim.style.opacity = String(Math.max(0.3, 1 - dy / (d.h * 1.35)));
+    }
+    if(e.cancelable) e.preventDefault();
+  }, { passive: false });
+
+  function release(){
+    if(!d) return;
+    var sheet = d.sheet, live = d.live, dy = d.dy;
+    var ms = Math.max(1, Date.now() - d.t0);
+    var v = dy / ms;
+    d = null;
+
+    sheet.classList.remove('is-drag');
+    sheet.style.transform = '';                                    /* пусто → вернётся плавно на место */
+    var scrim = document.getElementById('scrim');
+    if(scrim) scrim.style.opacity = '';
+    if(!live) return;
+
+    if(dy > CLOSE_PX || (dy > FLICK_PX && v > FLICK_V)){
+      try{ if(window.bridge && bridge.haptic) bridge.haptic(); }catch(e){}
+      closeSheets();
+    }
+  }
+  document.addEventListener('touchend', release, { passive: true });
+  document.addEventListener('touchcancel', release, { passive: true });
+})();
 
 /* ---------- ворота ---------- */
 /* Куда уводить неавторизованного гостя.
@@ -6114,7 +6226,7 @@ async function loadPushState(){
 async function togglePush(){
   if(!pushSupported()) return;
 
-  // iPhone в браузере: сначала на экран Домой, иначе запрос просто не сработает.
+  // iPhone в браузере: ��начала на экран Домой, иначе запрос просто не сработает.
   if(pwaIsIOS() && !pwaStandalone()){ openSheet('ios'); return; }
 
   const reg = await navigator.serviceWorker.ready;
