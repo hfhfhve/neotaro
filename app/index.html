@@ -2964,6 +2964,7 @@ function openSheet(id){
   if(id === 'mxbuy') fillMxBuy();
   if(id === 'sub'){
     renderSubSheet();
+    if(window.neoGoal) neoGoal('paywall_view', { place: 'sub_sheet' }); /* neotaro-goal */
     /* Собственный адрес нужен для скриншотов ЮКассы и для кнопки "назад". */
     try{ history.pushState({ v: S.view, sheet:'sub' }, '', '#subscription'); }catch(e){}
   }
@@ -3449,6 +3450,7 @@ function go(view, fromPop){
   const vb = document.getElementById('vback');
   if(vb) vb.classList.toggle('is-on', !!BACK_TO);
   if(!fromPop){ try{ if(!history.state || history.state.v !== view) history.pushState({ v: view }, '', '#' + view); }catch(e){} }
+  if(window.neoHit) neoHit('/app/#' + view, { title: 'app: ' + view }); /* neotaro-goal */
   if(LOADERS[view]) LOADERS[view]();
   bridge.haptic();
 }
@@ -3529,6 +3531,7 @@ async function gateWebLogin(){
       clearInterval(loginPoll);
       localStorage.setItem('neotaro_token', res.token);
       if(res.user) localStorage.setItem('neotaro_user', JSON.stringify(res.user));
+      if(window.neoGoal) neoGoal('signin', { method: 'telegram_code' }); /* neotaro-goal */
       bridge.token = res.token;
       bridge.webUser = res.user || null;
       boot();
@@ -3759,6 +3762,7 @@ function watchPayment(onPaid){
       hideToast();
       toast(tt('pay_done'));
       bridge.haptic('ok');
+      if(window.neoGoal) neoGoal('purchase'); /* neotaro-goal */
       if(onPaid) onPaid();
     }
   }, 4000);
@@ -4029,6 +4033,16 @@ async function dealSpread(){
     out.innerHTML = clean(data.interpretation || '');
     if(typeof data.energy === 'number'){ S.energy = data.energy; paintEnergy(); }
     bridge.haptic('ok');
+    if(window.neoGoal){ /* neotaro-goal */
+      neoGoal('spread_done', { spread: (S.spread && S.spread.id) || '' });
+      /* Первый расклад отмечаем ровно один раз — это активация, а не повторное действие. */
+      try{
+        if(!localStorage.getItem('neo_first_spread')){
+          localStorage.setItem('neo_first_spread', '1');
+          neoGoal('first_spread');
+        }
+      }catch(e){}
+    }
   } else if(data && data.message === 'no_energy'){
     out.innerHTML = '<p>' + esc(tt('no_energy')) + '</p>';
   } else {
@@ -4933,6 +4947,7 @@ function paintAstro(d){
   const feat = (acc.features && acc.features['astro.reading']) || {};
   const paid = !!feat.allowed && (acc.plan && acc.plan !== 'free');
   document.getElementById('as-paywall').style.display = paid ? 'none' : 'block';
+  if(!paid && window.neoGoal) neoGoal('paywall_view', { place: 'astro' }); /* neotaro-goal */
   if(!paid) renderAstroPlans();
 }
 
@@ -5218,6 +5233,7 @@ async function astroSubscribe(plan){
   const per = (S.per === 'year') ? tt('per_year') : tt('per_month');
   if(S.recurring && !confirm(tt('sub_recurring_consent').replace('{per}', per))) return;
   toast(tt('wait'));
+  if(window.neoGoal) neoGoal('purchase_start', { kind: 'subscription', plan: plan, period: S.per }); /* neotaro-goal */
   const d = await api('/subscription/invoice-rub', 'POST', { plan: plan, period: S.per });
   hideToast();
   if(d && d.success && d.url){ bridge.openLink ? bridge.openLink(d.url) : window.open(d.url, '_blank'); return; }

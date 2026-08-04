@@ -1556,6 +1556,7 @@ const APP_URL = "/app/";
       return;
     }
 
+    if(window.neoGoal) neoGoal('yesno_widget'); /* neotaro-goal */
     busy = true;
     go.disabled = true;
     label.textContent = 'Карты тасуются…';
@@ -1576,6 +1577,7 @@ const APP_URL = "/app/";
           vEl.textContent = 'На сегодня всё';
           cEl.textContent = '';
           tEl.innerHTML = 'Бесплатные вопросы на сегодня закончились. В кабинете ограничений нет.';
+          if(window.neoGoal) neoGoal('yesno_limit'); /* neotaro-goal */
           lock.hidden = false;
           setNote('');
         } else if(msg === 'bad_question'){
@@ -1592,6 +1594,7 @@ const APP_URL = "/app/";
       lock.hidden = false;
       out.hidden = false;
       setNote('');
+      if(window.neoGoal) neoGoal('yesno_done', { verdict: data.verdict || '' }); /* neotaro-goal */
       try { out.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch(e){}
     })
     .catch(function(){
@@ -1603,6 +1606,23 @@ const APP_URL = "/app/";
       label.textContent = 'Задать другой вопрос';
     });
   });
+})();
+</script>
+<script>
+/* neotaro-goal — один обработчик на все ссылки входа вместо шести отдельных правок. */
+(function(){
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if(!t || !t.closest) return;
+    var a = t.closest('a[href*="/login/"]');
+    if(!a) return;
+    var href = a.getAttribute('href') || '';
+    var place = 'cta';
+    if(a.id === 'yn-lock-btn') place = 'yesno_lock';
+    else if(href.indexOf('mode=login') !== -1) place = 'have_account';
+    else if(a.className && String(a.className).indexOf('lp-top-cta') !== -1) place = 'header';
+    if(window.neoGoal) neoGoal('login_click', { place: place });
+  }, true);
 })();
 </script>
 </body>
