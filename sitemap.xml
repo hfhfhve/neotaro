@@ -1956,6 +1956,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://neotaro.ru/sonnik/devushka/</loc>
+    <lastmod>2026-08-05</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://neotaro.ru/sonnik/dolg/</loc>
     <lastmod>2026-08-05</lastmod>
     <priority>0.6</priority>
@@ -2007,6 +2012,11 @@
   </url>
   <url>
     <loc>https://neotaro.ru/sonnik/groza/</loc>
+    <lastmod>2026-08-05</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://neotaro.ru/sonnik/izmena/</loc>
     <lastmod>2026-08-05</lastmod>
     <priority>0.6</priority>
   </url>
@@ -2156,6 +2166,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://neotaro.ru/sonnik/muzhchina/</loc>
+    <lastmod>2026-08-05</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://neotaro.ru/sonnik/mysh/</loc>
     <lastmod>2026-08-05</lastmod>
     <priority>0.6</priority>
@@ -2207,6 +2222,11 @@
   </url>
   <url>
     <loc>https://neotaro.ru/sonnik/padenie/</loc>
+    <lastmod>2026-08-05</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://neotaro.ru/sonnik/paren/</loc>
     <lastmod>2026-08-05</lastmod>
     <priority>0.6</priority>
   </url>
@@ -2302,6 +2322,11 @@
   </url>
   <url>
     <loc>https://neotaro.ru/sonnik/remont/</loc>
+    <lastmod>2026-08-05</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://neotaro.ru/sonnik/rodstvenniki/</loc>
     <lastmod>2026-08-05</lastmod>
     <priority>0.6</priority>
   </url>
@@ -2431,7 +2456,17 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://neotaro.ru/sonnik/zhenshchina/</loc>
+    <lastmod>2026-08-05</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://neotaro.ru/sonnik/zmeya/</loc>
+    <lastmod>2026-08-05</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://neotaro.ru/sonnik/znakomyy/</loc>
     <lastmod>2026-08-05</lastmod>
     <priority>0.6</priority>
   </url>
