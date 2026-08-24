@@ -1514,7 +1514,14 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 
             <div class="today-copy">
               <div class="arc m-hide" id="home-arc" data-t="home_arc_empty">карта дня ещё не открыта</div>
-              <h1 class="h1" id="home-title" data-t="home_title_empty">Карта ждёт, пока вы её не перевернёте</h1>
+              <!-- NEO:BREADCRUMBS:START -->
+<nav class="neo-crumbs" aria-label="Хлебные крошки">
+  <a href="/">Главная</a>
+  <span aria-hidden="true">/</span>
+  <a href="/app/">app</a>
+</nav>
+<!-- NEO:BREADCRUMBS:END -->
+<h1 class="h1" id="home-title" data-t="home_title_empty">Карта ждёт, пока вы её не перевернёте</h1>
               <p class="lead" id="home-lead" data-t="home_lead_empty">Нажмите на карту в центре циферблата. Один аркан из семидесяти восьми закрепится за этими сутками — с разбором от оракула.</p>
               <div class="today-acts">
                 <button class="btn btn-brass" onclick="openDaily()" id="home-cta" data-t="home_cta_empty">Перевернуть карту</button>
