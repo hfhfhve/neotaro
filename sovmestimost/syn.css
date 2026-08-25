@@ -199,3 +199,171 @@ background:rgba(18,24,41,.55)}
 *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
 .rel-card:hover{transform:none}
 }
+
+/* NEO-RELATED-BLOCK */
+/* ==================================================================
+   NEOTARO — блок «Смотри также» + хлебные крошки
+   Версия 2: самодостаточная, центруется сама,
+   не зависит от контейнеров .wrap / .syn-wrap.
+   ================================================================== */
+
+/* ---------- КРОШКИ ---------- */
+
+.neo-crumbs {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  max-width: 1120px;
+  margin: 18px auto 10px;
+  padding: 0 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, .55);
+}
+
+.neo-crumbs a {
+  color: rgba(255, 255, 255, .68);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(217, 174, 95, .28);
+}
+
+.neo-crumbs a:hover {
+  color: #e6bc66;
+  border-bottom-color: #e6bc66;
+}
+
+.neo-crumbs span {
+  margin: 0 7px;
+  color: rgba(255, 255, 255, .3);
+}
+
+/* ---------- БЛОК «СМОТРИ ТАКЖЕ» ---------- */
+
+.neo-related {
+  box-sizing: border-box;
+  display: block;
+  clear: both;
+  width: 100%;
+  max-width: 1120px;
+  margin: 56px auto 40px;
+  padding: 0 16px;
+}
+
+.neo-related__title {
+  margin: 0 0 6px;
+  padding: 0;
+  font-size: 26px;
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: .2px;
+  color: #f0ddb0;
+}
+
+.neo-related__title::after {
+  content: "";
+  display: block;
+  width: 54px;
+  height: 1px;
+  margin-top: 14px;
+  background: rgba(217, 174, 95, .45);
+}
+
+/* Сетка карточек. list-style сброшен жёстко — иначе лезут точки. */
+.neo-related__list,
+ul.neo-related__list {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.neo-related__list > li,
+.neo-related__item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 16px 18px;
+  list-style: none;
+  background: rgba(255, 255, 255, .022);
+  border: 1px solid rgba(217, 174, 95, .16);
+  border-radius: 12px;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.neo-related__list > li::marker,
+.neo-related__item::marker {
+  content: "";
+}
+
+.neo-related__item:hover {
+  background: rgba(255, 255, 255, .045);
+  border-color: rgba(217, 174, 95, .42);
+  transform: translateY(-2px);
+}
+
+.neo-related__link {
+  font-size: 17px;
+  line-height: 1.35;
+  font-weight: 500;
+  color: #f4e6c2;
+  text-decoration: none;
+}
+
+.neo-related__item:hover .neo-related__link {
+  color: #e6bc66;
+}
+
+.neo-related__desc {
+  display: block;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, .58);
+}
+
+/* ---------- СВЕТЛАЯ ТЕМА ---------- */
+
+@media (prefers-color-scheme: light) {
+  .neo-crumbs {
+    color: rgba(20, 18, 30, .6);
+  }
+  .neo-crumbs a {
+    color: rgba(20, 18, 30, .75);
+  }
+  .neo-related__title {
+    color: #6d5420;
+  }
+  .neo-related__item {
+    background: rgba(20, 18, 30, .025);
+    border-color: rgba(120, 96, 40, .2);
+  }
+  .neo-related__link {
+    color: #4a3a12;
+  }
+  .neo-related__desc {
+    color: rgba(20, 18, 30, .62);
+  }
+}
+
+/* ---------- МОБИЛЬНЫЕ ---------- */
+
+@media (max-width: 640px) {
+  .neo-related {
+    margin: 40px auto 28px;
+  }
+  .neo-related__title {
+    font-size: 22px;
+  }
+  .neo-related__list,
+  ul.neo-related__list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .neo-related__item {
+    padding: 14px 16px;
+  }
+}
