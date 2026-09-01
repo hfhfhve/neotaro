@@ -11,9 +11,10 @@
 <meta property="og:title" content="NEOTARO — гадание на Таро с ИИ-оракулом">
 <meta property="og:description" content="Карта дня бесплатно, расклады, сонник и нумерология.">
 <meta property="og:url" content="https://neotaro.ru/">
-<meta property="og:image" content="https://neotaro.ru/static/promo/Celestial_atlas_and_tarot_cards_202609012338.jpeg">
-<link rel="icon" href="/static/favicon.ico">
-<link rel="manifest" href="/static/manifest.json">
+<meta property="og:image" content="https://api.neotaro.ru/static/promo/Celestial_atlas_and_tarot_cards_202609012338.jpeg">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://api.neotaro.ru" crossorigin>
+<link rel="preload" as="image" href="https://api.neotaro.ru/static/promo/Celestial_atlas_and_tarot_cards_202609012338.jpeg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -132,8 +133,8 @@ body.nav-open{overflow:hidden}
 .hero-media{position:absolute;inset:0;z-index:-2;overflow:hidden}
 .hero-media img{width:100%;height:100%;object-fit:cover;object-position:50% 45%;
   transform:scale(1.08);opacity:0;
-  transition:transform 2.4s var(--ease),opacity 1.6s ease}
-.hero.ready .hero-media img{transform:scale(1);opacity:1}
+  transition:transform 2.4s var(--ease),opacity 1.8s ease}
+.hero.shot .hero-media img{transform:scale(1);opacity:1}
 .hero-veil{position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:
     radial-gradient(115% 78% at 50% 46%,transparent 30%,rgba(8,9,12,.55) 72%,var(--bg) 100%),
@@ -401,7 +402,7 @@ body.nav-open{overflow:hidden}
     <div class="hero-media">
       <!-- ▼▼▼ ЕДИНСТВЕННОЕ МЕСТО С ПУТЁМ К КАРТИНКЕ ▼▼▼ -->
       <img id="hero-img"
-           src="/static/promo/Celestial_atlas_and_tarot_cards_202609012338.jpeg"
+           src="https://api.neotaro.ru/static/promo/Celestial_atlas_and_tarot_cards_202609012338.jpeg"
            alt="Ночной атлас и карты Таро"
            fetchpriority="high" decoding="async">
       <!-- ▲▲▲ ═════════════════════════════ ▲▲▲ -->
@@ -495,7 +496,7 @@ body.nav-open{overflow:hidden}
         <article class="tile r r-scale" style="--i:2"><span class="tile-arw">↗</span>
           <div class="tile-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="8" height="12" rx="1.5"/><rect x="9" y="4" width="8" height="12" rx="1.5"/><rect x="15" y="8" width="6" height="12" rx="1.5"/></svg></div>
           <h3 class="h3">Расклады</h3>
-          <p>От трёх карт до Кельтского креста. Каждая позиция объяснена и связана с остальными в один ответ.</p>
+          <p>От трё�� карт до Кельтского креста. Каждая позиция объяснена и связана с остальными в один ответ.</p>
         </article>
         <article class="tile r r-scale" style="--i:3"><span class="tile-arw">↗</span>
           <div class="tile-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"/></svg></div>
@@ -573,7 +574,7 @@ body.nav-open{overflow:hidden}
         <h2 class="h2 r" style="--i:1">Профиль, который помнит</h2>
       </div>
       <div class="ctx">
-        <div class="ctx-cell r r-scale" style="--i:0"><div class="eyebrow">01 · Расклады</div><p>История всех вопросов и выпавших карт с датами.</p></div>
+        <div class="ctx-cell r r-scale" style="--i:0"><div class="eyebrow">01 · Расклады</div><p>Истори�� всех вопросов и выпавших карт с датами.</p></div>
         <div class="ctx-cell r r-scale" style="--i:1"><div class="eyebrow">02 · Натальная карта</div><p>Солнце, Луна, асцендент и дома по точному времени.</p></div>
         <div class="ctx-cell r r-scale" style="--i:2"><div class="eyebrow">03 · Матрица</div><p>Сильные линии, число судьбы и кармические задачи.</p></div>
         <div class="ctx-cell r r-scale" style="--i:3"><div class="eyebrow">04 · Дневник</div><p>Сны, числа на часах и заметки к раскладам.</p></div>
@@ -709,7 +710,7 @@ body.nav-open{overflow:hidden}
         <details><summary>Нужна ли регистрация?</summary><p class="a">Для быстрого вопроса и всей библиотеки — нет. Вход нужен только для персональных функций: карта дня, история диалогов с оракулом, натальная карта по точному времени рождения и сохранённые расклады.</p></details>
         <details><summary>Сколько это стоит?</summary><p class="a">Карта дня и вся библиотека разборов — 0 ₽. Расширенные расклады и диалог с оракулом без ограничений доступны в кабинете.</p></details>
         <details><summary>Карты выбирает алгоритм или я?</summary><p class="a">Карты выбираете вы. Система только тасует колоду из 78 карт с учётом прямых и перевёрнутых положений и запоминает порядок вашего выбора.</p></details>
-        <details><summary>Можно ли задавать уточняющие вопросы?</summary><p class="a">Да, в том же диалоге. Оракул помнит расклад и предыдущие сообщения, поэтому можно спросить «а если я всё-таки уеду» или «почему тут Башня».</p></details>
+        <details><summary>��ожно ли задавать уточняющие вопросы?</summary><p class="a">Да, в том же диалоге. Оракул помнит расклад и предыдущие сообщения, поэтому можно спросить «а если я всё-таки уеду» или «почему тут Башня».</p></details>
         <details><summary>Чем сонник отличается от народных?</summary><p class="a">Мы не даём приговор в одну строку. У символа есть архетипическое ядро, но смысл меняется от деталей сна, поэтому каждый символ разобран в нескольких сценариях.</p></details>
         <details><summary>На каких языках работает сервис?</summary><p class="a">На пяти. Интерфейс и разборы переключаются целиком, включая ответы оракула.</p></details>
         <details><summary>Где хранятся мои расклады?</summary><p class="a">В вашем личном профиле. Их видите только вы, и в любой момент можно удалить историю.</p></details>
@@ -815,26 +816,54 @@ try{
   if(localStorage.getItem('neotaro_token') && q.get('stay')!=='1'){ location.replace('/app/'); return; }
 }catch(e){}
 
-/* ── герой: появление фото + текста ── */
-var hero=$('#hero'), img=$('#hero-img');
-function heroReady(){ if(hero) hero.classList.add('ready'); }
-if(img){
-  if(img.complete && img.naturalWidth>0) requestAnimationFrame(heroReady);
-  else img.addEventListener('load',heroReady,{once:true});
-  img.addEventListener('error',function(){ if(hero) hero.classList.add('hero-noimg'); heroReady(); },{once:true});
-  setTimeout(heroReady,1600); /* страховка от зависания */
-}else heroReady();
+/* ── после первой отрисовки, иначе на ПК transition не играет ── */
+function afterPaint(fn){ requestAnimationFrame(function(){ requestAnimationFrame(fn); }); }
 
-/* ── каскадное появление при скролле ── */
-var reveal=$$('.r');
-if('IntersectionObserver' in window){
-  var io=new IntersectionObserver(function(en){
-    en.forEach(function(e){
-      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-    });
-  },{rootMargin:'0px 0px -12% 0px',threshold:.08});
-  reveal.forEach(function(el){io.observe(el)});
-}else reveal.forEach(function(el){el.classList.add('in')});
+/* ── герой: текст сразу, фото с бэкенда (GitHub Pages != /static) ── */
+var HERO_SRC=[
+  'https://api.neotaro.ru/static/promo/Celestial_atlas_and_tarot_cards_202609012338.jpeg',
+  'https://tarot.waifubot.website/static/promo/Celestial_atlas_and_tarot_cards_202609012338.jpeg'
+];
+var hero=$('#hero'), img=$('#hero-img');
+afterPaint(function(){ if(hero) hero.classList.add('ready'); });
+
+function heroShot(){ if(hero) hero.classList.add('shot'); }
+function tryHero(i){
+  if(!img) return;
+  if(i>=HERO_SRC.length){ if(hero) hero.classList.add('hero-noimg'); return; }
+  img.onload=function(){ if(img.naturalWidth>0) heroShot(); else tryHero(i+1); };
+  img.onerror=function(){ tryHero(i+1); };
+  if(img.src!==HERO_SRC[i]) img.src=HERO_SRC[i];
+  else if(img.complete){
+    if(img.naturalWidth>0) heroShot();
+    else tryHero(i+1);
+  }
+}
+if(img){
+  if(img.complete && img.naturalWidth>0) afterPaint(heroShot);
+  else tryHero(0);
+}
+
+/* ── каскадное появление при скролле (IO + запасной scroll, после paint) ── */
+function armReveal(){
+  var nodes=$$('.r');
+  function show(el){ el.classList.add('in'); }
+  function vis(el){
+    var r=el.getBoundingClientRect(), vh=window.innerHeight||document.documentElement.clientHeight;
+    return r.top < vh*0.92 && r.bottom > 40;
+  }
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(e){
+        if(e.isIntersecting){ show(e.target); io.unobserve(e.target); }
+      });
+    },{root:null, rootMargin:'0px 0px -8% 0px', threshold:0});
+    nodes.forEach(function(el){ io.observe(el); });
+  }
+  window.__neoReveal=function(){ $$('.r:not(.in)').forEach(function(el){ if(vis(el)) show(el); }); };
+  window.__neoReveal();
+}
+afterPaint(armReveal);
 
 /* ── шапка + прогресс ── */
 var top=$('#top'), bar=$('#progress'), tick=false;
@@ -847,6 +876,7 @@ function onScroll(){
       var h=document.documentElement.scrollHeight-window.innerHeight;
       bar.style.transform='scaleX('+(h>0?Math.min(1,y/h):0)+')';
     }
+    if(window.__neoReveal) window.__neoReveal();
     tick=false;
   });
 }
