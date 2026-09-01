@@ -1,1361 +1,963 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta name="yandex-verification" content="4829483e1c30ff58" />
-  <meta name="theme-color" content="#0B0F1E">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<!-- neotaro-metrika -->
-<script type="text/javascript">
-   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-   m[i].l=1*new Date();
-   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+  <meta name="yandex-verification" content="4829483e1c30ff58" />
+  <meta name="theme-color" content="#101524">
 
-   ym(111297297, "init", {
-        clickmap: true,
-        trackLinks: true,
-        accurateTrackBounce: true,
-        webvisor: true
-   });
-
-   /* Единая точка для целей. Везде в коде зовём neoGoal('register'),
-      а не ym(...) напрямую: номер счётчика остаётся в одном месте,
-      и при блокировщике рекламы страница не падает с ошибкой. */
-   window.NEO_METRIKA_ID = 111297297;
-   window.neoGoal = function(name, params){
-     try { if (typeof ym === 'function') ym(111297297, 'reachGoal', name, params || {}); } catch(e){}
-   };
-   window.neoHit = function(url, options){
-     try { if (typeof ym === 'function') ym(111297297, 'hit', url, options || {}); } catch(e){}
-   };
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/111297297" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /neotaro-metrika -->
   <title>NEOTARO — Таро, астрология и матрица судьбы онлайн</title>
   <meta name="description" content="NEOTARO — расклады Таро с ИИ-толкователем, натальная карта, матрица судьбы, совместимость, сонник и лунный календарь. Вытяните карту дня бесплатно.">
   <meta property="og:title" content="NEOTARO — ночной атлас Таро">
   <meta property="og:description" content="Расклады Таро, астрология, матрица судьбы и лунный календарь — в одном тихом ночном пространстве.">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "NEO TARO",
-    "url": "https://neotaro.ru/"
-  }
-  </script>
+  <meta property="og:image" content="https://neotaro.ru/og-cover.png">
+  <link rel="canonical" href="https://neotaro.ru/">
+
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
   <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
-  <meta property="og:image" content="https://neotaro.ru/og-cover.png">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.min.css" media="print" onload="this.media='all'">
-  <style>.bg-space-900{background:#0B0F1E}.min-h-screen{min-height:100vh}.hidden{display:none}</style>
-  <link rel="canonical" href="https://neotaro.ru/">
-  <style>/* home: library + prose + faq + footer (inline, no external file) */
-:root{--gold:#D9AE5F;--gold-pale:#E9D9AC;--gold-bright:#F0DDB0;--ivory:#F2EDE0;--mist:#9AA3BF;--blue:#8FA3DE;--ink-900:#0B0F1E;--ink-800:#121829;--ink-700:#1A2138;--ink-600:#232C47;--line:rgba(217,174,95,.22);--line-soft:rgba(217,174,95,.12);--serif:'Cormorant Garamond',Georgia,serif;--sans:'Manrope',system-ui,sans-serif}
-/* NEOTARO home: library, prose, faq, mega-footer */
-.lp-lib{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.lp-lib-card{display:block;padding:22px 22px 18px;border:1px solid rgba(217,174,95,.22);border-radius:14px;background:rgba(18,24,41,.62);text-decoration:none;transition:border-color .25s,transform .25s}
-.lp-lib-card:hover{border-color:rgba(217,174,95,.55);transform:translateY(-2px)}
-.lp-lib-card h3{margin:0 0 6px;font-size:20px;color:#F0DDB0;font-family:'Cormorant Garamond',Georgia,serif}
-.lp-lib-card p{margin:0 0 12px;font-size:14px;line-height:1.65;color:#9AA3BF}
-.lp-lib-count{display:inline-block;margin-bottom:10px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#D9AE5F}
-.lp-lib-links{display:flex;flex-wrap:wrap;gap:6px 10px}
-.lp-lib-links a{font-size:13px;color:#8FA3DE;text-decoration:none;border-bottom:1px solid rgba(143,163,222,.3)}
-.lp-lib-links a:hover{color:#C9D2F2}
-.lp-prose{max-width:760px}
-.lp-prose p{margin:0 0 16px;font-size:16px;line-height:1.8;color:#C3CADF}
-.lp-prose h3{margin:28px 0 10px;font-size:22px;color:#F0DDB0;font-family:'Cormorant Garamond',Georgia,serif}
-.lp-prose ul{margin:0 0 16px;padding-left:20px;color:#C3CADF;line-height:1.8}
-.lp-prose strong{color:#E9D9AC;font-weight:600}
-.lp-faq details{border-bottom:1px solid rgba(217,174,95,.16);padding:16px 0}
-.lp-faq summary{cursor:pointer;font-size:17px;color:#F2EDE0;list-style:none}
-.lp-faq summary::-webkit-details-marker{display:none}
-.lp-faq summary::before{content:'+';margin-right:12px;color:#D9AE5F}
-.lp-faq details[open] summary::before{content:'-'}
-.lp-faq .a{margin:12px 0 0;font-size:15px;line-height:1.8;color:#9AA3BF;max-width:720px}
-@media(max-width:900px){.lp-lib{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:620px){.lp-lib{grid-template-columns:1fr}}
-/* base classes the mega-footer relies on (not defined in index.html) */
-.site-foot .wrap{max-width:1060px;margin:0 auto;padding:0 22px;width:100%}
-.site-foot a{text-decoration:none;transition:color .2s}
-.site-foot .brand{font-family:'Cormorant Garamond',Georgia,serif;font-size:23px;letter-spacing:.03em;color:#F2EDE0}
-.site-foot .brand b{color:#D9AE5F;font-weight:400}
-.site-foot .btn-gold{display:inline-block;padding:11px 24px;border-radius:10px;background:linear-gradient(180deg,#E9D9AC,#D9AE5F);color:#14161F;font-weight:600;font-size:14px}
-.site-foot .btn-gold:hover{color:#14161F;filter:brightness(1.06)}
-.site-foot p{margin:0}
-.site-foot nav{min-width:0}
 
-
-/* Мега-подвал */
-.site-foot{margin-top:70px;border-top:1px solid var(--line-soft);background:linear-gradient(180deg,rgba(18,24,41,.55),rgba(11,15,30,1));padding:52px 0 26px}
-.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr 1.15fr;gap:34px 26px;align-items:start}
-.foot-brand .brand{display:inline-block;margin-bottom:14px}
-.foot-about{font-size:14px;color:var(--mist);line-height:1.65;margin-bottom:18px;max-width:280px}
-.foot-cta{font-size:14px;padding:11px 24px;box-shadow:none}
-.foot-col{display:flex;flex-direction:column;gap:9px}
-.fc-title{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
-.fc-second{margin-top:18px}
-.foot-col a,.foot-contact a{font-size:14px;color:var(--mist);line-height:1.45}
-.foot-col a:hover,.foot-contact a:hover{color:var(--gold-pale)}
-.foot-contact{display:flex;flex-direction:column;gap:9px}
-.fc-mail,.fc-tg{word-break:break-word}
-.fc-note{font-size:13px;color:var(--ink-500);color:rgba(154,163,191,.7);margin-top:4px;line-height:1.55}
-.foot-bottom{margin-top:40px;padding-top:22px;border-top:1px solid var(--line-soft);display:flex;flex-wrap:wrap;gap:14px 26px;align-items:baseline;justify-content:space-between}
-.foot-note{font-size:13px;color:var(--mist);opacity:.8;max-width:640px;line-height:1.6}
-.foot-legal{display:flex;flex-wrap:wrap;gap:18px;font-size:13px}
-.foot-legal a{color:var(--mist)}
-.foot-legal a:hover{color:var(--gold-pale)}
-.fl-copy{color:rgba(154,163,191,.55)}
-@media(max-width:900px){.foot-grid{grid-template-columns:1fr 1fr 1fr}}
-@media(max-width:620px){.foot-grid{grid-template-columns:1fr 1fr;gap:28px 18px}.foot-brand{grid-column:1/-1}}
-  </style>
-  <script src="data.js?v=6"></script>
-
-  <script>
-    /* ==================================================================
-       NIGHT ATLAS DESIGN TOKENS
-       Те же имена токенов (space-*, neon-*), что и раньше — поэтому вся
-       существующая разметка и JS-генерируемый HTML автоматически
-       переходят на новую палитру «Ночного атласа».
-       ================================================================== */
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            white: '#F2EDE0',
-            amber: { 300: '#E9D9AC', 400: '#D9AE5F', 500: '#C89055', 600: '#B87F45' },
-            orange: { 400: '#C89055', 500: '#B87F45', 600: '#A66F3A' },
-            emerald: { 300: '#A8C7B2', 400: '#93B9A0', 500: '#7FA68C', 600: '#6E9379' },
-            green: { 400: '#93B9A0', 500: '#7FA68C', 600: '#6E9379' },
-            red: { 400: '#C4899B', 500: '#B06F84', 600: '#9C5A70' },           /* тёплая слоновая кость вместо чистого белого */
-            space: {
-              900: '#0B0F1E',           /* чернила */
-              800: '#121829',           /* поверхность */
-              700: '#1A2138',           /* приподнятая поверхность */
-              600: '#232C47',           /* активная поверхность */
-              500: '#2E3A5C',           /* границы, разделители */
-            },
-            neon: {
-              indigo: '#8FA3DE',        /* звёздная сталь */
-              fuchsia: '#C9A0DC',       /* сиреневая дымка */
-              amber: '#D9AE5F',         /* старое золото — главный акцент */
-              purple: '#A78FD6',        /* аметист */
-              cyan: '#87B7C6',          /* лунная вода */
-              rose: '#C4899B',          /* пыльная роза */
-              emerald: '#93B9A0',       /* шалфей */
-            }
-          },
-          fontFamily: {
-            sans: ['Manrope', 'Inter', 'system-ui', 'sans-serif'],
-            mystic: ['Prata', 'Cormorant Garamond', 'Georgia', 'serif'],
-          },
-          animation: {
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'float': 'float 6s ease-in-out infinite',
-            'glow': 'glow 2s ease-in-out infinite alternate',
-            'slide-up': 'slideUp 0.3s ease-out',
-            'fade-in': 'fadeIn 0.2s ease-out',
-            'stars': 'stars 100s linear infinite',
-            'flip': 'flip 0.6s ease-in-out',
-            'spin-slow': 'spin 15s linear infinite',
-            'spin-reverse-slow': 'spinReverse 15s linear infinite',
-            'spin-slower': 'spin 25s linear infinite',
-            'spin-reverse-slower': 'spinReverse 25s linear infinite',
-          },
-          keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-10px)' },
-            },
-            glow: {
-              '0%': { boxShadow: '0 0 5px rgba(217, 174, 95, 0.25)' },
-              '100%': { boxShadow: '0 0 20px rgba(217, 174, 95, 0.45), 0 0 40px rgba(167, 143, 214, 0.25)' },
-            },
-            slideUp: {
-              '0%': { transform: 'translateY(100%)' },
-              '100%': { transform: 'translateY(0)' },
-            },
-            fadeIn: {
-              '0%': { opacity: '0' },
-              '100%': { opacity: '1' },
-            },
-            stars: {
-              '0%': { transform: 'translateY(0)' },
-              '100%': { transform: 'translateY(-100%)' },
-            },
-            spinReverse: {
-              '0%': { transform: 'translate(-50%, -50%) rotate(0deg)' },
-              '100%': { transform: 'translate(-50%, -50%) rotate(-360deg)' }
-            }
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Компонентные стили оригинального приложения -->
-<style>
-/* ============================================================
-   NEOTARO — NIGHT ATLAS
-   Гравированный медный альманах: чернильная ночь, латунь, слоновая кость.
-   ============================================================ */
-:root{
-  --ink-950:#070A14;
-  --ink-900:#0B0F1E;
-  --ink-850:#0E1424;
-  --ink-800:#121829;
-  --ink-700:#18203A;
-  --ink-600:#232C47;
-  --brass:#D9AE5F;
-  --brass-pale:#E9D9AC;
-  --brass-bright:#F0DDB0;
-  --ivory:#F2EDE0;
-  --mist:#93A0C0;
-
-  --verdigris:#6E9E90;
-  --ember:#C4703F;
-  --line:rgba(217,174,95,.22);
-  --line-soft:rgba(217,174,95,.11);
-  --line-cold:rgba(147,160,192,.14);
-  --serif:'Prata',Georgia,serif;
-  --sans:'Manrope',system-ui,-apple-system,sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
-  --rail:264px;
-  --dock:76px;
-  --sat:env(safe-area-inset-top,0px);
-  --sab:env(safe-area-inset-bottom,0px);
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
-body{
-  background:var(--ink-950);
-  color:var(--ivory);
-  font-family:var(--sans);
-  font-size:16px;
-  line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-  overflow:hidden;
-}
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:
-    radial-gradient(ellipse 70% 45% at 22% -8%,rgba(35,44,71,.75),transparent 62%),
-    radial-gradient(ellipse 50% 40% at 92% 8%,rgba(217,174,95,.07),transparent 60%);
-}
-button,input,textarea,select{font:inherit;color:inherit;background:none;border:none;outline:none}
-button{cursor:pointer}
-a{color:var(--brass-pale);text-decoration:none}
-img{display:block;max-width:100%}
-:focus-visible{outline:2px solid var(--brass);outline-offset:2px;border-radius:3px}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-::-webkit-scrollbar{width:0;height:0}
-
-/* ---------- типографика ---------- */
-.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--brass);opacity:.9}
-.label{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--mist)}
-.h1{font-family:var(--serif);font-weight:400;font-size:clamp(27px,4.6vw,40px);line-height:1.12;color:var(--brass-bright);letter-spacing:.005em}
-.h2{font-family:var(--serif);font-weight:400;font-size:clamp(21px,3vw,27px);line-height:1.2;color:var(--brass-pale)}
-.h3{font-family:var(--serif);font-weight:400;font-size:19px;line-height:1.25;color:var(--ivory)}
-.body{font-size:15.5px;line-height:1.68;color:var(--ivory);opacity:.9}
-.sub{font-size:13.5px;line-height:1.6;color:var(--mist)}
-.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
-
-/* ---------- каркас ---------- */
-#shell{position:relative;z-index:1;display:flex;height:100%;overflow:hidden}
-
-/* левая гравированная колонка (десктоп) */
-.rail{
-  width:var(--rail);flex:0 0 var(--rail);display:flex;flex-direction:column;
-  border-right:1px solid var(--line-soft);
-  background:linear-gradient(180deg,rgba(14,20,36,.9),rgba(7,10,20,.9));
-  padding:26px 0 18px;
-}
-.rail-brand{padding:0 24px 22px;display:flex;flex-direction:column;gap:5px}
-.rail-brand .mark{font-family:var(--serif);font-size:19px;letter-spacing:.2em;color:var(--brass-pale)}
-.rail-brand .mark b{font-weight:400;color:var(--brass)}
-.rail-brand .sub{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);opacity:.75}
-.rail-nav{display:flex;flex-direction:column;padding:6px 12px;gap:1px;overflow-y:auto;flex:1}
-.rail-sep{margin:14px 12px 8px;font-family:var(--mono);font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:rgba(147,160,192,.5)}
-.rail-link{
-  display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:9px;
-  color:var(--mist);font-size:14.5px;font-weight:500;text-align:left;
-  border:1px solid transparent;transition:color .18s,background .18s,border-color .18s;
-}
-.rail-link .gl{width:20px;text-align:center;font-size:15px;color:rgba(217,174,95,.55);transition:color .18s}
-.rail-link .kbd{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:rgba(147,160,192,.4)}
-.rail-link:hover{color:var(--ivory);background:rgba(217,174,95,.05)}
-.rail-link:hover .gl{color:var(--brass)}
-.rail-link.is-on{color:var(--brass-bright);background:linear-gradient(90deg,rgba(217,174,95,.12),transparent);border-color:var(--line)}
-.rail-link.is-on .gl{color:var(--brass)}
-.rail-foot{padding:14px 16px 0;border-top:1px solid var(--line-soft);margin:8px 12px 0}
-
-/* счётчик энергии */
-.meter{display:block;width:100%;text-align:left;border:1px solid var(--line-soft);border-radius:11px;padding:13px 14px;background:rgba(18,24,41,.7);transition:border-color .2s}
-.meter:hover{border-color:var(--line)}
-.meter-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:9px}
-.meter-val{font-family:var(--serif);font-size:26px;line-height:1;color:var(--brass-bright)}
-.meter-unit{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist)}
-.meter-bar{height:3px;border-radius:2px;background:rgba(147,160,192,.16);overflow:hidden}
-.meter-fill{height:100%;background:linear-gradient(90deg,#B8873F,var(--brass-pale));transition:width .5s ease}
-.meter-note{margin-top:9px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);opacity:.85}
-
-/* верхняя полоса (мобайл) */
-.topbar{
-  display:none;align-items:center;gap:12px;padding:calc(var(--sat) + 12px) 18px 12px;
-  border-bottom:1px solid var(--line-soft);background:rgba(7,10,20,.92);backdrop-filter:blur(14px);
-  position:sticky;top:0;z-index:20;
-}
-.topbar .tb-date{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist)}
-.topbar .tb-mark{font-family:var(--serif);font-size:15px;letter-spacing:.18em;color:var(--brass-pale);line-height:1.1}
-.tb-energy{margin-left:auto;display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:7px 13px}
-.tb-energy .v{font-family:var(--mono);font-size:13px;color:var(--brass-bright)}
-.tb-energy .u{font-family:var(--mono);font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist)}
-
-/* рабочая область */
-.work{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
-.scroll{flex:1;overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch}
-.wrap{max-width:1080px;margin:0 auto;padding:34px 40px 64px;width:100%}
-.view{display:none}
-.view.is-on{display:block;animation:rise .34s cubic-bezier(.2,.7,.3,1) both}
-@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-
-/* нижний док (мобайл) */
-.dock{
-  display:none;border-top:1px solid var(--line-soft);background:rgba(7,10,20,.96);backdrop-filter:blur(16px);
-  padding:8px 6px calc(var(--sab) + 8px);
-}
-.dock-in{display:flex;align-items:stretch}
-.dock-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 2px 6px;color:var(--mist);position:relative;min-height:56px;justify-content:center}
-.dock-btn .gl{font-size:17px;line-height:1;color:rgba(147,160,192,.8);transition:color .18s,transform .18s}
-.dock-btn .tx{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase}
-.dock-btn.is-on{color:var(--brass-bright)}
-.dock-btn.is-on .gl{color:var(--brass);transform:translateY(-1px)}
-.dock-btn.is-on::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:22px;height:2px;border-radius:2px;background:var(--brass)}
-
-/* ---------- поверхности ---------- */
-.panel{background:linear-gradient(160deg,rgba(18,24,41,.92),rgba(11,15,30,.92));border:1px solid var(--line-soft);border-radius:16px}
-.panel-pad{padding:24px 26px}
-.hair{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:26px 0}
-.orn{display:flex;align-items:center;gap:14px;margin:0 0 18px}
-.orn::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
-
-/* кнопки */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:0 22px;border-radius:999px;font-size:14.5px;font-weight:600;letter-spacing:.01em;transition:transform .16s,box-shadow .2s,border-color .2s,background .2s}
-.btn:active{transform:scale(.975)}
-.btn-brass{background:linear-gradient(140deg,var(--brass-pale),#C0913F);color:#0B0F1E;box-shadow:0 8px 26px rgba(217,174,95,.2)}
-.btn-brass:hover{box-shadow:0 12px 32px rgba(217,174,95,.3)}
-.btn-line{border:1px solid var(--line);color:var(--brass-pale)}
-.btn-line:hover{border-color:var(--brass);background:rgba(217,174,95,.07)}
-.btn-quiet{border:1px solid var(--line-cold);color:var(--mist)}
-.btn-quiet:hover{color:var(--ivory);border-color:rgba(147,160,192,.3)}
-.btn-wide{width:100%}
-.btn-sm{min-height:38px;padding:0 16px;font-size:13px}
-
-/* поля */
-.field{width:100%;background:rgba(7,10,20,.72);border:1px solid var(--line-cold);border-radius:11px;padding:13px 15px;font-size:15px;color:var(--ivory);transition:border-color .2s}
-.field::placeholder{color:rgba(147,160,192,.55)}
-.field:focus{border-color:var(--line)}
-textarea.field{resize:none;line-height:1.55}
-.field-lab{display:block;margin-bottom:7px;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist)}
-.row{display:flex;gap:10px}
-.row>*{flex:1;min-width:0}
-
-/* ============================================================
-   ПОДПИСЬ ПРОЕКТА: ЦИФЕРБЛАТ ДНЯ (78 делений — по числу карт)
-   ============================================================ */
-.today{display:grid;grid-template-columns:minmax(0,332px) minmax(0,1fr);gap:44px;align-items:center}
-.dial{position:relative;width:100%;max-width:332px;aspect-ratio:1;margin:0 auto}
-.dial svg{width:100%;height:100%;display:block;overflow:visible}
-.dial-rot{transform-origin:160px 160px;transition:transform 1.5s cubic-bezier(.16,.84,.24,1)}
-.dial-spin{transform-origin:160px 160px;animation:slowspin 220s linear infinite}
-@keyframes slowspin{to{transform:rotate(360deg)}}
-.dial-face{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:41.5%;aspect-ratio:100/166;border-radius:7px;overflow:hidden;
-  border:1px solid rgba(217,174,95,.55);
-  background:linear-gradient(165deg,#1A2138,#0B0F1E);
-  box-shadow:0 16px 44px rgba(0,0,0,.62),inset 0 0 0 3px rgba(11,15,30,.6);
-  display:flex;align-items:center;justify-content:center;cursor:pointer;
-  transition:box-shadow .3s,border-color .3s;
-}
-.dial-face:hover{border-color:var(--brass);box-shadow:0 18px 52px rgba(0,0,0,.7),0 0 28px rgba(217,174,95,.14)}
-.dial-face img{width:100%;height:100%;object-fit:cover}
-.dial-face .back{display:flex;flex-direction:column;align-items:center;gap:9px;padding:14px;text-align:center}
-.dial-face .back .glyph{font-family:var(--serif);font-size:30px;color:var(--brass);line-height:1}
-.dial-face .back .t{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass-pale);opacity:.8}
-.dial-cap{margin-top:14px;text-align:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist)}
-
-.today-copy .arc{font-family:var(--mono);font-size:11px;letter-spacing:.26em;color:var(--brass);text-transform:uppercase;margin-bottom:12px}
-.today-copy .h1{margin-bottom:14px}
-.today-copy .lead{font-size:16.5px;line-height:1.7;color:var(--ivory);opacity:.88;max-width:46ch}
-.today-acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
-
-/* строка альманаха */
-.almanac{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line-soft);border-radius:14px;overflow:hidden;background:rgba(11,15,30,.6)}
-.alm{padding:17px 18px;border-right:1px solid var(--line-soft)}
-.alm:last-child{border-right:none}
-.alm .k{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);margin-bottom:7px}
-.alm .v{font-family:var(--serif);font-size:20px;color:var(--brass-pale);line-height:1.15}
-.alm .v small{font-family:var(--sans);font-size:12.5px;color:var(--mist);display:block;margin-top:3px;font-weight:500}
-
-/* сетка практик */
-.grid{display:grid;gap:14px}
-.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
-.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-.tile{
-  position:relative;text-align:left;padding:22px 22px 20px;border-radius:14px;overflow:hidden;
-  border:1px solid var(--line-soft);background:linear-gradient(165deg,rgba(18,24,41,.9),rgba(11,15,30,.9));
-  transition:border-color .2s,transform .2s;display:flex;flex-direction:column;min-height:152px;
-}
-.tile:hover{border-color:var(--line);transform:translateY(-2px)}
-.tile .tg{font-family:var(--serif);font-size:26px;color:var(--brass);line-height:1;margin-bottom:14px}
-.tile h4{font-family:var(--serif);font-weight:400;font-size:18.5px;color:var(--ivory);margin-bottom:6px}
-.tile p{font-size:13px;line-height:1.55;color:var(--mist);margin-bottom:14px}
-.tile .foot{margin-top:auto;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);opacity:.85}
-.tile.locked{opacity:.72}
-.ic{width:18px;height:18px;display:block;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
-.rail-link .gl{display:flex;align-items:center;justify-content:center}
-.dock-btn .gl{display:flex;align-items:center;justify-content:center}
-.dock-btn .ic{width:20px;height:20px}
-.tile .tg{display:block}
-.tile .ic{width:25px;height:25px;stroke-width:1.15}
-.rowcard .idx .ic{width:19px;height:19px;margin:0 auto}
-.empty .g .ic{width:34px;height:34px;margin:0 auto;stroke-width:.9;opacity:.6}
-.city-picked .pin{display:flex;align-items:center}
-.city-picked .pin .ic{width:16px;height:16px}
-.syn-names i .ic{width:17px;height:17px}
-.chat-sigil .ic{width:38px;height:38px;margin:0 auto;stroke-width:.9}
-.dial-face .glyph .ic{width:22px;height:22px;margin:0 auto}
-.deck .plate .ic{width:22px;height:22px;margin:0 auto}
-.tag .ic{width:13px;height:13px}
-/* --- поиск города --- */
-.city-wrap{position:relative}
-.city-list{margin-top:8px;display:none;flex-direction:column;border:1px solid var(--line-soft);border-radius:10px;background:var(--ink-850);overflow:hidden;max-height:238px;overflow-y:auto}
-.city-list.is-on{display:flex}
-.city-opt{display:block;width:100%;text-align:left;padding:11px 14px;border-bottom:1px solid var(--line-soft);transition:background .16s}
-.city-opt:last-child{border-bottom:0}
-.city-opt:hover,.city-opt:focus-visible{background:rgba(217,174,95,.07)}
-.city-opt b{display:block;font-family:var(--body);font-weight:500;font-size:14px;color:var(--ivory);margin-bottom:2px}
-.city-opt span{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist)}
-.city-note{padding:12px 14px;font-size:12.5px;line-height:1.5;color:var(--mist)}
-.city-picked{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:rgba(217,174,95,.05)}
-.city-picked .pin{font-family:var(--serif);font-size:16px;color:var(--brass)}
-.city-picked .nm{flex:1;font-size:14px;color:var(--ivory);line-height:1.4}
-.city-picked .again{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);white-space:nowrap}
-.city-picked .again:hover{color:var(--brass-bright);text-decoration:underline}
-/* --- совместимость --- */
-.rel-row{display:flex;gap:8px;flex-wrap:wrap}
-.rel-chip{padding:9px 16px;border:1px solid var(--line-soft);border-radius:999px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mist);transition:color .18s,border-color .18s,background .18s}
-.rel-chip:hover{color:var(--ivory);border-color:var(--line)}
-.rel-chip.is-on{color:var(--ink-950);background:var(--brass-pale);border-color:var(--brass-pale)}
-.syn-head{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
-.syn-names{display:flex;align-items:baseline;gap:14px;font-family:var(--serif);font-size:26px;color:var(--ivory)}
-.syn-names i{font-style:normal;color:var(--brass);font-size:18px}
-.syn-dial{position:relative;width:150px;height:150px;flex-shrink:0}
-.syn-dial svg{width:100%;height:100%;transform:rotate(-90deg)}
-.syn-dial-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
-.syn-dial-num b{font-family:var(--serif);font-weight:400;font-size:34px;color:var(--brass-bright);line-height:1}
-.syn-dial-num span{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}
-.syn-block{padding:20px 22px;border:1px solid var(--line-soft);border-radius:12px;background:var(--ink-850)}
-.syn-block + .syn-block{margin-top:12px}
-.syn-block h4{font-family:var(--serif);font-weight:400;font-size:19px;color:var(--brass-pale);margin-bottom:10px}
-.syn-block p{font-size:14.5px;line-height:1.72;color:rgba(242,237,224,.8)}
-@media(max-width:700px){.syn-names{font-size:21px}.syn-dial{width:118px;height:118px}.syn-dial-num b{font-size:27px}}
-
-/* ярлык */
-.tag{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;padding:4px 9px;border-radius:5px;border:1px solid var(--line-soft);color:var(--brass);background:rgba(217,174,95,.07);white-space:nowrap}
-.tag-cold{color:var(--mist);border-color:var(--line-cold);background:rgba(147,160,192,.07)}
-.tag-good{color:var(--verdigris);border-color:rgba(110,158,144,.3);background:rgba(110,158,144,.08)}
-.tag-warm{color:var(--ember);border-color:rgba(196,112,63,.3);background:rgba(196,112,63,.08)}
-
-/* список-ряд */
-.rowcard{display:flex;align-items:center;gap:15px;width:100%;text-align:left;padding:15px 17px;border:1px solid var(--line-soft);border-radius:12px;background:rgba(18,24,41,.72);transition:border-color .2s,background .2s}
-.rowcard:hover{border-color:var(--line);background:rgba(24,32,58,.8)}
-.rowcard .idx{font-family:var(--serif);font-size:17px;color:var(--brass);min-width:34px;text-align:center;line-height:1}
-.rowcard .mid{flex:1;min-width:0}
-.rowcard .mid strong{display:block;font-weight:600;font-size:14.5px;color:var(--ivory);margin-bottom:3px}
-.rowcard .mid span{display:block;font-size:12.5px;color:var(--mist);line-height:1.45}
-.rowcard .end{flex:0 0 auto;display:flex;align-items:center;gap:9px}
-.stack{display:flex;flex-direction:column;gap:10px}
-
-/* ---------- чат ---------- */
-.chat{display:flex;flex-direction:column;height:100%}
-.chat-head{display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--line-soft);background:rgba(7,10,20,.9)}
-.chat-sigil{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:17px;color:var(--brass);flex:0 0 auto;background:rgba(18,24,41,.9)}
-.chat-head .who strong{display:block;font-family:var(--serif);font-weight:400;font-size:17px;color:var(--ivory)}
-.chat-head .who span{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--verdigris)}
-.chat-log{flex:1;overflow-y:auto;padding:26px 22px 8px;scroll-behavior:smooth}
-.chat-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-.msg{max-width:76%;font-size:15px;line-height:1.66}
-.msg .meta{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(147,160,192,.6);margin-bottom:6px}
-.msg .bubble{padding:15px 18px;white-space:pre-wrap;word-break:break-word}
-.msg-ai{align-self:flex-start}
-.msg-ai .bubble{border:1px solid var(--line-soft);border-left:2px solid var(--brass);border-radius:3px 14px 14px 3px;background:linear-gradient(140deg,rgba(18,24,41,.92),rgba(11,15,30,.9));color:var(--ivory)}
-.msg-me{align-self:flex-end;text-align:right}
-.msg-me .bubble{border:1px solid var(--line-cold);border-radius:14px 3px 14px 14px;background:rgba(35,44,71,.55);color:var(--ivory);text-align:left}
-.msg-act{margin-top:12px;padding-top:12px;border-top:1px solid var(--line-soft);display:flex}
-.typing{align-self:flex-start;display:flex;align-items:center;gap:7px;padding:12px 16px;border:1px solid var(--line-soft);border-radius:3px 14px 14px 3px;background:rgba(18,24,41,.8)}
-.typing i{width:5px;height:5px;border-radius:50%;background:var(--brass);opacity:.5;animation:blip 1.2s infinite}
-.typing i:nth-child(2){animation-delay:.18s}
-.typing i:nth-child(3){animation-delay:.36s}
-@keyframes blip{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
-.chat-foot{border-top:1px solid var(--line-soft);background:rgba(7,10,20,.95);padding:12px 22px calc(var(--sab) + 14px)}
-.chat-foot-in{max-width:760px;margin:0 auto}
-.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px}
-.chip{flex:0 0 auto;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-pale);border:1px solid var(--line-soft);border-radius:999px;padding:8px 14px;transition:border-color .2s,background .2s}
-.chip:hover{border-color:var(--brass);background:rgba(217,174,95,.08)}
-.composer{display:flex;align-items:flex-end;gap:10px;border:1px solid var(--line-cold);border-radius:14px;padding:9px 9px 9px 15px;background:rgba(11,15,30,.85);transition:border-color .2s}
-.composer:focus-within{border-color:var(--line)}
-.composer textarea{flex:1;max-height:132px;background:none;font-size:15px;line-height:1.5;resize:none;padding:9px 0}
-.send{width:44px;height:44px;flex:0 0 auto;border-radius:50%;background:linear-gradient(140deg,var(--brass-pale),#C0913F);color:#0B0F1E;display:flex;align-items:center;justify-content:center;font-size:16px;transition:transform .16s,opacity .2s}
-.send:active{transform:scale(.94)}
-.send:disabled{opacity:.4;cursor:default}
-.cost{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(147,160,192,.75)}
-
-/* ---------- ритуал расклада ---------- */
-.ritual{max-width:720px;margin:0 auto}
-.deck{display:flex;justify-content:center;align-items:center;gap:6px;min-height:172px;margin:26px 0}
-.deck .plate{width:74px;aspect-ratio:100/166;border-radius:6px;border:1px solid rgba(217,174,95,.4);background:linear-gradient(165deg,#1A2138,#0B0F1E);box-shadow:0 10px 26px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:16px;color:rgba(217,174,95,.7)}
-.deck .plate.dealt{animation:deal .5s cubic-bezier(.2,.8,.3,1) both}
-@keyframes deal{from{opacity:0;transform:translateY(-16px) rotate(-5deg)}to{opacity:1;transform:none}}
-.deck.shuffling .plate{animation:shuffle 1.15s ease-in-out infinite}
-.deck.shuffling .plate:nth-child(2){animation-delay:.13s}
-.deck.shuffling .plate:nth-child(3){animation-delay:.26s}
-@keyframes shuffle{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-13px) rotate(3deg)}}
-.spread-out{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin:22px 0}
-.spread-out img{width:82px;border-radius:6px;border:1px solid var(--line-soft);box-shadow:0 10px 24px rgba(0,0,0,.5)}
-.reading{font-size:15.5px;line-height:1.75;color:var(--ivory);opacity:.93}
-.reading p{margin-bottom:13px}
-.reading strong{color:var(--brass-pale);font-weight:600}
-.reading em{color:var(--brass-pale);font-style:italic}
-.reading h3,.reading h4{font-family:var(--serif);font-weight:400;color:var(--brass-pale);margin:18px 0 8px;font-size:19px}
-.reading ul,.reading ol{margin:0 0 14px 20px}
-.reading li{margin-bottom:7px}
-
-/* ---------- матрица ---------- */
-.mx{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:38px;align-items:start}
-.mx svg{width:100%;height:auto}
-.mx-node{cursor:pointer}
-.mx-node circle{transition:fill .2s,stroke .2s}
-.mx-node:hover circle{fill:rgba(217,174,95,.14);stroke:var(--brass-bright)}
-
-/* ---------- шторки ---------- */
-.scrim{position:fixed;inset:0;background:rgba(4,6,12,.78);backdrop-filter:blur(5px);opacity:0;pointer-events:none;transition:opacity .28s;z-index:60}
-.scrim.is-on{opacity:1;pointer-events:auto}
-.sheet{
-  position:fixed;z-index:70;left:50%;bottom:0;width:100%;max-width:520px;transform:translate(-50%,102%);
-  background:linear-gradient(180deg,#111729,#0A0E1C);
-  border:1px solid var(--line-soft);border-bottom:none;border-radius:20px 20px 0 0;
-  max-height:90vh;overflow-y:auto;transition:transform .34s cubic-bezier(.2,.8,.25,1);
-  visibility:hidden;pointer-events:none;
-  padding:10px 24px calc(var(--sab) + 26px);
-}
-.sheet.is-on{transform:translate(-50%,0);visibility:visible;pointer-events:auto}
-.stat-card{display:block;width:100%;cursor:pointer;font:inherit;color:inherit}
-.stat-card .stat-more{color:var(--brass);opacity:.9}
-.sheet-grip{width:38px;height:3px;border-radius:2px;background:rgba(147,160,192,.3);margin:6px auto 18px}
-.sheet h3{font-family:var(--serif);font-weight:400;font-size:22px;color:var(--brass-pale);margin-bottom:6px}
-.sheet .sheet-sub{font-size:13.5px;color:var(--mist);margin-bottom:20px;line-height:1.55}
-.sheet-acts{display:flex;flex-direction:column;gap:10px;margin-top:22px}
-@media(min-width:900px){
-  .sheet{top:50%;bottom:auto;transform:translate(-50%,-46%) scale(.97);opacity:0;border-radius:18px;border-bottom:1px solid var(--line-soft);padding:26px 30px 30px;max-height:84vh}
-  .sheet.is-on{transform:translate(-50%,-50%) scale(1);opacity:1;visibility:visible;pointer-events:auto}
-  .sheet-grip{display:none}
-}
-
-/* тост */
-.toast{position:fixed;left:50%;bottom:calc(var(--dock) + var(--sab) + 20px);transform:translate(-50%,16px);z-index:90;display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:999px;border:1px solid var(--line);background:rgba(14,20,36,.97);color:var(--ivory);font-size:13.5px;box-shadow:0 14px 40px rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .24s,transform .24s;max-width:calc(100% - 32px)}
-.toast.is-on{opacity:1;transform:translate(-50%,0)}
-.toast .dotmark{width:6px;height:6px;border-radius:50%;background:var(--brass);flex:0 0 auto}
-@media(min-width:900px){.toast{bottom:26px}}
-
-/* загрузка / вход / сбой */
-.gate{position:fixed;inset:0;z-index:120;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;background:var(--ink-950)}
-.gate.hidden{display:none}
-.gate-seal{width:96px;height:96px;margin-bottom:26px}
-.gate-seal svg{width:100%;height:100%}
-.gate h2{font-family:var(--serif);font-weight:400;font-size:26px;color:var(--brass-bright);margin-bottom:10px}
-.gate p{font-size:14.5px;color:var(--mist);max-width:37ch;line-height:1.6;margin-bottom:24px}
-.spin{display:inline-block;width:15px;height:15px;border:1.5px solid rgba(217,174,95,.28);border-top-color:var(--brass);border-radius:50%;animation:sp .8s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-
-/* пусто / скелет */
-.empty{text-align:center;padding:44px 20px;border:1px dashed var(--line-soft);border-radius:14px}
-.empty .g{font-family:var(--serif);font-size:26px;color:rgba(217,174,95,.55);margin-bottom:10px}
-.empty p{font-size:13.5px;color:var(--mist);max-width:34ch;margin:0 auto}
-.shimmer{height:13px;border-radius:4px;background:linear-gradient(90deg,rgba(147,160,192,.08),rgba(147,160,192,.16),rgba(147,160,192,.08));background-size:200% 100%;animation:sh 1.3s linear infinite}
-@keyframes sh{to{background-position:-200% 0}}
-
-/* переключатель */
-.switch{position:relative;width:44px;height:25px;border-radius:999px;border:1px solid var(--line-cold);background:rgba(11,15,30,.9);flex:0 0 auto;transition:border-color .2s,background .2s}
-.switch::after{content:'';position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:var(--mist);transition:transform .22s,background .22s}
-.switch.is-on{border-color:var(--line);background:rgba(217,174,95,.14)}
-.switch.is-on::after{transform:translateX(19px);background:var(--brass)}
-
-/* ---------- адаптив ---------- */
-@media(max-width:1000px){
-  .today{grid-template-columns:1fr;gap:30px}
-  .grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .mx{grid-template-columns:1fr;gap:26px}
-}
-@media(max-width:900px){
-  .rail{display:none}
-  .topbar{display:flex}
-  .dock{display:block}
-  .wrap{padding:22px 18px 40px}
-  .chat-log{padding:20px 16px 6px}
-  .chat-foot{padding:10px 16px calc(var(--sab) + 12px)}
-  .chat-head{padding:13px 16px}
-  .msg{max-width:88%}
-  .almanac{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .alm:nth-child(2){border-right:none}
-  .alm:nth-child(1),.alm:nth-child(2){border-bottom:1px solid var(--line-soft)}
-  .panel-pad{padding:20px 18px}
-}
-@media(max-width:560px){
-  .grid-3,.grid-2{grid-template-columns:1fr}
-  .today-acts .btn{width:100%}
-  .dial{max-width:268px}
-}
-@media(prefers-reduced-motion:reduce){
-  *{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
-  .chat-log{scroll-behavior:auto}
-}
-
-/* чат: одна верхняя полоса и одна нижняя */
-body.chat-mode .topbar{display:none}
-body.chat-mode .chat-head{padding-top:16px}
-@media(max-width:900px){body.chat-mode .chat-head{padding-top:calc(var(--sat) + 13px)}}
-.chat-energy{margin-left:auto;display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:7px 12px;flex:0 0 auto}
-.chat-energy .v{font-family:var(--mono);font-size:12.5px;color:var(--brass-bright)}
-.chat-energy .u{font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}
-.chat-head .clear{margin-left:8px}
-.chips.is-off{display:none}
-@media(max-width:420px){.chat-energy .u{display:none}.chat-head .who span{display:none}}
-
-/* знак / стихия / планета — всегда в три колонки */
-.grid-trio{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.sm-short{display:none}
-@media(max-width:620px){
-  .grid-trio{gap:8px}
-  .grid-trio .panel-pad{padding:14px 11px}
-  .grid-trio .h3{font-size:15px;line-height:1.2}
-  .grid-trio .label{font-size:8.5px;letter-spacing:.12em}
-  .sm-long{display:none}
-  .sm-short{display:inline}
-}
-
-@media (max-width:900px){.scroll{padding-bottom:calc(var(--dock) + var(--sab) + 48px)}}
-</style>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://neotaro.ru/#org", "name": "NEOTARO", "url": "https://neotaro.ru/", "logo": "https://neotaro.ru/apple-touch-icon.png", "email": "support@neotaro.ru", "sameAs": ["https://t.me/otcars"], "contactPoint": [{"@type": "ContactPoint", "email": "support@neotaro.ru", "contactType": "customer support", "availableLanguage": ["ru", "en"]}]}, {"@type": "WebSite", "@id": "https://neotaro.ru/#site", "name": "NEOTARO", "url": "https://neotaro.ru/", "inLanguage": "ru", "publisher": {"@id": "https://neotaro.ru/#org"}}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Гадание на Таро онлайн бесплатно — правда бесплатно?", "acceptedAnswer": {"@type": "Answer", "text": "Да. Карта дня открывается раз в сутки бесплатно и без оплаты чего-либо, а вся библиотека разборов — значения 78 карт, расклады, сонник, числа и матрица — доступна вообще без входа. Энергия и Звезды нужны только для больших раскладов и длинных диалогов с оракулом."}}, {"@type": "Question", "name": "Нужна ли регистрация?", "acceptedAnswer": {"@type": "Answer", "text": "Чтобы читать разборы — нет. Чтобы вытянуть карту дня и сохранять историю — да, вход занимает около десяти секунд через Telegram, Google, Яндекс или VK. Пароль придумывать не нужно."}}, {"@type": "Question", "name": "Чем ИИ-оракул отличается от обычного описания карты?", "acceptedAnswer": {"@type": "Answer", "text": "Обычное описание одинаково для всех. Оракул видит ваш вопрос, конкретные позиции расклада и порядок карт, помнит предыдущие сообщения и объясняет связь между картами. Можно спорить и уточнять — это диалог, а не справка."}}, {"@type": "Question", "name": "Насколько точны предсказания?", "acceptedAnswer": {"@type": "Answer", "text": "Карты не сообщают дату событий и не гарантируют исход. Они хорошо показывают расстановку сил, ваши мотивы и слепые зоны. Точность стоит мерить не совпадением с будущим, а тем, стало ли вам яснее, что делать сейчас."}}, {"@type": "Question", "name": "На чем основан сонник?", "acceptedAnswer": {"@type": "Answer", "text": "На аналитической психологии Карла Юнга и архетипических значениях символов, а не на народных приметах. У каждого символа есть ядро, но смысл меняют детали сна и ваш контекст — поэтому каждая страница разбирает несколько сценариев."}}, {"@type": "Question", "name": "Что нужно для натальной карты?", "acceptedAnswer": {"@type": "Answer", "text": "Дата рождения, максимально точное время и город. Время влияет на асцендент и дома: разница в час может сместить весь рисунок карты. Если время неизвестно, разбор все равно возможен, но по Солнцу и Луне."}}, {"@type": "Question", "name": "Можно ли пользоваться на телефоне?", "acceptedAnswer": {"@type": "Answer", "text": "Да, сайт работает в мобильном браузере, а также как приложение внутри Telegram. Интерфейс переведен на русский, английский, испанский, французский и немецкий."}}, {"@type": "Question", "name": "Это безопасно с точки зрения данных?", "acceptedAnswer": {"@type": "Answer", "text": "Мы храним минимум: идентификатор входа, дату рождения для расчетов и историю ваших раскладов. Данные не продаются третьим лицам. Подробности — в политике конфиденциальности."}}]}]}
+  {"@context":"https://schema.org","@type":"WebSite","name":"NEO TARO","url":"https://neotaro.ru/"}
   </script>
+
+  <!-- ==================== Яндекс.Метрика ==================== -->
+  <script type="text/javascript">
+     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+     m[i].l=1*new Date();
+     for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+     k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+     (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+     ym(111297297, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
+
+     window.NEO_METRIKA_ID = 111297297;
+     window.neoGoal = function(name, params){
+       try { if (typeof ym === 'function') ym(111297297, 'reachGoal', name, params || {}); } catch(e){}
+     };
+     window.neoHit = function(url, options){
+       try { if (typeof ym === 'function') ym(111297297, 'hit', url, options || {}); } catch(e){}
+     };
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/111297297" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+  <!-- Шрифты: Prata (дисплей) + Manrope (текст) + JetBrains Mono (приборные подписи) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prata&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.min.css" media="print" onload="this.media='all'">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   NEOTARO — ночная обсерватория
+   Плоские поверхности, волосяные линии, латунь одним тоном.
+   Ни одного декоративного градиента.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root{
+  /* поверхности */
+  --ink:      #101524;
+  --ink-2:    #161C2E;
+  --ink-3:    #1C2335;
+  --edge:     #262E42;
+  --edge-hi:  #333D55;
+
+  /* акценты */
+  --brass:    #C9A253;
+  --brass-hi: #DCBB74;
+  --brass-lo: #7E6A33;
+  --indigo:   #7E8CC7;
+
+  /* текст */
+  --ivory:    #EFEAE0;
+  --mist:     #99A1B5;
+  --mist-lo:  #6E7688;
+
+  /* сетка */
+  --shell:    1560px;
+  --gut:      clamp(20px, 3.6vw, 64px);
+  --band:     clamp(64px, 9vw, 132px);
+
+  /* типографика */
+  --display:  'Prata', Georgia, serif;
+  --body:     'Manrope', system-ui, -apple-system, sans-serif;
+  --mono:     'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  --sab:      env(safe-area-inset-bottom, 0px);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--ink);
+  color:var(--ivory);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.6;
+  font-weight:500;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,textarea,input{font:inherit;color:inherit;background:none;border:none}
+button{cursor:pointer}
+summary{cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:2px}
+#web-login-screen.hidden{display:none}
+
+/* ── звёздный фон: одна фиксированная текстура, без анимации ── */
+.sky{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    radial-gradient(1px 1px at 24px 34px,  rgba(239,234,224,.42) 50%, transparent 51%),
+    radial-gradient(1px 1px at 118px 88px, rgba(239,234,224,.24) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 198px 38px, rgba(201,162,83,.40) 50%, transparent 51%),
+    radial-gradient(1px 1px at 78px 158px, rgba(239,234,224,.20) 50%, transparent 51%),
+    radial-gradient(1px 1px at 168px 138px, rgba(239,234,224,.32) 50%, transparent 51%);
+  background-size:260px 220px;
+  background-position:0 var(--sky-y, 0px);
+  opacity:.55;
+}
+
+/* ── полоса прогресса чтения ── */
+.progress{
+  position:fixed;top:0;left:0;right:0;height:2px;z-index:90;
+  background:var(--brass);transform:scaleX(0);transform-origin:0 50%;
+  will-change:transform;
+}
+
+/* ── сетка ── */
+.page{position:relative;z-index:1}
+.shell{width:100%;max-width:var(--shell);margin-inline:auto;padding-inline:var(--gut)}
+.band{padding-block:var(--band);border-top:1px solid var(--edge)}
+.band--flush{border-top:none}
+
+/* ── приборные подписи ── */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--brass);
+}
+.eyebrow::before{content:'';width:26px;height:1px;background:var(--brass-lo)}
+.eyebrow--bare::before{display:none}
+
+/* ── заголовки ── */
+h1,h2,h3{font-weight:400;letter-spacing:-.01em}
+.h1{font-family:var(--display);font-size:clamp(40px,4.4vw,76px);line-height:1.05;letter-spacing:-.02em}
+.h1 em{font-style:normal;color:var(--brass)}
+.h2{font-family:var(--display);font-size:clamp(27px,2.7vw,46px);line-height:1.13}
+.h3{font-family:var(--body);font-weight:700;font-size:18px;line-height:1.35;letter-spacing:0}
+.lede{font-size:clamp(16px,1.05vw,18.5px);line-height:1.68;color:var(--mist);max-width:56ch}
+.lede strong{color:var(--ivory);font-weight:600}
+
+.head{max-width:76ch;margin-bottom:clamp(36px,4vw,64px)}
+.head .eyebrow{margin-bottom:18px}
+.head .lede{margin-top:18px}
+
+/* ── кнопки: плоская латунь, без градиента ── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:52px;padding:0 26px;
+  font-size:14.5px;font-weight:700;letter-spacing:.01em;
+  background:var(--brass);color:#141826;
+  border:1px solid var(--brass);
+  transition:background .18s ease,border-color .18s ease,transform .18s ease;
+}
+.btn:hover{background:var(--brass-hi);border-color:var(--brass-hi)}
+.btn:active{transform:translateY(1px)}
+.btn i{font-size:17px}
+
+.btn-ghost{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  min-height:52px;padding:0 24px;
+  font-size:14px;font-weight:600;color:var(--ivory);
+  border:1px solid var(--edge-hi);background:transparent;
+  transition:border-color .18s ease,color .18s ease;
+}
+.btn-ghost:hover{border-color:var(--brass);color:var(--brass-hi)}
+
+.btn-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* ── появление при скролле ── */
+.reveal{opacity:0;transform:translateY(22px);
+  transition:opacity .72s cubic-bezier(.16,.7,.3,1),transform .72s cubic-bezier(.16,.7,.3,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ═══════════ ШАПКА ═══════════ */
+.top{
+  position:sticky;top:0;z-index:80;
+  background:rgba(16,21,36,.86);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--edge);
+}
+.top-in{display:flex;align-items:center;gap:clamp(16px,2.4vw,44px);height:68px}
+.brand{
+  display:flex;align-items:center;gap:10px;margin-right:auto;
+  font-family:var(--display);font-size:17px;letter-spacing:.26em;color:var(--ivory);
+  white-space:nowrap;
+}
+.brand svg{flex:0 0 auto}
+.top-nav{display:flex;gap:clamp(16px,1.8vw,30px)}
+.top-nav a{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--mist);
+  transition:color .18s ease;
+}
+.top-nav a:hover{color:var(--brass-hi)}
+.status{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mist-lo);border:1px solid var(--edge);padding:7px 12px;white-space:nowrap;
+}
+.status i{width:5px;height:5px;background:var(--brass);border-radius:50%;animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.top-cta{
+  display:inline-flex;align-items:center;height:40px;padding:0 20px;
+  font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--brass);color:#141826;border:1px solid var(--brass);
+  transition:background .18s ease;white-space:nowrap;
+}
+.top-cta:hover{background:var(--brass-hi)}
+
+/* ═══════════ ГЕРОЙ ═══════════ */
+.hero{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);
+  gap:clamp(36px,5vw,96px);align-items:center;
+  min-height:min(88svh,940px);
+  padding-block:clamp(48px,7vw,104px);
+}
+.hero-copy .eyebrow{margin-bottom:26px}
+.hero-copy .h1{margin-bottom:26px}
+.hero-copy .lede{margin-bottom:34px;max-width:52ch}
+.hero-hint{
+  margin-top:20px;font-family:var(--mono);font-size:11.5px;line-height:1.7;
+  letter-spacing:.03em;color:var(--mist-lo);max-width:46ch;
+}
+
+/* фото в приборной рамке с угловыми метками */
+.hero-art{position:relative}
+.frame{position:relative;border:1px solid var(--edge);background:var(--ink-2);overflow:hidden;aspect-ratio:4/5}
+.frame img{width:100%;height:100%;object-fit:cover}
+.frame::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 0 -120px 120px -60px rgba(16,21,36,.85);
+}
+.mark{position:absolute;width:16px;height:16px;border:1px solid var(--brass);z-index:2}
+.mark.tl{top:-1px;left:-1px;border-right:none;border-bottom:none}
+.mark.tr{top:-1px;right:-1px;border-left:none;border-bottom:none}
+.mark.bl{bottom:-1px;left:-1px;border-right:none;border-top:none}
+.mark.br{bottom:-1px;right:-1px;border-left:none;border-top:none}
+
+/* заглушка, если файл картинки не найден */
+.frame-fallback{
+  position:absolute;inset:0;display:none;
+  flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  background:var(--ink-2);
+}
+.frame.noimg img{display:none}
+.frame.noimg .frame-fallback{display:flex}
+.frame-fallback span{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist-lo)}
+
+/* табличка «XVII Звезда» поверх фото */
+.plate{
+  position:absolute;left:clamp(-14px,-1vw,0px);bottom:26px;z-index:3;
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;background:var(--ink);border:1px solid var(--edge-hi);
+}
+.plate-num{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--brass)}
+.plate-div{width:1px;height:24px;background:var(--edge-hi)}
+.plate-name{font-family:var(--display);font-size:17px;color:var(--ivory)}
+
+/* приборная строка под героем */
+.readout{
+  display:flex;flex-wrap:wrap;gap:0;
+  border:1px solid var(--edge);border-bottom:none;
+}
+.readout div{
+  flex:1 1 180px;padding:20px 22px;border-bottom:1px solid var(--edge);
+  border-right:1px solid var(--edge);
+}
+.readout div:last-child{border-right:none}
+.readout b{display:block;font-family:var(--display);font-size:26px;color:var(--ivory);margin-bottom:5px}
+.readout span{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist-lo)}
+</style>
+<style>
+/* ═══════════ ВИДЖЕТ «ДА / НЕТ» ═══════════ */
+.ask{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(32px,4vw,80px);align-items:start}
+.ask-copy .eyebrow{margin-bottom:18px}
+.ask-copy .h2{margin-bottom:20px}
+.ask-list{margin-top:28px;border-top:1px solid var(--edge)}
+.ask-list li{
+  list-style:none;display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--edge);
+  font-size:14.5px;color:var(--mist);
+}
+.ask-list li b{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--brass-lo);flex:0 0 22px;padding-top:3px}
+
+.panel{border:1px solid var(--edge);background:var(--ink-2);padding:clamp(24px,2.4vw,38px)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.chip{
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--mist);
+  border:1px solid var(--edge-hi);padding:9px 13px;transition:border-color .18s,color .18s;
+  text-align:left;
+}
+.chip:hover{border-color:var(--brass);color:var(--brass-hi)}
+
+.field{position:relative;border:1px solid var(--edge-hi);background:var(--ink);transition:border-color .2s}
+.field:focus-within{border-color:var(--brass)}
+.field textarea{
+  width:100%;display:block;resize:none;padding:18px 18px 8px;
+  font-size:16.5px;line-height:1.5;color:var(--ivory);
+}
+.field textarea::placeholder{color:var(--mist-lo)}
+.field-meta{
+  display:flex;justify-content:flex-end;padding:0 18px 12px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--mist-lo);
+}
+.ask-go{width:100%;margin-top:14px}
+.ask-note{margin-top:12px;font-family:var(--mono);font-size:11px;line-height:1.6;letter-spacing:.03em;color:var(--mist-lo)}
+.ask-note.bad{color:#C98E80}
+
+.out{margin-top:26px;padding-top:26px;border-top:1px solid var(--edge)}
+.out[hidden]{display:none}
+.drawn{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.drawn-sigil{
+  flex:0 0 auto;width:46px;height:46px;display:grid;place-items:center;
+  border:1px solid var(--brass-lo);color:var(--brass);font-size:18px;
+}
+.verdict{font-family:var(--display);font-size:clamp(24px,2.2vw,34px);line-height:1.15;color:var(--ivory)}
+.cardname{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-lo);margin-top:6px}
+.out-text{position:relative;font-size:15.5px;line-height:1.75;color:var(--mist);max-height:132px;overflow:hidden}
+.out-text b{color:var(--ivory);font-weight:600}
+.out-fade{position:absolute;left:0;right:0;bottom:0;height:64px;background:linear-gradient(to bottom,rgba(22,28,46,0),var(--ink-2))}
+.lock{margin-top:22px;padding:22px;border:1px solid var(--edge-hi);background:var(--ink-3)}
+.lock[hidden]{display:none}
+.lock-t{font-family:var(--display);font-size:20px;margin-bottom:8px}
+.lock-s{font-size:14.5px;line-height:1.65;color:var(--mist);margin-bottom:18px;max-width:48ch}
+.lock-note{margin-top:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--mist-lo)}
+
+/* ═══════════ ИНСТРУМЕНТЫ ═══════════ */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(288px,1fr));border-top:1px solid var(--edge);border-left:1px solid var(--edge)}
+.tile{
+  padding:clamp(24px,2.2vw,36px);
+  border-right:1px solid var(--edge);border-bottom:1px solid var(--edge);
+  transition:background .22s ease;
+}
+.tile:hover{background:var(--ink-2)}
+.tile i{font-size:21px;color:var(--brass);display:block;margin-bottom:22px}
+.tile .h3{margin-bottom:10px}
+.tile p{font-size:14.5px;line-height:1.68;color:var(--mist)}
+
+/* ═══════════ ПУТЬ РАСКЛАДА (signature) ═══════════ */
+.track{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,5vw,96px);align-items:start}
+.track-aside{position:sticky;top:130px}
+.track-aside .eyebrow{margin-bottom:18px}
+.track-aside .h2{margin-bottom:20px}
+.dial{
+  margin-top:32px;padding:20px;border:1px solid var(--edge);background:var(--ink-2);
+  font-family:var(--mono);
+}
+.dial-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.dial-lab{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist-lo)}
+.dial-val{font-size:13px;color:var(--brass)}
+.dial-bar{margin-top:14px;height:2px;background:var(--edge-hi);overflow:hidden}
+.dial-fill{display:block;height:100%;width:0%;background:var(--brass);transition:width .35s linear}
+
+.steps{position:relative;padding-left:clamp(30px,3.2vw,54px)}
+.steps::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:1px;background:var(--edge)}
+.steps::after{content:'';position:absolute;left:0;top:6px;width:1px;height:var(--fill,0%);background:var(--brass);transition:height .25s linear}
+.step{position:relative;padding:0 0 clamp(38px,4vw,64px)}
+.step:last-child{padding-bottom:0}
+.step::before{
+  content:'';position:absolute;left:calc(clamp(30px,3.2vw,54px) * -1);top:8px;
+  width:9px;height:9px;transform:translateX(-4px);
+  border:1px solid var(--edge-hi);background:var(--ink);
+  transition:border-color .3s ease,background .3s ease;
+}
+.step.lit::before{border-color:var(--brass);background:var(--brass)}
+.step-top{display:flex;align-items:baseline;gap:14px;margin-bottom:9px;flex-wrap:wrap}
+.step-n{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--brass-lo)}
+.step-t{font-family:var(--display);font-size:clamp(20px,1.7vw,27px);color:var(--ivory)}
+.step-clock{
+  margin-left:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--mist-lo);border:1px solid var(--edge);padding:4px 9px;
+}
+.step p{font-size:15px;line-height:1.72;color:var(--mist);max-width:58ch}
+
+/* ═══════════ ЕДИНЫЙ КОНТЕКСТ ═══════════ */
+.ctx{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--edge);border:1px solid var(--edge)}
+.ctx-cell{background:var(--ink);padding:clamp(22px,2vw,32px)}
+.ctx-cell.is-core{background:var(--ink-3)}
+.ctx-cell .eyebrow{margin-bottom:16px;font-size:10px}
+.ctx-cell b{display:block;font-family:var(--display);font-size:20px;margin-bottom:9px;color:var(--ivory)}
+.ctx-cell p{font-size:14px;line-height:1.65;color:var(--mist)}
+
+/* ═══════════ ГОЛОСА АРКАНОВ ═══════════ */
+.voices{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:clamp(16px,1.5vw,22px)}
+.voice{border:1px solid var(--edge);background:var(--ink-2);padding:clamp(22px,2vw,30px);display:flex;flex-direction:column}
+.voice-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.voice-name{font-family:var(--display);font-size:21px;color:var(--ivory)}
+.voice-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);border:1px solid var(--brass-lo);padding:4px 8px;white-space:nowrap}
+.voice q{font-size:15px;line-height:1.72;color:var(--mist);font-style:normal;quotes:'«' '»'}
+.voice-num{margin-top:22px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--mist-lo)}
+
+/* ═══════════ СРАВНЕНИЕ ═══════════ */
+.cmp-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.cmp{width:100%;min-width:660px;border-collapse:collapse;font-size:14.5px}
+.cmp th,.cmp td{padding:17px 18px;text-align:left;border-bottom:1px solid var(--edge);vertical-align:top}
+.cmp thead th{
+  font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--mist-lo);border-bottom:1px solid var(--edge-hi);
+}
+.cmp thead th.us{color:var(--brass)}
+.cmp tbody th{font-weight:600;color:var(--ivory);width:30%}
+.cmp td{color:var(--mist)}
+.cmp td.us{color:var(--ivory);background:var(--ink-2)}
+.cmp .no{color:var(--mist-lo)}
+
+/* ═══════════ БИБЛИОТЕКА ═══════════ */
+.lib{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(16px,1.5vw,22px)}
+.lib-card{
+  display:flex;flex-direction:column;border:1px solid var(--edge);background:var(--ink-2);
+  padding:clamp(22px,2vw,30px);transition:border-color .22s ease,transform .22s ease;
+}
+.lib-card:hover{border-color:var(--brass-lo);transform:translateY(-2px)}
+.lib-count{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-bottom:16px}
+.lib-card .h3{font-family:var(--display);font-weight:400;font-size:23px;margin-bottom:10px}
+.lib-card p{font-size:14.5px;line-height:1.68;color:var(--mist);margin-bottom:18px;flex:1}
+.lib-links{font-size:13px;color:var(--indigo);letter-spacing:.01em}
+
+/* ═══════════ ЛОНГРИД ═══════════ */
+.prose{max-width:74ch}
+.prose p{font-size:16.5px;line-height:1.82;color:var(--mist);margin-bottom:18px}
+.prose h3{font-family:var(--display);font-size:26px;color:var(--ivory);margin:40px 0 14px}
+.prose ul{margin:0 0 18px;padding-left:0;list-style:none}
+.prose li{position:relative;padding-left:20px;margin-bottom:12px;font-size:16px;line-height:1.78;color:var(--mist)}
+.prose li::before{content:'';position:absolute;left:0;top:.72em;width:7px;height:1px;background:var(--brass-lo)}
+.prose strong{color:var(--ivory);font-weight:600}
+
+/* ═══════════ FAQ ═══════════ */
+.faq{max-width:88ch;border-top:1px solid var(--edge)}
+.faq details{border-bottom:1px solid var(--edge)}
+.faq summary{
+  display:flex;gap:16px;align-items:baseline;
+  padding:20px 0;font-size:17px;font-weight:600;color:var(--ivory);list-style:none;
+  transition:color .18s ease;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--brass-hi)}
+.faq summary::before{
+  content:'+';font-family:var(--mono);font-size:15px;color:var(--brass);flex:0 0 14px;line-height:1.3;
+}
+.faq details[open] summary::before{content:'–'}
+.faq details[open] summary{color:var(--brass-hi)}
+.faq .a{padding:0 0 22px 30px;font-size:15.5px;line-height:1.8;color:var(--mist);max-width:72ch}
+
+/* ═══════════ ФИНАЛ ═══════════ */
+.final{text-align:center;max-width:64ch;margin-inline:auto}
+.final .eyebrow{margin-bottom:22px}
+.final .h2{margin-bottom:20px}
+.final .lede{margin-inline:auto;margin-bottom:32px}
+.final .btn-row{justify-content:center}
+
+/* ═══════════ ПОДВАЛ ═══════════ */
+.foot{border-top:1px solid var(--edge);background:var(--ink-2);padding-block:clamp(48px,5vw,72px) 26px}
+.foot-grid{display:grid;grid-template-columns:1.6fr repeat(4,1fr) 1.1fr;gap:clamp(24px,2.4vw,38px)}
+.foot-brand .brand{margin-bottom:16px}
+.foot-about{font-size:14px;line-height:1.65;color:var(--mist);margin-bottom:20px;max-width:30ch}
+.foot-col{display:flex;flex-direction:column;gap:9px;min-width:0}
+.fc-title{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:6px}
+.fc-title.second{margin-top:20px}
+.foot-col a,.foot-contact a{font-size:13.5px;line-height:1.45;color:var(--mist);transition:color .18s}
+.foot-col a:hover,.foot-contact a:hover{color:var(--brass-hi)}
+.foot-contact{display:flex;flex-direction:column;gap:9px;min-width:0}
+.fc-mail,.fc-tg{word-break:break-word}
+.fc-note{font-size:12.5px;line-height:1.55;color:var(--mist-lo);margin-top:4px}
+.foot-bottom{
+  margin-top:44px;padding-top:22px;border-top:1px solid var(--edge);
+  display:flex;flex-wrap:wrap;gap:14px 26px;align-items:baseline;justify-content:space-between;
+}
+.foot-note{font-size:12.5px;line-height:1.6;color:var(--mist-lo);max-width:66ch}
+.foot-legal{display:flex;flex-wrap:wrap;gap:18px;font-size:12.5px}
+.foot-legal a{color:var(--mist);transition:color .18s}
+.foot-legal a:hover{color:var(--brass-hi)}
+.fl-copy{color:var(--mist-lo);font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+
+/* ═══════════ COOKIE ═══════════ */
+.cookie{
+  position:fixed;left:var(--gut);right:var(--gut);bottom:calc(var(--sab) + 18px);z-index:95;
+  display:none;align-items:center;gap:18px;flex-wrap:wrap;
+  max-width:760px;margin-inline:auto;padding:16px 20px;
+  background:var(--ink-3);border:1px solid var(--edge-hi);
+}
+.cookie.show{display:flex}
+.cookie p{flex:1 1 320px;font-size:13px;line-height:1.6;color:var(--mist)}
+.cookie a{color:var(--brass);border-bottom:1px solid var(--brass-lo)}
+.cookie button{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  padding:11px 18px;background:var(--brass);color:#141826;transition:background .18s;
+}
+.cookie button:hover{background:var(--brass-hi)}
+
+/* ═══════════════ АДАПТИВ — три брейкпоинта ═══════════════ */
+@media (max-width:1280px){
+  .foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr}
+  .foot-brand{grid-column:1/-1}
+  .foot-contact{grid-column:1/-1}
+  .track-aside{top:96px}
+}
+
+@media (max-width:1000px){
+  .top-nav{display:none}
+  .hero{grid-template-columns:1fr;min-height:0;gap:40px;padding-block:44px 56px}
+  .hero-art{order:-1}
+  .frame{aspect-ratio:16/10}
+  .plate{left:auto;right:18px;bottom:18px}
+  .ask{grid-template-columns:1fr;gap:34px}
+  .track{grid-template-columns:1fr;gap:38px}
+  .track-aside{position:static}
+  .dial{display:none}
+}
+
+@media (max-width:640px){
+  :root{--band:clamp(52px,11vw,72px)}
+  .status{display:none}
+  .top-in{height:60px}
+  .brand{font-size:15px;letter-spacing:.2em}
+  .hero-copy .h1{font-size:clamp(34px,9.2vw,46px)}
+  .hero-copy .lede{font-size:16px;margin-bottom:28px}
+  .btn,.btn-ghost{width:100%;min-height:54px}
+  .btn-row{gap:10px}
+  .readout div{flex:1 1 50%;padding:16px 16px}
+  .readout div:nth-child(2n){border-right:none}
+  .readout b{font-size:22px}
+  .steps{padding-left:24px}
+  .step::before{left:-24px}
+  .step-clock{margin-left:0}
+  .prose p,.prose li{font-size:15.5px}
+  .faq summary{font-size:15.5px}
+  .faq .a{padding-left:30px;font-size:14.5px}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:26px 18px}
+  .foot-bottom{margin-top:32px}
+  .cookie{left:12px;right:12px;padding:14px 16px}
+  .cookie button{width:100%}
+  .lib-card:hover{transform:none}
+}
+
+/* тач-устройства: снимаем параллакс и hover-сдвиги */
+@media (hover:none){
+  .tile:hover{background:transparent}
+  .lib-card:hover{transform:none;border-color:var(--edge)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  .progress{display:none}
+  .status i{animation:none}
+  .steps::after,.step::before,.dial-fill{transition:none}
+}
+</style>
 </head>
-<body class="bg-space-900 min-h-screen">
-  <!-- ==================== 🌌 NIGHT ATLAS: ЛЕНДИНГ + ВХОД (neotaro.ru) ==================== -->
-  <div id="web-login-screen">
-    <style>
-      /* ---------- Каркас лендинга ---------- */
-      #web-login-screen {
-        position: fixed; inset: 0; z-index: 10000;
-        overflow-y: auto; overflow-x: hidden;
-        font-family: 'Manrope', 'Inter', system-ui, sans-serif;
-        color: #F2EDE0;
-        background: #0B0F1E;
-        scroll-behavior: smooth;
-      }
-      #web-login-screen.hidden { display: none; }
+<body>
+<div id="web-login-screen">
 
-      .lp-sky {
-        position: fixed; inset: 0; pointer-events: none; z-index: 0;
-        background:
-          radial-gradient(1100px 720px at 78% -12%, rgba(143,163,222,.10), transparent 60%),
-          radial-gradient(860px 640px at -8% 108%, rgba(167,143,214,.08), transparent 55%),
-          radial-gradient(640px 460px at 92% 78%, rgba(217,174,95,.05), transparent 60%);
-      }
-      .lp-stars {
-        position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .5;
-        background-image:
-          radial-gradient(1px 1px at 25px 35px, rgba(242,237,224,.5) 50%, transparent 51%),
-          radial-gradient(1px 1px at 120px 90px, rgba(242,237,224,.3) 50%, transparent 51%),
-          radial-gradient(1.4px 1.4px at 200px 40px, rgba(233,217,172,.45) 50%, transparent 51%),
-          radial-gradient(1px 1px at 80px 160px, rgba(242,237,224,.25) 50%, transparent 51%),
-          radial-gradient(1px 1px at 170px 140px, rgba(242,237,224,.4) 50%, transparent 51%);
-        background-size: 260px 220px;
-      }
-      .lp-wrap { position: relative; z-index: 2; max-width: 1140px; margin: 0 auto; padding: 0 32px; }
+  <div class="sky" aria-hidden="true"></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
 
-      /* ---------- Шапка ---------- */
-      .lp-top {
-        display: flex; align-items: center; gap: 32px;
-        padding: 26px 0 22px;
-        border-bottom: 1px solid rgba(217,174,95,.14);
-      }
-      .lp-brand {
-        display: flex; align-items: center; gap: 11px;
-        font-family: 'Prata', serif; font-size: 17px; letter-spacing: .3em;
-        color: #E9D9AC; text-decoration: none; margin-right: auto;
-      }
-      .lp-nav { display: flex; gap: 28px; }
-      .lp-nav a {
-        color: rgba(242,237,224,.6); text-decoration: none;
-        font-size: 12px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
-        transition: color .18s ease;
-      }
-      .lp-nav a:hover { color: #F0DDB0; }
-      .lp-top-cta {
-        display: inline-flex; align-items: center; gap: 8px;
-        padding: 10px 22px; border-radius: 12px; text-decoration: none;
-        font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
-        box-shadow: 0 6px 24px rgba(217,174,95,.25);
-        transition: transform .18s ease, box-shadow .18s ease;
-      }
-      .lp-top-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(217,174,95,.35); }
+  <!-- ══════════════ ШАПКА ══════════════ -->
+  <header class="top">
+    <div class="shell top-in">
+      <a class="brand" href="/">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M10.5 4.5a7.5 7.5 0 1 0 9 9 6 6 0 1 1-9-9Z" stroke="#C9A253" stroke-width="1.2" stroke-linejoin="round"/>
+          <path d="M17 4.5l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6z" fill="#DCBB74"/>
+        </svg>
+        NEOTARO
+      </a>
+      <nav class="top-nav">
+        <a href="#tools">Что внутри</a>
+        <a href="#reading">Ритуал</a>
+        <a href="#library">Библиотека</a>
+        <a href="/sonnik/">Сонник</a>
+        <a href="/karty/">Карты</a>
+        <a href="#faq">Вопросы</a>
+      </nav>
+      <span class="status"><i aria-hidden="true"></i>Оракул на связи</span>
+      <a class="top-cta" href="/login/">Войти</a>
+    </div>
+  </header>
 
-      /* ---------- Герой ---------- */
-      .lp-hero {
-        display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-        gap: 48px; align-items: center;
-        padding: 84px 0 96px;
-      }
-      .lp-eyebrow {
-        display: flex; align-items: center; gap: 14px;
-        font-size: 11px; font-weight: 700; letter-spacing: .32em; text-transform: uppercase;
-        color: rgba(217,174,95,.75); margin-bottom: 26px; white-space: nowrap;
-      }
-      .lp-eyebrow::before { content: ''; width: 44px; height: 1px; background: linear-gradient(90deg, rgba(217,174,95,.7), transparent); }
-      .lp-h1 {
-        font-family: 'Prata', serif; font-weight: 400;
-        font-size: clamp(40px, 4.6vw, 62px); line-height: 1.12;
-        color: #F2EDE0; margin: 0 0 24px;
-      }
-      .lp-h1 em { font-style: normal; color: #E9C87E; }
-      .lp-lede {
-        font-size: 16.5px; line-height: 1.65; font-weight: 500;
-        color: rgba(242,237,224,.62);
-        max-width: 520px; margin: 0 0 36px;
-      }
-      .lp-cta-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
-      .lp-cta {
-        display: inline-flex; align-items: center; gap: 10px;
-        padding: 16px 30px; border-radius: 14px; text-decoration: none;
-        font-size: 14px; font-weight: 800; letter-spacing: .06em;
-        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
-        box-shadow: 0 10px 34px rgba(217,174,95,.28);
-        transition: transform .18s ease, box-shadow .18s ease;
-      }
-      .lp-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 44px rgba(217,174,95,.38); }
-      .lp-cta-ghost {
-        display: inline-flex; align-items: center; gap: 10px;
-        padding: 16px 26px; border-radius: 14px; text-decoration: none;
-        font-size: 14px; font-weight: 700;
-        color: rgba(242,237,224,.75);
-        border: 1px solid rgba(242,237,224,.18);
-        transition: border-color .18s ease, color .18s ease;
-      }
-      .lp-cta-ghost:hover { border-color: rgba(217,174,95,.5); color: #F0DDB0; }
-      .lp-hint { font-size: 12px; color: rgba(242,237,224,.38); letter-spacing: .04em; }
+  <main class="page">
 
-      /* ---------- Сигнатура: веер карт ---------- */
-      .lp-fan { position: relative; height: 460px; }
-      .lp-ring {
-        position: absolute; top: 50%; left: 50%; width: 420px; height: 420px;
-        transform: translate(-50%, -50%); border-radius: 50%;
-        border: 1px solid rgba(217,174,95,.18); pointer-events: none;
-      }
-      .lp-ring::before {
-        content: ''; position: absolute; inset: 18px; border-radius: 50%;
-        border: 1px dashed rgba(143,163,222,.2);
-      }
-      .lp-card {
-        position: absolute; left: 50%; top: 50%;
-        width: 148px; height: 248px; margin: -124px 0 0 -74px;
-        border-radius: 13px;
-        background: linear-gradient(160deg, #161D33, #0E1425);
-        border: 1px solid rgba(217,174,95,.4);
-        box-shadow: 0 24px 48px rgba(4,6,14,.65);
-        transition: transform .35s cubic-bezier(.2,.9,.3,1.2);
-      }
-      .lp-card::before {
-        content: ''; position: absolute; inset: 7px; border-radius: 8px;
-        border: 1px solid rgba(217,174,95,.25);
-        background:
-          radial-gradient(1px 1px at 22% 18%, rgba(233,217,172,.6) 50%, transparent 51%),
-          radial-gradient(1px 1px at 70% 32%, rgba(233,217,172,.45) 50%, transparent 51%),
-          radial-gradient(1.4px 1.4px at 42% 60%, rgba(233,217,172,.5) 50%, transparent 51%),
-          radial-gradient(1px 1px at 80% 78%, rgba(233,217,172,.4) 50%, transparent 51%),
-          radial-gradient(1px 1px at 28% 84%, rgba(233,217,172,.35) 50%, transparent 51%);
-      }
-      .lp-card::after {
-        content: '✦'; position: absolute; inset: 0;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 30px; color: rgba(217,174,95,.55);
-      }
-      .lp-c1 { transform: rotate(-26deg) translateY(34px); }
-      .lp-c2 { transform: rotate(-13deg) translateY(9px); }
-      .lp-c4 { transform: rotate(13deg) translateY(9px); }
-      .lp-c5 { transform: rotate(26deg) translateY(34px); }
-      .lp-c1:hover { transform: rotate(-26deg) translateY(18px); }
-      .lp-c2:hover { transform: rotate(-13deg) translateY(-7px); }
-      .lp-c4:hover { transform: rotate(13deg) translateY(-7px); }
-      .lp-c5:hover { transform: rotate(26deg) translateY(18px); }
-
-      .lp-face {
-        z-index: 3; transform: rotate(0deg) translateY(-14px);
-        background: linear-gradient(165deg, #F2E9CF, #E4D3A8);
-        border: 1px solid #C7A254;
-        animation: lp-float 7s ease-in-out infinite;
-      }
-      .lp-face::before { content: none; }
-      .lp-face::after { content: none; }
-      .lp-face:hover { transform: rotate(0deg) translateY(-26px); }
-      @keyframes lp-float {
-        0%, 100% { transform: rotate(0deg) translateY(-14px); }
-        50% { transform: rotate(0deg) translateY(-24px); }
-      }
-      .lp-face-inner {
-        position: absolute; inset: 8px; border-radius: 8px;
-        border: 1px solid rgba(122,94,38,.5);
-        display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-        padding: 14px 10px; color: #6B5320;
-      }
-      .lp-face-num { font-family: 'Prata', serif; font-size: 15px; letter-spacing: .3em; margin-right: -.3em; }
-      .lp-face-inner svg { display: block; }
-      .lp-face-name {
-        font-size: 10px; font-weight: 800; letter-spacing: .34em; margin-right: -.34em;
-        text-transform: uppercase;
-      }
-
-      /* ---------- Секции ---------- */
-      .lp-sec { padding: 72px 0; border-top: 1px solid rgba(217,174,95,.12); }
-      .lp-sec-head { max-width: 560px; margin-bottom: 44px; }
-      .lp-kicker {
-        display: flex; align-items: center; gap: 14px;
-        font-size: 11px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase;
-        color: rgba(217,174,95,.7); margin-bottom: 16px;
-      }
-      .lp-kicker::before { content: ''; width: 34px; height: 1px; background: rgba(217,174,95,.55); }
-      .lp-h2 { font-family: 'Prata', serif; font-weight: 400; font-size: 32px; line-height: 1.25; color: #F2EDE0; margin: 0; }
-      .lp-sub { font-size: 15px; line-height: 1.6; color: rgba(242,237,224,.55); margin: 14px 0 0; }
-
-      .lp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-      .lp-tile {
-        position: relative; border-radius: 16px; padding: 26px 24px;
-        background: linear-gradient(165deg, rgba(242,237,224,.045), rgba(242,237,224,.012));
-        border: 1px solid rgba(217,174,95,.16);
-        transition: border-color .2s ease, transform .2s ease;
-      }
-      .lp-tile:hover { border-color: rgba(217,174,95,.42); transform: translateY(-3px); }
-      .lp-tile i { font-size: 26px; color: #D9AE5F; }
-      .lp-tile h3 { font-family: 'Prata', serif; font-weight: 400; font-size: 18px; color: #F2EDE0; margin: 16px 0 8px; }
-      .lp-tile p { font-size: 13.5px; line-height: 1.6; color: rgba(242,237,224,.52); margin: 0; }
-      .lp-tile .lp-badge {
-        position: absolute; top: 18px; right: 18px;
-        font-size: 9px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase;
-        color: #D9AE5F; border: 1px solid rgba(217,174,95,.45); border-radius: 99px; padding: 3px 9px;
-      }
-      .lp-tile.lp-soon { opacity: .72; }
-
-      /* ---------- Ритуал ---------- */
-      .lp-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-      .lp-step { border-top: 1px solid rgba(217,174,95,.3); padding-top: 22px; }
-      .lp-step-num { font-family: 'Prata', serif; font-size: 15px; letter-spacing: .34em; color: #D9AE5F; display: block; margin-bottom: 14px; }
-      .lp-step h3 { font-family: 'Prata', serif; font-weight: 400; font-size: 19px; color: #F2EDE0; margin: 0 0 10px; }
-      .lp-step p { font-size: 13.5px; line-height: 1.65; color: rgba(242,237,224,.52); margin: 0; }
-
-      /* ---------- Вход ---------- */
-      .lp-auth-sec { padding: 84px 0 96px; border-top: 1px solid rgba(217,174,95,.12); display: flex; justify-content: center; }
-      .lp-auth-card {
-        position: relative; width: 100%; max-width: 460px;
-        border-radius: 22px; padding: 38px 36px 30px;
-        background: linear-gradient(165deg, rgba(242,237,224,.05), rgba(242,237,224,.015));
-        border: 1px solid rgba(217,174,95,.28);
-        box-shadow: 0 40px 90px rgba(4,6,14,.6);
-      }
-      .lp-auth-card::before {
-        content: ''; position: absolute; top: 0; left: 48px; right: 48px; height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(233,200,126,.7), transparent);
-      }
-      .lp-auth-card h2 { font-family: 'Prata', serif; font-weight: 400; font-size: 24px; color: #F2EDE0; margin: 0 0 10px; text-align: center; }
-      .lp-auth-card > p { font-size: 13.5px; line-height: 1.6; color: rgba(242,237,224,.55); text-align: center; margin: 0 0 26px; }
-
-      .lp-tg-btn {
-        display: flex; align-items: center; justify-content: center; gap: 11px;
-        width: 100%; padding: 16px 20px; border-radius: 14px; border: none; cursor: pointer;
-        font-family: inherit; font-size: 14.5px; font-weight: 800; letter-spacing: .04em;
-        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
-        box-shadow: 0 10px 30px rgba(217,174,95,.25);
-        transition: transform .18s ease, box-shadow .18s ease;
-      }
-      .lp-tg-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 38px rgba(217,174,95,.35); }
-      .lp-tg-btn:disabled { opacity: .6; cursor: wait; transform: none; }
-      .lp-tg-btn i { font-size: 20px; }
-      .lp-tg-btn.nl-hidden { display: none; }
-
-      .lp-div { display: flex; align-items: center; gap: 14px; margin: 22px 0; color: rgba(242,237,224,.35); font-size: 10px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; }
-      .lp-div::before, .lp-div::after { content: ''; height: 1px; flex: 1; background: rgba(242,237,224,.12); }
-
-      .lp-socials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-      .lp-soc {
-        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-        padding: 14px 8px; border-radius: 13px; cursor: pointer;
-        background: rgba(242,237,224,.04); border: 1px solid rgba(242,237,224,.1);
-        font-family: inherit; color: rgba(242,237,224,.7);
-        font-size: 10px; font-weight: 700; letter-spacing: .1em;
-        transition: border-color .18s ease, background .18s ease;
-      }
-      .lp-soc:hover { background: rgba(242,237,224,.07); border-color: rgba(217,174,95,.4); }
-      .lp-soc svg { width: 22px; height: 22px; }
-      .lp-ya { width: 22px; height: 22px; border-radius: 50%; background: #FC3F1D; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 12px; }
-
-      /* ---------- Финальный призыв к входу ---------- */
-      .lp-final { max-width: 620px; text-align: center; }
-      .lp-final .lp-kicker { justify-content: center; }
-      .lp-final .lp-h2 { font-size: 34px; }
-      .lp-final .lp-sub { margin: 16px auto 30px; max-width: 520px; }
-      .lp-final-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; }
-      @media (max-width: 720px) {
-        .lp-final .lp-h2 { font-size: 27px; }
-        .lp-final-row { flex-direction: column; }
-      }
-
-      /* ---------- Статус входа (используется JS-логикой) ---------- */
-      #web-login-status { min-height: 16px; margin-top: 18px; font-size: 12px; text-align: center; display: none; }
-      #web-login-status.nl-active { display: block; }
-      .nl-err { color: #C4899B; padding: 8px 0 2px; font-weight: 600; }
-      .nl-wait { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 6px 0; }
-      .nl-spin {
-        width: 26px; height: 26px; border-radius: 50%;
-        border: 2px solid rgba(217,174,95,.25); border-top-color: #D9AE5F;
-        animation: nl-rot 1s linear infinite;
-      }
-      @keyframes nl-rot { to { transform: rotate(360deg); } }
-      .nl-wait-t { font-size: 14px; font-weight: 800; color: #F0DDB0; }
-      .nl-wait-s { font-size: 12px; line-height: 1.6; color: rgba(242,237,224,.55); max-width: 300px; }
-      .nl-open {
-        display: inline-block; margin-top: 4px; padding: 10px 22px; border-radius: 11px;
-        background: linear-gradient(120deg, #E9C87E, #D9AE5F); color: #0B0F1E;
-        font-weight: 800; font-size: 12.5px; text-decoration: none;
-      }
-      .nl-cancel { margin-top: 6px; background: none; border: none; color: rgba(242,237,224,.4); font-size: 11.5px; cursor: pointer; text-decoration: underline; font-family: inherit; }
-
-      /* ---------- Подвал ---------- */
-      .lp-foot {
-        padding: 30px 0 40px; border-top: 1px solid rgba(217,174,95,.12);
-        display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
-        font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
-        color: rgba(242,237,224,.3); text-align: center;
-      }
-      .lp-foot a { color: rgba(217,174,95,.65); text-decoration: none; }
-      .lp-foot a:hover { color: #F0DDB0; }
-      .lp-foot i { color: rgba(217,174,95,.4); font-style: normal; }
-
-      /* ---------- Быстрый расклад да/нет ---------- */
-      /* Подпись поля для скринридеров: визуально скрыта, но доступна. */
-      .lp-sr {
-        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-        overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
-      }
-      .yn { padding: 0 0 10px; }
-      .yn-card {
-        position: relative; border-radius: 20px; padding: 34px 32px 30px;
-        background: linear-gradient(165deg, rgba(242,237,224,.055), rgba(242,237,224,.014));
-        border: 1px solid rgba(217,174,95,.26);
-        box-shadow: 0 30px 70px rgba(4,6,14,.45);
-      }
-      .yn-card::before {
-        content: ''; position: absolute; top: 0; left: 40px; right: 40px; height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(233,200,126,.65), transparent);
-      }
-      .yn-kicker {
-        font-size: 10.5px; font-weight: 800; letter-spacing: .26em; text-transform: uppercase;
-        color: rgba(217,174,95,.8); margin-bottom: 14px;
-      }
-      .yn-h { font-family: 'Prata', serif; font-weight: 400; font-size: 27px; line-height: 1.25; color: #F2EDE0; margin: 0 0 10px; }
-      .yn-sub { font-size: 14px; line-height: 1.6; color: rgba(242,237,224,.55); margin: 0 0 20px; max-width: 560px; }
-
-      .yn-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-      .yn-chip {
-        font-family: inherit; cursor: pointer;
-        padding: 8px 14px; border-radius: 99px; font-size: 12.5px;
-        color: rgba(242,237,224,.66);
-        background: rgba(242,237,224,.04);
-        border: 1px solid rgba(242,237,224,.12);
-        transition: border-color .18s ease, color .18s ease;
-      }
-      .yn-chip:hover { border-color: rgba(217,174,95,.45); color: #F0DDB0; }
-
-      .yn-field { position: relative; }
-      /* font-size ровно 16px — на iOS меньший размер заставляет Safari зумить при фокусе. */
-      .yn-field textarea {
-        width: 100%; box-sizing: border-box; resize: none;
-        padding: 15px 16px; border-radius: 13px;
-        background: rgba(8,11,20,.6);
-        border: 1px solid rgba(217,174,95,.22);
-        color: #F2EDE0; font-family: inherit; font-size: 16px; line-height: 1.5;
-        outline: none; transition: border-color .18s ease;
-      }
-      .yn-field textarea::placeholder { color: rgba(242,237,224,.3); }
-      .yn-field textarea:focus { border-color: rgba(217,174,95,.55); }
-      .yn-meta { display: flex; justify-content: flex-end; margin: 6px 2px 0; font-size: 11px; color: rgba(242,237,224,.35); }
-
-      .yn-go {
-        display: flex; align-items: center; justify-content: center; gap: 10px;
-        width: 100%; margin-top: 14px; padding: 16px 20px;
-        border-radius: 13px; border: none; cursor: pointer;
-        font-family: inherit; font-size: 14.5px; font-weight: 800; letter-spacing: .04em;
-        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
-        box-shadow: 0 10px 30px rgba(217,174,95,.24);
-        transition: transform .18s ease, box-shadow .18s ease;
-      }
-      .yn-go:hover { transform: translateY(-1px); box-shadow: 0 14px 38px rgba(217,174,95,.34); }
-      .yn-go:disabled { opacity: .6; cursor: wait; transform: none; }
-      .yn-go i { font-size: 19px; }
-      .yn-note { margin-top: 10px; font-size: 11.5px; color: rgba(242,237,224,.34); text-align: center; min-height: 15px; }
-      .yn-note.yn-bad { color: #C4899B; }
-
-      .yn-out { margin-top: 24px; border-top: 1px solid rgba(217,174,95,.16); padding-top: 22px; animation: yn-in .5s ease both; }
-      @keyframes yn-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-      .yn-drawn { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
-      .yn-mini {
-        flex: none; width: 62px; height: 100px; border-radius: 9px;
-        background: linear-gradient(160deg, #F2E9CF, #E4D3A8);
-        border: 1px solid #C7A254;
-        display: flex; align-items: center; justify-content: center;
-        color: #8A6B29; font-size: 26px;
-        animation: yn-flip .7s cubic-bezier(.2,.9,.3,1.2) both;
-      }
-      @keyframes yn-flip { from { transform: rotateY(90deg); } to { transform: rotateY(0); } }
-      .yn-verdict { font-family: 'Prata', serif; font-size: 26px; color: #E9C87E; line-height: 1.2; }
-      .yn-cardname { margin-top: 5px; font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: rgba(242,237,224,.45); }
-
-      .yn-text-wrap { position: relative; }
-      .yn-text { font-size: 15px; line-height: 1.75; color: rgba(242,237,224,.74); }
-      .yn-text b { color: #F0DDB0; font-weight: 600; }
-      /* Градиент гасит последние строки — текст обрывается визуально, а не резко. */
-      .yn-fade {
-        position: absolute; left: 0; right: 0; bottom: 0; height: 96px; pointer-events: none;
-        background: linear-gradient(180deg, rgba(11,15,30,0), rgba(11,15,30,.86) 62%, #0B0F1E);
-      }
-      .yn-lock { position: relative; margin-top: -10px; text-align: center; }
-      .yn-lock-t { font-family: 'Prata', serif; font-size: 20px; color: #F2EDE0; margin-bottom: 8px; }
-      .yn-lock-s { font-size: 13.5px; line-height: 1.6; color: rgba(242,237,224,.5); margin: 0 auto 18px; max-width: 430px; }
-      .yn-lock-btn {
-        display: inline-flex; align-items: center; justify-content: center; gap: 9px;
-        padding: 15px 30px; border-radius: 13px; text-decoration: none;
-        font-size: 14px; font-weight: 800;
-        color: #0B0F1E; background: linear-gradient(120deg, #E9C87E, #D9AE5F);
-        box-shadow: 0 10px 30px rgba(217,174,95,.28);
-        transition: transform .18s ease;
-      }
-      .yn-lock-btn:hover { transform: translateY(-1px); }
-      .yn-lock-note { margin-top: 12px; font-size: 11.5px; color: rgba(242,237,224,.32); }
-
-      /* ---------- Адаптив лендинга ---------- */
-      /* Длинные заголовки и слова вроде «ИИ-толкователем» не должны распирать макет. */
-      .lp-h1, .lp-h2, .lp-lede, .lp-sub, .yn-h, .yn-sub,
-      .lp-tile p, .lp-tile h3, .lp-step p, .lp-step h3 { overflow-wrap: break-word; }
-
-      @media (max-width: 900px) {
-        .lp-hero { grid-template-columns: 1fr; padding: 56px 0 64px; gap: 40px; }
-        .lp-fan { height: 380px; }
-        .lp-nav { display: none; }
-        .lp-grid, .lp-steps { grid-template-columns: 1fr; }
-        .lp-wrap { padding: 0 20px; }
-      }
-
-      @media (max-width: 620px) {
-        .lp-wrap { padding: 0 18px; }
-
-        /* Главный виновник обрезанного текста: nowrap на строке
-           «Таро · Астрология · Матрица судьбы» плюс разрядка .32em. */
-        .lp-eyebrow { white-space: normal; font-size: 10px; letter-spacing: .2em; gap: 10px; margin-bottom: 18px; }
-        .lp-eyebrow::before { width: 22px; flex: none; }
-
-        /* clamp с нижней границей 40px не влезал в узкие экраны. */
-        .lp-h1 { font-size: clamp(30px, 8.4vw, 44px); margin-bottom: 18px; }
-        .lp-lede { font-size: 15px; margin-bottom: 26px; }
-        .lp-hero { padding: 40px 0 52px; gap: 30px; }
-        .lp-cta-row { gap: 10px; }
-        .lp-cta, .lp-cta-ghost { width: 100%; box-sizing: border-box; justify-content: center; padding: 15px 20px; }
-
-        .lp-top { padding: 18px 0 16px; gap: 12px; }
-        .lp-brand { font-size: 15px; letter-spacing: .2em; gap: 8px; }
-        .lp-top-cta { padding: 9px 16px; font-size: 11px; letter-spacing: .1em; }
-
-        .lp-sec { padding: 52px 0; }
-        .lp-sec-head { margin-bottom: 30px; }
-        .lp-h2 { font-size: 26px; }
-        .lp-final .lp-h2 { font-size: 26px; }
-        .lp-kicker { letter-spacing: .2em; font-size: 10px; }
-        .lp-tile { padding: 20px 18px; }
-        .lp-auth-sec { padding: 56px 0 64px; }
-        .lp-auth-card { padding: 28px 20px 24px; }
-        .lp-foot { font-size: 10px; letter-spacing: .08em; gap: 10px; }
-
-        /* Веер карт был шире экрана: одно только кольцо — 420px. */
-        .lp-fan { height: 300px; }
-        .lp-ring { width: 260px; height: 260px; }
-        .lp-card { width: 104px; height: 174px; margin: -87px 0 0 -52px; border-radius: 10px; }
-        .lp-card::after { font-size: 22px; }
-        .lp-face-inner { padding: 10px 8px; inset: 6px; }
-        .lp-face-num { font-size: 12px; }
-        .lp-face-name { font-size: 8.5px; letter-spacing: .22em; margin-right: -.22em; }
-        .lp-face-inner svg { width: 44px; height: 44px; }
-
-        .yn-card { padding: 24px 18px 22px; border-radius: 16px; }
-        .yn-card::before { left: 24px; right: 24px; }
-        .yn-h { font-size: 22px; }
-        .yn-sub { font-size: 13.5px; }
-        .yn-verdict { font-size: 22px; }
-        .yn-mini { width: 54px; height: 88px; font-size: 22px; }
-        .yn-lock-btn { width: 100%; box-sizing: border-box; }
-      }
-
-      @media (max-width: 380px) {
-        .lp-h1 { font-size: 29px; }
-        .lp-brand { font-size: 13px; letter-spacing: .12em; }
-        .lp-top-cta { padding: 8px 12px; letter-spacing: .05em; }
-        .lp-fan { height: 250px; }
-        .lp-ring { width: 216px; height: 216px; }
-        .lp-card { width: 88px; height: 148px; margin: -74px 0 0 -44px; }
-        .yn-drawn { gap: 12px; }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .lp-face { animation: none; }
-      }
-    </style>
-
-    <div class="lp-sky" aria-hidden="true"></div>
-    <div class="lp-stars" aria-hidden="true"></div>
-
-    <div class="lp-wrap">
-
-      <header class="lp-top">
-        <a class="lp-brand" href="#">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M10.5 4.5a7.5 7.5 0 1 0 9 9 6 6 0 1 1-9-9Z" stroke="#D9AE5F" stroke-width="1.2" stroke-linejoin="round" fill="rgba(217,174,95,.1)"/>
-            <path d="M17 4.5l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6z" fill="#F0DDB0"/>
-          </svg>
-          NEOTARO
-        </a>
-        <nav class="lp-nav">
-          <a href="#lp-tools">Что внутри</a>
-          <a href="#lp-library">Библиоте��а</a>
-          <a href="/sonnik/">Сонник</a>
-          <a href="/karty/">Карты</a>
-          <a href="#lp-faq">Вопросы</a>
-        </nav>
-        <a class="lp-top-cta" href="/login/">Войти</a>
-      </header>
-
-      <section class="lp-hero">
-        <div>
-          <div class="lp-eyebrow">Таро · Астрология · Матрица судьбы</div>
-          <h1 class="lp-h1">Карты уже знают.<br><em>Осталось спросить.</em></h1>
-          <p class="lp-lede">NEOTARO — ночной кабинет гаданий: расклады Таро с ИИ‑толкователем, натальная карта, матрица судьбы, совместимость и лунный календарь. Без эзотерического тумана — только вы, вопрос и колода.</p>
-          <div class="lp-cta-row">
-            <a class="lp-cta" href="/login/"><i class="ph-fill ph-sparkle" aria-hidden="true"></i>Войти и вытянуть карту дня</a>
-            <a class="lp-cta-ghost" href="#lp-ritual">Как проходит ритуал</a>
-          </div>
-          <div class="lp-hint">Вход через Telegram, Google, Яндекс или VK — около 10 секунд. Карта дня — бесплатно, каждый день.</div>
+    <!-- ══════════════ ГЕРОЙ ══════════════ -->
+    <section class="shell hero">
+      <div class="hero-copy">
+        <div class="eyebrow reveal">Таро · Астрология · Матрица судьбы</div>
+        <h1 class="h1 reveal" data-d="70">Карты уже знают.<br><em>Осталось спросить.</em></h1>
+        <p class="lede reveal" data-d="140">Ночной кабинет гаданий: расклады Таро с ИИ-толкователем, натальная карта, матрица судьбы, совместимость и лунный календарь. Без эзотерического тумана — только вы, вопрос и колода.</p>
+        <div class="btn-row reveal" data-d="210">
+          <a class="btn" href="/login/"><i class="ph-fill ph-sparkle" aria-hidden="true"></i>Войти и вытянуть карту дня</a>
+          <a class="btn-ghost" href="#ask">Спросить сейчас, без входа</a>
         </div>
-        <div class="lp-fan" aria-hidden="true">
-          <div class="lp-ring"></div>
-          <div class="lp-card lp-c1"></div>
-          <div class="lp-card lp-c2"></div>
-          <div class="lp-card lp-c4"></div>
-          <div class="lp-card lp-c5"></div>
-          <div class="lp-card lp-face">
-            <div class="lp-face-inner">
-              <span class="lp-face-num">XVII</span>
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                <circle cx="32" cy="32" r="22" stroke="#8A6B29" stroke-width="1"/>
-                <path d="M32 12l3.2 16.8L52 32l-16.8 3.2L32 52l-3.2-16.8L12 32l16.8-3.2L32 12z" fill="#8A6B29" fill-opacity=".85"/>
-                <circle cx="32" cy="32" r="3.4" fill="#F2E9CF"/>
-              </svg>
-              <span class="lp-face-name">Звезда</span>
-            </div>
+        <p class="hero-hint reveal" data-d="280">Вход через Telegram, Google, Яндекс или VK — около 10 секунд.<br>Карта дня — бесплатно, каждый день.</p>
+      </div>
+
+      <div class="hero-art reveal" data-d="120">
+        <div class="frame" id="hero-frame">
+          <span class="mark tl" aria-hidden="true"></span>
+          <span class="mark tr" aria-hidden="true"></span>
+          <span class="mark bl" aria-hidden="true"></span>
+          <span class="mark br" aria-hidden="true"></span>
+
+          <!-- ▼▼▼ ЕДИНСТВЕННОЕ МЕСТО, ГДЕ МЕНЯТЬ ИМЯ ФАЙЛА КАРТИНКИ ▼▼▼ -->
+          <img id="hero-img" src="/static/hero.png"
+               alt="Ночной стол с раскладом Таро"
+               width="1200" height="1500" fetchpriority="high" decoding="async">
+          <!-- ▲▲▲ если файл называется иначе — поменяй src выше ▲▲▲ -->
+
+          <div class="frame-fallback">
+            <svg width="58" height="58" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <circle cx="32" cy="32" r="22" stroke="#7E6A33" stroke-width="1"/>
+              <path d="M32 12l3.2 16.8L52 32l-16.8 3.2L32 52l-3.2-16.8L12 32l16.8-3.2L32 12z" fill="#7E6A33"/>
+              <circle cx="32" cy="32" r="3.4" fill="#EFEAE0"/>
+            </svg>
+            <span>Картинка не найдена — проверьте путь /static/</span>
           </div>
         </div>
-      </section>
+        <div class="plate">
+          <span class="plate-num">XVII</span>
+          <span class="plate-div" aria-hidden="true"></span>
+          <span class="plate-name">Звезда</span>
+        </div>
+      </div>
+    </section>
 
-      <section class="yn" id="yn">
-        <div class="yn-card">
-          <div class="yn-kicker">Бесплатно · без регистрации</div>
-          <h2 class="yn-h">Спросите карты прямо сейчас</h2>
-          <p class="yn-sub">Один вопрос, одна карта, прямой ответ. Формулируйте так, чтобы ответить можно было «да» или «нет».</p>
+    <!-- приборная строка -->
+    <div class="shell">
+      <div class="readout reveal">
+        <div><b>78</b><span>карт с разбором</span></div>
+        <div><b>98</b><span>схем раскладов</span></div>
+        <div><b>480+</b><span>статей без входа</span></div>
+        <div><b>5</b><span>языков интерфейса</span></div>
+        <div><b>0 ₽</b><span>карта дня, ежедневно</span></div>
+      </div>
+    </div>
 
-          <div class="yn-chips">
-            <button type="button" class="yn-chip">Стоит ли мне сейчас менять работу?</button>
-            <button type="button" class="yn-chip">Вернётся ли этот человек?</button>
-            <button type="button" class="yn-chip">Получится ли задуманное в этом месяце?</button>
+    <!-- ══════════════ ВИДЖЕТ ДА/НЕТ ══════════════ -->
+    <section class="band band--flush" id="ask">
+      <div class="shell ask">
+        <div class="ask-copy reveal">
+          <div class="eyebrow">Бесплатно · без регистрации</div>
+          <h2 class="h2">Спросите карты<br>прямо сейчас</h2>
+          <p class="lede">Один вопрос, одна карта, прямой ответ. Формулируйте так, чтобы ответить можно было «да» или «нет».</p>
+          <ul class="ask-list">
+            <li><b>01</b><span>Не нужно почты, пароля и подтверждения — сразу к колоде.</span></li>
+            <li><b>02</b><span>Ответ приходит примерно за десять секунд.</span></li>
+            <li><b>03</b><span>Полный разбор со сроками и советом открывается в кабинете.</span></li>
+          </ul>
+        </div>
+
+        <div class="panel reveal" data-d="90">
+          <div class="chips">
+            <button type="button" class="chip yn-chip">Стоит ли мне сейчас менять работу?</button>
+            <button type="button" class="chip yn-chip">Вернётся ли этот человек?</button>
+            <button type="button" class="chip yn-chip">Получится ли задуманное в этом месяце?</button>
           </div>
 
-          <div class="yn-field">
-            <label for="yn-q" class="lp-sr">Ваш вопрос</label>
+          <div class="field">
+            <label for="yn-q" class="sr">Ваш вопрос</label>
             <textarea id="yn-q" rows="2" maxlength="140" placeholder="Например: получу ли я эту должность?"></textarea>
-            <div class="yn-meta"><span id="yn-count">0 / 140</span></div>
+            <div class="field-meta"><span id="yn-count">0 / 140</span></div>
           </div>
 
-          <button type="button" class="yn-go" id="yn-go">
+          <button type="button" class="btn ask-go" id="yn-go">
             <i class="ph-fill ph-sparkle" aria-hidden="true"></i>
             <span id="yn-go-label">Вытянуть карту</span>
           </button>
-          <div class="yn-note" id="yn-note">Ответ приходит примерно за десять секунд.</div>
+          <div class="ask-note" id="yn-note">Ответ приходит примерно за десять секунд.</div>
 
-          <div class="yn-out" id="yn-out" hidden>
-            <div class="yn-drawn">
-              <div class="yn-mini" aria-hidden="true">✦</div>
+          <div class="out" id="yn-out" hidden>
+            <div class="drawn">
+              <div class="drawn-sigil" aria-hidden="true">✦</div>
               <div>
-                <div class="yn-verdict" id="yn-verdict"></div>
-                <div class="yn-cardname" id="yn-cardname"></div>
+                <div class="verdict" id="yn-verdict"></div>
+                <div class="cardname" id="yn-cardname"></div>
               </div>
             </div>
-            <div class="yn-text-wrap">
-              <div class="yn-text" id="yn-text"></div>
-              <div class="yn-fade" aria-hidden="true"></div>
-            </div>
-            <div class="yn-lock" id="yn-lock">
-              <div class="yn-lock-t">Дальше — самое важное</div>
-              <p class="yn-lock-s">Полный разбор с советом и сроками открывается в кабинете. Вход занимает около десяти секунд.</p>
-              <a class="yn-lock-btn" id="yn-lock-btn" href="/login/?from=yesno">Смотреть расклад полностью</a>
-              <div class="yn-lock-note">И ещё карта дня, расклады на 10 схем и натальная карта — бесплатно</div>
+            <div class="out-text" id="yn-text"></div>
+            <div class="lock" id="yn-lock" hidden>
+              <div class="lock-t">Дальше — самое важное</div>
+              <p class="lock-s">Полный разбор с советом и сроками открывается в кабинете. Вход занимает около десяти секунд.</p>
+              <a class="btn" id="yn-lock-btn" href="/login/?from=yesno">Смотреть расклад полностью</a>
+              <div class="lock-note">И ещё карта дня, расклады на 10 схем и натальная карта — бесплатно</div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="lp-sec" id="lp-tools">
-        <div class="lp-sec-head">
-          <div class="lp-kicker">Что внутри</div>
-          <h2 class="lp-h2">Семь инструментов одного атласа</h2>
-          <p class="lp-sub">Каждый отвечает на свой тип вопроса — от «что меня ждёт» до «почему мы вместе».</p>
+    <!-- ══════════════ ИНСТРУМЕНТЫ ══════════════ -->
+    <section class="band" id="tools">
+      <div class="shell">
+        <div class="head reveal">
+          <div class="eyebrow">Что внутри</div>
+          <h2 class="h2">Шесть инструментов одного атласа</h2>
+          <p class="lede">Каждый отвечает на свой тип вопроса — от «что меня ждёт» до «почему мы вместе».</p>
         </div>
-        <div class="lp-grid">
-          <div class="lp-tile">
-            <i class="ph-fill ph-cards" aria-hidden="true"></i>
-            <h3>Расклады Таро</h3>
-            <p>От одной карты до кельтского креста. ИИ‑толкователь читает расклад под ваш вопрос, а не по шаблону.</p>
-          </div>
-          <div class="lp-tile">
-            <i class="ph-fill ph-chat-circle" aria-hidden="true"></i>
-            <h3>Оракул</h3>
-            <p>Живой диалог о том, что показали карты. Задавайте уточняющие вопросы — Оракул помнит ваш расклад.</p>
-          </div>
-          <div class="lp-tile">
-            <i class="ph-fill ph-flower-lotus" aria-hidden="true"></i>
-            <h3>Матрица судьбы</h3>
-            <p>17 позиций по дате рождения: предназначение, кармический хвост, энергия и финансы.</p>
-          </div>
-          <div class="lp-tile">
-            <i class="ph-fill ph-planet" aria-hidden="true"></i>
-            <h3>Натальная карта</h3>
-            <p>Солнце, Луна и асцендент по месту и времени рождения — с человеческим разбором, а не таблицей.</p>
-          </div>
-          <div class="lp-tile">
-            <i class="ph-fill ph-intersect" aria-hidden="true"></i>
-            <h3>Совместимость</h3>
-            <p>Синастрия двух дат: процент совпадения, сильные стороны пары и точки роста.</p>
-          </div>
-          <div class="lp-tile">
-            <i class="ph-fill ph-moon-stars" aria-hidden="true"></i>
-            <h3>Сонник и лунный календарь</h3>
-            <p>Толкование снов по символам и фаза Луны на сегодня: что начинать, а что отложить.</p>
-          </div>
+        <div class="tiles">
+          <article class="tile reveal"><i class="ph-fill ph-cards" aria-hidden="true"></i>
+            <h3 class="h3">Расклады Таро</h3>
+            <p>От одной карты до кельтского креста. ИИ-толкователь читает расклад под ваш вопрос, а не по шаблону.</p></article>
+          <article class="tile reveal" data-d="60"><i class="ph-fill ph-chat-circle" aria-hidden="true"></i>
+            <h3 class="h3">Оракул</h3>
+            <p>Живой диалог о том, что показали карты. Задавайте уточняющие вопросы — Оракул помнит ваш расклад.</p></article>
+          <article class="tile reveal" data-d="120"><i class="ph-fill ph-flower-lotus" aria-hidden="true"></i>
+            <h3 class="h3">Матрица судьбы</h3>
+            <p>17 позиций по дате рождения: предназначение, кармический хвост, энергия и финансы.</p></article>
+          <article class="tile reveal" data-d="180"><i class="ph-fill ph-planet" aria-hidden="true"></i>
+            <h3 class="h3">Натальная карта</h3>
+            <p>Солнце, Луна и асцендент по месту и времени рождения — с человеческим разбором, а не таблицей.</p></article>
+          <article class="tile reveal" data-d="240"><i class="ph-fill ph-intersect" aria-hidden="true"></i>
+            <h3 class="h3">Совместимость</h3>
+            <p>Синастрия двух дат: процент совпадения, сильные стороны пары и точки роста.</p></article>
+          <article class="tile reveal" data-d="300"><i class="ph-fill ph-moon-stars" aria-hidden="true"></i>
+            <h3 class="h3">Сонник и лунный календарь</h3>
+            <p>Толкование снов по символам и фаза Луны на сегодня: что начинать, а что отложить.</p></article>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="lp-sec" id="lp-ritual">
-        <div class="lp-sec-head">
-          <div class="lp-kicker">Ритуал</div>
-          <h2 class="lp-h2">Три шага до ответа</h2>
-        </div>
-        <div class="lp-steps">
-          <div class="lp-step">
-            <span class="lp-step-num">I</span>
-            <h3>Задайте вопрос</h3>
-            <p>Сформулируйте его своими словами — про отношения, работу или выбор, который не даёт покоя.</p>
+    <!-- ══════════════ ПУТЬ РАСКЛАДА — сигнатурный блок ══════════════ -->
+    <section class="band" id="reading">
+      <div class="shell track">
+        <aside class="track-aside">
+          <div class="eyebrow">Ритуал</div>
+          <h2 class="h2">Что происходит<br>между вопросом<br>и ответом</h2>
+          <p class="lede">Шесть шагов за десять секунд. Ничего мистического — и именно поэтому разбор получается про вас, а не про карту вообще.</p>
+          <div class="dial" aria-hidden="true">
+            <div class="dial-row">
+              <span class="dial-lab">Шаг</span>
+              <span class="dial-val" id="dial-step">01 / 06</span>
+            </div>
+            <div class="dial-bar"><i class="dial-fill" id="dial-fill"></i></div>
+            <div class="dial-row" style="margin-top:14px">
+              <span class="dial-lab">Секунды</span>
+              <span class="dial-val" id="dial-clock">0.0</span>
+            </div>
           </div>
-          <div class="lp-step">
-            <span class="lp-step-num">II</span>
-            <h3>Вытяните карты</h3>
-            <p>Колода перемешивается на ваших глазах — вы сами выбираете карты и выкладываете их на стол.</p>
-          </div>
-          <div class="lp-step">
-            <span class="lp-step-num">III</span>
-            <h3>Прочтите послание</h3>
-            <p>Оракул толкует раскла�� целиком и остаётся рядом: обсудите детали в чате, пока не станет ясно.</p>
-          </div>
-        </div>
-      </section>
+        </aside>
 
-      <section class="lp-sec" id="lp-library">
-        <div class="lp-sec-head">
-          <div class="lp-kicker">Библиотека</div>
-          <h2 class="lp-h2">Шесть разделов атласа</h2>
-          <p class="lp-sub">Больше 480 разборов, открытых без входа: значения карт, расклады, числа, матрица, совместимость и сонник.</p>
+        <div class="steps" id="steps">
+          <div class="step" data-clock="0.0">
+            <div class="step-top"><span class="step-n">01</span><span class="step-t">Вопрос</span><span class="step-clock">0.0 сек</span></div>
+            <p>Вы пишете своими словами. Оракул сразу смотрит, есть ли в вопросе ваше участие: «выйду ли я замуж» даёт мутный ответ, «что мешает мне подпустить ближе» — конкретный.</p>
+          </div>
+          <div class="step" data-clock="1.5">
+            <div class="step-top"><span class="step-n">02</span><span class="step-t">Тасовка</span><span class="step-clock">1.5 сек</span></div>
+            <p>Колода перемешивается на ваших глазах. Порядок фиксируется до выбора — подогнать расклад под желаемый ответ технически нельзя.</p>
+          </div>
+          <div class="step" data-clock="2.0">
+            <div class="step-top"><span class="step-n">03</span><span class="step-t">Выбор карт</span><span class="step-clock">ваш ход</span></div>
+            <p>Карты вытягиваете вы, а не сервер. Сколько думать над выбором — решаете тоже вы: этот шаг без таймера.</p>
+          </div>
+          <div class="step" data-clock="4.0">
+            <div class="step-top"><span class="step-n">04</span><span class="step-t">Архетипы</span><span class="step-clock">4.0 сек</span></div>
+            <p>Каждая карта раскрывается в своёй позиции: прямая или перевёрнутая, в начале или в исходе. Шесть карт — это не шесть справок подряд.</p>
+          </div>
+          <div class="step" data-clock="6.5">
+            <div class="step-top"><span class="step-n">05</span><span class="step-t">Ваш контекст</span><span class="step-clock">6.5 сек</span></div>
+            <p>К раскладу подключается то, что уже известно: ваша натальная карта, матрица, предыдущие расклады и то, о чём вы говорили в чате на прошлой неделе.</p>
+          </div>
+          <div class="step" data-clock="10.0">
+            <div class="step-top"><span class="step-n">06</span><span class="step-t">Совет</span><span class="step-clock">10.0 сек</span></div>
+            <p>На выходе не «ждите перемен», а что сделать ближайшими днями. Дальше можно спорить и уточнять в том же диалоге.</p>
+          </div>
         </div>
-        <div class="lp-lib">
+      </div>
+    </section>
 
-          <a class="lp-lib-card" href="/karty/">
-            <span class="lp-lib-count">78 карт</span>
-            <h3>Значения карт Таро</h3>
-            <p>Полная колода: прямое и перевернутое положение, карта в любви, работе и как совет дня.</p>
-            <span class="lp-lib-links">Луна · Шут · Башня</span>
+    <!-- ══════════════ ЕДИНЫЙ КОНТЕКСТ ══════════════ -->
+    <section class="band">
+      <div class="shell">
+        <div class="head reveal">
+          <div class="eyebrow">Одна память</div>
+          <h2 class="h2">Оракул не знакомится с вами заново</h2>
+          <p class="lede">Всё, что вы делаете в NEOTARO, стекается в один профиль. Не надо каждый раз объяснять, кто вы и что у вас происходит.</p>
+        </div>
+        <div class="ctx reveal">
+          <div class="ctx-cell"><div class="eyebrow eyebrow--bare">Входит</div><b>Расклады</b><p>Какие вопросы вы задавали и какие карты выпадали раньше.</p></div>
+          <div class="ctx-cell"><div class="eyebrow eyebrow--bare">Входит</div><b>Натальная карта</b><p>Дата, время и город рождения — ваш темп и реакции.</p></div>
+          <div class="ctx-cell is-core"><div class="eyebrow eyebrow--bare">Ядро</div><b>Профиль</b><p>Одна карточка, которую видят все инструменты сразу.</p></div>
+          <div class="ctx-cell"><div class="eyebrow eyebrow--bare">Входит</div><b>Матрица</b><p>Сильные линии, кармические узлы и отношение к деньгам.</p></div>
+          <div class="ctx-cell"><div class="eyebrow eyebrow--bare">Входит</div><b>Сны и диалоги</b><p>О чём вы спрашивали Оракула и какие сны разбирали.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ ГОЛОСА АРКАНОВ ══════════════ -->
+    <section class="band">
+      <div class="shell">
+        <div class="head reveal">
+          <div class="eyebrow">Как говорят карты</div>
+          <h2 class="h2">У каждого аркана свой голос</h2>
+          <p class="lede">Один и тот же вопрос — «стоит ли менять работу» — и четыре честные, но разные реакции. Колода не льстит.</p>
+        </div>
+        <div class="voices">
+          <article class="voice reveal">
+            <div class="voice-top"><span class="voice-name">Шут</span><span class="voice-tag">Риск</span></div>
+            <q>Прыгать можно — но с закрытыми глазами. Сколько месяцев вы проживёте без зарплаты?</q>
+            <div class="voice-num">Аркан 0</div>
+          </article>
+          <article class="voice reveal" data-d="70">
+            <div class="voice-top"><span class="voice-name">Верховная Жрица</span><span class="voice-tag">Интуиция</span></div>
+            <q>Вы уже знаете ответ неделю. Вопрос не в решении, а в том, кому вы боитесь его сообщить.</q>
+            <div class="voice-num">Аркан II</div>
+          </article>
+          <article class="voice reveal" data-d="140">
+            <div class="voice-top"><span class="voice-name">Башня</span><span class="voice-tag">Перелом</span></div>
+            <q>Старая конструкция уже трещит. Выбор не «менять или нет», а «сам или когда рушится».</q>
+            <div class="voice-num">Аркан XVI</div>
+          </article>
+          <article class="voice reveal" data-d="210">
+            <div class="voice-top"><span class="voice-name">Звезда</span><span class="voice-tag">Надежда</span></div>
+            <q>Дорога есть, и она длиннее, чем хочется. Начните с одного разговора, а не с заявления.</q>
+            <div class="voice-num">Аркан XVII</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ СРАВНЕНИЕ ══════════════ -->
+    <section class="band">
+      <div class="shell">
+        <div class="head reveal">
+          <div class="eyebrow">Честное сравнение</div>
+          <h2 class="h2">Гадать можно четырьмя способами</h2>
+          <p class="lede">Мы не лучше во всём — живая гадалка сильнее в одном. Вот разница без прикрас.</p>
+        </div>
+        <div class="cmp-scroll reveal">
+          <table class="cmp">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Обычный ИИ-чат</th>
+                <th scope="col">Сайт-сонник</th>
+                <th scope="col">Живая гадалка</th>
+                <th scope="col" class="us">NEOTARO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Помнит вашу историю</th>
+                <td class="no">Только в одном диалоге</td>
+                <td class="no">Нет</td>
+                <td>Если запомнит</td>
+                <td class="us">Да, все расклады и диалоги</td>
+              </tr>
+              <tr>
+                <th scope="row">Учитывает натальную карту</th>
+                <td class="no">Нет</td>
+                <td class="no">Нет</td>
+                <td>За отдельную плату</td>
+                <td class="us">Да, автоматически</td>
+              </tr>
+              <tr>
+                <th scope="row">Сколько ждать ответ</th>
+                <td>Секунды</td>
+                <td>Сразу</td>
+                <td class="no">От часа до недели</td>
+                <td class="us">Около 10 секунд</td>
+              </tr>
+              <tr>
+                <th scope="row">Цена одного вопроса</th>
+                <td>Подписка</td>
+                <td>0 ₽</td>
+                <td class="no">От 1500 ₽</td>
+                <td class="us">Карта дня — 0 ₽</td>
+              </tr>
+              <tr>
+                <th scope="row">Говорит о границах метода</th>
+                <td>Иногда</td>
+                <td class="no">Нет</td>
+                <td class="no">Почти никогда</td>
+                <td class="us">Да, в каждом разборе</td>
+              </tr>
+              <tr>
+                <th scope="row">Можно спорить и уточнять</th>
+                <td>Да</td>
+                <td class="no">Нет</td>
+                <td>За доплату</td>
+                <td class="us">Да, в том же чате</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ БИБЛИОТЕКА ══════════════ -->
+    <section class="band" id="library">
+      <div class="shell">
+        <div class="head reveal">
+          <div class="eyebrow">Библиотека</div>
+          <h2 class="h2">Шесть разделов атласа</h2>
+          <p class="lede">Больше 480 разборов, открытых без входа: значения карт, расклады, числа, матрица, совместимость и сонник.</p>
+        </div>
+        <div class="lib">
+          <a class="lib-card reveal" href="/karty/">
+            <span class="lib-count">78 карт</span>
+            <h3 class="h3">Значения карт Таро</h3>
+            <p>Полная колода: прямое и перевёрнутое положение, карта в любви, работе и как совет дня.</p>
+            <span class="lib-links">Луна · Шут · Башня</span>
           </a>
-
-          <a class="lp-lib-card" href="/rasklady/">
-            <span class="lp-lib-count">98 раскладов</span>
-            <h3>Расклады Таро</h3>
+          <a class="lib-card reveal" data-d="60" href="/rasklady/">
+            <span class="lib-count">98 раскладов</span>
+            <h3 class="h3">Расклады Таро</h3>
             <p>Десять схем на десять тем: где лежит каждая позиция, как связать карты в один ответ.</p>
-            <span class="lp-lib-links">Кельтский крест · Три карты на любовь · Да или нет</span>
+            <span class="lib-links">Кельтский крест · Три карты на любовь · Да или нет</span>
           </a>
-
-          <a class="lp-lib-card" href="/sonnik/">
-            <span class="lp-lib-count">сонник</span>
-            <h3>Толкование снов</h3>
+          <a class="lib-card reveal" data-d="120" href="/sonnik/">
+            <span class="lib-count">сонник</span>
+            <h3 class="h3">Толкование снов</h3>
             <p>Символы по Юнгу и архетипам: что меняет деталь сна, кому он снится и что делать утром.</p>
-            <span class="lp-lib-links">Вода · Змея · Зубы · Падение</span>
+            <span class="lib-links">Вода · Змея · Зубы · Падение</span>
           </a>
-
-          <a class="lp-lib-card" href="/chisla/">
-            <span class="lp-lib-count">159 разборов</span>
-            <h3>Числа на часах</h3>
+          <a class="lib-card reveal" data-d="180" href="/chisla/">
+            <span class="lib-count">159 разборов</span>
+            <h3 class="h3">Числа на часах</h3>
             <p>Ангельская нумерология: одинаковое и зеркальное время, повторяющиеся числа и их послания.</p>
-            <span class="lp-lib-links">11:11 · Зеркальные числа · Ангельские числа</span>
+            <span class="lib-links">11:11 · Зеркальные числа · Ангельские числа</span>
           </a>
-
-          <a class="lp-lib-card" href="/matrica/">
-            <span class="lp-lib-count">37 разборов</span>
-            <h3>Матрица судьбы</h3>
-            <p>22 аркана по дате рождения, число судьбы и расчет по позициям — предназначение, деньги, карма.</p>
-            <span class="lp-lib-links">Как рассчитать · Число судьбы · Арканы</span>
+          <a class="lib-card reveal" data-d="240" href="/matrica/">
+            <span class="lib-count">37 разборов</span>
+            <h3 class="h3">Матрица судьбы</h3>
+            <p>22 аркана по дате рождения, число судьбы и расчёт по позициям — предназначение, деньги, карма.</p>
+            <span class="lib-links">Как рассчитать · Число судьбы · Арканы</span>
           </a>
-
-          <a class="lp-lib-card" href="/sovmestimost/">
-            <span class="lp-lib-count">12 знаков</span>
-            <h3>Совместимость знаков</h3>
+          <a class="lib-card reveal" data-d="300" href="/sovmestimost/">
+            <span class="lib-count">12 знаков</span>
+            <h3 class="h3">Совместимость знаков</h3>
             <p>Синастрия пар: где совпадают ритмы, где спорят стихии и что держит союз на длинной дистанции.</p>
-            <span class="lp-lib-links">Овен · Лев · Скорпион</span>
+            <span class="lib-links">Овен · Лев · Скорпион</span>
           </a>
-
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="lp-sec" id="lp-how">
-        <div class="lp-sec-head">
-          <div class="lp-kicker">Как этим пользоваться</div>
-          <h2 class="lp-h2">Вопрос важнее карты</h2>
+    <!-- ══════════════ ЛОНГРИД ══════════════ -->
+    <section class="band" id="how">
+      <div class="shell">
+        <div class="head reveal">
+          <div class="eyebrow">Как этим пользоваться</div>
+          <h2 class="h2">Вопрос важнее карты</h2>
         </div>
-        <div class="lp-prose">
-          <p>Колода не решает за вас. Она возвращает вопрос в более честной формулировке — и в этом ее польза. Расклад «выйду ли я замуж в этом году» почти всегда дает мутный ответ, потому что в нем нет вашего участия. Тот же вопрос, заданный как «что мешает мне подпустить человека близко», дает конкретные карты и конкретный вывод, с которым можно что-то сделать в понедельник утром.</p>
-          <p>Поэтому в NEOTARO разбор строится не вокруг названия карты, а вокруг вашей ситуации. ИИ-оракул видит и вопрос, и позиции, и порядок карт, помнит предыдущие сообщения — и объясняет расклад целиком, а не читает шесть отдельных справок подряд. Уточняющие вопросы можно задавать в том же диалоге: «а если я все-таки уеду», «почему тут Башня».</p>
+        <div class="prose reveal">
+          <p>Колода не решает за вас. Она возвращает вопрос в более честной формулировке — и в этом её польза. Расклад «выйду ли я замуж в этом году» почти всегда даёт мутный ответ, потому что в нём нет вашего участия. Тот же вопрос, заданный как «что мешает мне подпустить человека близко», даёт конкретные карты и конкретный вывод, с которым можно что-то сделать в понедельник утром.</p>
+          <p>Поэтому в NEOTARO разбор строится не вокруг названия карты, а вокруг вашей ситуации. ИИ-оракул видит и вопрос, и позиции, и порядок карт, помнит предыдущие сообщения — и объясняет расклад целиком, а не читает шесть отдельных справок подряд. Уточняющие вопросы можно задавать в том же диалоге: «а если я всё-таки уеду», «почему тут Башня».</p>
 
           <h3>Что выбрать под свой вопрос</h3>
           <ul>
@@ -1364,123 +966,137 @@ body.chat-mode .chat-head{padding-top:16px}
             <li><strong>Кельтский крест</strong> — когда ситуация запутана и в ней участвуют другие люди, деньги, сроки. Десять позиций, включая скрытые влияния и страхи.</li>
             <li><strong>Расклад на чувства</strong> — что человек ощущает, что думает и чего не говорит вслух.</li>
             <li><strong>Матрица судьбы</strong> — не про события, а про склад характера: сильные линии, кармический долг, отношение к деньгам.</li>
-            <li><strong>Натальная карта и совместимость</strong> — про ритмы. Почему один партнер выгорает от темпа другого, где пара опирается друг на друга.</li>
+            <li><strong>Натальная карта и совместимость</strong> — про ритмы. Почему один партнёр выгорает от темпа другого, где пара опирается друг на друга.</li>
             <li><strong>Сонник</strong> — когда сон стоит перед глазами и не отпускает. Разбираем символ, а не «плохая примета — хорошая примета».</li>
           </ul>
 
           <h3>Почему сонник здесь устроен иначе</h3>
-          <p>Народные сонники дают приговор в одну строку: змея — предательство, зубы — смерть родственника. Это красиво, но бесполезно, потому что не учитывает вас. Мы идем от психоанализа Карла Юнга: сон — это язык, на котором психика говорит о том, что днем не проговаривается. У каждого символа есть архетипическое ядро, но окраска рождается из деталей: чистой была вода или мутной, вы летели сами или падали, зуб выпал с кровью или без боли.</p>
+          <p>Народные сонники дают приговор в одну строку: змея — предательство, зубы — смерть родственника. Это красиво, но бесполезно, потому что не учитывает вас. Мы идём от психоанализа Карла Юнга: сон — это язык, на котором психика говорит о том, что днём не проговаривается. У каждого символа есть архетипическое ядро, но окраска рождается из деталей: чистой была вода или мутной, вы летели сами или падали, зуб выпал с кровью или без боли.</p>
           <p>Поэтому каждая страница сонника разбирает четыре сценария одного символа, три «линзы» — кому такой сон приходит чаще и почему, — и заканчивается тремя действиями на утро. Не «ждите беды», а «запишите, кому вы вчера не сказали нет».</p>
 
           <h3>Числа, которые вы замечаете</h3>
-          <p>Мозг ищет закономерности и подсвечивает повторы: 11:11, 22:22, один и тот же номер в чеке и на машине впереди. Психология называет это избирательным вниманием, нумерология — посланием. Полезная часть здесь одна и та же: повтор фиксирует момент, в котором вы о чем-то думали. Раздел с числами на часах нужен не чтобы предсказать будущее, а чтобы поймать мысль, которая была в голове ровно в 11:11.</p>
+          <p>Мозг ищет закономерности и подсвечивает повторы: 11:11, 22:22, один и тот же номер в чеке и на машине впереди. Психология называет это избирательным вниманием, нумерология — посланием. Полезная часть здесь одна и та же: повтор фиксирует момент, в котором вы о чём-то думали. Раздел с числами на часах нужен не чтобы предсказать будущее, а чтобы поймать мысль, которая была в голове ровно в 11:11.</p>
 
           <h3>Честно о границах</h3>
           <p>NEOTARO — развлекательный и рефлексивный инструмент. Карты не диагностируют болезни, не заменяют врача, психотерапевта или юриста и не сообщают дату событий. Если сон повторяется месяцами, тревога не уходит, а решение касается здоровья, детей или крупных денег — это территория специалиста, а не колоды. Мы говорим об этом прямо, потому что доверие дороже красивого обещания.</p>
-          <p>Все разборы в библиотеке открыты без входа и без оплаты. Вход нужен только для персональных функций: карта дня, история диалогов с оракулом, натальная карта по точному времени рождения и сохраненные расклады.</p>
+          <p>Все разборы в библиотеке открыты без входа и без оплаты. Вход нужен только для персональных функций: карта дня, история диалогов с оракулом, натальная карта по точному времени рождения и сохранённые расклады.</p>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="lp-sec" id="lp-faq">
-        <div class="lp-sec-head">
-          <div class="lp-kicker">Частые вопросы</div>
-          <h2 class="lp-h2">Коротко о главном</h2>
+    <!-- ══════════════ FAQ ══════════════ -->
+    <section class="band" id="faq">
+      <div class="shell">
+        <div class="head reveal">
+          <div class="eyebrow">Частые вопросы</div>
+          <h2 class="h2">Коротко о главном</h2>
         </div>
-        <div class="lp-faq">
-          <details><summary>Гадание на Таро онлайн бесплатно — правда бесплатно?</summary><p class="a">Да. Карта дня открывается раз в сутки бесплатно и без оплаты чего-либо, а вся библиотека разборов — значения 78 карт, расклады, сонник, числа и матрица — доступна вообще без входа. Энергия и Звезды нужны только для больших раскладов и длинных диалогов с оракулом.</p></details>
+        <div class="faq reveal">
+          <details><summary>Гадание на Таро онлайн бесплатно — правда бесплатно?</summary><p class="a">Да. Карта дня открывается раз в сутки бесплатно и без оплаты чего-либо, а вся библиотека разборов — значения 78 карт, расклады, сонник, числа и матрица — доступна вообще без входа. Энергия и Звёзды нужны только для больших раскладов и длинных диалогов с оракулом.</p></details>
           <details><summary>Нужна ли регистрация?</summary><p class="a">Чтобы читать разборы — нет. Чтобы вытянуть карту дня и сохранять историю — да, вход занимает около десяти секунд через Telegram, Google, Яндекс или VK. Пароль придумывать не нужно.</p></details>
-          <details><summary>Чем ИИ-оракул отличается от обычного описания карты?</summary><p class="a">Обычное описание одинаково для всех. Оракул видит ваш вопрос, конкретные позиции расклада и порядок карт, помнит предыдущие сообщения и объясняет связ�� между картами. Можно спорить и уточнять — это диалог, а не справка.</p></details>
+          <details><summary>Чем ИИ-оракул отличается от обычного описания карты?</summary><p class="a">Обычное описание одинаково для всех. Оракул видит ваш вопрос, конкретные позиции расклада и порядок карт, помнит предыдущие сообщения и объясняет связь между картами. Можно спорить и уточнять — это диалог, а не справка.</p></details>
           <details><summary>Насколько точны предсказания?</summary><p class="a">Карты не сообщают дату событий и не гарантируют исход. Они хорошо показывают расстановку сил, ваши мотивы и слепые зоны. Точность стоит мерить не совпадением с будущим, а тем, стало ли вам яснее, что делать сейчас.</p></details>
-          <details><summary>На чем основан сонник?</summary><p class="a">На аналитической психологии Карла Юнга и архетипических значениях символов, а не на народных приметах. У каждого символа есть ядро, но смысл меняют детали сна и ваш контекст — поэтому каждая страница разбирает несколько сценариев.</p></details>
-          <details><summary>Что нужно для натальной карты?</summary><p class="a">Дата рождения, максимально точное время и город. Время влияет на асцендент и дома: разница в час может сместить весь рисунок карты. Если время неизвестно, разбор все равно возможен, но по Солнцу и Луне.</p></details>
-          <details><summary>Можно ли пользоваться на телефоне?</summary><p class="a">Да, сайт работает в мобильном браузере, а также как приложение внутри Telegram. Интерфейс переведен на русский, английский, испанский, французский и немецкий.</p></details>
-          <details><summary>Это безопасно с точки зрения данных?</summary><p class="a">Мы храним минимум: идентификатор входа, дату рождения для расчетов и историю ваших раскладов. Данные не продаются третьим лицам. Подробности — в политике конфиденциальности.</p></details>
+          <details><summary>На чём основан сонник?</summary><p class="a">На аналитической психологии Карла Юнга и архетипических значениях символов, а не на народных приметах. У каждого символа есть ядро, но смысл меняют детали сна и ваш контекст — поэтому каждая страница разбирает несколько сценариев.</p></details>
+          <details><summary>Что нужно для натальной карты?</summary><p class="a">Дата рождения, максимально точное время и город. Время влияет на асцендент и дома: разница в час может сместить весь рисунок карты. Если время неизвестно, разбор всё равно возможен, но по Солнцу и Луне.</p></details>
+          <details><summary>Можно ли пользоваться на телефоне?</summary><p class="a">Да, сайт работает в мобильном браузере, а также как приложение внутри Telegram. Интерфейс переведён на русский, английский, испанский, французский и немецкий.</p></details>
+          <details><summary>Это безопасно с точки зрения данных?</summary><p class="a">Мы храним минимум: идентификатор входа, дату рождения для расчётов и историю ваших раскладов. Данные не продаются третьим лицам. Подробности — в политике конфиденциальности.</p></details>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="lp-auth-sec" id="lp-auth">
-        <div class="lp-final">
-          <div class="lp-kicker">Вход за полминуты</div>
-          <h2 class="lp-h2">Карты уже знают.<br>Осталось спросить.</h2>
-          <p class="lp-sub">Создайте аккаунт по почте или войдите через Telegram, Google, Яндекс или ВКонтакте. Карта дня — бесплатно, каждый день.</p>
-          <div class="lp-final-row">
-            <a class="lp-cta" href="/login/"><i class="ph-fill ph-sparkle" aria-hidden="true"></i>Создать аккаунт</a>
-            <a class="lp-cta-ghost" href="/login/?mode=login">У меня уже есть аккаунт</a>
+    <!-- ══════════════ ФИНАЛ ══════════════ -->
+    <section class="band" id="start">
+      <div class="shell">
+        <div class="final reveal">
+          <div class="eyebrow">Вход за полминуты</div>
+          <h2 class="h2">Карты уже знают.<br>Осталось спросить.</h2>
+          <p class="lede">Создайте аккаунт по почте или войдите через Telegram, Google, Яндекс или ВКонтакте. Карта дня — бесплатно, каждый день.</p>
+          <div class="btn-row">
+            <a class="btn" href="/login/"><i class="ph-fill ph-sparkle" aria-hidden="true"></i>Создать аккаунт</a>
+            <a class="btn-ghost" href="/login/?mode=login">У меня уже есть аккаунт</a>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-<footer class="site-foot"><div class="wrap foot-grid">
-<div class="foot-brand">
-<a class="brand" href="/">NEO<b>TARO</b></a>
-<p class="foot-about">Онлайн-Таро, сонник и нумерология с ИИ-оракулом. Карта дня, расклады и толкование снов — без регистрации.</p>
-<a class="btn-gold foot-cta" href="/login/">Открыть карту дня</a>
-</div>
-<nav class="foot-col" aria-label="Сонник">
-<div class="fc-title">Сонник</div>
-<a href="/sonnik/">Все толкования снов</a>
-<a href="/sonnik/voda/">К чему снится вода</a>
-<a href="/sonnik/zmeya/">Сны про змею</a>
-<a href="/sonnik/zuby/">Выпадение зубов</a>
-<a href="/karty/luna/">Карта Луна</a>
-<a href="/rasklady/keltskiy-krest/">Кельтский крест</a>
-<a href="/matrica/chislo-sudby/">Число судьбы</a>
-</nav>
-<nav class="foot-col" aria-label="Таро">
-<div class="fc-title">Таро</div>
-<a href="/karty/">Значения 78 карт</a>
-<a href="/rasklady/">Все расклады</a>
-<a href="/rasklady/keltskiy-krest-situaciya/">Кельтский крест</a>
-<a href="/rasklady/tri-karty-lyubov/">Три карты на любовь</a>
-<a href="/rasklady/da-ili-net-situaciya/">Расклад «Да или нет»</a>
-<a href="/karty/shut/">Шут</a>
-<a href="/karty/bashnya/">Башня</a>
-</nav>
-<nav class="foot-col" aria-label="Числа и матрица">
-<div class="fc-title">Числа</div>
-<a href="/chisla/">Числа на часах</a>
-<a href="/chisla/11-11/">11:11 на часах</a>
-<a href="/chisla/zerkalnye/">Зеркальные числа</a>
-<a href="/chisla/angelskie/">Ангельская нумерология</a>
-<a href="/matrica/">Матрица судьбы</a>
-<a href="/matrica/kak-rasschitat/">Как рассчитать матрицу</a>
-<a href="/matrica/chislo-sudby/">Число судьбы</a>
-</nav>
-<nav class="foot-col" aria-label="Астрология и проект">
-<div class="fc-title">Астрология</div>
-<a href="/sovmestimost/">Совместимость знаков</a>
-<a href="/sovmestimost/oven/">Овен</a>
-<a href="/sovmestimost/lev/">Лев</a>
-<a href="/sovmestimost/skorpion/">Скорпион</a>
-<div class="fc-title fc-second">Проект</div>
-<a href="/o-proekte/">О проекте</a>
-<a href="/kontakty/">Контакты</a>
-</nav>
-<div class="foot-contact">
-<div class="fc-title">Связаться</div>
-<a class="fc-mail" href="mailto:support@neotaro.ru">support@neotaro.ru</a>
-<a class="fc-tg" href="https://t.me/otcars">Telegram — @otcars</a>
-<p class="fc-note">Отвечаем на письма в течение трёх рабочих дней.</p>
-</div>
-</div>
-<div class="wrap foot-bottom">
-<p class="foot-note">NEOTARO — онлайн-Таро, сонник и ИИ-оракул. Материалы сайта носят развлекательный характер и не заменяют консультацию врача, психолога или юриста. 18+</p>
-<div class="foot-legal">
-<a href="/soglashenie/">Пользовательское соглашение</a>
-<a href="/politika/">Политика конфиденциальности</a>
-<span class="fl-copy">© 2026 NEOTARO</span>
-</div>
-</div></footer>
+  </main>
 
+  <!-- ══════════════ ПОДВАЛ ══════════════ -->
+  <footer class="foot">
+    <div class="shell foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="/">NEOTARO</a>
+        <p class="foot-about">Онлайн-Таро, сонник и нумерология с ИИ-оракулом. Карта дня, расклады и толкование снов — без регистрации.</p>
+        <a class="btn" href="/login/">Открыть карту дня</a>
+      </div>
+      <nav class="foot-col" aria-label="Сонник">
+        <div class="fc-title">Сонник</div>
+        <a href="/sonnik/">Все толкования снов</a>
+        <a href="/sonnik/voda/">К чему снится вода</a>
+        <a href="/sonnik/zmeya/">Сны про змею</a>
+        <a href="/sonnik/zuby/">Выпадение зубов</a>
+        <a href="/karty/luna/">Карта Луна</a>
+        <a href="/rasklady/keltskiy-krest/">Кельтский крест</a>
+        <a href="/matrica/chislo-sudby/">Число судьбы</a>
+      </nav>
+      <nav class="foot-col" aria-label="Таро">
+        <div class="fc-title">Таро</div>
+        <a href="/karty/">Значения 78 карт</a>
+        <a href="/rasklady/">Все расклады</a>
+        <a href="/rasklady/keltskiy-krest-situaciya/">Кельтский крест</a>
+        <a href="/rasklady/tri-karty-lyubov/">Три карты на любовь</a>
+        <a href="/rasklady/da-ili-net-situaciya/">Расклад «Да или нет»</a>
+        <a href="/karty/shut/">Шут</a>
+        <a href="/karty/bashnya/">Башня</a>
+      </nav>
+      <nav class="foot-col" aria-label="Числа и матрица">
+        <div class="fc-title">Числа</div>
+        <a href="/chisla/">Числа на часах</a>
+        <a href="/chisla/11-11/">11:11 на часах</a>
+        <a href="/chisla/zerkalnye/">Зеркальные числа</a>
+        <a href="/chisla/angelskie/">Ангельская нумерология</a>
+        <a href="/matrica/">Матрица судьбы</a>
+        <a href="/matrica/kak-rasschitat/">Как рассчитать матрицу</a>
+        <a href="/matrica/chislo-sudby/">Число судьбы</a>
+      </nav>
+      <nav class="foot-col" aria-label="Астрология и проект">
+        <div class="fc-title">Астрология</div>
+        <a href="/sovmestimost/">Совместимость знаков</a>
+        <a href="/sovmestimost/oven/">Овен</a>
+        <a href="/sovmestimost/lev/">Лев</a>
+        <a href="/sovmestimost/skorpion/">Скорпион</a>
+        <div class="fc-title second">Проект</div>
+        <a href="/o-proekte/">О проекте</a>
+        <a href="/kontakty/">Контакты</a>
+      </nav>
+      <div class="foot-contact">
+        <div class="fc-title">Связаться</div>
+        <a class="fc-mail" href="mailto:support@neotaro.ru">support@neotaro.ru</a>
+        <a class="fc-tg" href="https://t.me/otcars">Telegram — @otcars</a>
+        <p class="fc-note">Отвечаем на письма в течение трёх рабочих дней.</p>
+      </div>
     </div>
-  </div>
+    <div class="shell foot-bottom">
+      <p class="foot-note">NEOTARO — онлайн-Таро, сонник и ИИ-оракул. Материалы сайта носят развлекательный характер и не заменяют консультацию врача, психолога или юриста. 18+</p>
+      <div class="foot-legal">
+        <a href="/soglashenie/">Пользовательское соглашение</a>
+        <a href="/politika/">Политика конфиденциальности</a>
+        <span class="fl-copy">© 2026 NEOTARO</span>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /#web-login-screen -->
+
+<div class="cookie" id="cookie" role="dialog" aria-label="Cookie">
+  <p>Нужные cookie — для входа. Яндекс Метрика включается после согласия. <a href="/politika/">Политика</a></p>
+  <button type="button" id="cookie-ok">Понятно</button>
+</div>
 
 <script>
-/* ==================== ВХОД НА САЙТЕ (логика из исходного index.html) ==================== */
 const API_URL = "https://api.neotaro.ru/api";
 const APP_URL = "/app/";
 
-/* уже вошёл -> сразу в кабинет; ?stay=1 оставляет лендинг */
 (function(){
   try {
     const q = new URLSearchParams(location.search);
@@ -1492,14 +1108,104 @@ const APP_URL = "/app/";
   }
 })();
 
-/* Блок авторизации удалён.
-   Здесь лежали Telegram / Google / Yandex / VK — около 140 строк.
-   Все они вешались на tg-login-btn, google-login-btn, yandex-login-btn,
-   vk-login-btn, auth-card, web-login-status — ни одного из этих id
-   в разметке лендинга нет. Код не выполнялся никогда.
-   Вход живёт только на /login/. */
+/* картинка героя: если файла нет — показываем заглушку */
+(function(){
+  const img = document.getElementById('hero-img');
+  const frame = document.getElementById('hero-frame');
+  if(!img || !frame) return;
+  img.addEventListener('error', function(){ frame.classList.add('noimg'); });
+})();
 
-/* ==================== БЫСТРЫЙ РАСКЛАД ДА/НЕТ ==================== */
+/* появление при скролле */
+(function(){
+  const nodes = document.querySelectorAll('.reveal');
+  if(!nodes.length) return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    nodes.forEach(function(n){ n.classList.add('in'); });
+    return;
+  }
+  const io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var d = e.target.getAttribute('data-d');
+      if(d) e.target.style.transitionDelay = d + 'ms';
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  nodes.forEach(function(n){ io.observe(n); });
+})();
+
+/* полоса прогресса + лёгкий параллакс звёзд */
+(function(){
+  const bar = document.getElementById('progress');
+  const sky = document.querySelector('.sky');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse = window.matchMedia('(hover: none)').matches;
+  let ticking = false;
+  function tick(){
+    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const p = Math.min(1, window.scrollY / max);
+    if(bar) bar.style.transform = 'scaleX(' + p + ')';
+    if(sky && !reduce && !coarse) sky.style.setProperty('--sky-y', (window.scrollY * 0.06) + 'px');
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(tick);
+  }, { passive: true });
+  tick();
+})();
+
+/* путь расклада: подсветка шага + прибор */
+(function(){
+  const steps = document.querySelectorAll('#steps .step');
+  const fill = document.getElementById('dial-fill');
+  const lab = document.getElementById('dial-step');
+  const clock = document.getElementById('dial-clock');
+  const rail = document.getElementById('steps');
+  if(!steps.length || !rail) return;
+  const clocks = ['0.0','1.5','—','4.0','6.5','10.0'];
+  function setActive(i){
+    steps.forEach(function(s, n){ s.classList.toggle('lit', n <= i); });
+    const pct = ((i + 1) / steps.length) * 100;
+    rail.style.setProperty('--fill', pct + '%');
+    if(fill) fill.style.width = pct + '%';
+    if(lab) lab.textContent = String(i + 1).padStart(2,'0') + ' / 06';
+    if(clock) clock.textContent = clocks[i] || '—';
+  }
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    setActive(steps.length - 1);
+    return;
+  }
+  const io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      const i = Array.prototype.indexOf.call(steps, e.target);
+      if(i >= 0) setActive(i);
+    });
+  }, { threshold: 0.55, rootMargin: '-20% 0px -30% 0px' });
+  steps.forEach(function(s){ io.observe(s); });
+  setActive(0);
+})();
+
+/* cookie */
+(function(){
+  const box = document.getElementById('cookie');
+  const btn = document.getElementById('cookie-ok');
+  if(!box || !btn) return;
+  try {
+    if(localStorage.getItem('neo_cookie_ok')) return;
+  } catch(e){}
+  box.classList.add('show');
+  btn.addEventListener('click', function(){
+    try { localStorage.setItem('neo_cookie_ok', '1'); } catch(e){}
+    box.classList.remove('show');
+  });
+})();
+
+/* быстрый расклад да/нет — логика как в исходном лендинге */
 (function(){
   const q  = document.getElementById('yn-q');
   const go = document.getElementById('yn-go');
@@ -1518,11 +1224,8 @@ const APP_URL = "/app/";
 
   function setNote(text, bad){
     note.textContent = text || '';
-    note.classList.toggle('yn-bad', !!bad);
+    note.classList.toggle('bad', !!bad);
   }
-
-  /* Сервер присылает текст с <b> и <br>. Экранируем всё,
-     потом возвращаем только эти два тега — дешёвле, чем тянуть DOMPurify ради одного блока. */
   function safeHtml(raw){
     return String(raw || '')
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -1533,7 +1236,6 @@ const APP_URL = "/app/";
   q.addEventListener('input', function(){
     count.textContent = q.value.length + ' / ' + LIMIT;
   });
-
   document.querySelectorAll('.yn-chip').forEach(function(chip){
     chip.addEventListener('click', function(){
       q.value = chip.textContent.trim();
@@ -1541,8 +1243,6 @@ const APP_URL = "/app/";
       q.focus();
     });
   });
-
-  /* Enter оставляем для переноса строки, отправка — Ctrl/Cmd+Enter. */
   q.addEventListener('keydown', function(e){
     if((e.metaKey || e.ctrlKey) && e.key === 'Enter') go.click();
   });
@@ -1555,8 +1255,7 @@ const APP_URL = "/app/";
       q.focus();
       return;
     }
-
-    if(window.neoGoal) neoGoal('yesno_widget'); /* neotaro-goal */
+    if(window.neoGoal) neoGoal('yesno_widget');
     busy = true;
     go.disabled = true;
     label.textContent = 'Карты тасуются…';
@@ -1572,12 +1271,11 @@ const APP_URL = "/app/";
       if(!data || !data.success){
         const msg = data && data.message;
         if(msg === 'limit'){
-          /* Лимит — тоже точка конверсии, показываем призыв, а не голую ошибку. */
           out.hidden = false;
           vEl.textContent = 'На сегодня всё';
           cEl.textContent = '';
           tEl.innerHTML = 'Бесплатные вопросы на сегодня закончились. В кабинете ограничений нет.';
-          if(window.neoGoal) neoGoal('yesno_limit'); /* neotaro-goal */
+          if(window.neoGoal) neoGoal('yesno_limit');
           lock.hidden = false;
           setNote('');
         } else if(msg === 'bad_question'){
@@ -1587,14 +1285,13 @@ const APP_URL = "/app/";
         }
         return;
       }
-
       vEl.textContent = data.verdict || 'Ответ получен';
       cEl.textContent = data.card ? ('Выпал аркан · ' + data.card) : '';
       tEl.innerHTML = safeHtml(data.teaser);
       lock.hidden = false;
       out.hidden = false;
       setNote('');
-      if(window.neoGoal) neoGoal('yesno_done', { verdict: data.verdict || '' }); /* neotaro-goal */
+      if(window.neoGoal) neoGoal('yesno_done', { verdict: data.verdict || '' });
       try { out.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch(e){}
     })
     .catch(function(){
@@ -1607,9 +1304,8 @@ const APP_URL = "/app/";
     });
   });
 })();
-</script>
-<script>
-/* neotaro-goal — один обработчик на все ссылки входа вместо шести отдельных правок. */
+
+/* цели: клики по /login/ */
 (function(){
   document.addEventListener('click', function(e){
     var t = e.target;
@@ -1620,7 +1316,7 @@ const APP_URL = "/app/";
     var place = 'cta';
     if(a.id === 'yn-lock-btn') place = 'yesno_lock';
     else if(href.indexOf('mode=login') !== -1) place = 'have_account';
-    else if(a.className && String(a.className).indexOf('lp-top-cta') !== -1) place = 'header';
+    else if(a.className && String(a.className).indexOf('top-cta') !== -1) place = 'header';
     if(window.neoGoal) neoGoal('login_click', { place: place });
   }, true);
 })();
