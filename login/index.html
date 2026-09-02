@@ -56,6 +56,16 @@ body{
 
 /* ---------- Фон ---------- */
 .sky,.stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+/* Мобильный фон-фото (то же изображение, что в правой колонке) */
+.mob-photo{display:none}
+.mob-photo{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:var(--ink-950) url('/login/side.jpg') center/cover no-repeat;
+}
+.mob-photo::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(7,10,20,.62) 0%,rgba(7,10,20,.86) 45%,rgba(7,10,20,.94) 100%);
+}
 .sky{
   background:
     radial-gradient(1100px 720px at 78% -12%, rgba(143,163,222,.12), transparent 60%),
@@ -196,17 +206,26 @@ body{
 /* ---------- Мобильные ---------- */
 @media (max-width:900px){
   body{padding:0;align-items:stretch}
-  .auth{grid-template-columns:1fr;border-radius:0;border:none;min-height:100vh;min-height:100dvh;box-shadow:none}
+  .auth{grid-template-columns:1fr;border-radius:0;border:none;min-height:100vh;min-height:100dvh;box-shadow:none;
+    background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
   .art{display:none}
   .pane{padding:28px 22px calc(24px + env(safe-area-inset-bottom))}
   .h1{font-size:25px}
   .socials{gap:8px}
+
+  /* фото с правой колонки становится фоном всего экрана */
+  .mob-photo{display:block}
+  .sky,.stars{display:none}
+  .inp{background:rgba(11,15,30,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  .soc{background:rgba(11,15,30,.5)}
+  .h1,.art-quote{text-shadow:0 4px 24px rgba(0,0,0,.75)}
 }
 </style>
 </head>
 <body>
 <div class="sky" aria-hidden="true"></div>
 <div class="stars" aria-hidden="true"></div>
+<div class="mob-photo" aria-hidden="true"></div>
 
 <main class="auth">
 
@@ -221,13 +240,6 @@ body{
     </a>
 
     <div class="pane-mid">
-      <!-- NEO:BREADCRUMBS:START -->
-<nav class="neo-crumbs" aria-label="Хлебные крошки">
-  <a href="/">Главная</a>
-  <span aria-hidden="true">/</span>
-  <a href="/login/">login</a>
-</nav>
-<!-- NEO:BREADCRUMBS:END -->
 <h1 class="h1" id="a-title">Создать аккаунт</h1>
       <p class="lede" id="a-lede">Карта дня, история раскладов и энергия сохраняются в вашем кабинете.</p>
 
@@ -643,7 +655,7 @@ async function startTelegram(){
       if(ticks > 150){
         clearInterval(A.poll); A.poll = null;
         if(btn) btn.disabled = false;
-        msg('Время вышло. Попробуйте ещё раз.', 'err');
+        msg('Время в��шло. Попробуйте ещё раз.', 'err');
         return;
       }
       try {
