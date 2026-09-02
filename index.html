@@ -356,14 +356,43 @@ body.nav-open{overflow:hidden}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  /* анимации не убиваем полностью, только укорачиваем — иначе на ПК
-     с выключенными эффектами Windows никакого появления не видно */
   .r{transition-duration:.3s!important;transition-delay:0ms!important;transform:translateY(12px)}
   .r.in{opacity:1;transform:none;filter:none}
   .hero-line>span,.hero-sub,.hero-bottom{transition-duration:.35s!important;transition-delay:0ms!important}
   .hero-media img{transition-duration:.4s!important}
 }
 </style>
+<script src="https://browser.sentry-cdn.com/8.47.0/bundle.min.js" crossorigin="anonymous"></script>
+<script>
+(function(){
+  var API='https://api.neotaro.ru';
+  var DSN=''; /* если пусто — DSN берётся с API, тот же что в .env */
+  function boot(dsn){
+    if(!dsn || !window.Sentry) return;
+    Sentry.init({
+      dsn: dsn,
+      environment: location.hostname,
+      tracesSampleRate: 0,
+      ignoreErrors: [
+        'ResizeObserver loop',
+        'Non-Error promise rejection captured',
+        'Load failed',
+        'NetworkError',
+        'ChunkLoadError',
+        'cancelled',
+        'AbortError'
+      ]
+    });
+    try {
+      var u = JSON.parse(localStorage.getItem('neotaro_user')||'null');
+      if(u && (u.id||u.email||u.user_id))
+        Sentry.setUser({id: String(u.id||u.user_id||''), email: u.email||undefined});
+    } catch(e){}
+  }
+  if(DSN) boot(DSN);
+  else fetch(API+'/api/public/sentry').then(function(r){return r.json()}).then(function(d){boot(d.dsn)}).catch(function(){});
+})();
+</script>
 </head>
 <body>
 <div id="web-login-screen">
@@ -558,7 +587,7 @@ body.nav-open{overflow:hidden}
         </article>
         <article class="step r r-right" style="--i:4">
           <div class="step-top"><span class="step-n">05</span><span class="step-t">Ваш контекст</span><span class="step-clock">6.5 сек</span></div>
-          <p>Подключаются прош��ые расклады, натальная карта и то, что вы говорили раньше.</p>
+          <p>Подключаются прошлые расклады, натальная карта и то, что вы говорили раньше.</p>
         </article>
         <article class="step r r-right" style="--i:5">
           <div class="step-top"><span class="step-n">06</span><span class="step-t">Совет</span><span class="step-clock">10.0 сек</span></div>
@@ -709,9 +738,9 @@ body.nav-open{overflow:hidden}
         <h2 class="h2 r" style="--i:1">Часто спрашивают</h2>
       </div>
       <div class="faq r" style="--i:2">
-        <details><summary>Нужна ли регистрация?</summary><p class="a">Для быстрого вопроса и всей библиотеки — нет. Вход нужен только для п��рсональных функций: карта дня, история диалогов с оракулом, натальная карта по точному времени рождения и сохранённые расклады.</p></details>
-        <details><summary>Сколько это стоит?</summary><p class="a">Карта дня и вся библиотека разборов — 0 ₽. Расширенные расклады и диалог с оракулом без ог��аничений доступны в кабинете.</p></details>
-        <details><summary>Карты выбирает алгоритм или я?</summary><p class="a">Карты выбираете вы. Система только тасует колоду из 78 карт с учё��ом прямых и перевёрнутых положений и запоминает порядок вашего выбора.</p></details>
+        <details><summary>Нужна ли регистрация?</summary><p class="a">Для быстрого вопроса и всей библиотеки — нет. Вход нужен только для персональных функций: карта дня, история диалогов с оракулом, натальная карта по точному времени рождения и сохранённые расклады.</p></details>
+        <details><summary>Сколько это стоит?</summary><p class="a">Карта дня и вся библиотека разборов — 0 ₽. Расширенные расклады и диалог с оракулом без ограничений доступны в кабинете.</p></details>
+        <details><summary>Карты выбирает алгоритм или я?</summary><p class="a">Карты выбираете вы. Система только тасует колоду из 78 карт с учётом прямых и перевёрнутых положений и запоминает порядок вашего выбора.</p></details>
         <details><summary>��ожно ли задавать уточняющие вопросы?</summary><p class="a">Да, в том же диалоге. Оракул помнит расклад и предыдущие сообщения, поэтому можно спросить «а если я всё-таки уеду» или «почему тут Башня».</p></details>
         <details><summary>Чем сонник отличается от народных?</summary><p class="a">Мы не даём приговор в одну строку. У символа есть архетипическое ядро, но смысл меняется от деталей сна, поэтому каждый символ разобран в нескольких сценариях.</p></details>
         <details><summary>На каких языках работает сервис?</summary><p class="a">На пяти. Интерфейс и разборы переключаются целиком, включая ответы оракула.</p></details>
@@ -823,7 +852,7 @@ function afterPaint(fn){ requestAnimationFrame(function(){ requestAnimationFrame
 
 /* ── герой: текст сразу, фото с бэкенда (GitHub Pages != /static) ── */
 var HERO_SRC=[
-  '/assets/hero.webp',                 /* локальная копия в репо GitHub Pages */
+  '/assets/hero.webp',
   '/assets/hero.jpeg',
   'https://api.neotaro.ru/static/promo/Celestial_atlas_and_tarot_cards_202609012338.jpeg',
   'https://tarot.waifubot.website/static/promo/Celestial_atlas_and_tarot_cards_202609012338.jpeg'
@@ -866,8 +895,6 @@ function armReveal(){
     nodes.forEach(function(el){ io.observe(el); });
   }
   window.__neoReveal=function(){ $$('.r:not(.in)').forEach(function(el){ if(vis(el)) show(el); }); };
-  /* на старте показываем ТОЛЬКО то, что реально в первом экране:
-     иначе на большом мониторе полстраницы раскрывалось до скролла */
   nodes.forEach(function(el){ if(el.getBoundingClientRect().top < vh()*0.7) show(el); });
 }
 afterPaint(armReveal);
