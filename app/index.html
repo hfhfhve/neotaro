@@ -1322,6 +1322,37 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
   .nk-pay-in{padding:18px}
 }
 </style>
+<script src="https://browser.sentry-cdn.com/8.47.0/bundle.min.js" crossorigin="anonymous"></script>
+<script>
+(function(){
+  var API='https://api.neotaro.ru';
+  var DSN=''; /* если пусто — DSN берётся с API, тот же что в .env */
+  function boot(dsn){
+    if(!dsn || !window.Sentry) return;
+    Sentry.init({
+      dsn: dsn,
+      environment: location.hostname,
+      tracesSampleRate: 0,
+      ignoreErrors: [
+        'ResizeObserver loop',
+        'Non-Error promise rejection captured',
+        'Load failed',
+        'NetworkError',
+        'ChunkLoadError',
+        'cancelled',
+        'AbortError'
+      ]
+    });
+    try {
+      var u = JSON.parse(localStorage.getItem('neotaro_user')||'null');
+      if(u && (u.id||u.email||u.user_id))
+        Sentry.setUser({id: String(u.id||u.user_id||''), email: u.email||undefined});
+    } catch(e){}
+  }
+  if(DSN) boot(DSN);
+  else fetch(API+'/api/public/sentry').then(function(r){return r.json()}).then(function(d){boot(d.dsn)}).catch(function(){});
+})();
+</script>
 </head>
 <body class="bg-space-900 min-h-screen">
 <!-- ==================== КАБИНЕТ (NIGHT ATLAS) ==================== -->
