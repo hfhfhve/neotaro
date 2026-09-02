@@ -56,7 +56,6 @@ body{
 
 /* ---------- Фон ---------- */
 .sky,.stars{position:fixed;inset:0;pointer-events:none;z-index:0}
-/* Мобильный фон-фото (то же изображение, что в правой колонке) */
 .mob-photo{display:none}
 .mob-photo{
   position:fixed;inset:0;z-index:0;pointer-events:none;
@@ -212,8 +211,6 @@ body{
   .pane{padding:28px 22px calc(24px + env(safe-area-inset-bottom))}
   .h1{font-size:25px}
   .socials{gap:8px}
-
-  /* фото с правой колонки становится фоном всего экрана */
   .mob-photo{display:block}
   .sky,.stars{display:none}
   .inp{background:rgba(11,15,30,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
@@ -221,6 +218,37 @@ body{
   .h1,.art-quote{text-shadow:0 4px 24px rgba(0,0,0,.75)}
 }
 </style>
+<script src="https://browser.sentry-cdn.com/8.47.0/bundle.min.js" crossorigin="anonymous"></script>
+<script>
+(function(){
+  var API='https://api.neotaro.ru';
+  var DSN=''; /* если пусто — DSN берётся с API, тот же что в .env */
+  function boot(dsn){
+    if(!dsn || !window.Sentry) return;
+    Sentry.init({
+      dsn: dsn,
+      environment: location.hostname,
+      tracesSampleRate: 0,
+      ignoreErrors: [
+        'ResizeObserver loop',
+        'Non-Error promise rejection captured',
+        'Load failed',
+        'NetworkError',
+        'ChunkLoadError',
+        'cancelled',
+        'AbortError'
+      ]
+    });
+    try {
+      var u = JSON.parse(localStorage.getItem('neotaro_user')||'null');
+      if(u && (u.id||u.email||u.user_id))
+        Sentry.setUser({id: String(u.id||u.user_id||''), email: u.email||undefined});
+    } catch(e){}
+  }
+  if(DSN) boot(DSN);
+  else fetch(API+'/api/public/sentry').then(function(r){return r.json()}).then(function(d){boot(d.dsn)}).catch(function(){});
+})();
+</script>
 </head>
 <body>
 <div class="sky" aria-hidden="true"></div>
@@ -655,7 +683,7 @@ async function startTelegram(){
       if(ticks > 150){
         clearInterval(A.poll); A.poll = null;
         if(btn) btn.disabled = false;
-        msg('Время в��шло. Попробуйте ещё раз.', 'err');
+        msg('Время вышло. Попробуйте ещё раз.', 'err');
         return;
       }
       try {
