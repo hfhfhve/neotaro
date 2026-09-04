@@ -1610,14 +1610,7 @@ html[data-theme="dawn"] .neo-glyph{fill:#5E4210;fill-opacity:.75}
 
             <div class="today-copy">
               <div class="arc m-hide" id="home-arc" data-t="home_arc_empty">карта дня ещё не открыта</div>
-              <!-- NEO:BREADCRUMBS:START -->
-<nav class="neo-crumbs" aria-label="Хлебные крошки">
-  <a href="/">Главная</a>
-  <span aria-hidden="true">/</span>
-  <a href="/app/">app</a>
-</nav>
-<!-- NEO:BREADCRUMBS:END -->
-<h1 class="h1" id="home-title" data-t="home_title_empty">Карта ждёт, пока вы её не перевернёте</h1>
+              <h1 class="h1" id="home-title" data-t="home_title_empty">Карта ждёт, пока вы её не перевернёте</h1>
               <p class="lead" id="home-lead" data-t="home_lead_empty">Нажмите на карту в центре циферблата. Один аркан из семидесяти восьми закрепится за этими сутками — с разбором от оракула.</p>
               <div class="today-acts">
                 <button class="btn btn-brass" onclick="openDaily()" id="home-cta" data-t="home_cta_empty">Перевернуть карту</button>
@@ -1656,7 +1649,7 @@ html[data-theme="dawn"] .neo-glyph{fill:#5E4210;fill-opacity:.75}
             <button class="tile" onclick="go('astro')">
               <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg></span>
               <h4 data-t="nav_astro">Космо-паспорт</h4>
-              <p data-t="tile_astro">Дата, время и город рождения — личная карта светил.</p>
+              <p data-t="tile_astro">Небо в момент рождения: планеты, дома, асцендент. Нужны дата, время и город.</p>
               <span class="foot" data-t="tile_open">Открыть →</span>
             </button>
             <button class="tile" onclick="go('syn')">
@@ -1668,7 +1661,7 @@ html[data-theme="dawn"] .neo-glyph{fill:#5E4210;fill-opacity:.75}
             <button class="tile" onclick="go('matrix')">
               <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></span>
               <h4 data-t="nav_matrix">Матрица судьбы</h4>
-              <p data-t="tile_matrix">Двадцать два аркана в октаграмме вашей даты рождения.</p>
+              <p data-t="tile_matrix">Числовой код даты рождения: 22 аркана в октаграмме. Время и город не нужны.</p>
               <span class="foot" data-t="tile_open">Открыть →</span>
             </button>
             <button class="tile" onclick="go('calendar')">
@@ -1711,9 +1704,9 @@ html[data-theme="dawn"] .neo-glyph{fill:#5E4210;fill-opacity:.75}
 
           <div class="orn prx-grp"><span class="eyebrow" data-t="prx_grp_astro">Астрология</span></div>
           <div class="pgrid">
-            <button class="pcell" onclick="go('astro')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg><b data-t="nav_astro">Космо-паспорт</b><span data-t="prx_h_astro">Натальная карта</span></button>
+            <button class="pcell" onclick="go('astro')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg><b data-t="nav_astro">Космо-паспорт</b><span data-t="prx_h_astro">Планеты и дома</span></button>
             <button class="pcell" onclick="go('syn')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg><b data-t="nav_syn">Совместимость</b><span data-t="prx_h_syn">Вы и партнёр</span></button>
-            <button class="pcell" onclick="go('matrix')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg><b data-t="nav_matrix">Матрица судьбы</b><span data-t="prx_h_matrix">Код по дате рождения</span></button>
+            <button class="pcell" onclick="go('matrix')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg><b data-t="nav_matrix">Матрица судьбы</b><span data-t="prx_h_matrix">22 аркана по дате</span></button>
             <button class="pcell" onclick="go('calendar')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg><b data-t="nav_calendar">Лунный день</b><span data-t="prx_h_calendar">Луна сегодня</span></button>
           </div>
         </section>
@@ -2610,9 +2603,9 @@ const STR = {
   prx_grp_astro:{ru:'Астрология',en:'Astrology',es:'Astrología',fr:'Astrologie',de:'Astrologie'},
   prx_h_spreads:{ru:'Карты на вопрос',en:'Cards for your question',es:'Cartas para tu pregunta',fr:'Cartes pour votre question',de:'Karten für Ihre Frage'},
   prx_h_dream:{ru:'Толкование снов',en:'Dream meanings',es:'Significado de sueños',fr:'Interprétation des rêves',de:'Traumdeutung'},
-  prx_h_astro:{ru:'Натальная карта',en:'Your natal chart',es:'Tu carta natal',fr:'Votre thème natal',de:'Ihr Geburtshoroskop'},
+  prx_h_astro:{ru:'Планеты и дома',en:'Planets and houses',es:'Planetas y casas',fr:'Planètes et maisons',de:'Planeten und Häuser'},
   prx_h_syn:{ru:'Вы и партнёр',en:'You and your partner',es:'Tú y tu pareja',fr:'Vous et votre partenaire',de:'Sie und Ihr Partner'},
-  prx_h_matrix:{ru:'Код по дате рождения',en:'Code from your birth date',es:'Código de tu fecha de nacimiento',fr:'Code de votre date de naissance',de:'Code aus Ihrem Geburtsdatum'},
+  prx_h_matrix:{ru:'22 аркана по дате',en:'22 arcana from the date',es:'22 arcanos por fecha',fr:'22 arcanes par date',de:'22 Arkana aus dem Datum'},
   prx_h_calendar:{ru:'Луна сегодня',en:'The moon today',es:'La luna hoy',fr:'La lune aujourd’hui',de:'Der Mond heute'},
   vback_practices:{ru:'Практики',en:'Practices',es:'Prácticas',fr:'Pratiques',de:'Praktiken'},
   pf_plans:{ru:'Тарифы и энергия',en:'Plans & energy',es:'Planes y energía',fr:'Forfaits et énergie',de:'Tarife & Energie'},
@@ -2701,8 +2694,8 @@ const STR = {
   tile_open:{ru:'Открыть →',en:'Open →',es:'Abrir →',fr:'Ouvrir →',de:'Öffnen →'},
   tile_spreads:{ru:'Задайте вопрос и получите разбор позиций — от одной карты до Кельтского креста.',en:'Ask a question and get a position-by-position reading — from one card to the Celtic cross.'},
   tile_dream:{ru:'Опишите сон — разберём символы по Юнгу и архетипам.',en:'Describe a dream — we read its symbols through Jung and the archetypes.'},
-  tile_astro:{ru:'Дата, время и город рождения — личная карта светил.',en:'Date, time and city of birth — your personal chart of the luminaries.'},
-  tile_matrix:{ru:'Двадцать два аркана в октаграмме вашей даты рождения.',en:'Twenty-two arcana in the octagram of your birth date.'},
+  tile_astro:{ru:'Небо в момент рождения: планеты, дома, асцендент. Нужны дата, время и город.',en:'The sky at the moment of birth: planets, houses, ascendant. Needs date, time and city.'},
+  tile_matrix:{ru:'Числовой код даты рождения: 22 аркана в октаграмме. Время и город не нужны.',en:'A numeric code from your birth date: 22 arcana in an octagram. No time or city needed.'},
   tile_calendar:{ru:'Что сегодня идёт легко, а что лучше отложить.',en:'What flows easily today and what is better postponed.'},
   tile_chat:{ru:'Свободный разговор: карты, звёзды, сны и сложные вопросы.',en:'An open conversation: cards, stars, dreams and hard questions.'},
   stat_more_s:{ru:'Читать',en:'Read',es:'Leer',fr:'Lire',de:'Lesen'},
@@ -4296,6 +4289,16 @@ function drawTicks(){
 }
 
 /* ============================ КАРТА ДНЯ ============================ */
+function neoLangOnly(s){
+  if(!s) return s;
+  const l = (document.documentElement.lang || lang || 'ru').slice(0,2);
+  if(l === 'en') return s;
+  return String(s)
+    .replace(/\bCosmic Message\b/gi, '')
+    .replace(/\bMain Arcana of the Day\b[:.]?/gi, '')
+    .replace(/\bDaily Card\b[:.]?/gi, '')
+    .replace(/[ \t]{2,}/g, ' ');
+}
 function paintDaily(){
   const c = S.daily;
   const img = document.getElementById('dial-img');
@@ -4306,7 +4309,7 @@ function paintDaily(){
     back.style.display = 'none';
     document.getElementById('home-arc').textContent = arcNumLabel(c.id) + ' · ' + tt('home_arc_open');
     document.getElementById('home-title').textContent = c.name;
-    const short = (c.interpretation || '').replace(/<[^>]*>/g, ' ').trim();
+    const short = neoLangOnly((c.interpretation || '').replace(/<[^>]*>/g, ' ')).trim();
     document.getElementById('home-lead').textContent = short ? short.slice(0, 260) + (short.length > 260 ? '…' : '') : tt('daily_reading');
     document.getElementById('home-cta').textContent = tt('home_cta_open');
     const p = document.getElementById('dial-pointer');
@@ -4344,7 +4347,7 @@ function fillDaily(c){
   const im = document.getElementById('daily-img');
   im.src = c.image || CARD_IMG(c.id);
   im.style.display = 'block';
-  document.getElementById('daily-text').innerHTML = clean(c.interpretation || '');
+  document.getElementById('daily-text').innerHTML = clean(neoLangOnly(c.interpretation || ''));
   document.getElementById('daily-discuss').style.display = 'flex';
   document.getElementById('daily-draw').style.display = 'none';
 }
