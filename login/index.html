@@ -538,11 +538,64 @@ function cooldown(sec){
   }, 1000);
 }
 
+// Correlation metadata only; never retain/log email, password, code or token.
+let lastAuthDiagnostic = null;
+function authRequestId(){
+  const bytes = new Uint8Array(12);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, b => b.toString(16).padStart(2,'0')).join('');
+}
+function reportAuthError(e){
+  const d = e && e.authDiagnostic;
+  if(!d){
+    console.error('[AUTH UI ERROR]', { kind:'ui', errorType:e && e.name, lastRequest:lastAuthDiagnostic });
+    msg('Ошибка интерфейса после запроса. Откройте консоль браузера. ID: ' + ((lastAuthDiagnostic && lastAuthDiagnostic.id) || '—'), 'err');
+    return;
+  }
+  console.error('[AUTH ERROR]', d);
+  const suffix = ' ID: ' + d.id;
+  if(d.kind === 'timeout') msg('За 25 секунд ответ не получен. Операция могла выполниться — проверьте почту или попробуйте войти.' + suffix, 'err');
+  else if(d.kind === 'http') msg('API вернул HTTP ' + d.status + '.' + suffix, 'err');
+  else if(d.kind === 'invalid_json') msg('Ответ получен, но его формат неверный (HTTP ' + d.status + ').' + suffix, 'err');
+  else msg('Браузер не смог получить ответ API: сеть, TLS или CORS. Операция могла выполниться.' + suffix, 'err');
+}
 async function post(endpoint, body){
-  const r = await fetch(API_URL + endpoint, {
-    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
-  });
-  return await r.json();
+  const id = authRequestId();
+  const controller = new AbortController();
+  const started = performance.now();
+  const d = { id, endpoint, method:'POST', stage:'fetch', status:null };
+  lastAuthDiagnostic = d;
+  console.info('[AUTH START]', { ...d });
+  const timer = setTimeout(() => controller.abort(), 25000);
+  try {
+    const r = await fetch(API_URL + endpoint + '?__rid=' + id, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body), signal:controller.signal
+    });
+    d.status = r.status;
+    d.serverId = r.headers.get('X-Request-ID') || null;
+    d.stage = 'body';
+    let data;
+    try { data = await r.json(); }
+    catch(parseError){
+      const e = new Error('Response body could not be read as JSON');
+      e.authDiagnostic = { ...d, kind:controller.signal.aborted?'timeout':(parseError instanceof SyntaxError?'invalid_json':'network'), ms:Math.round(performance.now()-started) };
+      throw e;
+    }
+    if(!r.ok){
+      const e = new Error('API returned an HTTP error');
+      e.authDiagnostic = { ...d, kind:'http', ms:Math.round(performance.now()-started) };
+      throw e;
+    }
+    d.stage = 'done'; d.ms = Math.round(performance.now()-started);
+    if(typeof data.success === 'boolean') d.success = data.success;
+    if(typeof data.message === 'string' && /^[a-z0-9_]{1,80}$/.test(data.message)) d.result = data.message;
+    console.info('[AUTH END]', { ...d });
+    return data;
+  } catch(e){
+    if(!e.authDiagnostic) e.authDiagnostic = { ...d, kind:controller.signal.aborted?'timeout':'network', ms:Math.round(performance.now()-started) };
+    throw e;
+  } finally { clearTimeout(timer); }
 }
 
 function enter(data){
@@ -571,7 +624,7 @@ async function aRegister(){
       return;
     }
     err(d.message);
-  } catch(e){ err('network'); }
+  } catch(e){ reportAuthError(e); }
   finally { busy(false); }
 }
 
@@ -592,7 +645,7 @@ async function aLogin(){
       return;
     }
     err(d.message);
-  } catch(e){ err('network'); }
+  } catch(e){ reportAuthError(e); }
   finally { busy(false); }
 }
 
@@ -605,7 +658,7 @@ async function aVerify(){
     const d = await post('/auth/verify', { email: A.email, code: code });
     if(d.success && d.token){ enter(d); return; }
     err(d.message);
-  } catch(e){ err('network'); }
+  } catch(e){ reportAuthError(e); }
   finally { busy(false); }
 }
 
@@ -624,7 +677,7 @@ async function aForgot(){
       return;
     }
     err(d.message);
-  } catch(e){ err('network'); }
+  } catch(e){ reportAuthError(e); }
   finally { busy(false); }
 }
 
@@ -641,7 +694,7 @@ async function aReset(){
     if(d.success && d.token){ enter(d); return; }
     if(d.success){ aScreen('login'); msg('Пароль обновлён — войдите с новым.', 'ok'); return; }
     err(d.message);
-  } catch(e){ err('network'); }
+  } catch(e){ reportAuthError(e); }
   finally { busy(false); }
 }
 
@@ -652,7 +705,7 @@ async function aResend(purpose){
     const d = await post('/auth/resend', { email: A.email, lang: 'ru', purpose: purpose === 'reset' ? 'reset' : 'verify' });
     if(d.success){ msg('Новый код отправлен.', 'ok'); cooldown(d.resend_after || 60); return; }
     err(d.message);
-  } catch(e){ err('network'); }
+  } catch(e){ reportAuthError(e); }
 }
 
 /* ==================== СОЦСЕТИ ==================== */
@@ -663,7 +716,7 @@ async function socialVerify(endpoint, body){
     const d = await post(endpoint, body);
     if(d.success && d.token){ enter(d); return; }
     msg('Войти не удалось. Попробуйте другой способ.', 'err');
-  } catch(e){ err('network'); }
+  } catch(e){ reportAuthError(e); }
   finally { busy(false); }
 }
 
