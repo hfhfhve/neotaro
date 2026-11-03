@@ -554,7 +554,12 @@ function enter(data, goalName, goalParams){
   localStorage.setItem('neotaro_user', JSON.stringify(data.user || {}));
   if(window.neoGoal && goalName) window.neoGoal(goalName, goalParams || {});
   msg('Готово, открываем кабинет…', 'ok');
-  location.replace(APP_URL);
+  let target = APP_URL;
+  try {
+    const next = (new URLSearchParams(location.search)).get('next');
+    if(next && next.startsWith('/app')) target = next;
+  } catch(e){}
+  location.replace(target);
 }
 
 /* ==================== ПОЧТА ==================== */
