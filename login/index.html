@@ -225,8 +225,8 @@ body{
     Sentry.init({
       dsn: dsn,
       environment: location.hostname,
-      tracesSampleRate: 0,
-      ignoreErrors: ['ResizeObserver loop','Non-Error promise rejection captured','Load failed','NetworkError','ChunkLoadError','cancelled','AbortError']
+      tracesSampleRate: 0.2,
+      ignoreErrors: ['ResizeObserver loop']
     });
   }
   if(DSN) boot(DSN);
@@ -514,6 +514,12 @@ function authRequestId(){
 }
 function reportAuthError(e){
   const d = e && e.authDiagnostic;
+  if(window.Sentry){
+    Sentry.withScope(function(scope){
+      if(d) scope.setContext("auth_diagnostic", d);
+      Sentry.captureException(e);
+    });
+  }
   if(!d){
     msg('Ошибка интерфейса. Попробуйте войти через Telegram или Google.', 'err');
     return;
@@ -521,7 +527,7 @@ function reportAuthError(e){
   const suffix = ' ID: ' + d.id;
   if(d.kind === 'timeout') msg('За 25 секунд ответ не получен. Проверьте почту или войдите через Telegram.' + suffix, 'err');
   else if(d.kind === 'http') msg('API вернул HTTP ' + d.status + '.' + suffix, 'err');
-  else msg('Сбой сети. Проверьте интернет или войдите через Telegram.' + suffix, 'err');
+  else msg('Сбой сети (' + (e.message || 'fetch') + '). Проверьте интернет.' + suffix, 'err');
 }
 async function post(endpoint, body){
   const id = authRequestId();
