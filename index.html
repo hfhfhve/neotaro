@@ -165,6 +165,7 @@ body.nav-open{overflow:hidden}
 .hero-bottom{position:relative;z-index:2;margin-top:auto;padding-bottom:clamp(38px,7vh,86px);display:flex;flex-direction:column;align-items:center;gap:26px;
   opacity:0;transform:translateY(22px);transition:opacity 1s var(--ease) .62s,transform 1s var(--ease) .62s}
 .hero.ready .hero-bottom{opacity:1;transform:none}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding-inline:20px}
 .hero-hint{font:400 11px/1 var(--mono);letter-spacing:.19em;text-transform:uppercase;color:rgba(255,255,255,.42)}
 .scroll-dot{width:1px;height:52px;background:linear-gradient(to bottom,rgba(255,255,255,.42),transparent);position:relative;overflow:hidden}
 .scroll-dot::after{content:'';position:absolute;top:-52px;left:0;width:1px;height:52px;background:linear-gradient(to bottom,transparent,#fff);animation:fall 2.4s var(--ease) infinite}
@@ -208,8 +209,8 @@ body.nav-open{overflow:hidden}
 
 /* плитки */
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 24px 30px;position:relative;
-  transition:transform .65s var(--ease),border-color .45s,background .45s}
+.tile{display:block;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 24px 30px;position:relative;
+  transition:transform .65s var(--ease),border-color .45s,background .45s;cursor:pointer}
 .tile:hover{transform:translateY(-6px);border-color:var(--line-hi);background:var(--card-hi)}
 .tile-ico{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);
   display:grid;place-items:center;margin-bottom:52px;color:#fff}
@@ -356,7 +357,8 @@ body.nav-open{overflow:hidden}
   .readout div{border-left:0;border-top:1px solid var(--line);padding:22px 14px}
   .readout div:nth-child(odd){border-right:1px solid var(--line)}
   .foot-grid{grid-template-columns:1fr 1fr}
-  .hero-bottom .btn,.final .btn,.final .btn-ghost,.foot .btn,.field-meta .btn,.lock .btn{width:100%;justify-content:center}
+  .hero-actions{width:100%}
+  .hero-actions .btn,.hero-actions .btn-ghost,.final .btn,.final .btn-ghost,.foot .btn,.field-meta .btn,.lock .btn{width:100%;justify-content:center}
   .top-login{display:none}
   .top .btn{width:auto;padding:10px 16px}
   .btn-row{gap:11px}
@@ -423,8 +425,8 @@ body.nav-open{overflow:hidden}
       <a href="#faq">FAQ</a>
     </nav>
     <div class="top-right">
-      <a class="top-login" href="/login/?mode=login">Войти</a>
-      <a class="btn top-cta" href="/login/">Регистрация</a>
+      <a class="top-login" href="/login/?mode=login" data-place="header_login">Войти</a>
+      <a class="btn top-cta" href="/app/" data-place="header_app">Открыть кабинет</a>
       <button class="burger" type="button" id="burger" aria-label="Меню" aria-expanded="false"><i></i></button>
     </div>
   </div>
@@ -436,7 +438,7 @@ body.nav-open{overflow:hidden}
   <a href="/sonnik/">Сонник</a>
   <a href="/karty/">Карты</a>
   <a href="#faq">FAQ</a>
-  <a class="btn" href="/login/">Регистрация <span class="arw">→</span></a>
+  <a class="btn" href="/app/" data-place="mobile_app">Открыть кабинет <span class="arw">→</span></a>
 </nav>
 
 <main>
@@ -462,8 +464,11 @@ body.nav-open{overflow:hidden}
     </div>
 
     <div class="hero-bottom">
-      <a class="btn" href="#ask">Задать вопрос <span class="arw">→</span></a>
-      <span class="hero-hint">Карта дня — бесплатно · Без регистрации</span>
+      <div class="hero-actions">
+        <a class="btn" href="/app/" data-place="hero_app">Вытянуть Карту дня <span class="arw">→</span></a>
+        <a class="btn-ghost" href="#ask">Быстрый вопрос Да / Нет</a>
+      </div>
+      <span class="hero-hint">Карта дня — бесплатно · Вход без регистрации</span>
       <span class="scroll-dot" aria-hidden="true"></span>
     </div>
   </section>
@@ -518,45 +523,45 @@ body.nav-open{overflow:hidden}
     </div>
   </section>
 
-  <!-- ═════ ИНСТРУМЕНТЫ ═════ -->
+  <!-- ═════ ИНСТРУМЕНТЫ (ТЕПЕРЬ КЛИКАБЕЛЬНЫЕ И ВЕДУТ В /app/) ═════ -->
   <section class="band band--alt" id="tools">
     <div class="shell">
       <div class="head head--mid">
         <div class="eyebrow r">Единая система</div>
         <h2 class="h2 r" style="--i:1">Шесть инструментов в одном профиле</h2>
-        <p class="lede r" style="--i:2">Всё, что вы делаете в NEOTARO, стекается в один контекст. Не нужно объяснять ситуацию заново в каждом разделе.</p>
+        <p class="lede r" style="--i:2">Всё, что вы делаете в NEOTARO, стекается в один контекст. Нажмите на любой раздел, чтобы открыть его в кабинете.</p>
       </div>
       <div class="tiles">
-        <article class="tile r r-scale" style="--i:0"><span class="tile-arw">↗</span>
+        <a class="tile r r-scale" style="--i:0" href="/app/#chat" data-place="tile_chat"><span class="tile-arw">↗</span>
           <div class="tile-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
           <h3 class="h3">ИИ-оракул</h3>
           <p>Диалог, а не справка. Видит вопрос, позиции и порядок карт, помнит предыдущие сообщения и отвечает на уточнения.</p>
-        </article>
-        <article class="tile r r-scale" style="--i:1"><span class="tile-arw">↗</span>
+        </a>
+        <a class="tile r r-scale" style="--i:1" href="/app/#home" data-place="tile_daily"><span class="tile-arw">↗</span>
           <div class="tile-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M12 8v4M12 14.5v.5"/></svg></div>
           <h3 class="h3">Карта дня</h3>
           <p>Один аркан на сегодня с разбором под ваш контекст. Бесплатно, каждые сутки, без ограничений по времени.</p>
-        </article>
-        <article class="tile r r-scale" style="--i:2"><span class="tile-arw">↗</span>
+        </a>
+        <a class="tile r r-scale" style="--i:2" href="/app/#spreads" data-place="tile_spreads"><span class="tile-arw">↗</span>
           <div class="tile-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="8" height="12" rx="1.5"/><rect x="9" y="4" width="8" height="12" rx="1.5"/><rect x="15" y="8" width="6" height="12" rx="1.5"/></svg></div>
           <h3 class="h3">Расклады</h3>
-          <p>От трё�� карт до Кельтского креста. Каждая позиция объяснена и связана с остальными в один ответ.</p>
-        </article>
-        <article class="tile r r-scale" style="--i:3"><span class="tile-arw">↗</span>
+          <p>От трёх карт до Кельтского креста. Каждая позиция объяснена и связана с остальными в один ответ.</p>
+        </a>
+        <a class="tile r r-scale" style="--i:3" href="/app/#dream" data-place="tile_dream"><span class="tile-arw">↗</span>
           <div class="tile-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"/></svg></div>
           <h3 class="h3">Сонник</h3>
           <p>Символы по Юнгу и архетипам: детали сна меняют смысл, поэтому разбираем несколько сценариев.</p>
-        </article>
-        <article class="tile r r-scale" style="--i:4"><span class="tile-arw">↗</span>
+        </a>
+        <a class="tile r r-scale" style="--i:4" href="/app/#astro" data-place="tile_astro"><span class="tile-arw">↗</span>
           <div class="tile-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2.2 2.2M16.8 16.8 19 19M19 5l-2.2 2.2M5 19l2.2-2.2"/></svg></div>
           <h3 class="h3">Натальная карта</h3>
           <p>Расчёт по точному времени рождения, совместимость пар и лунный прогноз на пяти языках.</p>
-        </article>
-        <article class="tile r r-scale" style="--i:5"><span class="tile-arw">↗</span>
+        </a>
+        <a class="tile r r-scale" style="--i:5" href="/app/#matrix" data-place="tile_matrix"><span class="tile-arw">↗</span>
           <div class="tile-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
           <h3 class="h3">Матрица и числа</h3>
           <p>22 аркана по дате рождения, число судьбы и разбор повторяющихся чисел на часах.</p>
-        </article>
+        </a>
       </div>
     </div>
   </section>
@@ -567,7 +572,7 @@ body.nav-open{overflow:hidden}
       <div class="track-aside">
         <div class="eyebrow r">Путь расклада</div>
         <h2 class="h2 r" style="--i:1">От вопроса<br>до совета</h2>
-        <p class="lede r" style="--i:2">��аждый расклад проходит шесть шагов за десять секунд. Вы видите не только ответ, но и как он собран.</p>
+        <p class="lede r" style="--i:2">Каждый расклад проходит шесть шагов за десять секунд. Вы видите не только ответ, но и как он собран.</p>
         <div class="dial r" style="--i:3">
           <div class="dial-row">
             <span class="dial-lab">Шаг</span>
@@ -618,7 +623,7 @@ body.nav-open{overflow:hidden}
         <h2 class="h2 r" style="--i:1">Профиль, который помнит</h2>
       </div>
       <div class="ctx">
-        <div class="ctx-cell r r-scale" style="--i:0"><div class="eyebrow">01 · Расклады</div><p>Истори�� всех вопросов и выпавших карт с датами.</p></div>
+        <div class="ctx-cell r r-scale" style="--i:0"><div class="eyebrow">01 · Расклады</div><p>История всех вопросов и выпавших карт с датами.</p></div>
         <div class="ctx-cell r r-scale" style="--i:1"><div class="eyebrow">02 · Натальная карта</div><p>Солнце, Луна, асцендент и дома по точному времени.</p></div>
         <div class="ctx-cell r r-scale" style="--i:2"><div class="eyebrow">03 · Матрица</div><p>Сильные линии, число судьбы и кармические задачи.</p></div>
         <div class="ctx-cell r r-scale" style="--i:3"><div class="eyebrow">04 · Дневник</div><p>Сны, числа на часах и заметки к раскладам.</p></div>
@@ -751,10 +756,10 @@ body.nav-open{overflow:hidden}
         <h2 class="h2 r" style="--i:1">Часто спрашивают</h2>
       </div>
       <div class="faq r" style="--i:2">
-        <details><summary>Нужна ли регистрация?</summary><p class="a">Для быстрого вопроса и всей библиотеки — нет. Вход нужен только для персональных функций: карта дня, история диалогов с оракулом, натальная карта по точному времени рождения и сохранённые расклады.</p></details>
+        <details><summary>Нужна ли регистрация?</summary><p class="a">Вы можете сразу открыть кабинет, посмотреть все расклады, лунный календарь и ввести свой вопрос без регистрации. Короткий вход понадобится только в самом конце, чтобы сохранить ваш разбор и начислить +5 бонусной энергии.</p></details>
         <details><summary>Сколько это стоит?</summary><p class="a">Карта дня и вся библиотека разборов — 0 ₽. Расширенные расклады и диалог с оракулом без ограничений доступны в кабинете.</p></details>
         <details><summary>Карты выбирает алгоритм или я?</summary><p class="a">Карты выбираете вы. Система только тасует колоду из 78 карт с учётом прямых и перевёрнутых положений и запоминает порядок вашего выбора.</p></details>
-        <details><summary>��ожно ли задавать уточняющие вопросы?</summary><p class="a">Да, в том же диалоге. Оракул помнит расклад и предыдущие сообщения, поэтому можно спросить «а если я всё-таки уеду» или «почему тут Башня».</p></details>
+        <details><summary>Можно ли задавать уточняющие вопросы?</summary><p class="a">Да, в том же диалоге. Оракул помнит расклад и предыдущие сообщения, поэтому можно спросить «а если я всё-таки уеду» или «почему тут Башня».</p></details>
         <details><summary>Чем сонник отличается от народных?</summary><p class="a">Мы не даём приговор в одну строку. У символа есть архетипическое ядро, но смысл меняется от деталей сна, поэтому каждый символ разобран в нескольких сценариях.</p></details>
         <details><summary>На каких языках работает сервис?</summary><p class="a">На пяти. Интерфейс и разборы переключаются целиком, включая ответы оракула.</p></details>
         <details><summary>Где хранятся мои расклады?</summary><p class="a">В вашем личном профиле. Их видите только вы, и в любой момент можно удалить историю.</p></details>
@@ -769,9 +774,9 @@ body.nav-open{overflow:hidden}
       <div class="final r r-scale">
         <div class="eyebrow">Начать</div>
         <h2 class="h2">Карты уже знают.<br>Осталось спросить.</h2>
-        <p class="lede">Карта дня бесплатно, библиотека открыта, регистрация занимает меньше минуты.</p>
+        <p class="lede">Карта дня бесплатно, кабинет открыт сразу без регистрации.</p>
         <div class="btn-row">
-          <a class="btn" href="/login/" data-place="cta">Начать расклад <span class="arw">��</span></a>
+          <a class="btn" href="/app/" data-place="cta">Открыть кабинет <span class="arw">→</span></a>
           <a class="btn-ghost" href="/login/?mode=login" data-place="have_account">У меня есть аккаунт</a>
         </div>
       </div>
@@ -787,7 +792,7 @@ body.nav-open{overflow:hidden}
       <div>
         <a class="brand" href="/">NEOTARO<span>.ru</span></a>
         <p class="foot-about">Сервис гаданий без гадалок. ИИ-оракул, библиотека разборов и личный профиль в одном месте.</p>
-        <a class="btn" href="/login/" data-place="footer">Начать <span class="arw">→</span></a>
+        <a class="btn" href="/app/" data-place="footer">Открыть кабинет <span class="arw">→</span></a>
       </div>
       <div class="foot-col">
         <div class="fc-title">Карты</div>
@@ -977,8 +982,8 @@ try{
   }
 }catch(e){}
 
-/* ── цели на кнопки входа ── */
-$$('a[href^="/login/"]').forEach(function(a){
+/* ── цели на кнопки входа и перехода в кабинет ── */
+$$('a[href^="/login/"], a[href^="/app/"]').forEach(function(a){
   a.addEventListener('click',function(){
     ym('login_click',{place:a.dataset.place || (a.closest('.top')?'header':'cta')});
   });
