@@ -3160,6 +3160,19 @@ class AppBridge {
 const bridge = new AppBridge();
 
 /* ---------- запросы ---------- */
+function isGuest(){
+  return bridge.isWeb && !bridge.token;
+}
+
+function requireAuth(intent){
+  if(!isGuest()) return false;
+  try {
+    if(intent) sessionStorage.setItem('neo_guest_intent', JSON.stringify(intent));
+  } catch(e){}
+  bounceToAuth();
+  return true;
+}
+
 async function api(endpoint, method = 'POST', data = {}, silent = false){
   for(let attempt = 0; attempt < 3; attempt++){
     try {
@@ -3171,9 +3184,8 @@ async function api(endpoint, method = 'POST', data = {}, silent = false){
         localStorage.removeItem('neotaro_user');
         bridge.token = null;
         bridge.webUser = null;
-        showGate('login');
-        applyStrings();
-        return { success:false };
+        if(!silent) bounceToAuth();
+        return { success:false, unauthorized:true };
       }
       const json = await res.json();
       if(json && json.maintenance) { showGate('down'); return { success:false }; }
@@ -3847,24 +3859,48 @@ function fmtNum(n){
   try{ return v.toLocaleString(lang || 'ru'); }catch(e){ return String(n); }
 }
 function paintEnergy(){
+  const guest = isGuest();
+
+  // В верхней шапке (мобайл), в чате и в левой колонке (ПК)
+  const tbBtn = document.querySelector('.tb-energy');
+  if(tbBtn){
+    tbBtn.onclick = guest ? () => bounceToAuth() : () => go('shop');
+  }
+  const chatBtn = document.querySelector('.chat-energy');
+  if(chatBtn){
+    chatBtn.onclick = guest ? () => bounceToAuth() : () => go('shop');
+  }
+  const meterBtn = document.querySelector('.meter');
+  if(meterBtn){
+    meterBtn.onclick = guest ? () => bounceToAuth() : () => go('shop');
+  }
+
   ['m-energy','m-energy-2','m-energy-4'].forEach(id => {
     const n = document.getElementById(id);
-    if(n) n.textContent = S.energy;
+    if(n) n.textContent = guest ? (lang === 'ru' ? 'Войти' : 'Sign in') : S.energy;
   });
-  /* В профиле число крупное и без разделителей читается как каша. */
+
+  // Прячем слово "энергия" рядом с кнопкой "Войти", чтобы было аккуратно: "Войти · +5 ⚡"
+  document.querySelectorAll('.tb-energy .u, .chat-energy .u, .meter-unit').forEach(el => {
+    el.textContent = guest ? '+5 ⚡' : tt('energy_unit');
+  });
+
+  const mNote = document.querySelector('.meter-note');
+  if(mNote) mNote.textContent = guest ? (lang === 'ru' ? 'Получить +5 энергии →' : 'Claim +5 energy →') : tt('energy_top_up');
+
   const pe = document.getElementById('pf-energy');
-  if(pe) pe.textContent = fmtNum(S.energy);
+  if(pe) pe.textContent = guest ? '0' : fmtNum(S.energy);
   const rh = document.getElementById('pf-ref-hint');
   if(rh) rh.textContent = tt('ref_text') + ' \u00b7 ' + tt('pf_refs').toLowerCase() + ': ' + (S.refs || 0);
   const fill = document.getElementById('m-fill');
   if(fill){
     const max = Math.max(S.energyMax, S.energy);
-    fill.style.width = Math.max(3, Math.round(S.energy / max * 100)) + '%';
+    fill.style.width = guest ? '100%' : Math.max(3, Math.round(S.energy / max * 100)) + '%';
   }
   const tbf = document.getElementById('tb-fill');
   if(tbf){
     const tmax = Math.max(S.energyMax, S.energy, 1);
-    tbf.style.width = Math.max(3, Math.round(S.energy / tmax * 100)) + '%';
+    tbf.style.width = guest ? '100%' : Math.max(3, Math.round(S.energy / tmax * 100)) + '%';
   }
   const st = document.getElementById('pf-streak'), al = document.getElementById('alm-streak');
   if(st) st.textContent = S.streak;
@@ -4207,7 +4243,26 @@ function absorbUser(d){
 
 async function boot(){
   await bridge.ready();
-  if(bridge.isWeb && !bridge.token){ showGate('login'); applyStrings(); return; }
+
+  // ЕСЛИ ЭТО ГОСТЬ В БРАУЗЕРЕ — ОТКРЫВАЕМ КАБИНЕТ СРАЗУ БЕЗ РЕДИРЕКТА!
+  if(bridge.isWeb && !bridge.token){
+    const guess = (navigator.language || 'ru').slice(0,2);
+    lang = LANGS.some(l => l.code === guess) ? guess : 'ru';
+    if(typeof activeLanguage !== 'undefined') window.activeLanguage = lang;
+    S.name = lang === 'ru' ? 'Гость' : 'Guest';
+    applyStrings();
+    paintDates();
+    showGate(null);
+    paintProfile();
+    paintDaily();
+    paintEnergy();
+    var _gh = (location.hash || '').replace('#','');
+    go(_gh && document.getElementById('v-' + _gh) ? _gh : 'home');
+    loadCalendar();
+    renderSpreads();
+    return;
+  }
+
   showGate('boot');
   const data = await api('/get-user', 'POST', { start_param: bridge.startParam });
   if(!data || !data.success){
@@ -4218,8 +4273,6 @@ async function boot(){
   if(data.theme && THEMES.some(t => t.code === data.theme) && data.theme !== themePref){
     themePref = data.theme;
     applyThemeDom();
-  } else if(data.theme === undefined || data.theme === null){
-    /* у аккаунта ещё нет темы — запомним тем же запросом при следующем выборе */
   }
   if(data.reading_tone && TONES.indexOf(data.reading_tone) !== -1) tonePref = data.reading_tone;
   if(data.response_length && LENGTHS.indexOf(data.response_length) !== -1) lengthPref = data.response_length;
@@ -4352,6 +4405,7 @@ function fillDaily(c){
   document.getElementById('daily-draw').style.display = 'none';
 }
 async function drawDaily(){
+  if(requireAuth({ action: 'daily' })) return;
   document.getElementById('daily-draw').style.display = 'none';
   document.getElementById('daily-wait').style.display = 'block';
   const data = await api('/tarot/daily', 'POST');
@@ -4361,7 +4415,7 @@ async function drawDaily(){
     fillDaily(data.card);
     paintDaily();
     bridge.haptic('ok');
-    if(window.neoGoal) neoGoal('daily_card'); /* neotaro-goal */
+    if(window.neoGoal) neoGoal('daily_card');
   } else {
     document.getElementById('daily-draw').style.display = 'flex';
     toast(tt('err'));
@@ -4434,6 +4488,7 @@ function countQ(){
 async function dealSpread(){
   const q = document.getElementById('tb-q').value.trim();
   if(!q) return toast(tt('need_q'));
+  if(requireAuth({ action: 'spread', spreadId: S.spread ? S.spread.id : null, question: q })) return;
   const price = S.spread.price || 0;
   if(S.energy < price){ openBuySpread(price); return; }
   const picked = [];
@@ -4460,9 +4515,8 @@ async function dealSpread(){
     out.innerHTML = clean(data.interpretation || '');
     if(typeof data.energy === 'number'){ S.energy = data.energy; paintEnergy(); }
     bridge.haptic('ok');
-    if(window.neoGoal){ /* neotaro-goal */
+    if(window.neoGoal){
       neoGoal('spread_done', { spread: (S.spread && S.spread.id) || '' });
-      /* Первый расклад отмечаем ровно один раз — это активация, а не повторное действие. */
       try{
         if(!localStorage.getItem('neo_first_spread')){
           localStorage.setItem('neo_first_spread', '1');
@@ -4693,6 +4747,7 @@ async function sendChat(){
   const input = document.getElementById('chat-in');
   const text = input.value.trim();
   if(!text) return;
+  if(requireAuth({ action: 'chat', text: text })) return;
   if(S.energy < 1){ toast(tt('no_energy')); go('shop'); return; }
   const now = new Date().toLocaleTimeString(lang, { hour:'2-digit', minute:'2-digit' });
   const vmeta = window.__voiceMeta; window.__voiceMeta = null;
@@ -4718,8 +4773,7 @@ async function sendChat(){
   const t = document.getElementById('typing');
   if(t) t.remove();
   if(data && data.success){
-    /* Первый ответ оракула отмечаем один раз — это активация, а не рутина. */
-    if(window.neoGoal){ /* neotaro-goal */
+    if(window.neoGoal){
       neoGoal('chat_message', { input: vmeta ? 'voice' : 'text' });
       try{
         if(!localStorage.getItem('neo_first_chat')){
@@ -5062,6 +5116,7 @@ async function saveBirth(){
   const d = pad(document.getElementById('b-d').value), m = pad(document.getElementById('b-m').value), y = document.getElementById('b-y').value.trim();
   if(!validDate(y, m, d)) return toast(tt('bad_date'));
   const iso = `${y}-${m}-${d}`;
+  if(requireAuth({ action: 'birth', birth_date: iso })) return;
   const data = await api('/profile/update', 'POST', { birth_date: iso });
   if(data && data.success){
     S.birth = iso;
@@ -5776,11 +5831,12 @@ async function saveAstro(){
   if(!city) return toast(tt('city_pick_first'));
   const time = document.getElementById('as-t').value;
   const unknown = document.getElementById('as-unknown').checked;
+  const iso = y + '-' + m + '-' + d;
+  if(requireAuth({ action: 'astro', birth_date: iso, birth_time: time || null, birth_city: city, unknown_time: unknown })) return;
   const btn = document.getElementById('as-save');
   btn.disabled = true;
   document.getElementById('astro-empty').style.display = 'none';
   document.getElementById('astro-loading').style.display = 'block';
-  const iso = y + '-' + m + '-' + d;
   const data = await api('/astro/chart', 'POST', { birth_date: iso, birth_time: time || null, birth_city: city, unknown_time: unknown, lang_code: S.lang || 'ru' });
   btn.disabled = false;
   document.getElementById('astro-loading').style.display = 'none';
