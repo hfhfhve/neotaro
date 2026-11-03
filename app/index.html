@@ -3230,6 +3230,11 @@ function hideToast(){ document.getElementById('toast').classList.remove('is-on')
 
 /* ---------- шторки ---------- */
 function openSheet(id){
+  // Если гость жмет на закрытые шторки (награды, история, рефералка, настройки) — сразу ведем на вход!
+  if(isGuest() && ['bonus','referral','history','name','birth','sub','tone','length'].indexOf(id) !== -1){
+    requireAuth({ action: id });
+    return;
+  }
   closeSheets();
   document.getElementById('scrim').classList.add('is-on');
   const s = document.getElementById('sheet-' + id);
@@ -3246,8 +3251,7 @@ function openSheet(id){
   if(id === 'mxbuy') fillMxBuy();
   if(id === 'sub'){
     renderSubSheet();
-    if(window.neoGoal) neoGoal('paywall_view', { place: 'sub_sheet' }); /* neotaro-goal */
-    /* Собственный адрес нужен для скриншотов ЮКассы и для кнопки "назад". */
+    if(window.neoGoal) neoGoal('paywall_view', { place: 'sub_sheet' });
     try{ history.pushState({ v: S.view, sheet:'sub' }, '', '#subscription'); }catch(e){}
   }
 }
