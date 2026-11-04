@@ -5984,7 +5984,8 @@ async function loadMatrix(silent){
   NB.style.display = 'none';
   /* Гостю матрицу не считаем: показываем экран «укажите дату», а кнопка там уже ведёт на вход. */
   if(isGuest()){ L.style.display = 'none'; B.style.display = 'none'; NB.style.display = 'block'; return; }
-  if(S.mx){ renderMatrix(); return; }
+  if(!silent) S.mxPolls = 0;   /* человек сам открыл экран — опрос начинаем заново */
+  if(S.mx && (S.mx.teaser || silent)){ renderMatrix(); return; }
   if(!silent){ B.style.display = 'none'; L.style.display = 'flex'; L.style.flexDirection = 'column'; }
   const data = await api('/matrix/get', 'GET');
   L.style.display = 'none';
@@ -5992,7 +5993,11 @@ async function loadMatrix(silent){
   if(!data || !data.success){ toast(tt('err')); return; }
   S.mx = data;
   renderMatrix();
-  if(!data.teaser) setTimeout(() => { S.mx = null; loadMatrix(true); }, 8000);
+  /* Тизер ещё готовится — переспрашиваем, но не бесконечно (раньше опрос шёл вечно). */
+  if(!data.teaser){
+    S.mxPolls = (S.mxPolls || 0) + 1;
+    if(S.mxPolls <= 6) setTimeout(() => { if(S.view === 'matrix'){ S.mx = null; loadMatrix(true); } }, 8000);
+  } else S.mxPolls = 0;
   if(data.is_paid && !S.mxText) mxFetch(0);
 }
 function renderMatrix(){
