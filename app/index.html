@@ -3163,10 +3163,99 @@ function isGuest(){
   return bridge.isWeb && !bridge.token;
 }
 
+/* Плашка «войдите» для экранов, которым нужен аккаунт. */
+function guestInviteHtml(row){
+  const ru = lang === 'ru';
+  const t = ru ? 'Войдите, чтобы открыть' : 'Sign in to unlock';
+  const n = ru ? 'Бесплатно · +5 энергии и Карта дня' : 'Free · +5 energy and a Daily card';
+  if(row){
+    return '<button class="rowcard" onclick="requireAuth({ action: \'profile\' })">' +
+      '<span class="mid"><strong>' + esc(t) + '</strong><span>' + esc(n) + '</span></span>' +
+      '<span class="end">→</span></button>';
+  }
+  return '<div class="empty"><p>' + esc(t) + '</p><p class="sub" style="opacity:.7">' + esc(n) + '</p>' +
+    '<button class="btn btn-brass" style="margin-top:12px" onclick="requireAuth({ action: \'' + esc(S.view || 'home') + '\' })">' +
+    esc(ru ? 'Войти' : 'Sign in') + '</button></div>';
+}
+
+/* Язык гостя: выбор в приложении > язык браузера. Никаких запросов на бэк. */
+function guestLang(){
+  let saved = null;
+  try{ saved = localStorage.getItem('neo_guest_lang'); }catch(e){}
+  if(saved && LANGS.some(l => l.code === saved)) return saved;
+  const guess = (navigator.language || 'ru').slice(0,2);
+  return LANGS.some(l => l.code === guess) ? guess : 'ru';
+}
+
+/* После входа возвращаем человека туда, где он остановился.
+   Платные действия НЕ запускаем сами — только подставляем введённое,
+   чтобы энергия списывалась по осознанному нажатию. */
+function resumeGuestIntent(){
+  let it = null;
+  try{
+    it = JSON.parse(sessionStorage.getItem('neo_guest_intent') || 'null');
+    sessionStorage.removeItem('neo_guest_intent');
+  }catch(e){}
+  if(!it || !it.action) return;
+  if(it.ts && Date.now() - it.ts > 60 * 60 * 1000) return;   // старше часа — неактуально
+  const fill = (id, v) => { const e = document.getElementById(id); if(e && v != null && v !== '') e.value = v; };
+  try{
+    switch(it.action){
+      case 'daily':
+        go('home');
+        return;
+      case 'chat':
+        go('chat');
+        fill('chat-in', it.text);
+        if(typeof growInput === 'function'){ try{ growInput(document.getElementById('chat-in')); }catch(e){} }
+        return;
+      case 'spread': {
+        if(!it.spreadId) return;
+        let tries = 0;
+        const open = () => {
+          if(S.spreads && S.spreads.some(s => s.id === it.spreadId)){
+            pickSpread(it.spreadId);
+            fill('tb-q', it.question);
+            countQ();
+          } else if(++tries < 20) setTimeout(open, 300);
+        };
+        open();
+        return;
+      }
+      case 'birth': {
+        openSheet('birth');
+        if(it.birth_date){
+          const p = String(it.birth_date).split('-');
+          fill('b-y', p[0]); fill('b-m', p[1]); fill('b-d', p[2]);
+        }
+        return;
+      }
+      case 'astro': {
+        go('astro');
+        if(it.birth_date){
+          const p = String(it.birth_date).split('-');
+          fill('as-y', p[0]); fill('as-m', p[1]); fill('as-d', p[2]);
+        }
+        fill('as-t', it.birth_time);
+        if(it.birth_city && typeof pickCity === 'function'){ try{ pickCity(it.birth_city, true); }catch(e){} }
+        const u = document.getElementById('as-unknown');
+        if(u && it.unknown_time) u.checked = true;
+        return;
+      }
+      default:
+        if(document.getElementById('sheet-' + it.action)) openSheet(it.action);
+        else if(document.getElementById('v-' + it.action)) go(it.action);
+    }
+  }catch(e){}
+}
+
 function requireAuth(intent){
   if(!isGuest()) return false;
   try {
-    if(intent) sessionStorage.setItem('neo_guest_intent', JSON.stringify(intent));
+    if(intent){
+      intent.ts = Date.now();
+      sessionStorage.setItem('neo_guest_intent', JSON.stringify(intent));
+    }
   } catch(e){}
   bounceToAuth();
   return true;
@@ -3392,6 +3481,8 @@ function bounceToAuth(){
   var next = '';
   try {
     next = '?next=' + encodeURIComponent(location.pathname + location.search + location.hash);
+    var _ref = bridge.startParam;
+    if(_ref) next += '&ref=' + encodeURIComponent(_ref);
   } catch(e){}
   /* replace, а не href: иначе кнопка «назад» вернёт на /app/ и всё повторится. */
   location.replace(AUTH_REDIRECT_URL + next);
@@ -3418,6 +3509,10 @@ const MEM_KIND_ICON = {
 async function loadMemory(){
   const body = document.getElementById('mem-body');
   if(!body) return;
+  if(isGuest()){
+    body.innerHTML = guestInviteHtml();
+    return;
+  }
   if(!MEM.loaded) body.innerHTML = '<p class="sub" style="opacity:.6">…</p>';
 
   const d = await api('/memory', 'GET', {}, true);
@@ -3497,18 +3592,21 @@ function renderMemory(d){
 }
 
 async function memForget(id){
+  if(requireAuth({ action: 'memory' })) return;
   bridge.haptic();
   const r = await api('/memory/forget', 'POST', { scope:'fact', fact_id:id }, true);
   if(r && r.success) loadMemory();
 }
 
 async function memForgetSubject(key){
+  if(requireAuth({ action: 'memory' })) return;
   bridge.haptic();
   const r = await api('/memory/forget', 'POST', { scope:'subject', subject_key:key }, true);
   if(r && r.success) loadMemory();
 }
 
 async function memForgetAll(){
+  if(requireAuth({ action: 'memory' })) return;
   if(!confirm(tt('mem_confirm'))) return;
   bridge.haptic();
   const r = await api('/memory/forget', 'POST', { scope:'all' }, true);
@@ -3516,6 +3614,7 @@ async function memForgetAll(){
 }
 
 async function memToggle(){
+  if(requireAuth({ action: 'memory' })) return;
   bridge.haptic();
   const next = !MEM.enabled;
   MEM.enabled = next;
@@ -3537,6 +3636,7 @@ let SUB = null;
 async function loadProfileSub(){
   const box = document.getElementById('pf-sub');
   if(!box) return;
+  if(isGuest()){ box.innerHTML = guestInviteHtml(true); return; }
   const d = await api('/subscription/status', 'GET', {}, true);
   if(!d || !d.success || !d.access){ box.innerHTML = ''; SUB = null; return; }
   S.recurring = !!d.recurring_enabled;
@@ -4250,8 +4350,7 @@ async function boot(){
 
   // ЕСЛИ ЭТО ГОСТЬ В БРАУЗЕРЕ — ОТКРЫВАЕМ КАБИНЕТ СРАЗУ БЕЗ РЕДИРЕКТА!
   if(bridge.isWeb && !bridge.token){
-    const guess = (navigator.language || 'ru').slice(0,2);
-    lang = LANGS.some(l => l.code === guess) ? guess : 'ru';
+    lang = guestLang();
     if(typeof activeLanguage !== 'undefined') window.activeLanguage = lang;
     S.name = lang === 'ru' ? 'Гость' : 'Guest';
     applyStrings();
@@ -4263,12 +4362,17 @@ async function boot(){
     var _gh = (location.hash || '').replace('#','');
     go(_gh && document.getElementById('v-' + _gh) ? _gh : 'home');
     loadCalendar();
+    loadProfileSub();
+    /* Тарифы отдают guest_access: без него у гостя нет замков на премиум-раскладах. */
+    renderShopPlans().then(() => { if(S.view === 'spreads') renderSpreads(); }).catch(() => {});
     renderSpreads();
     return;
   }
 
   showGate('boot');
-  const data = await api('/get-user', 'POST', { start_param: bridge.startParam });
+  const data = await api('/get-user', 'POST', { start_param: bridge.startParam }, bridge.isWeb);
+  /* Протухший токен на сайте — не выкидываем на логин, а пускаем гостем. */
+  if(data && data.unauthorized && bridge.isWeb){ return boot(); }
   if(!data || !data.success){
     if(bridge.isWeb && !bridge.token) showGate('login');
     else showGate('down');
@@ -4304,6 +4408,7 @@ async function boot(){
     const r = document.getElementById(id);
     if(r && bridge.isWeb) r.style.display = 'flex';
   });
+  resumeGuestIntent();
 }
 document.addEventListener('DOMContentLoaded', () => { drawTicks(); applyStrings(); boot(); });
 </script>
@@ -4440,7 +4545,7 @@ async function renderSpreads(){
   const box = document.getElementById('spreads-list');
   if(!S.spreads.length){
     box.innerHTML = '<div class="shimmer" style="height:70px;border-radius:12px"></div>'.repeat(4);
-    const data = await api('/spreads', 'GET');
+    const data = await api('/spreads?lang=' + encodeURIComponent(lang || 'ru'), 'GET');
     if(!data || !data.success || !data.spreads){ box.innerHTML = `<div class="empty"><div class="g">${IC.cards}</div><p>${esc(tt('err'))}</p></div>`; return; }
     S.spreads = data.spreads;
   }
@@ -4550,6 +4655,7 @@ function openBuySpread(price){
   openSheet('buyspread');
 }
 async function paySpreadRub(){
+  if(requireAuth({ action: 'spreads' })) return;
   toast(tt('wait'));
   /* Цену берём с того же экрана, который видит человек. */
   const _price = neoReadPrice('bs-rub-val');
@@ -4584,7 +4690,7 @@ async function resetHistory(){
   document.getElementById('hist-list').innerHTML = '';
   // справочник раскладов нужен, чтобы показать нормальные названия, а не three_cards
   if(!S.spreads.length){
-    try{ const d = await api('/spreads', 'GET'); if(d && d.spreads) S.spreads = d.spreads; }catch(e){}
+    try{ const d = await api('/spreads?lang=' + encodeURIComponent(lang || 'ru'), 'GET'); if(d && d.spreads) S.spreads = d.spreads; }catch(e){}
   }
   loadHistory();
 }
@@ -4684,6 +4790,8 @@ function openChat(){
 }
 async function loadChat(more){
   if(S.chatLoading) return;
+  /* У гостя истории нет — не дёргаем бэк зря. */
+  if(isGuest()){ S.chatReady = true; renderChat(); return; }
   S.chatLoading = true;
   const data = await api(`/chat/history?persona=oracle&offset=${S.chatOffset}&limit=20`, 'GET', {}, true);
   S.chatLoading = false;
@@ -4800,6 +4908,7 @@ async function sendChat(){
 }
 async function clearChat(){
   closeSheets();
+  if(requireAuth({ action: 'chat' })) return;
   const data = await api('/chat/clear', 'POST', { persona: 'oracle' });
   if(data && data.success){
     S.chat = []; S.chatOffset = 0; S.chatMore = false;
@@ -4949,6 +5058,7 @@ function neoReadPrice(elId){
 }
 
 async function payRub(){
+  if(requireAuth({ action: 'shop' })) return;
   if(!S.shopPick) return;
   toast(tt('wait'));
   const _price = neoReadPrice('buy-rub-val');
@@ -4967,7 +5077,7 @@ async function payRub(){
 
 /* ============================ ЛУННЫЙ ДЕНЬ ============================ */
 async function loadCalendar(){
-  const data = await api('/calendar/today', 'GET', {}, true);
+  const data = await api('/calendar/today?lang=' + encodeURIComponent(lang || 'ru'), 'GET', {}, true);
   if(!data || !data.success || !data.forecast) return;
   const f = data.forecast;
   const set = (id, v) => { const n = document.getElementById(id); if(n) n.textContent = v; };
@@ -5083,6 +5193,7 @@ function openStatInfo(kind){
   openSheet('stat');
 }
 async function toggleNotif(){
+  if(requireAuth({ action: 'settings' })) return;
   S.notif = !S.notif;
   (function(){ const e = document.getElementById('pf-notif'); if(e) e.classList.toggle('is-on', S.notif); })();
   const data = await api('/profile/notifications', 'POST', { enabled: S.notif });
@@ -5178,6 +5289,7 @@ async function setTheme(code){
   renderThemes();
   closeSheets();
   toast(tt('th_saved'));
+  if(isGuest()) return;
   try { await api('/profile/update', 'POST', { theme: code }); } catch(e){}
 }
 if(window.matchMedia){
@@ -5280,7 +5392,8 @@ async function setLang(code){
   S.spreads = [];
   closeSheets();
   toast(tt('lang_saved'));
-  await api('/profile/update', 'POST', { language_code: code });
+  if(isGuest()){ try{ localStorage.setItem('neo_guest_lang', code); }catch(e){} }
+  else await api('/profile/update', 'POST', { language_code: code });
   loadCalendar();
   renderSpreads();
   if(S.view === 'shop') loadShop();
@@ -5373,6 +5486,7 @@ async function loadBonus(){
   }).join('');
 }
 async function claimBonus(){
+  if(requireAuth({ action: 'bonus' })) return;
   const data = await api('/bonus/claim', 'POST');
   if(data && data.success){
     S.energy = data.energy;
@@ -5569,6 +5683,7 @@ function renderAstroSections(d){
 }
 
 async function openAstroSection(key){
+  if(requireAuth({ action: 'astro' })) return;
   const wrap = document.getElementById('nk-sec-' + key);
   const body = document.getElementById('nk-body-' + key);
   if(!wrap || !body) return;
@@ -5802,6 +5917,7 @@ async function renderShopPlans(force){
 async function renderAstroPlans(force){ return renderShopPlans(force); }
 
 async function astroSubscribe(plan){
+  if(requireAuth({ action: 'shop' })) return;
   /* Явное согласие на автосписания ДО оплаты. Без него любой спор с банком
      проигран заранее: подтвердить, что человека предупредили, будет нечем. */
   const per = (S.per === 'year') ? tt('per_year') : tt('per_month');
@@ -5866,6 +5982,8 @@ function askAboutChart(){
 async function loadMatrix(silent){
   const L = document.getElementById('mx-loading'), NB = document.getElementById('mx-nobirth'), B = document.getElementById('mx-body');
   NB.style.display = 'none';
+  /* Гостю матрицу не считаем: показываем экран «укажите дату», а кнопка там уже ведёт на вход. */
+  if(isGuest()){ L.style.display = 'none'; B.style.display = 'none'; NB.style.display = 'block'; return; }
   if(S.mx){ renderMatrix(); return; }
   if(!silent){ B.style.display = 'none'; L.style.display = 'flex'; L.style.flexDirection = 'column'; }
   const data = await api('/matrix/get', 'GET');
@@ -6057,6 +6175,7 @@ function resetSyn(){
 function capFirst(v){ return v ? v.charAt(0).toUpperCase() + v.slice(1) : v; }
 
 async function runSynastry(){
+  if(requireAuth({ action: 'syn' })) return;
   if(!S.birth){ renderSyn(); return; }
   const nameRaw = document.getElementById('syn-name').value.trim();
   if(!nameRaw) return toast(tt('syn_need_name'));
@@ -6224,6 +6343,7 @@ const REC = {
   async start(target){
     if(this.active) return;
     if(!VOICE_OK) return;
+    if(requireAuth({ action: target && target.scope === 'dream' ? 'dream' : 'chat' })) return;
     this.target = target; this.aborted = false; this.chunks = [];
     try{
       this.stream = await navigator.mediaDevices.getUserMedia({
@@ -6593,6 +6713,7 @@ async function loadPushState(){
 
 async function togglePush(){
   if(!pushSupported()) return;
+  if(requireAuth({ action: 'settings' })) return;
 
   // iPhone в браузере: сначала на экран Домой, иначе запрос просто не сработает.
   if(pwaIsIOS() && !pwaStandalone()){ openSheet('ios'); return; }
