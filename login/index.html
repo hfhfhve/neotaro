@@ -405,8 +405,18 @@ const GOOGLE_CLIENT_ID = "67067405192-tfq2sj5kdk7no312f76lg4fenac49k08.apps.goog
     const ref = q.get("ref");
     if(ref) localStorage.setItem("neotaro_ref", ref);
   } catch(e){}
-  if(localStorage.getItem("neotaro_token")) location.replace(APP_URL);
+  /* Уже вошёл — возвращаем туда, откуда прислало приложение (?next=/app/...). */
+  if(localStorage.getItem("neotaro_token")) location.replace(safeNext());
 })();
+
+function safeNext(){
+  try {
+    const next = (new URLSearchParams(location.search)).get('next');
+    /* Только свои пути внутри /app — защита от редиректа на чужой сайт. */
+    if(next && /^\/app(\/|\?|#|$)/.test(next)) return next;
+  } catch(e){}
+  return APP_URL;
+}
 
 const A = { email:'', screen:'register', busy:false, cool:0, timer:null, poll:null, fromYesNo:false };
 try { A.fromYesNo = (new URLSearchParams(location.search)).get('from') === 'yesno'; } catch(e){}
@@ -560,12 +570,7 @@ function enter(data, goalName, goalParams){
   localStorage.setItem('neotaro_user', JSON.stringify(data.user || {}));
   if(window.neoGoal && goalName) window.neoGoal(goalName, goalParams || {});
   msg('Готово, открываем кабинет…', 'ok');
-  let target = APP_URL;
-  try {
-    const next = (new URLSearchParams(location.search)).get('next');
-    if(next && next.startsWith('/app')) target = next;
-  } catch(e){}
-  location.replace(target);
+  location.replace(safeNext());
 }
 
 /* ==================== ПОЧТА ==================== */
