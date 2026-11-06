@@ -1402,14 +1402,18 @@ html[data-theme="dawn"] .neo-glyph{fill:#5E4210;fill-opacity:.75}
 /* NEO:SENTRY */
 (function(){
   if(!window.Sentry) return;
+  // ВПИШИ СЮДА СВОЙ SENTRY_DSN ИЗ .env ВМЕСТО КАВЫЧЕК (если вдруг оставишь пустым — он попробует скачать с бэка как раньше)
+  var STATIC_DSN = "https://ab1fbcfb979d73619d2c9255eaca13f8@o4511189625274368.ingest.de.sentry.io/4511514128810064"; 
+
   var IGN = ['ResizeObserver loop'];
   function boot(dsn){
-    if(!dsn) return;
+    if(!dsn || dsn.indexOf('http') !== 0 || window.__sentryBooted) return;
+    window.__sentryBooted = true;
     try{
       Sentry.init({
         dsn: dsn,
         environment: location.hostname,
-        tracesSampleRate: 0,
+        tracesSampleRate: 0.2,
         ignoreErrors: IGN
       });
       var u = null;
@@ -1417,11 +1421,16 @@ html[data-theme="dawn"] .neo-glyph{fill:#5E4210;fill-opacity:.75}
       if(u) Sentry.setUser({ id: String(u.id || u.user_id || ''), email: u.email || undefined, username: u.name || undefined });
     }catch(e){}
   }
-  var API = (window.API_URL || 'https://api.neotaro.ru/api');
-  fetch(API.replace(/\/api\/?$/, '') + '/api/public/sentry')
-    .then(function(r){ return r.json(); })
-    .then(function(j){ boot(j && j.dsn); })
-    .catch(function(){});
+
+  if(STATIC_DSN && STATIC_DSN.indexOf('http') === 0){
+    boot(STATIC_DSN);
+  } else {
+    var API = (window.API_URL || 'https://api.neotaro.ru/api');
+    fetch(API.replace(/\/api\/?$/, '') + '/api/public/sentry')
+      .then(function(r){ return r.json(); })
+      .then(function(j){ boot(j && j.dsn); })
+      .catch(function(){});
+  }
 })();
 </script>
 </head>
@@ -3269,11 +3278,23 @@ function requireAuth(intent){
 }
 
 async function api(endpoint, method = 'POST', data = {}, silent = false){
-  for(let attempt = 0; attempt < 3; attempt++){
+  // Для тяжелых ИИ-запросов даем 28 секунд, для быстрых — 12 секунд (чтобы не висело вечно!)
+  const isHeavy = /\/tarot\/(daily|spread|synastry)|\/chat\/send|\/astro\/(chart|reading)|\/matrix\/(get|reading|compat)|\/stt\//.test(endpoint);
+  const timeoutMs = isHeavy ? 28000 : 12000;
+  const maxAttempts = isHeavy ? 2 : 3;
+
+  for(let attempt = 0; attempt < maxAttempts; attempt++){
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+    const t0 = Date.now();
+
     try {
-      const opts = { method, headers: bridge.headers() };
+      const opts = { method, headers: bridge.headers(), signal: ctrl.signal };
       if(method !== 'GET') opts.body = JSON.stringify(data);
+
       const res = await fetch(API_URL + endpoint, opts);
+      clearTimeout(timer);
+
       if(res.status === 401 && bridge.isWeb){
         localStorage.removeItem('neotaro_token');
         localStorage.removeItem('neotaro_user');
@@ -3282,16 +3303,54 @@ async function api(endpoint, method = 'POST', data = {}, silent = false){
         if(!silent) bounceToAuth();
         return { success:false, unauthorized:true };
       }
+
+      // Если сервер вернул 500 / 502 / 503 / 504 — сразу фиксируем статус!
+      if(!res.ok && res.status >= 500){
+        const rawText = await res.text().catch(() => '');
+        const httpErr = new Error(`API HTTP ${res.status} on ${endpoint}`);
+        if(window.Sentry){
+          Sentry.captureException(httpErr, {
+            tags: { endpoint, http_status: res.status, attempt: attempt + 1 },
+            extra: { elapsed_ms: Date.now() - t0, response_preview: rawText.slice(0, 300) }
+          });
+        }
+        if(typeof clarity === 'function') clarity('event', `api_err_${res.status}`);
+        throw httpErr;
+      }
+
       const json = await res.json();
       if(json && json.maintenance) { showGate('down'); return { success:false }; }
       return json;
+
     } catch(e){
-      if(attempt === 2){
-        if(window.Sentry) Sentry.captureException(e, { extra: { endpoint, method } });
-        if(!silent) toast(tt('err'));
-        return { success:false, offline:true };
+      clearTimeout(timer);
+      const isTimeout = e && e.name === 'AbortError';
+      const elapsed = Date.now() - t0;
+
+      // Отправляем в Sentry СРАЗУ при первом же таймауте или на последней попытке сетевого сбоя!
+      if(window.Sentry && (isTimeout || attempt === maxAttempts - 1)){
+        const reportErr = isTimeout
+          ? new Error(`API TIMEOUT (${elapsed}ms) on ${method} ${endpoint}`)
+          : new Error(`API NETWORK FAIL on ${method} ${endpoint}: ${e.message || e}`);
+        Sentry.captureException(reportErr, {
+          tags: {
+            endpoint: endpoint.split('?')[0],
+            method,
+            kind: isTimeout ? 'timeout' : 'network',
+            attempt: attempt + 1
+          },
+          extra: { elapsed_ms: elapsed, online: navigator.onLine, ua: navigator.userAgent }
+        });
       }
-      await new Promise(r => setTimeout(r, 1000));
+      if(typeof clarity === 'function'){
+        clarity('event', isTimeout ? 'api_timeout' : 'api_net_error');
+      }
+
+      if(attempt === maxAttempts - 1){
+        if(!silent) toast(tt('err'));
+        return { success:false, offline:true, timeout: isTimeout };
+      }
+      await new Promise(r => setTimeout(r, 800));
     }
   }
   return { success:false };
