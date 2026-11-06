@@ -1396,6 +1396,112 @@ html[data-theme="dawn"] .neo-glyph{fill:#5E4210;fill-opacity:.75}
   .neo-card-back,.neo-card-back::after,.neo-rot,.neo-rot-r,.neo-sweep,
   .neo-orbit-1,.neo-orbit-2,.neo-orbit-3,.neo-core,.neo-skel i{animation:none}
 }
+/* ===== ЕЖЕДНЕВНАЯ НАГРАДА (LUXURY ALMANAC) ===== */
+.bnx-hero{
+  position:relative;overflow:hidden;border-radius:16px;padding:22px 20px 20px;margin-bottom:16px;
+  border:1px solid var(--line);
+  background:radial-gradient(120% 120% at 50% 0%,rgba(217,174,95,.18),rgba(18,24,41,.92) 68%);
+  text-align:center;box-shadow:0 16px 40px -18px rgba(0,0,0,.7);
+}
+.bnx-hero.is-done{
+  border-color:var(--line-soft);
+  background:linear-gradient(160deg,rgba(18,24,41,.85),rgba(11,15,30,.9));
+}
+.bnx-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(217,174,95,.09);
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass-pale);
+}
+.bnx-orb{
+  position:relative;width:68px;height:68px;margin:16px auto 12px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(217,174,95,.5);
+  background:radial-gradient(circle at 50% 35%,rgba(240,221,176,.24),rgba(217,174,95,.04) 70%);
+  box-shadow:0 0 32px rgba(217,174,95,.22),inset 0 0 18px rgba(217,174,95,.14);
+  color:var(--brass-bright);transition:transform .45s cubic-bezier(.2,1,.3,1),box-shadow .45s;
+}
+.bnx-orb svg{width:30px;height:30px;stroke:currentColor;fill:none;stroke-width:1.5}
+.bnx-hero:not(.is-done) .bnx-orb{animation:bnxPulse 2.8s ease-in-out infinite}
+@keyframes bnxPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 26px rgba(217,174,95,.18),inset 0 0 14px rgba(217,174,95,.12)}
+  50%{transform:scale(1.05);box-shadow:0 0 42px rgba(217,174,95,.36),inset 0 0 22px rgba(217,174,95,.24)}
+}
+.bnx-val{font-family:var(--serif);font-size:32px;line-height:1.1;color:var(--brass-bright)}
+.bnx-sub{font-size:13px;color:var(--mist);margin-top:5px}
+.bnx-cta{margin-top:16px;position:relative;overflow:hidden}
+.bnx-cta::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.32) 50%,transparent 65%);
+  transform:translateX(-130%);animation:bnxShine 3.4s ease-in-out infinite;
+}
+@keyframes bnxShine{0%{transform:translateX(-130%)}55%,100%{transform:translateX(130%)}}
+
+.bnx-bar-wrap{margin:0 0 14px}
+.bnx-bar-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}
+.bnx-bar{height:4px;border-radius:4px;background:rgba(147,160,192,.14);overflow:hidden}
+.bnx-bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#B8873F,var(--brass-bright));transition:width .6s cubic-bezier(.2,.9,.3,1)}
+
+.bnx-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.bnx-cell{
+  position:relative;border-radius:12px;padding:12px 10px 11px;text-align:center;
+  border:1px solid var(--line-soft);background:rgba(18,24,41,.6);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  opacity:0;transform:translateY(8px);animation:bnxIn .36s cubic-bezier(.2,.8,.3,1) forwards;
+  transition:border-color .25s,background .25s,transform .25s;
+}
+@keyframes bnxIn{to{opacity:1;transform:none}}
+.bnx-cell .d{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}
+.bnx-cell .amt{font-family:var(--serif);font-size:21px;line-height:1.15;color:var(--ivory);margin:2px 0}
+.bnx-cell .u{font-size:11px;color:var(--mist)}
+.bnx-cell .st{margin-top:4px;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mist);min-height:14px;display:flex;align-items:center;gap:4px}
+.bnx-cell .st svg{width:12px;height:12px}
+
+.bnx-cell.is-claimed{background:rgba(110,158,144,.07);border-color:rgba(110,158,144,.28)}
+.bnx-cell.is-claimed .amt{color:var(--brass-pale);opacity:.85}
+.bnx-cell.is-claimed .st{color:var(--verdigris)}
+
+.bnx-cell.is-current{
+  border-color:var(--brass);
+  background:radial-gradient(120% 120% at 50% 0%,rgba(217,174,95,.22),rgba(18,24,41,.92));
+  box-shadow:0 8px 24px -10px rgba(217,174,95,.35);
+}
+.bnx-cell.is-current .d,.bnx-cell.is-current .st{color:var(--brass)}
+.bnx-cell.is-current .amt{color:var(--brass-bright)}
+
+.bnx-cell.is-locked{opacity:.52}
+
+.bnx-cell.is-grand{
+  grid-column:1 / -1;flex-direction:row;justify-content:space-between;text-align:left;
+  padding:14px 16px;background:linear-gradient(135deg,rgba(217,174,95,.14),rgba(18,24,41,.85));
+  border-color:var(--line);
+}
+.bnx-cell.is-grand .g-left{display:flex;align-items:center;gap:12px}
+.bnx-cell.is-grand .g-ico{
+  width:38px;height:38px;border-radius:10px;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;color:var(--brass-bright);
+  background:rgba(217,174,95,.1);flex:0 0 auto;
+}
+.bnx-cell.is-grand .g-ico svg{width:19px;height:19px}
+.bnx-cell.is-grand .amt{font-size:22px;margin:0}
+
+.bnx-burst{
+  position:fixed;z-index:120;left:50%;top:46%;transform:translate(-50%,-50%) scale(.7);
+  padding:14px 26px;border-radius:999px;border:1px solid var(--brass);
+  background:rgba(11,15,30,.96);color:var(--brass-bright);
+  font-family:var(--serif);font-size:26px;box-shadow:0 20px 60px rgba(0,0,0,.75),0 0 40px rgba(217,174,95,.35);
+  pointer-events:none;opacity:0;animation:bnxFly 1.15s cubic-bezier(.16,.84,.3,1) forwards;
+}
+@keyframes bnxFly{
+  0%{opacity:0;transform:translate(-50%,-30%) scale(.7)}
+  25%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}
+  75%{opacity:1;transform:translate(-50%,-68%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-95%) scale(.92)}
+}
+html[data-theme="dawn"] .bnx-hero{background:radial-gradient(120% 120% at 50% 0%,rgba(154,108,28,.16),#FFFFFF 72%);box-shadow:0 10px 28px rgba(90,66,26,.08)}
+html[data-theme="dawn"] .bnx-cell{background:#FFFFFF}
+html[data-theme="dawn"] .bnx-cell.is-current{background:radial-gradient(120% 120% at 50% 0%,rgba(154,108,28,.18),#FFFFFF)}
+html[data-theme="dawn"] .bnx-cell.is-grand{background:linear-gradient(135deg,rgba(154,108,28,.14),#FFFFFF)}
+html[data-theme="dawn"] .bnx-burst{background:#FFFFFF;color:#5C3D08}
 </style>
 <script src="https://browser.sentry-cdn.com/8.47.0/bundle.min.js" crossorigin="anonymous"></script>
 <script>
@@ -2376,9 +2482,13 @@ html[data-theme="dawn"] .neo-glyph{fill:#5E4210;fill-opacity:.75}
 <!-- ежедневная награда -->
 <div class="sheet" id="sheet-bonus">
   <div class="sheet-grip"></div>
-  <h3 data-t="bonus_title">Ежедневная награда</h3>
-  <p class="sheet-sub" data-t="bonus_sub">Семь дней подряд — семь разных наград. Пропуск возвращает к первому дню.</p>
-  <div id="bonus-list" class="stack"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px">
+    <h3 data-t="bonus_title" style="margin:0">Ежедневная награда</h3>
+    <span class="tag" id="bonus-streak-pill">1 / 7</span>
+  </div>
+  <p class="sheet-sub" data-t="bonus_sub" style="margin-bottom:16px">Семь дней подряд — семь наград. Пропуск дня возвращает к первому шагу.</p>
+  <div id="bonus-hero"></div>
+  <div id="bonus-list"></div>
 </div>
 
 <!-- покупка энергии -->
@@ -5521,48 +5631,162 @@ function shareRef(){
   }
   copyRef();
 }
-
 /* ---------- ежедневная награда ---------- */
+function bnxEnergyWord(n){
+  if(lang === 'ru') return 'энергии';
+  return tt('energy_unit');
+}
+function bnxDayWord(d){
+  const map = {ru:'День', en:'Day', es:'Día', fr:'Jour', de:'Tag'};
+  return (map[lang] || map.en) + ' ' + d;
+}
+function bnxTomorrowText(){
+  const map = {
+    ru:'Награда на сегодня получена · приходите завтра',
+    en:'Today’s reward is claimed · come back tomorrow',
+    es:'Recompensa reclamada · vuelve mañana',
+    fr:'Récompense reçue · revenez demain',
+    de:'Belohnung abgeholt · komm morgen wieder'
+  };
+  return map[lang] || map.en;
+}
+function bnxStreakTitle(day){
+  const map = {
+    ru:`Серия: ${day} из 7 дней`,
+    en:`Streak: ${day} of 7 days`,
+    es:`Racha: ${day} de 7 días`,
+    fr:`Série : ${day} sur 7 jours`,
+    de:`Serie: ${day} von 7 Tagen`
+  };
+  return map[lang] || map.en;
+}
+
 async function loadBonusBanner(){
   const data = await api('/bonus/info', 'GET', {}, true);
   const slot = document.getElementById('home-bonus-slot');
   if(!slot || !data || !data.success) return;
   const ready = !data.claimed_today;
-  slot.innerHTML = `<button class="rowcard" onclick="openSheet('bonus')" ${ready ? 'style="border-color:var(--line)"' : ''}>
-    <span class="idx num">${data.cycle_day}</span>
-    <span class="mid"><strong>${esc(ready ? tt('bonus_ready') : tt('bonus_claimed'))}</strong><span>${esc(tt('bonus_sub'))}</span></span>
+  const cur = (data.rewards || []).find(r => r.day === data.cycle_day) || {};
+  const gain = cur.energy ? (`+${cur.energy} ⚡ `) : '';
+  slot.innerHTML = `<button class="rowcard" onclick="openSheet('bonus')" ${ready ? 'style="border-color:var(--brass);background:linear-gradient(90deg,rgba(217,174,95,.12),rgba(18,24,41,.75))"' : ''}>
+    <span class="idx" style="color:var(--brass)">${IC.bolt}</span>
+    <span class="mid">
+      <strong>${esc(ready ? (gain + tt('bonus_ready')) : tt('bonus_claimed'))}</strong>
+      <span>${esc(ready ? bnxStreakTitle(data.cycle_day) : bnxTomorrowText())}</span>
+    </span>
     <span class="end"><span class="tag${ready ? '' : ' tag-cold'}">${esc(ready ? tt('bonus_claim') : tt('bonus_open'))}</span></span>
   </button>`;
 }
+
 async function loadBonus(){
+  const hero = document.getElementById('bonus-hero');
   const box = document.getElementById('bonus-list');
-  box.innerHTML = '<div class="shimmer" style="height:56px;border-radius:12px"></div>';
+  const pill = document.getElementById('bonus-streak-pill');
+  if(hero) hero.innerHTML = '<div class="shimmer" style="height:170px;border-radius:16px;margin-bottom:14px"></div>';
+  if(box) box.innerHTML = '<div class="shimmer" style="height:160px;border-radius:14px"></div>';
+
   const data = await api('/bonus/info', 'GET');
-  if(!data || !data.success || !data.rewards){ box.innerHTML = `<div class="empty"><p>${esc(tt('err'))}</p></div>`; return; }
-  box.innerHTML = data.rewards.map(r => {
-    let end = '';
-    if(r.state === 'claimed') end = `<span class="tag tag-cold">${esc(tt('bonus_claimed'))}</span>`;
-    else if(r.state === 'current') end = `<button class="btn btn-brass btn-sm" onclick="claimBonus()">${esc(tt('bonus_claim'))}</button>`;
-    else end = `<span class="tag tag-cold">·</span>`;
-    return `<div class="rowcard" style="${r.state === 'upcoming' ? 'opacity:.55' : ''}">
-      <span class="idx num">${r.day}</span>
-      <span class="mid"><strong>+ ${r.energy} ${esc(tt('energy_unit'))}</strong><span>${esc(r.description || '')}</span></span>
-      <span class="end">${end}</span>
+  if(!data || !data.success || !data.rewards){
+    if(hero) hero.innerHTML = '';
+    if(box) box.innerHTML = `<div class="empty"><p>${esc(tt('err'))}</p></div>`;
+    return;
+  }
+
+  const cycleDay = data.cycle_day || 1;
+  const claimedToday = !!data.claimed_today;
+  const doneCount = claimedToday ? cycleDay : Math.max(0, cycleDay - 1);
+  const pct = Math.min(100, Math.round((doneCount / 7) * 100));
+
+  if(pill) pill.textContent = `${cycleDay} / 7`;
+
+  const todayReward = data.rewards.find(r => r.day === cycleDay) || data.rewards[0];
+
+  if(hero){
+    hero.innerHTML = `
+      <div class="bnx-hero ${claimedToday ? 'is-done' : ''}">
+        <span class="bnx-badge">${IC.spark} ${esc(bnxDayWord(cycleDay))}</span>
+        <div class="bnx-orb" id="bnx-orb">${claimedToday ? IC.check : IC.bolt}</div>
+        <div class="bnx-val num">+${todayReward.energy} ${esc(bnxEnergyWord(todayReward.energy))}</div>
+        <div class="bnx-sub">${esc(claimedToday ? bnxTomorrowText() : (todayReward.description || tt('bonus_ready')))}</div>
+        ${claimedToday
+          ? ''
+          : `<button class="btn btn-brass btn-wide bnx-cta" id="bnx-claim-btn" onclick="claimBonus()">
+               ${esc(tt('bonus_claim'))} +${todayReward.energy} ⚡
+             </button>`}
+      </div>
+      <div class="bnx-bar-wrap">
+        <div class="bnx-bar-top">
+          <span>${esc(bnxStreakTitle(cycleDay))}</span>
+          <span class="num">${doneCount} / 7</span>
+        </div>
+        <div class="bnx-bar"><i style="width:${pct}%"></i></div>
+      </div>`;
+  }
+
+  const first6 = data.rewards.slice(0, 6);
+  const day7 = data.rewards[6];
+
+  const renderCell = (r, idx) => {
+    const st = r.state; // claimed | current | locked
+    const cls = st === 'claimed' ? 'is-claimed' : (st === 'current' ? 'is-current' : 'is-locked');
+    const delay = (idx * 40) + 'ms';
+    let foot = '·';
+    if(st === 'claimed') foot = `${IC.check} <span>${esc(tt('bonus_claimed'))}</span>`;
+    else if(st === 'current') foot = `<span>${esc(tt('nav_home'))}</span>`;
+
+    if(r.day === 7){
+      return `<div class="bnx-cell is-grand ${cls}" style="animation-delay:${delay}">
+        <div class="g-left">
+          <div class="g-ico">${IC.spark}</div>
+          <div>
+            <div class="d">${esc(bnxDayWord(7))} · ${esc(r.description || 'Гранд-бонус')}</div>
+            <div class="amt num">+${r.energy} <span class="u">${esc(bnxEnergyWord(r.energy))}</span></div>
+          </div>
+        </div>
+        <div class="st">${foot}</div>
+      </div>`;
+    }
+
+    return `<div class="bnx-cell ${cls}" style="animation-delay:${delay}">
+      <span class="d">${esc(bnxDayWord(r.day))}</span>
+      <span class="amt num">+${r.energy}</span>
+      <span class="u">${esc(bnxEnergyWord(r.energy))}</span>
+      <span class="st">${foot}</span>
     </div>`;
-  }).join('');
+  };
+
+  box.innerHTML = `<div class="bnx-grid">
+    ${first6.map((r, i) => renderCell(r, i)).join('')}
+    ${day7 ? renderCell(day7, 6) : ''}
+  </div>`;
 }
+
 async function claimBonus(){
   if(requireAuth({ action: 'bonus' })) return;
+  const btn = document.getElementById('bnx-claim-btn');
+  if(btn){ btn.disabled = true; btn.textContent = tt('wait'); }
+
   const data = await api('/bonus/claim', 'POST');
   if(data && data.success){
     S.energy = data.energy;
     S.streak = data.streak || S.streak;
     paintEnergy();
-    toast('+ ' + data.bonus_amount + ' ' + tt('energy_unit'));
     bridge.haptic('ok');
-    loadBonus();
+
+    // Плавная вспышка +X ⚡ поверх экрана
+    const burst = document.createElement('div');
+    burst.className = 'bnx-burst';
+    burst.textContent = `+${data.bonus_amount} ⚡`;
+    document.body.appendChild(burst);
+    setTimeout(() => burst.remove(), 1200);
+
+    toast('+' + data.bonus_amount + ' ' + bnxEnergyWord(data.bonus_amount));
+    await loadBonus();
     loadBonusBanner();
-  } else toast(tt('err'));
+  } else {
+    if(btn){ btn.disabled = false; btn.textContent = tt('bonus_claim'); }
+    toast(tt('err'));
+  }
 }
 
 /* ============================ НАТАЛЬНАЯ КАРТА ============================ */
