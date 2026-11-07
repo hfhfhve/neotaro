@@ -3686,22 +3686,25 @@ const AUTH_REDIRECT_URL = '/login/';
 let _bouncing = false;
 
 function bounceToAuth(){
-  /* Запросов в полёте может быть несколько, и каждый может принести 401.
-     Без этого флага получим пачку редиректов подряд. */
   if(_bouncing) return;
+  /* Если мы УЖЕ находимся на /login/ — никуда не редиректим, а просто показываем встроенное окно входа #gate-login! */
+  if(location.pathname.indexOf('/login') === 0){
+    ['boot','down'].forEach(g => document.getElementById('gate-' + g).classList.add('hidden'));
+    document.getElementById('gate-login').classList.remove('hidden');
+    document.getElementById('shell').style.display = 'none';
+    return;
+  }
   _bouncing = true;
   try {
     localStorage.removeItem('neotaro_token');
     localStorage.removeItem('neotaro_user');
   } catch(e){}
-  /* Запоминаем, куда человек шёл, чтобы после входа вернуть его туда же. */
   var next = '';
   try {
     next = '?next=' + encodeURIComponent(location.pathname + location.search + location.hash);
     var _ref = bridge.startParam;
     if(_ref) next += '&ref=' + encodeURIComponent(_ref);
   } catch(e){}
-  /* replace, а не href: иначе кнопка «назад» вернёт на /app/ и всё повторится. */
   location.replace(AUTH_REDIRECT_URL + next);
 }
 
@@ -4665,6 +4668,54 @@ function drawTicks(){
     s += `<line x1="${(160 + Math.cos(a)*r1).toFixed(1)}" y1="${(160 + Math.sin(a)*r1).toFixed(1)}" x2="${(160 + Math.cos(a)*r2).toFixed(1)}" y2="${(160 + Math.sin(a)*r2).toFixed(1)}" stroke-width="${major ? 1.3 : .7}" opacity="${major ? .85 : .4}"/>`;
   }
   g.innerHTML = s;
+}
+
+/* ============================ КАРТА ДНЯ ============================ */
+function neoLangOnly(s){
+  if(!s) return s;
+  const l = (document.documentElement.lang || lang || 'ru').slice(0,2);
+  if(l === 'en') return s;
+  return String(s)
+    .replace(/\bCosmic Message\b/gi, '')
+    .replace(/\bMain Arcana of the Day\b[:.]?/gi, '')
+    .replace(/\bDaily Card\b[:.]?/gi, '')
+    .replace(/[ \t]{2,}/g, ' ');
+}
+function arcNumLabel(id){
+  const n = parseInt(id, 10);
+  return (n >= 1 && n <= 78) ? ('№ ' + n + ' / 78') : '—';
+}
+function paintDaily(){
+  if(isGuest() && !S.daily){
+    try{
+      const saved = JSON.parse(localStorage.getItem('neo_guest_daily') || 'null');
+      const todayKey = new Date().toISOString().slice(0,10);
+      if(saved && saved.date === todayKey && saved.card) S.daily = saved.card;
+    }catch(e){}
+  }
+  const c = S.daily;
+  const img = document.getElementById('dial-img');
+  const back = document.getElementById('dial-back');
+  if(c && c.name){
+    img.src = CARD_IMG(c.id);
+    img.style.display = 'block';
+    back.style.display = 'none';
+    document.getElementById('home-arc').textContent = arcNumLabel(c.id) + ' · ' + tt('home_arc_open');
+    document.getElementById('home-title').textContent = c.name;
+    const rawText = c.teaser || c.interpretation || '';
+    const short = neoLangOnly(rawText.replace(/<[^>]*>/g, ' ')).trim();
+    document.getElementById('home-lead').textContent = short ? short.slice(0, 260) + (short.length > 260 ? '…' : '') : tt('daily_reading');
+    document.getElementById('home-cta').textContent = tt('home_cta_open');
+    const p = document.getElementById('dial-pointer');
+    if(p) p.style.transform = `rotate(${(c.id % 78) / 78 * 360}deg)`;
+  } else {
+    img.style.display = 'none';
+    back.style.display = 'flex';
+    document.getElementById('home-arc').textContent = tt('home_arc_empty');
+    document.getElementById('home-title').textContent = tt('home_title_empty');
+    document.getElementById('home-lead').textContent = tt('home_lead_empty');
+    document.getElementById('home-cta').textContent = tt('home_cta_empty');
+  }
 }
 
 function formatReadingHtml(raw){
