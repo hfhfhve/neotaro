@@ -258,6 +258,57 @@
 .site-foot p{margin:0}
 .site-foot nav{min-width:0}
 
+/* ===== БЛОК ВОРОНКИ ПОСЛЕ КАРТЫ ДНЯ (NIGHT ATLAS) ===== */
+.daily-next{
+  margin-top:20px;padding-top:18px;
+  border-top:1px solid var(--line-soft);
+  animation:rise .4s cubic-bezier(.2,.7,.3,1) both;
+}
+.daily-next-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:12px;
+}
+.daily-next-grid{
+  display:grid;grid-template-columns:1fr;gap:9px;margin-bottom:12px;
+}
+.daily-next-card{
+  display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+  padding:13px 15px;border-radius:12px;
+  border:1px solid var(--line);
+  background:linear-gradient(135deg,rgba(217,174,95,.11),rgba(18,24,41,.88));
+  transition:border-color .2s,background .2s,transform .16s;
+}
+.daily-next-card:hover{
+  border-color:var(--brass);
+  background:linear-gradient(135deg,rgba(217,174,95,.18),rgba(24,32,58,.92));
+}
+.daily-next-card:active{transform:scale(.985)}
+.daily-next-card.is-sec{
+  border-color:var(--line-soft);
+  background:rgba(18,24,41,.68);
+}
+.daily-next-card.is-sec:hover{border-color:var(--line)}
+.daily-next-ico{
+  width:36px;height:36px;border-radius:10px;flex:0 0 auto;
+  border:1px solid var(--line);background:rgba(217,174,95,.09);
+  display:flex;align-items:center;justify-content:center;color:var(--brass-bright);
+}
+.daily-next-ico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.4}
+.daily-next-mid{flex:1;min-width:0}
+.daily-next-mid strong{
+  display:block;font-family:var(--serif);font-weight:400;font-size:16.5px;
+  color:var(--brass-bright);line-height:1.22;margin-bottom:3px;
+}
+.daily-next-card.is-sec .daily-next-mid strong{color:var(--ivory)}
+.daily-next-mid span{display:block;font-size:12.5px;color:var(--mist);line-height:1.4}
+.daily-next-arw{flex:0 0 auto;color:var(--brass);font-family:var(--mono);font-size:14px}
+html[data-theme="dawn"] .daily-next-card{
+  background:linear-gradient(135deg,rgba(154,108,28,.12),#FFFFFF);
+  box-shadow:0 2px 10px rgba(90,66,26,.06);
+}
+html[data-theme="dawn"] .daily-next-card.is-sec{background:#FFFFFF}
+html[data-theme="dawn"] .daily-next-mid strong{color:#4A3208}
+
 
 /* Мега-подвал */
 .site-foot{margin-top:70px;border-top:1px solid var(--line-soft);background:linear-gradient(180deg,rgba(18,24,41,.55),rgba(11,15,30,1));padding:52px 0 26px}
@@ -2510,6 +2561,38 @@ html[data-theme="dawn"] .bnx-burst{background:#FFFFFF;color:#5C3D08}
     </div>
   </div>
   <div class="reading" id="daily-text"></div>
+
+  <!-- Воронка перехода к раскладам и Оракулу после открытия Карты Дня -->
+  <div class="daily-next" id="daily-next" style="display:none">
+    <div class="daily-next-head">
+      <span class="eyebrow" id="dn-eyebrow">Углубить разбор</span>
+      <span class="tag" id="dn-energy-badge">⚡ На балансе: 5</span>
+    </div>
+    <div class="daily-next-grid">
+      <button type="button" class="daily-next-card" onclick="openDailySpread('feelings')">
+        <span class="daily-next-ico">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg>
+        </span>
+        <span class="daily-next-mid">
+          <strong id="dn-feel-t">Расклад «Что он чувствует?»</strong>
+          <span id="dn-feel-s">Истинные мысли, чувства и скрытые намерения человека</span>
+        </span>
+        <span class="daily-next-arw">→</span>
+      </button>
+
+      <button type="button" class="daily-next-card is-sec" onclick="openDailySpread('one-card')">
+        <span class="daily-next-ico">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3.5" width="12" height="17" rx="2"/><path d="M12 8.5v4M12 15v.5"/></svg>
+        </span>
+        <span class="daily-next-mid">
+          <strong id="dn-one-t">1 карта на ваш личный вопрос</strong>
+          <span id="dn-one-s">Быстрый и точный ответ аркана на любую ситуацию</span>
+        </span>
+        <span class="daily-next-arw">→</span>
+      </button>
+    </div>
+  </div>
+
   <div class="sheet-acts">
     <button class="btn btn-brass btn-wide" id="daily-draw" onclick="drawDaily()" data-t="daily_draw">Вытянуть карту</button>
     <button class="btn btn-line btn-wide" id="daily-discuss" onclick="discussDaily()" style="display:none" data-t="daily_discuss">Спросить об этой карте</button>
@@ -4731,7 +4814,6 @@ function formatReadingHtml(raw){
 
 function openDaily(){
   if(window.neoGoal) neoGoal('open_daily_sheet');
-  // Если гость уже тянул карту сегодня в этом браузере — восстановим её из localStorage
   if(isGuest() && !S.daily){
     try{
       const saved = JSON.parse(localStorage.getItem('neo_guest_daily') || 'null');
@@ -4744,6 +4826,8 @@ function openDaily(){
   const isPreview = !!(has && S.daily.isGuestPreview);
   document.getElementById('daily-draw').style.display = has ? 'none' : 'flex';
   document.getElementById('daily-discuss').style.display = (has && !isPreview) ? 'flex' : 'none';
+  const nextBox = document.getElementById('daily-next');
+  if(nextBox) nextBox.style.display = (has && !isPreview) ? 'block' : 'none';
   document.getElementById('daily-wait').style.display = 'none';
   if(has) fillDaily(S.daily);
   else {
@@ -4793,8 +4877,24 @@ function fillDaily(c){
     textBox.innerHTML = formatReadingHtml(c.interpretation || '');
     document.getElementById('daily-discuss').style.display = 'flex';
     document.getElementById('daily-draw').style.display = 'none';
+    const nextBox = document.getElementById('daily-next');
+    if(nextBox){
+      nextBox.style.display = 'block';
+      const badge = document.getElementById('dn-energy-badge');
+      if(badge){
+        badge.textContent = (lang === 'ru')
+          ? ('⚡ Доступно: ' + S.energy + ' энергии')
+          : ('⚡ Available: ' + S.energy + ' energy');
+      }
+      if(lang !== 'ru'){
+        document.getElementById('dn-eyebrow').textContent = 'Go deeper';
+        document.getElementById('dn-feel-t').textContent = 'Spread “What do they feel?”';
+        document.getElementById('dn-feel-s').textContent = 'True thoughts, feelings and hidden intentions';
+        document.getElementById('dn-one-t').textContent = '1 Card for your question';
+        document.getElementById('dn-one-s').textContent = 'A direct answer for any situation';
+      }
+    }
   }
-}
 
 function unlockGuestDaily(cardId){
   if(window.neoGoal) neoGoal('guest_daily_unlock_click', { card_id: cardId });
@@ -4866,6 +4966,49 @@ async function drawDaily(){
   } else {
     document.getElementById('daily-draw').style.display = 'flex';
     toast(tt('err'));
+  }
+}
+
+function discussDaily(){
+  if(!S.daily || !S.daily.name) return;
+  if(requireAuth({ action: 'daily' })) return;
+  const cardName = S.daily.name;
+  const cleanInterp = String(S.daily.interpretation || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  window.cardDiscussContext =
+    'Сегодня пользователю выпала Карта Дня: «' + cardName + '». ' +
+    'Краткое содержание толкования, которое он только что прочитал: ' + cleanInterp.slice(0, 1000);
+
+  closeSheets();
+  go('chat');
+  if(window.neoGoal) neoGoal('chat_start', { from: 'daily_card' });
+  setTimeout(() => {
+    const input = document.getElementById('chat-in');
+    if(!input) return;
+    input.value = tt('daily_ask_text') + cardName + '. Как мне прожить этот аркан сегодня с максимальной пользой?';
+    sendChat();
+  }, 320);
+}
+
+async function openDailySpread(spreadId){
+  if(requireAuth({ action: 'spread', spreadId: spreadId })) return;
+  bridge.haptic();
+  closeSheets();
+  if(window.neoGoal) neoGoal('daily_to_spread_click', { spread: spreadId });
+
+  // Если список раскладов ещё не успел подгрузиться — ждём его загрузки
+  if(!S.spreads || !S.spreads.length){
+    const data = await api('/spreads?lang=' + encodeURIComponent(lang || 'ru'), 'GET', {}, true);
+    if(data && data.success && data.spreads) S.spreads = data.spreads;
+  }
+  const found = (S.spreads || []).find(x => x.id === spreadId);
+  if(found){
+    pickSpread(spreadId);
+    setTimeout(() => {
+      const q = document.getElementById('tb-q');
+      if(q) q.focus();
+    }, 250);
+  } else {
+    go('spreads');
   }
 }
 /* ============================ РАСКЛАДЫ ============================ */
