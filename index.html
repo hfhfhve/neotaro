@@ -188,7 +188,7 @@ body.nav-open{overflow:hidden}
 
 /* виджет да/нет */
 .ask{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(36px,5vw,86px);align-items:start}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(22px,2.4vw,34px)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(22px,2.4vw,34px);position:relative;overflow:hidden}
 .chips{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:18px}
 .chip{padding:9px 15px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--line);
   color:var(--muted);font-size:13px;cursor:pointer;transition:color .3s,border-color .3s,background .3s}
@@ -201,15 +201,50 @@ body.nav-open{overflow:hidden}
 #yn-count{font:400 11px/1 var(--mono);color:var(--dim);letter-spacing:.08em}
 .ask-note{margin:14px 0 0;font-size:13.5px;line-height:1.55;color:var(--dim);min-height:20px}
 .ask-note.bad{color:#E4A3A3}
-.out{margin-top:20px;padding-top:20px;border-top:1px solid var(--line);animation:pop .8s var(--ease)}
+
+/* ожидание тасовки */
+.yn-wait{display:flex;align-items:center;gap:16px;margin-top:20px;padding:18px 20px;border-radius:16px;
+  border:1px solid var(--line);background:rgba(255,255,255,.02);animation:pop .5s var(--ease)}
+.yn-wait-card{width:38px;height:60px;border-radius:6px;border:1px solid rgba(255,255,255,.28);
+  background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.14),rgba(0,0,0,.6));
+  display:grid;place-items:center;flex:none;animation:ynPulse 1.6s ease-in-out infinite}
+.yn-wait-card::after{content:'✦';font-size:13px;color:rgba(255,255,255,.75)}
+@keyframes ynPulse{0%,100%{transform:translateY(0) rotate(-2deg);border-color:rgba(255,255,255,.22)}50%{transform:translateY(-4px) rotate(2deg);border-color:rgba(255,255,255,.55)}}
+.yn-wait-t{font-weight:500;color:#fff;font-size:14.5px}
+.yn-wait-s{font:400 11px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:4px}
+
+/* карточка ответа */
+.out{margin-top:22px;padding-top:22px;border-top:1px solid var(--line);animation:pop .75s var(--ease)}
 @keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.verdict{font-family:var(--serif);font-weight:400;font-size:clamp(27px,3.2vw,42px);line-height:1.1;color:#fff;margin:0}
-.cardname{margin:9px 0 0;font:400 11px/1 var(--mono);letter-spacing:.17em;text-transform:uppercase;color:var(--dim)}
-.out-text{position:relative;margin:17px 0 0;font-size:15.5px;line-height:1.7;color:var(--text);max-height:132px;overflow:hidden}
-.out-text::after{content:'';position:absolute;left:0;right:0;bottom:0;height:66px;background:linear-gradient(to bottom,transparent,var(--card))}
-.lock{margin-top:18px;padding:18px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
-.lock-t{font-weight:500;color:#fff;font-size:15px}
-.lock-s{margin:6px 0 15px;font-size:13.5px;color:var(--muted);line-height:1.55}
+.out-head{display:flex;align-items:center;gap:18px}
+.out-card-img{width:58px;height:94px;border-radius:8px;object-fit:cover;border:1px solid var(--line-hi);
+  background:#0B0D11;flex:none;box-shadow:0 12px 28px rgba(0,0,0,.55);
+  animation:ynFlip .65s var(--ease)}
+@keyframes ynFlip{from{opacity:0;transform:perspective(500px) rotateY(80deg) scale(.9)}to{opacity:1;transform:none}}
+.out-meta{min-width:0;flex:1}
+.verdict-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;
+  font:500 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  border:1px solid var(--line-hi);background:rgba(255,255,255,.05);color:#fff;margin-bottom:8px}
+.verdict-pill i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.verdict-pill.is-yes{color:#A8E0B8;border-color:rgba(168,224,184,.32);background:rgba(168,224,184,.08)}
+.verdict-pill.is-wait{color:#E9D29E;border-color:rgba(233,210,158,.32);background:rgba(233,210,158,.08)}
+.verdict-pill.is-no{color:#E4A3A3;border-color:rgba(228,163,163,.32);background:rgba(228,163,163,.08)}
+.verdict{font-family:var(--serif);font-weight:400;font-size:clamp(24px,2.6vw,34px);line-height:1.12;color:#fff;margin:0}
+.cardname{margin:6px 0 0;font:400 11px/1.3 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+.out-text{position:relative;margin:18px 0 0;font-size:15px;line-height:1.72;color:var(--text);max-height:158px;overflow:hidden}
+.out-text p{margin:0 0 11px}
+.out-text p:last-child{margin-bottom:0}
+.out-text b,.out-text strong{color:#fff;font-weight:500}
+.out-text::after{content:'';position:absolute;left:0;right:0;bottom:0;height:74px;
+  background:linear-gradient(to bottom,rgba(17,19,24,0),rgba(17,19,24,.88) 65%,var(--card));pointer-events:none}
+
+.lock{margin-top:16px;padding:18px 20px;border:1px solid var(--line-hi);border-radius:16px;
+  background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.015));
+  display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.lock-copy{flex:1 1 240px}
+.lock-t{font-weight:500;color:#fff;font-size:15px;display:flex;align-items:center;gap:8px}
+.lock-s{margin:5px 0 0;font-size:13.5px;color:var(--muted);line-height:1.55}
 .ask-list{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .ask-list li{background:var(--bg);padding:16px 20px;display:flex;gap:14px;align-items:baseline;font-size:14.5px;color:var(--muted)}
 .ask-list b{font:500 10.5px/1 var(--mono);letter-spacing:.14em;color:var(--dim);flex:none;width:22px}
@@ -505,25 +540,41 @@ body.nav-open{overflow:hidden}
       <div class="panel r r-scale" style="--i:1" id="yn">
         <div class="chips">
           <button type="button" class="chip yn-chip">Стоит ли мне менять работу сейчас?</button>
-          <button type="button" class="chip yn-chip">Он вернётся?</button>
-          <button type="button" class="chip yn-chip">Стоит ли переезжать в другой город?</button>
+          <button type="button" class="chip yn-chip">Что он чувствует ко мне на самом деле?</button>
+          <button type="button" class="chip yn-chip">Исполнится ли задуманное в этом месяце?</button>
         </div>
         <label class="sr" for="yn-q">Ваш вопрос</label>
-        <textarea class="field" id="yn-q" maxlength="140" placeholder="Например: стоит ли мне принять это предложение о работе?"></textarea>
+        <textarea class="field" id="yn-q" data-clarity-unmask="true" maxlength="140" placeholder="Например: стоит ли мне принять это предложение о работе?"></textarea>
         <div class="field-meta">
           <span id="yn-count">0 / 140</span>
           <button class="btn" type="button" id="yn-go"><span id="yn-go-label">Вытянуть карту</span> <span class="arw">→</span></button>
         </div>
         <p class="ask-note" id="yn-note"></p>
 
+        <div class="yn-wait" id="yn-wait" hidden>
+          <div class="yn-wait-card" aria-hidden="true"></div>
+          <div>
+            <div class="yn-wait-t" id="yn-wait-step">Тасуем колоду из 78 арканов…</div>
+            <div class="yn-wait-s">Оракул настраивается на ваш вопрос</div>
+          </div>
+        </div>
+
         <div class="out" id="yn-out" hidden>
-          <p class="verdict" id="yn-verdict"></p>
-          <p class="cardname" id="yn-cardname"></p>
+          <div class="out-head">
+            <img class="out-card-img" id="yn-img" src="" alt="" hidden>
+            <div class="out-meta">
+              <span class="verdict-pill" id="yn-pill"><i></i><span id="yn-pill-tx">Вердикт</span></span>
+              <p class="verdict" id="yn-verdict"></p>
+              <p class="cardname" id="yn-cardname"></p>
+            </div>
+          </div>
           <div class="out-text" id="yn-text"></div>
           <div class="lock" id="yn-lock" hidden>
-            <div class="lock-t">Полный разбор в кабинете</div>
-            <p class="lock-s">Почему именно эта карта, что она советует и что будет, если поступить иначе.</p>
-            <a class="btn" id="yn-lock-btn" href="/login/?from=yesno">Открыть разбор <span class="arw">→</span></a>
+            <div class="lock-copy">
+              <div class="lock-t">Совет карты и сроки оборваны</div>
+              <p class="lock-s">Откройте продолжение разбора в кабинете — бесплатно + 5 ⚡ бонусной энергии.</p>
+            </div>
+            <a class="btn" id="yn-lock-btn" href="/login/?from=yesno">Дочитать разбор <span class="arw">→</span></a>
           </div>
         </div>
       </div>
@@ -998,11 +1049,38 @@ $$('a[href^="/login/"], a[href^="/app/"]').forEach(function(a){
 
 /* ── виджет да/нет ── */
 var q=$('#yn-q'), cnt=$('#yn-count'), go=$('#yn-go'), goLab=$('#yn-go-label'),
-    note=$('#yn-note'), out=$('#yn-out'), verd=$('#yn-verdict'),
-    cname=$('#yn-cardname'), otext=$('#yn-text'), lock=$('#yn-lock');
-var LIMIT=140, busy=false;
+    note=$('#yn-note'), waitBox=$('#yn-wait'), waitStep=$('#yn-wait-step'),
+    out=$('#yn-out'), imgEl=$('#yn-img'), pill=$('#yn-pill'), pillTx=$('#yn-pill-tx'),
+    verd=$('#yn-verdict'), cname=$('#yn-cardname'), otext=$('#yn-text'), lock=$('#yn-lock');
+var LIMIT=140, busy=false, waitTimer=null;
 
 function setNote(t,bad){ if(!note)return; note.textContent=t||''; note.classList.toggle('bad',!!bad); }
+
+/* Превращаем любые <br>, &lt;br&gt; и переносы строк от ИИ в чистые абзацы */
+function formatTeaserHtml(raw){
+  if(!raw) return '';
+  var safe = String(raw)
+    .replace(/&lt;br\s*\/?&gt;/gi, '\n')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/&lt;\/?p&gt;/gi, '\n\n')
+    .replace(/<\/?p>/gi, '\n\n');
+  // Экранируем всё кроме <b> и </b>
+  safe = safe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/&lt;b&gt;/gi, '<b>')
+    .replace(/&lt;\/b&gt;/gi, '</b>');
+  var parts = safe.split(/\n+/).map(function(s){ return s.trim(); }).filter(Boolean);
+  return parts.map(function(p){ return '<p>' + p + '</p>'; }).join('');
+}
+
+function classifyVerdict(v){
+  var s = String(v || '').toLowerCase();
+  if(s.indexOf('нет') !== -1) return {cls:'is-no', label:'Ответ аркана'};
+  if(s.indexOf('время') !== -1) return {cls:'is-wait', label:'Пауза'};
+  return {cls:'is-yes', label:'Благоприятно'};
+}
 
 if(q&&cnt){
   var upd=function(){ cnt.textContent=q.value.length+' / '+LIMIT; };
@@ -1030,7 +1108,20 @@ if(go) go.addEventListener('click',function(){
   busy=true; go.disabled=true;
   if(goLab) goLab.textContent='Тасуем колоду…';
   setNote('');
+  if(out) out.hidden=true;
+  if(waitBox) waitBox.hidden=false;
+
+  var steps=['Тасуем колоду из 78 арканов…','Вытягиваем ваш аркан…','Оракул читает символику карты…'];
+  var si=0;
+  if(waitStep) waitStep.textContent=steps[0];
+  clearInterval(waitTimer);
+  waitTimer=setInterval(function(){
+    si=(si+1)%steps.length;
+    if(waitStep) waitStep.textContent=steps[si];
+  }, 1800);
+
   ym('yesno_widget');
+  try{ if(window.clarity) window.clarity('event','yesno_widget'); }catch(e){}
 
   fetch(API+'/free/yesno',{
     method:'POST',
@@ -1039,22 +1130,55 @@ if(go) go.addEventListener('click',function(){
   })
   .then(function(r){return r.json().catch(function(){return {}})})
   .then(function(d){
+    clearInterval(waitTimer);
+    if(waitBox) waitBox.hidden=true;
+
     if(!d || !d.success){
       var m=d && d.message;
-      if(m==='limit'){ setNote('На сегодня бесплатные вопросы закончились. В кабинете ограничений нет.',true); ym('yesno_limit'); }
+      if(m==='limit'){ setNote('На сегодня бесплатные быстрые вопросы закончились. В кабинете ограничений нет.',true); ym('yesno_limit'); }
       else if(m==='bad_question'){ setNote('Переформулируйте вопрос — колода его не поняла.',true); }
       else setNote('Не удалось вытянуть карту. Попробуйте ещё раз.',true);
       return;
     }
-    if(verd)  verd.textContent=d.verdict||'';
-    if(cname) cname.textContent=d.card||'';
-    if(otext) otext.textContent=d.teaser||'';
-    if(out)   out.hidden=false;
-    if(lock)  lock.hidden=false;
+
+    var vMeta = classifyVerdict(d.verdict);
+    if(pill){
+      pill.className = 'verdict-pill ' + vMeta.cls;
+      if(pillTx) pillTx.textContent = vMeta.label;
+    }
+    if(verd)  verd.textContent = d.verdict || '';
+    if(cname) cname.textContent = d.card ? ('Аркан: ' + d.card) : '';
+    if(imgEl){
+      if(d.image || d.card_id){
+        imgEl.src = d.image || ('https://api.neotaro.ru/static/cards/' + d.card_id + '.webp');
+        imgEl.alt = d.card || 'Карта Таро';
+        imgEl.hidden = false;
+      } else {
+        imgEl.hidden = true;
+      }
+    }
+    if(otext) otext.innerHTML = formatTeaserHtml(d.teaser || '');
+    if(out)   out.hidden = false;
+    if(lock)  lock.hidden = false;
+
+    /* Сохраняем контекст вопроса, чтобы после входа в кабинет человек мог продолжить */
+    try{
+      sessionStorage.setItem('neo_guest_intent', JSON.stringify({
+        action: 'chat',
+        text: 'Мой вопрос был: «' + text + '». Выпала карта ' + (d.card || '') + ' (' + (d.verdict || '') + '). Расскажи подробнее, что это значит и как мне лучше поступить?',
+        ts: Date.now()
+      }));
+    }catch(e){}
+
     ym('yesno_done');
+    try{ if(window.clarity) window.clarity('event','yesno_done'); }catch(e){}
     if(out) out.scrollIntoView({behavior:'smooth',block:'nearest'});
   })
-  .catch(function(){ setNote('Сеть недоступна. Проверьте соединение и попробуйте снова.',true) })
+  .catch(function(){
+    clearInterval(waitTimer);
+    if(waitBox) waitBox.hidden=true;
+    setNote('Сеть недоступна. Проверьте соединение и попробуйте снова.',true);
+  })
   .then(function(){
     busy=false; go.disabled=false;
     if(goLab) goLab.textContent='Вытянуть карту';
@@ -1062,9 +1186,10 @@ if(go) go.addEventListener('click',function(){
 });
 
 var lb=$('#yn-lock-btn');
-if(lb) lb.addEventListener('click',function(){ ym('login_click',{place:'yesno_lock'}); });
-
-})();
+if(lb) lb.addEventListener('click',function(){
+  ym('login_click',{place:'yesno_lock'});
+  try{ if(window.clarity) window.clarity('event','yesno_unlock_click'); }catch(e){}
+});
 </script>
 </div>
 </body>
