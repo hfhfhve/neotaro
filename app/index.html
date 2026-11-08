@@ -1627,6 +1627,100 @@ html[data-theme="dawn"] .bnx-burst{background:#FFFFFF;color:#5C3D08}
   }
 })();
 </script>
+<style id="neo-home-v2">
+/* ============ ГЛАВНАЯ v2: компактная карта дня + вопрос + практики ============ */
+.hm-legacy{display:none!important}
+#v-home button{font:inherit;color:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hm-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.hm-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.hm-daily,.hm-ask{border:1px solid var(--line-soft);border-radius:18px;background:linear-gradient(160deg,rgba(24,32,58,.72),rgba(11,15,30,.78));padding:18px}
+.hm-daily{display:flex;gap:18px;align-items:center}
+.hm-card{flex:0 0 auto;position:relative;width:104px;height:176px;padding:0;border:1px solid var(--line)!important;border-radius:11px;overflow:hidden;background:linear-gradient(165deg,#1B2340,#0B0F1E)!important;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 28px rgba(0,0,0,.45),inset 0 0 0 3px rgba(217,174,95,.06);transition:transform .2s,box-shadow .2s,border-color .2s}
+.hm-card:hover{border-color:var(--brass)!important;box-shadow:0 14px 34px rgba(0,0,0,.55),0 0 22px rgba(217,174,95,.16)}
+.hm-card:active{transform:scale(.97)}
+.hm-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hm-card .back{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;width:100%;height:100%;text-align:center;background:radial-gradient(circle at 50% 42%,rgba(217,174,95,.16),transparent 62%)}
+.hm-card .glyph{color:var(--brass);animation:hmPulse 2.6s ease-in-out infinite}
+.hm-card .glyph .ic{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.2;stroke-linejoin:round}
+.hm-card .t{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass-pale);opacity:.85}
+@keyframes hmPulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+.hm-dcopy{flex:1;min-width:0}
+.hm-arc{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-bottom:7px}
+.hm-dtitle{font-family:var(--serif);font-weight:400;font-size:20px;line-height:1.25;color:var(--ivory);margin-bottom:7px}
+.hm-dlead{font-size:13.5px;line-height:1.55;color:var(--mist);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hm-dcta{margin-top:13px;text-align:center!important}
+.hm-ask{display:flex;flex-direction:column;gap:12px;border-color:var(--line);background:linear-gradient(160deg,rgba(217,174,95,.07),rgba(11,15,30,.8) 55%)}
+.hm-ask-h{display:flex;gap:12px;align-items:flex-start}
+.hm-ask-ic{flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--brass)}
+.hm-ask-ic .ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.2;stroke-linejoin:round}
+.hm-ask-t{font-family:var(--serif);font-weight:400;font-size:20px;line-height:1.25;color:var(--ivory);margin-bottom:4px}
+.hm-ask-s{font-size:13px;line-height:1.5;color:var(--mist)}
+.hm-q{min-height:66px;font-size:15px}
+.hm-q.is-shake{animation:hmShake .4s;border-color:var(--brass)}
+@keyframes hmShake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.hm-chips{display:flex;flex-wrap:wrap;gap:7px}
+.hm-chip{font-family:var(--mono)!important;font-size:10px!important;letter-spacing:.12em;text-transform:uppercase;color:var(--brass-pale)!important;border:1px solid var(--line-soft);border-radius:999px;padding:8px 13px;background:transparent;transition:border-color .2s,background .2s}
+.hm-chip:hover{border-color:var(--line)}
+.hm-chip.is-on{border-color:var(--brass);background:rgba(217,174,95,.14)}
+.hm-ask-btn{width:100%;justify-content:center;text-align:center!important;margin-top:2px}
+.hm-alm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:16px 0 0}
+.hm-pill{display:flex;flex-direction:column;gap:4px;padding:11px 14px;border:1px solid var(--line-soft);border-radius:13px;background:rgba(11,15,30,.55);transition:border-color .2s,background .2s}
+.hm-pill:hover{border-color:var(--line);background:rgba(217,174,95,.05)}
+.hm-pill .k{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}
+.hm-pill .v{font-size:14.5px;font-weight:600;color:var(--ivory);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hm-bonus{margin-top:12px}
+.hm-bonus:empty{display:none}
+.hm-sec{margin:26px 0 11px}
+.hm-oracle,.hm-cell,.hm-ref{display:flex;align-items:center;gap:13px;width:100%;border:1px solid var(--line-soft);border-radius:15px;background:rgba(18,24,41,.55);transition:border-color .2s,background .2s,transform .2s}
+.hm-oracle:hover,.hm-cell:hover,.hm-ref:hover{border-color:var(--line);transform:translateY(-1px)}
+.hm-oracle:active,.hm-cell:active,.hm-ref:active{background:rgba(18,24,41,.85);transform:none}
+.hm-oracle{padding:14px 16px;margin-bottom:10px;border-color:var(--line);background:linear-gradient(120deg,rgba(217,174,95,.09),rgba(18,24,41,.6) 60%)}
+.hm-prx{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.hm-cell{padding:14px}
+.hm-ic{flex:0 0 auto;width:40px;height:40px;border-radius:12px;border:1px solid var(--line-soft);background:rgba(217,174,95,.05);display:flex;align-items:center;justify-content:center;color:var(--brass)}
+.hm-ic .ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.hm-ct{flex:1;min-width:0}
+.hm-ct b{display:block;font-family:var(--serif);font-weight:400;font-size:15.5px;line-height:1.25;color:var(--ivory)}
+.hm-ct span{display:block;margin-top:3px;font-size:12px;line-height:1.4;color:var(--mist)}
+.hm-arrow{flex:0 0 auto;font-family:var(--mono);color:var(--brass);opacity:.8}
+.hm-ref{margin-top:22px;padding:13px 16px;border-style:dashed;background:transparent}
+.hm-ref-ic{flex:0 0 auto;width:34px;text-align:center;color:var(--brass);font-size:17px}
+.hm-pend{position:relative;display:flex;flex-direction:column;gap:5px;padding:14px 44px 14px 16px;margin:0 0 6px;border:1px solid var(--line);border-radius:14px;background:rgba(217,174,95,.07)}
+.hm-pend .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass)}
+.hm-pend .q{font-family:var(--serif);font-size:16px;line-height:1.35;color:var(--ivory);word-break:break-word}
+.hm-pend .s{font-size:12.5px;color:var(--mist)}
+.hm-pend-x{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:0;background:transparent;color:var(--mist);font-size:20px;line-height:1;cursor:pointer}
+@media(max-width:1000px){.hm-hero{grid-template-columns:1fr}}
+@media(max-width:900px){#home-eyebrow{visibility:hidden}.hm-top{margin-bottom:12px}}
+@media(max-width:900px){
+  .hm-alm{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin-left:-18px;margin-right:-18px;padding:0 18px 2px;scrollbar-width:none}
+  .hm-alm::-webkit-scrollbar{display:none}
+  .hm-pill{flex:0 0 auto;min-width:118px;scroll-snap-align:start}
+  .hm-prx{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:560px){
+  .hm-daily,.hm-ask{padding:15px;border-radius:16px}
+  .hm-daily{gap:15px;align-items:flex-start}
+  .hm-card{width:88px;height:150px}
+  .hm-dtitle,.hm-ask-t{font-size:18px}
+  .hm-dcta{width:100%}
+  .hm-cell{flex-direction:column;align-items:flex-start;gap:10px;padding:13px}
+  .hm-ic{width:36px;height:36px}
+}
+html[data-theme="obsidian"] .hm-daily,html[data-theme="obsidian"] .hm-cell,html[data-theme="obsidian"] .hm-pill{background:linear-gradient(160deg,rgba(16,18,24,.94),rgba(4,5,8,.94))}
+html[data-theme="obsidian"] .hm-ask,html[data-theme="obsidian"] .hm-oracle{background:linear-gradient(160deg,rgba(217,174,95,.06),rgba(4,5,8,.94) 60%)}
+html[data-theme="dawn"] .hm-daily,html[data-theme="dawn"] .hm-cell,html[data-theme="dawn"] .hm-pill{background:#FFFFFF;box-shadow:0 1px 2px rgba(90,66,26,.05),0 8px 22px rgba(90,66,26,.05)}
+html[data-theme="dawn"] .hm-ask,html[data-theme="dawn"] .hm-oracle{background:linear-gradient(160deg,#FFF6E2,#FFFFFF 60%);box-shadow:0 1px 2px rgba(90,66,26,.05),0 10px 26px rgba(90,66,26,.07)}
+html[data-theme="dawn"] .hm-ref{background:transparent}
+html[data-theme="dawn"] .hm-dtitle,html[data-theme="dawn"] .hm-ask-t,html[data-theme="dawn"] .hm-ct b,html[data-theme="dawn"] .hm-pill .v,html[data-theme="dawn"] .hm-pend .q{color:#241F16}
+html[data-theme="dawn"] .hm-dlead,html[data-theme="dawn"] .hm-ask-s,html[data-theme="dawn"] .hm-ct span,html[data-theme="dawn"] .hm-pill .k,html[data-theme="dawn"] .hm-pend .s{color:#6E6552}
+html[data-theme="dawn"] .hm-arc,html[data-theme="dawn"] .hm-ask-ic,html[data-theme="dawn"] .hm-ic,html[data-theme="dawn"] .hm-arrow,html[data-theme="dawn"] .hm-ref-ic,html[data-theme="dawn"] .hm-pend .k{color:#9A6C1C}
+html[data-theme="dawn"] .hm-chip{color:#7C5412!important}
+html[data-theme="dawn"] .hm-chip.is-on{background:rgba(154,108,28,.12)}
+html[data-theme="dawn"] .hm-card{background:linear-gradient(165deg,#2A2318,#14100A)!important;border-color:rgba(154,108,28,.55)!important}
+html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
+
+</style>
 </head>
 <body class="bg-space-900 min-h-screen">
 <!-- ==================== КАБИНЕТ (NIGHT ATLAS) ==================== -->
@@ -1785,118 +1879,85 @@ html[data-theme="dawn"] .bnx-burst{background:#FFFFFF;color:#5C3D08}
 
         <!-- ============ СЕГОДНЯ ============ -->
         <section class="view" id="v-home">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap">
+          <div class="hm-top">
             <div class="eyebrow" id="home-eyebrow">—</div>
             <button class="tag" id="home-plan" onclick="goPlans()" style="cursor:pointer;border:0">—</button>
           </div>
 
-          <div class="today">
-            <div>
-              <div class="dial">
-                <svg viewBox="0 0 320 320" aria-hidden="true">
-                  <circle cx="160" cy="160" r="152" fill="none" stroke="rgba(217,174,95,.16)"/>
-                  <circle cx="160" cy="160" r="133" fill="none" stroke="rgba(147,160,192,.12)"/>
-                  <g id="dial-ticks" stroke="rgba(217,174,95,.4)"></g>
-                  <g class="dial-spin">
-                    <circle cx="160" cy="160" r="120" fill="none" stroke="rgba(217,174,95,.2)" stroke-dasharray="1 9"/>
-                  </g>
-                  <g id="dial-pointer" class="dial-rot">
-                    <line x1="160" y1="22" x2="160" y2="44" stroke="#D9AE5F" stroke-width="1.6"/>
-                    <circle cx="160" cy="18" r="3.4" fill="#E9D9AC"/>
-                  </g>
-                  <circle cx="160" cy="160" r="96" fill="none" stroke="rgba(217,174,95,.14)"/>
-                </svg>
-                <button class="dial-face" id="dial-face" onclick="openDaily()" aria-label="Карта дня">
-                  <span class="back" id="dial-back">
-                    <span class="glyph"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.3 6.9 6.9 2.3-6.9 2.3L12 21.2l-2.3-6.9L2.8 12l6.9-2.3z"/></svg></span>
-                    <span class="t" data-t="dial_draw">вытянуть</span>
-                  </span>
-                  <img id="dial-img" alt="" style="display:none">
-                </button>
-              </div>
-              <div class="dial-cap m-hide" id="dial-cap" data-t="dial_cap">78 арканов · одна карта в сутки</div>
-            </div>
+          <!-- скрытые узлы старого циферблата: JS их ищет, оставлены для совместимости -->
+          <svg class="hm-legacy" aria-hidden="true"><g id="dial-ticks"></g><g id="dial-pointer"></g></svg>
+          <span class="hm-legacy" id="dial-cap"></span>
 
-            <div class="today-copy">
-              <div class="arc m-hide" id="home-arc" data-t="home_arc_empty">карта дня ещё не открыта</div>
-              <h1 class="h1" id="home-title" data-t="home_title_empty">Карта ждёт, пока вы её не перевернёте</h1>
-              <p class="lead" id="home-lead" data-t="home_lead_empty">Нажмите на карту в центре циферблата. Один аркан из семидесяти восьми закрепится за этими сутками — с разбором от оракула.</p>
-              <div class="today-acts">
-                <button class="btn btn-brass" onclick="openDaily()" id="home-cta" data-t="home_cta_empty">Перевернуть карту</button>
-                <button class="btn btn-line" onclick="goSpreadCta()" data-t="home_cta_spreads">Собрать расклад</button>
+          <div class="hm-hero">
+            <!-- 1. Карта дня — компактно -->
+            <div class="hm-daily">
+              <button class="hm-card" id="dial-face" type="button" onclick="openDaily()" aria-label="Карта дня">
+                <span class="back" id="dial-back">
+                  <span class="glyph"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.3 6.9 6.9 2.3-6.9 2.3L12 21.2l-2.3-6.9L2.8 12l6.9-2.3z"/></svg></span>
+                  <span class="t" data-t="dial_draw">вытянуть</span>
+                </span>
+                <img id="dial-img" alt="" style="display:none">
+              </button>
+              <div class="hm-dcopy">
+                <div class="hm-arc" id="home-arc" data-t="home_arc_empty">карта дня ещё не открыта</div>
+                <h2 class="hm-dtitle" id="home-title" data-t="home_title_empty">Карта ждёт, пока вы её не перевернёте</h2>
+                <p class="hm-dlead" id="home-lead" data-t="home_lead_empty">Один аркан из 78 — ваша подсказка на сегодня, с разбором от оракула.</p>
+                <button class="btn btn-brass btn-sm hm-dcta" onclick="openDaily()" id="home-cta" data-t="home_cta_empty">Перевернуть карту</button>
               </div>
             </div>
-          </div>
 
-          <div class="hair"></div>
-
-          <div class="almanac">
-            <button class="alm" type="button" onclick="go('calendar')"><div class="k" data-t="alm_lunar">Лунный день</div><div class="v num" id="alm-lunar">—</div><span class="alm-go m-only" data-t="alm_go_day">Разбор дня →</span></button>
-            <button class="alm" type="button" onclick="go('calendar')"><div class="k" data-t="alm_phase">Фаза</div><div class="v" id="alm-phase" style="font-size:15px;font-family:var(--sans);color:var(--ivory);font-weight:500">—</div><span class="alm-go m-only" data-t="alm_go_day">Разбор дня →</span></button>
-            <button class="alm" type="button" onclick="openStatInfo('sign')"><div class="k" data-t="alm_sign">Ваш знак</div><div class="v" id="alm-sign" style="font-size:15px;font-family:var(--sans);color:var(--ivory);font-weight:500">—</div><span class="alm-go m-only" data-t="alm_go_sign">Что это значит →</span></button>
-            <button class="alm" type="button" onclick="openSheet('bonus')"><div class="k" data-t="alm_streak">Дней подряд</div><div class="v num" id="alm-streak">0</div><span class="alm-go m-only" data-t="alm_go_rewards">Награды →</span></button>
-          </div>
-
-          <div id="home-bonus-slot" style="margin-top:14px"></div>
-
-          <div class="hair"></div>
-
-          <div class="orn m-hide"><span class="eyebrow" data-t="home_practices">Практики</span></div>
-          <div class="grid grid-3 m-hide">
-            <button class="tile" onclick="go('spreads')">
-              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg></span>
-              <h4 data-t="nav_spreads">Расклады</h4>
-              <p data-t="tile_spreads">Задайте вопрос и получите разбор позиций — от одной карты до Кельтского креста.</p>
-              <span class="foot" data-t="tile_open">Открыть →</span>
-            </button>
-            <button class="tile" onclick="go('dream')">
-              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 3.4a8.6 8.6 0 100 17.2 8.9 8.9 0 01-3.6-8.6 8.9 8.9 0 013.6-8.6z"/></svg></span>
-              <h4 data-t="nav_dream">Сонник</h4>
-              <p data-t="tile_dream">Опишите сон — разберём символы по Юнгу и архетипам.</p>
-              <span class="foot" data-t="tile_open">Открыть →</span>
-            </button>
-            <button class="tile" onclick="go('astro')">
-              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg></span>
-              <h4 data-t="nav_astro">Космо-паспорт</h4>
-              <p data-t="tile_astro">Небо в момент рождения: планеты, дома, асцендент. Нужны дата, время и город.</p>
-              <span class="foot" data-t="tile_open">Открыть →</span>
-            </button>
-            <button class="tile" onclick="go('syn')">
-              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg></span>
-              <h4 data-t="nav_syn">Совместимость</h4>
-              <p data-t="tile_syn">Две даты рождения — где связь держит, а где рвётся.</p>
-              <span class="foot" data-t="tile_open">Открыть →</span>
-            </button>
-            <button class="tile" onclick="go('matrix')">
-              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></span>
-              <h4 data-t="nav_matrix">Матрица судьбы</h4>
-              <p data-t="tile_matrix">Числовой код даты рождения: 22 аркана в октаграмме. Время и город не нужны.</p>
-              <span class="foot" data-t="tile_open">Открыть →</span>
-            </button>
-            <button class="tile" onclick="go('calendar')">
-              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg></span>
-              <h4 data-t="nav_calendar">Лунный день</h4>
-              <p data-t="tile_calendar">Что сегодня идёт легко, а что лучше отложить.</p>
-              <span class="foot" data-t="tile_open">Открыть →</span>
-            </button>
-            <button class="tile" onclick="go('chat')">
-              <span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.6h16v10.2H9.6L4 19.6z"/><path d="M8 9.4h8M8 12.4h5"/></svg></span>
-              <h4 data-t="nav_chat">Оракул</h4>
-              <p data-t="tile_chat">Свободный разговор: карты, звёзды, сны и сложные вопросы.</p>
-              <span class="foot" data-t="tile_open">Открыть →</span>
-            </button>
-          </div>
-
-          <div class="hair"></div>
-
-          <div class="panel panel-pad m-hide" style="display:flex;gap:22px;align-items:center;flex-wrap:wrap">
-            <div style="flex:1;min-width:220px">
-              <div class="eyebrow" style="margin-bottom:10px" data-t="ref_eyebrow">Приглашения</div>
-              <h3 class="h2" style="margin-bottom:8px" data-t="ref_title">Приведите своего человека</h3>
-              <p class="sub" data-t="ref_text">За каждого, кто зарегистрируется по вашей ссылке, на баланс приходит бонус энергии.</p>
+            <!-- 2. Главное действие — вопрос картам -->
+            <div class="hm-ask">
+              <div class="hm-ask-h">
+                <span class="hm-ask-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg></span>
+                <div>
+                  <h2 class="hm-ask-t" data-t="hm_ask_title">О чём спросим карты?</h2>
+                  <p class="hm-ask-s" data-t="hm_ask_sub">Напишите вопрос — выберите расклад, и вопрос уже будет вписан.</p>
+                </div>
+              </div>
+              <textarea id="hm-q" class="field hm-q" rows="2" maxlength="500" data-ph="hm_q_ph" placeholder="Например: что мне важно понять в отношениях сейчас?" onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){homeAsk()}"></textarea>
+              <div class="hm-chips">
+                <button type="button" class="hm-chip" data-k="love" onclick="homeChip('love')" data-t="hm_chip_love">Любовь</button>
+                <button type="button" class="hm-chip" data-k="work" onclick="homeChip('work')" data-t="hm_chip_work">Работа</button>
+                <button type="button" class="hm-chip" data-k="money" onclick="homeChip('money')" data-t="hm_chip_money">Деньги</button>
+                <button type="button" class="hm-chip" data-k="choice" onclick="homeChip('choice')" data-t="hm_chip_choice">Выбор</button>
+              </div>
+              <button class="btn btn-brass hm-ask-btn" type="button" onclick="homeAsk()"><span data-t="hm_ask_btn">Сделать расклад</span>&nbsp;<span aria-hidden="true">→</span></button>
             </div>
-            <button class="btn btn-line" onclick="openSheet('referral')" data-t="ref_btn">Показать ссылку</button>
           </div>
+
+          <!-- 3. Альманах — одна строка -->
+          <div class="hm-alm">
+            <button class="hm-pill" type="button" onclick="go('calendar')"><span class="k" data-t="alm_lunar">Лунный день</span><span class="v num" id="alm-lunar">—</span></button>
+            <button class="hm-pill" type="button" onclick="go('calendar')"><span class="k" data-t="alm_phase">Фаза</span><span class="v" id="alm-phase">—</span></button>
+            <button class="hm-pill" type="button" onclick="openStatInfo('sign')"><span class="k" data-t="alm_sign">Ваш знак</span><span class="v" id="alm-sign">—</span></button>
+            <button class="hm-pill" type="button" onclick="openSheet('bonus')"><span class="k" data-t="alm_streak">Дней подряд</span><span class="v num" id="alm-streak">0</span></button>
+          </div>
+
+          <div id="home-bonus-slot" class="hm-bonus"></div>
+
+          <!-- 4. Практики — видны сразу, и на телефоне тоже -->
+          <div class="hm-sec"><span class="eyebrow" data-t="home_practices">Практики</span></div>
+          <button class="hm-oracle" type="button" onclick="go('chat')">
+            <span class="hm-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.6h16v10.2H9.6L4 19.6z"/><path d="M8 9.4h8M8 12.4h5"/></svg></span>
+            <span class="hm-ct"><b data-t="nav_chat">Оракул</b><span data-t="hm_oracle_text">Спросите своими словами — карты, звёзды, сны</span></span>
+            <span class="hm-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="hm-prx">
+            <button class="hm-cell" type="button" onclick="go('spreads')"><span class="hm-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="6.4" width="8.6" height="13" rx="1.6"/><path d="M13.4 6.9l4.4 1.2a1.6 1.6 0 011.1 2l-2.7 9.7"/></svg></span><span class="hm-ct"><b data-t="nav_spreads">Расклады</b><span data-t="prx_h_spreads">Карты на вопрос</span></span></button>
+            <button class="hm-cell" type="button" onclick="go('dream')"><span class="hm-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 3.4a8.6 8.6 0 100 17.2 8.9 8.9 0 01-3.6-8.6 8.9 8.9 0 013.6-8.6z"/></svg></span><span class="hm-ct"><b data-t="nav_dream">Сонник</b><span data-t="prx_h_dream">Толкование снов</span></span></button>
+            <button class="hm-cell" type="button" onclick="go('astro')"><span class="hm-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><ellipse cx="12" cy="12" rx="9.4" ry="4.2" transform="rotate(-22 12 12)"/></svg></span><span class="hm-ct"><b data-t="nav_astro">Космо-паспорт</b><span data-t="prx_h_astro">Планеты и дома</span></span></button>
+            <button class="hm-cell" type="button" onclick="go('syn')"><span class="hm-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.6"/><circle cx="15" cy="12" r="5.6"/></svg></span><span class="hm-ct"><b data-t="nav_syn">Совместимость</b><span data-t="prx_h_syn">Вы и партнёр</span></span></button>
+            <button class="hm-cell" type="button" onclick="go('matrix')"><span class="hm-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8L21.2 12 12 21.2 2.8 12z"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></span><span class="hm-ct"><b data-t="nav_matrix">Матрица судьбы</b><span data-t="prx_h_matrix">22 аркана по дате</span></span></button>
+            <button class="hm-cell" type="button" onclick="go('calendar')"><span class="hm-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2a8.8 8.8 0 010 17.6z" fill="currentColor" stroke="none" opacity=".55"/></svg></span><span class="hm-ct"><b data-t="nav_calendar">Лунный день</b><span data-t="prx_h_calendar">Луна сегодня</span></span></button>
+          </div>
+
+          <!-- 5. Приглашения — тихо, внизу -->
+          <button class="hm-ref" type="button" onclick="openSheet('referral')">
+            <span class="hm-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.6" y="8.4" width="16.8" height="4.2" rx="1"/><path d="M5.2 12.6v7.8h13.6v-7.8M12 8.4v12M12 8.4c-1.6-3.6-5.6-3.8-5.6-1.4 0 1.4 2.6 1.4 5.6 1.4zM12 8.4c1.6-3.6 5.6-3.8 5.6-1.4 0 1.4-2.6 1.4-5.6 1.4z"/></svg></span>
+            <span class="hm-ct"><b data-t="ref_title">Приведите своего человека</b><span data-t="hm_ref_text">Бонус энергии за каждого приглашённого друга</span></span>
+            <span class="hm-arrow" aria-hidden="true">→</span>
+          </button>
         </section>
 
         <!-- ============ ПРАКТИКИ (мобильная вкладка) ============ -->
@@ -2803,6 +2864,23 @@ const ADMIN_IDS = [6546116205, 7672744848];
 
 /* ---------- словарь интерфейса ---------- */
 const STR = {
+  hm_ask_title:{ru:'О чём спросим карты?',en:'What shall we ask the cards?',es:'¿Qué preguntamos a las cartas?',fr:'Que demander aux cartes ?',de:'Was fragen wir die Karten?'},
+  hm_ask_sub:{ru:'Напишите вопрос и выберите расклад — вопрос уже будет вписан.',en:'Write your question, then pick a spread — it will be filled in for you.',es:'Escribe tu pregunta y elige una tirada: ya estará escrita.',fr:'Écrivez votre question puis choisissez un tirage : elle sera déjà remplie.',de:'Schreiben Sie Ihre Frage und wählen Sie eine Legung – sie ist dann schon eingetragen.'},
+  hm_q_ph:{ru:'Например: что мне важно понять в отношениях сейчас?',en:'E.g. what do I need to understand about my relationship now?',es:'Ej.: ¿qué debo entender ahora sobre mi relación?',fr:'Ex. : que dois-je comprendre de ma relation en ce moment ?',de:'Z. B.: Was sollte ich gerade über meine Beziehung verstehen?'},
+  hm_ask_btn:{ru:'Сделать расклад',en:'Get a reading',es:'Hacer una tirada',fr:'Faire un tirage',de:'Legung machen'},
+  hm_q_need:{ru:'Сначала напишите вопрос — или выберите тему ниже',en:'Write a question first — or pick a topic below',es:'Primero escribe una pregunta o elige un tema',fr:'Écrivez d\u2019abord une question ou choisissez un thème',de:'Schreiben Sie zuerst eine Frage oder wählen Sie ein Thema'},
+  hm_chip_love:{ru:'Любовь',en:'Love',es:'Amor',fr:'Amour',de:'Liebe'},
+  hm_chip_work:{ru:'Работа',en:'Work',es:'Trabajo',fr:'Travail',de:'Arbeit'},
+  hm_chip_money:{ru:'Деньги',en:'Money',es:'Dinero',fr:'Argent',de:'Geld'},
+  hm_chip_choice:{ru:'Выбор',en:'A choice',es:'Elección',fr:'Un choix',de:'Entscheidung'},
+  hm_q_love:{ru:'Что сейчас происходит в моих отношениях и куда они движутся?',en:'What is happening in my relationship right now, and where is it heading?',es:'¿Qué pasa ahora en mi relación y hacia dónde va?',fr:'Que se passe-t-il dans ma relation et où va-t-elle ?',de:'Was passiert gerade in meiner Beziehung und wohin entwickelt sie sich?'},
+  hm_q_work:{ru:'Что мне важно знать о работе и карьере в ближайший месяц?',en:'What should I know about my work and career over the next month?',es:'¿Qué debo saber sobre mi trabajo en el próximo mes?',fr:'Que dois-je savoir sur mon travail le mois prochain ?',de:'Was sollte ich über Arbeit und Karriere im nächsten Monat wissen?'},
+  hm_q_money:{ru:'Что поможет улучшить моё финансовое положение?',en:'What will help improve my financial situation?',es:'¿Qué me ayudará a mejorar mi situación económica?',fr:'Qu\u2019est-ce qui m\u2019aidera à améliorer ma situation financière ?',de:'Was hilft mir, meine finanzielle Lage zu verbessern?'},
+  hm_q_choice:{ru:'Какой вариант мне выбрать и что ждёт на каждом пути?',en:'Which option should I choose, and what awaits on each path?',es:'¿Qué opción elegir y qué me espera en cada camino?',fr:'Quelle option choisir et qu\u2019attend-il sur chaque voie ?',de:'Welche Option soll ich wählen und was erwartet mich auf jedem Weg?'},
+  hm_pend_k:{ru:'Ваш вопрос',en:'Your question',es:'Tu pregunta',fr:'Votre question',de:'Ihre Frage'},
+  hm_pend_s:{ru:'Выберите расклад ниже — вопрос перенесётся автоматически.',en:'Pick a spread below — the question will carry over.',es:'Elige una tirada abajo: la pregunta se trasladará.',fr:'Choisissez un tirage ci-dessous : la question sera reprise.',de:'Wählen Sie unten eine Legung – die Frage wird übernommen.'},
+  hm_oracle_text:{ru:'Спросите своими словами — карты, звёзды, сны',en:'Ask in your own words — cards, stars, dreams',es:'Pregunta con tus palabras: cartas, astros, sueños',fr:'Demandez avec vos mots : cartes, étoiles, rêves',de:'Fragen Sie frei – Karten, Sterne, Träume'},
+  hm_ref_text:{ru:'Бонус энергии за каждого приглашённого друга',en:'Bonus energy for every friend you invite',es:'Energía extra por cada amigo invitado',fr:'De l\u2019énergie en bonus pour chaque ami invité',de:'Bonus-Energie für jede eingeladene Person'},
   nav_syn:{ru:'Совместимость',en:'Compatibility',es:'Compatibilidad',fr:'Compatibilit\u00e9',de:'Kompatibilit\u00e4t'},
   tile_syn:{ru:'Две даты рождения — где связь держит, а где рвётся.',en:'Two birth dates — where the bond holds and where it tears.'},
   syn_title:{ru:'Две даты — одна линия',en:'Two dates, one line'},
@@ -2926,7 +3004,7 @@ const STR = {
   dial_cap:{ru:'78 арканов · одна карта в сутки',en:'78 arcana · one card a day',es:'78 arcanos · una carta al día',fr:'78 arcanes · une carte par jour',de:'78 Arkana · eine Karte pro Tag'},
   home_arc_empty:{ru:'карта дня ещё не открыта',en:'today\u2019s card is still face down'},
   home_title_empty:{ru:'Карта ждёт, пока вы её не перевернёте',en:'The card waits until you turn it over'},
-  home_lead_empty:{ru:'Нажмите на карту в центре циферблата. Один аркан из семидесяти восьми закрепится за этими сутками — с разбором от оракула.',en:'Tap the card at the centre of the dial. One arcanum out of seventy-eight is fixed to this day, with a reading from the oracle.'},
+  home_lead_empty:{ru:'Один аркан из 78 — ваша подсказка на сегодня, с разбором от оракула.',en:'One arcanum out of 78 — your hint for today, with a reading from the oracle.',es:'Un arcano de 78: tu pista para hoy, con lectura del oráculo.',fr:'Un arcane sur 78 : votre indice du jour, avec la lecture de l\u2019oracle.',de:'Ein Arkanum von 78 – Ihr Hinweis für heute, mit Deutung des Orakels.'},
   home_cta_empty:{ru:'Перевернуть карту',en:'Turn the card over',es:'Dar vuelta la carta',fr:'Retourner la carte',de:'Karte umdrehen'},
   home_cta_open:{ru:'Читать разбор',en:'Read the interpretation',es:'Leer la lectura',fr:'Lire l\u2019interprétation',de:'Deutung lesen'},
   home_cta_spreads:{ru:'Собрать расклад',en:'Lay out a spread',es:'Hacer una tirada',fr:'Faire un tirage',de:'Legung erstellen'},
@@ -4109,6 +4187,34 @@ function goBack(){ go(BACK_TO || 'practices'); }
 
 /* На телефоне «Собрать расклад» ведёт в Практики — там виден весь набор.
    На ПК плитки практик и так на главной, поэтому поведение прежнее. */
+/* ---------- главная v2: вопрос картам ---------- */
+var HM_CHIPS = { love:'hm_q_love', work:'hm_q_work', money:'hm_q_money', choice:'hm_q_choice' };
+function homeChip(k){
+  var q = document.getElementById('hm-q');
+  if(!q) return;
+  q.value = tt(HM_CHIPS[k]);
+  document.querySelectorAll('#v-home .hm-chip').forEach(function(b){ b.classList.toggle('is-on', b.dataset.k === k); });
+  q.focus();
+  try{ q.setSelectionRange(q.value.length, q.value.length); }catch(e){}
+  if(window.neoGoal) neoGoal('home_chip', { topic: k });
+}
+function homeAsk(){
+  var el = document.getElementById('hm-q');
+  var q = el ? el.value.trim() : '';
+  if(!q){
+    if(el){ el.focus(); el.classList.add('is-shake'); setTimeout(function(){ el.classList.remove('is-shake'); }, 450); }
+    if(typeof toast === 'function') toast(tt('hm_q_need'));
+    return;
+  }
+  S.pendingQ = q.slice(0, 500);
+  if(window.neoGoal) neoGoal('home_ask_click');
+  go('spreads');
+}
+function pendingQHtml(){
+  if(!S.pendingQ) return '';
+  return '<div class="hm-pend"><span class="k">' + esc(tt('hm_pend_k')) + '</span><span class="q">«' + esc(S.pendingQ) + '»</span><span class="s">' + esc(tt('hm_pend_s')) + '</span><button type="button" class="hm-pend-x" onclick="S.pendingQ=\'\';renderSpreads()" aria-label="×">×</button></div>';
+}
+
 function goSpreadCta(){
   var mob = window.matchMedia && window.matchMedia('(max-width:900px)').matches;
   go(mob ? 'practices' : 'spreads');
@@ -5049,7 +5155,7 @@ async function renderSpreads(){
       </button>`;
     });
   });
-  box.innerHTML = html;
+  box.innerHTML = pendingQHtml() + html;
 }
 function lockedSpread(){ toast(tt('premium_note')); go('shop'); }
 function pickSpread(id){
@@ -5060,7 +5166,10 @@ function pickSpread(id){
   document.getElementById('tb-desc').textContent = s.description || '';
   document.getElementById('tb-cards').textContent = s.cards_count + ' ' + tt('cards_word');
   document.getElementById('tb-price').textContent = s.price === 0 ? tt('free') : (s.price + ' ' + tt('energy_unit'));
-  document.getElementById('tb-q').value = '';
+  document.getElementById('tb-q').value = S.pendingQ || '';
+  S.pendingQ = '';
+  const hq = document.getElementById('hm-q'); if(hq) hq.value = '';
+  document.querySelectorAll('#v-home .hm-chip').forEach(b => b.classList.remove('is-on'));
   countQ();
   document.getElementById('tb-ask').style.display = 'block';
   document.getElementById('tb-shuffle').style.display = 'none';
