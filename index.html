@@ -174,6 +174,32 @@ body.nav-open{overflow:hidden}
 .hero.ready .hero-bottom{opacity:1;transform:none}
 .hero-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding-inline:20px}
 .hero-hint{font:400 11px/1 var(--mono);letter-spacing:.19em;text-transform:uppercase;color:rgba(255,255,255,.42)}
+.hero-ask{width:min(640px,100%);padding-inline:20px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.hero-ask-box{position:relative;width:100%;display:flex;align-items:center;gap:8px;padding:7px 7px 7px 50px;border-radius:999px;
+  background:rgba(10,11,15,.58);border:1px solid rgba(255,255,255,.18);
+  -webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);
+  box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);transition:border-color .2s,box-shadow .2s}
+.hero-ask-box:focus-within{border-color:rgba(255,255,255,.42);box-shadow:0 18px 50px rgba(0,0,0,.5),0 0 0 4px rgba(255,255,255,.07)}
+.hero-ask-box.is-err{border-color:rgba(255,140,120,.7);animation:heroShake .38s}
+@keyframes heroShake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+.hero-ask-ico{position:absolute;left:19px;top:50%;width:20px;height:20px;transform:translateY(-50%);color:rgba(255,255,255,.62);pointer-events:none}
+.hero-ask-in{flex:1;min-width:0;height:48px;background:transparent;border:0;outline:0;font-size:16px;color:#fff}
+.hero-ask-in::placeholder{color:rgba(255,255,255,.46)}
+.hero-ask-go{flex:none;padding:14px 22px;white-space:nowrap}
+.hero-ask-err{margin:0;min-height:0;font-size:13px;line-height:1.4;color:#FFB4A6;text-align:center}
+.hero-ask-err:empty{display:none}
+.hero-ask-meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 18px}
+.hero-ask-alt{font-size:14px;font-weight:600;color:rgba(255,255,255,.86);border-bottom:1px solid rgba(255,255,255,.28);padding-bottom:1px;transition:color .2s,border-color .2s}
+.hero-ask-alt:hover{color:#fff;border-color:#fff}
+@media (max-width:680px){
+  .hero-ask{padding-inline:16px;gap:10px}
+  .hero-ask-box{flex-direction:column;align-items:stretch;padding:6px;border-radius:22px;gap:6px}
+  .hero-ask-ico{display:none}
+  .hero-ask-in{height:50px;padding:0 16px;font-size:16px;text-align:center}
+  .hero-ask-go{width:100%;justify-content:center;padding:15px 22px}
+  .hero-ask-meta{flex-direction:column;gap:10px}
+  .hero-ask-meta .hero-hint{font-size:10px;letter-spacing:.14em;text-align:center;line-height:1.5}
+}
 .scroll-dot{width:1px;height:52px;background:linear-gradient(to bottom,rgba(255,255,255,.42),transparent);position:relative;overflow:hidden}
 .scroll-dot::after{content:'';position:absolute;top:-52px;left:0;width:1px;height:52px;background:linear-gradient(to bottom,transparent,#fff);animation:fall 2.4s var(--ease) infinite}
 @keyframes fall{to{top:52px}}
@@ -506,11 +532,19 @@ body.nav-open{overflow:hidden}
     </div>
 
     <div class="hero-bottom">
-      <div class="hero-actions">
-        <a class="btn" href="/app/" data-place="hero_app">Вытянуть Карту дня <span class="arw">→</span></a>
-        <a class="btn-ghost" href="#ask">Быстрый вопрос Да / Нет</a>
-      </div>
-      <span class="hero-hint">Карта дня — бесплатно · Вход без регистрации</span>
+      <form class="hero-ask" id="hero-ask" novalidate autocomplete="off">
+        <label class="sr" for="hero-q">Ваш вопрос картам</label>
+        <div class="hero-ask-box" id="hero-ask-box">
+          <svg class="hero-ask-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.6 4.9L18.5 9.5l-4.9 1.6L12 16l-1.6-4.9L5.5 9.5l4.9-1.6z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M18.5 15.5l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z" fill="currentColor"/></svg>
+          <input class="hero-ask-in" id="hero-q" type="text" maxlength="140" enterkeyhint="go" data-clarity-unmask="true" placeholder="Стоит ли мне менять работу сейчас?">
+          <button class="btn hero-ask-go" type="submit">Вытянуть карту <span class="arw">→</span></button>
+        </div>
+        <p class="hero-ask-err" id="hero-ask-err" role="status" aria-live="polite"></p>
+        <div class="hero-ask-meta">
+          <span class="hero-hint">Ответ за 10 секунд · бесплатно · без регистрации</span>
+          <a class="hero-ask-alt" href="/app/" data-place="hero_daily">или Карта дня →</a>
+        </div>
+      </form>
       <span class="scroll-dot" aria-hidden="true"></span>
     </div>
   </section>
@@ -571,10 +605,10 @@ body.nav-open{overflow:hidden}
           <div class="out-text" id="yn-text"></div>
           <div class="lock" id="yn-lock" hidden>
             <div class="lock-copy">
-              <div class="lock-t">Совет карты и сроки оборваны</div>
-              <p class="lock-s">Откройте продолжение разбора в кабинете — бесплатно + 5 ⚡ бонусной энергии.</p>
+              <div class="lock-t">Совет карты — в полном разборе</div>
+              <p class="lock-s">Откроется сразу, без регистрации и без оплаты.</p>
             </div>
-            <a class="btn" id="yn-lock-btn" href="/login/?from=yesno">Дочитать разбор <span class="arw">→</span></a>
+            <a class="btn" id="yn-lock-btn" href="/app/?from=yesno">Дочитать разбор <span class="arw">→</span></a>
           </div>
         </div>
       </div>
@@ -1161,11 +1195,17 @@ if(go) go.addEventListener('click',function(){
     if(out)   out.hidden = false;
     if(lock)  lock.hidden = false;
 
-    /* Сохраняем контекст вопроса, чтобы после входа в кабинет человек мог продолжить */
+    /* Отдаём разбор в пробный кабинет: там он откроется целиком (кроме сроков).
+       localStorage, а не sessionStorage: так данные переживают новую вкладку и переход в Telegram. */
     try{
-      sessionStorage.setItem('neo_guest_intent', JSON.stringify({
-        action: 'chat',
-        text: 'Мой вопрос был: «' + text + '». Выпала карта ' + (d.card || '') + ' (' + (d.verdict || '') + '). Расскажи подробнее, что это значит и как мне лучше поступить?',
+      localStorage.setItem('neo_yn', JSON.stringify({
+        q: text,
+        verdict: d.verdict || '',
+        card: d.card || '',
+        card_id: d.card_id || null,
+        image: d.image || (d.card_id ? ('https://api.neotaro.ru/static/cards/' + d.card_id + '.webp') : ''),
+        teaser: d.teaser || '',
+        more: d.more || '',
         ts: Date.now()
       }));
     }catch(e){}
@@ -1185,9 +1225,37 @@ if(go) go.addEventListener('click',function(){
   });
 });
 
+/* ── вопрос из первого экрана: используем тот же виджет, чтобы не дублировать логику ── */
+(function(){
+  var form=$('#hero-ask'), hin=$('#hero-q'), box=$('#hero-ask-box'), herr=$('#hero-ask-err');
+  if(!form||!hin) return;
+  var showErr=function(t){
+    if(herr) herr.textContent=t||'';
+    if(box){ box.classList.remove('is-err'); if(t){ void box.offsetWidth; box.classList.add('is-err'); } }
+  };
+  hin.addEventListener('input',function(){ if(herr && herr.textContent) showErr(''); });
+  hin.addEventListener('focus',function(){ ym('hero_ask_focus'); },{once:true});
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var t=hin.value.trim();
+    if(t.length<8){
+      showErr(t ? 'Чуть подробнее — хотя бы 8 символов.' : 'Напишите вопрос — например, «стоит ли мне менять работу?»');
+      hin.focus(); return;
+    }
+    if(busy) return;
+    showErr('');
+    ym('hero_ask_submit');
+    if(q){ q.value=t.slice(0,LIMIT); q.dispatchEvent(new Event('input')); }
+    hin.blur();
+    var target=$('#yn')||$('#ask');
+    if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+    setTimeout(function(){ if(go) go.click(); }, 450);
+  });
+})();
+
 var lb=$('#yn-lock-btn');
 if(lb) lb.addEventListener('click',function(){
-  ym('login_click',{place:'yesno_lock'});
+  ym('yesno_open_app',{place:'yesno_lock'});
   try{ if(window.clarity) window.clarity('event','yesno_unlock_click'); }catch(e){}
 });
 
