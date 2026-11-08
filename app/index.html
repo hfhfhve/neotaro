@@ -3513,7 +3513,7 @@ function requireAuth(intent){
 
 async function api(endpoint, method = 'POST', data = {}, silent = false){
   // Для тяжелых ИИ-запросов даем 28 секунд, для быстрых — 12 секунд (чтобы не висело вечно!)
-  const isHeavy = /\/tarot\/(daily|spread|synastry)|\/chat\/send|\/astro\/(chart|reading)|\/matrix\/(get|reading|compat)|\/stt\//.test(endpoint);
+  const isHeavy = /\/tarot\/(daily|spread|synastry)|\/free\/(daily|yesno)|\/chat\/send|\/astro\/(chart|reading)|\/matrix\/(get|reading|compat)|\/stt\//.test(endpoint);
   const timeoutMs = isHeavy ? 28000 : 12000;
   const maxAttempts = isHeavy ? 2 : 3;
 
