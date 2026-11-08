@@ -1720,6 +1720,16 @@ html[data-theme="dawn"] .hm-chip.is-on{background:rgba(154,108,28,.12)}
 html[data-theme="dawn"] .hm-card{background:linear-gradient(165deg,#2A2318,#14100A)!important;border-color:rgba(154,108,28,.55)!important}
 html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
 
+
+/* v2.1: альманах внутри карточки карты дня */
+.hm-daily{flex-wrap:wrap}
+.hm-daily .hm-alm{flex:0 0 100%;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:2px 0 0!important;padding:12px 0 0!important;border-top:1px solid var(--line-soft);overflow:visible!important}
+.hm-daily .hm-pill{min-width:0!important;padding:2px 8px!important;border:0!important;border-left:1px solid var(--line-soft)!important;border-radius:0!important;background:none!important;box-shadow:none!important;gap:3px!important;transform:none!important}
+.hm-daily .hm-pill:first-child{border-left:0!important;padding-left:0!important}
+.hm-daily .hm-pill .k{font-size:8.5px;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hm-daily .hm-pill .v{font-size:13.5px;font-weight:600;white-space:normal;line-height:1.25}
+.hm-daily .hm-pill:hover .v{color:var(--brass-bright)}
+@media(max-width:420px){.hm-daily .hm-pill{padding:2px 6px!important}.hm-daily .hm-pill .k{font-size:7.5px;letter-spacing:.06em}.hm-daily .hm-pill .v{font-size:12.5px}}
 </style>
 </head>
 <body class="bg-space-900 min-h-screen">
@@ -1879,7 +1889,7 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
 
         <!-- ============ СЕГОДНЯ ============ -->
         <section class="view" id="v-home">
-          <div class="hm-top">
+          <div class="hm-top hm-legacy">
             <div class="eyebrow" id="home-eyebrow">—</div>
             <button class="tag" id="home-plan" onclick="goPlans()" style="cursor:pointer;border:0">—</button>
           </div>
@@ -1904,6 +1914,13 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
                 <p class="hm-dlead" id="home-lead" data-t="home_lead_empty">Один аркан из 78 — ваша подсказка на сегодня, с разбором от оракула.</p>
                 <button class="btn btn-brass btn-sm hm-dcta" onclick="openDaily()" id="home-cta" data-t="home_cta_empty">Перевернуть карту</button>
               </div>
+          <!-- альманах дня — футер карточки -->
+          <div class="hm-alm">
+            <button class="hm-pill" type="button" onclick="go('calendar')"><span class="k" data-t="alm_lunar">Лунный день</span><span class="v num" id="alm-lunar">—</span></button>
+            <button class="hm-pill" type="button" onclick="go('calendar')"><span class="k" data-t="alm_phase">Фаза</span><span class="v" id="alm-phase">—</span></button>
+            <button class="hm-pill" type="button" onclick="openStatInfo('sign')"><span class="k" data-t="alm_sign">Ваш знак</span><span class="v" id="alm-sign">—</span></button>
+            <button class="hm-pill" type="button" onclick="openSheet('bonus')"><span class="k" data-t="alm_streak">Дней подряд</span><span class="v num" id="alm-streak">0</span></button>
+          </div>
             </div>
 
             <!-- 2. Главное действие — вопрос картам -->
@@ -1926,15 +1943,7 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
             </div>
           </div>
 
-          <!-- 3. Альманах — одна строка -->
-          <div class="hm-alm">
-            <button class="hm-pill" type="button" onclick="go('calendar')"><span class="k" data-t="alm_lunar">Лунный день</span><span class="v num" id="alm-lunar">—</span></button>
-            <button class="hm-pill" type="button" onclick="go('calendar')"><span class="k" data-t="alm_phase">Фаза</span><span class="v" id="alm-phase">—</span></button>
-            <button class="hm-pill" type="button" onclick="openStatInfo('sign')"><span class="k" data-t="alm_sign">Ваш знак</span><span class="v" id="alm-sign">—</span></button>
-            <button class="hm-pill" type="button" onclick="openSheet('bonus')"><span class="k" data-t="alm_streak">Дней подряд</span><span class="v num" id="alm-streak">0</span></button>
-          </div>
-
-          <div id="home-bonus-slot" class="hm-bonus"></div>
+<div id="home-bonus-slot" class="hm-bonus"></div>
 
           <!-- 4. Практики — видны сразу, и на телефоне тоже -->
           <div class="hm-sec"><span class="eyebrow" data-t="home_practices">Практики</span></div>
@@ -4376,6 +4385,18 @@ function fmtNum(n){
   if(!isFinite(v)) return String(n);
   try{ return v.toLocaleString(lang || 'ru'); }catch(e){ return String(n); }
 }
+/* склонение и формат энергии: 1 энергия, 2 энергии, 5 энергии, 21 энергия */
+function energyWord(n){
+  const v = Math.abs(Math.floor(Number(n) || 0));
+  if(lang === 'ru') return (v % 10 === 1 && v % 100 !== 11) ? 'энергия' : 'энергии';
+  return tt('energy_unit');
+}
+function fmtEnergyShort(n){
+  const v = Number(n);
+  if(!isFinite(v)) return String(n);
+  if(Math.abs(v) < 100000) return fmtNum(v);
+  try{ return new Intl.NumberFormat(lang || 'ru', { notation:'compact', maximumFractionDigits:1 }).format(v); }catch(e){ return fmtNum(v); }
+}
 function paintEnergy(){
   const guest = isGuest();
 
@@ -4395,12 +4416,12 @@ function paintEnergy(){
 
   ['m-energy','m-energy-2','m-energy-4'].forEach(id => {
     const n = document.getElementById(id);
-    if(n) n.textContent = guest ? (lang === 'ru' ? 'Войти' : 'Sign in') : S.energy;
+    if(n) n.textContent = guest ? (lang === 'ru' ? 'Войти' : 'Sign in') : (id === 'm-energy' ? fmtNum(S.energy) : fmtEnergyShort(S.energy));
   });
 
   // Прячем слово "энергия" рядом с кнопкой "Войти", чтобы было аккуратно: "Войти · +5 ⚡"
   document.querySelectorAll('.tb-energy .u, .chat-energy .u, .meter-unit').forEach(el => {
-    el.textContent = guest ? '+5 ⚡' : tt('energy_unit');
+    el.textContent = guest ? '+5 ⚡' : (Math.abs(Number(S.energy) || 0) >= 100000 ? tt('energy_unit') : energyWord(S.energy));
   });
 
   const mNote = document.querySelector('.meter-note');
@@ -5146,7 +5167,7 @@ async function renderSpreads(){
       // Энергия тратится у всех, включая подписчиков: цена показывается всегда.
       const price = s.price === 0
         ? `<span class="tag">${esc(tt('free'))}</span>`
-        : `<span class="tag"><span class="num">${s.price}</span> ${esc(tt('energy_unit'))}</span>`;
+        : `<span class="tag"><span class="num">${s.price}</span> ${esc(energyWord(s.price))}</span>`;
       const end = locked ? lockTag(feat) : price;
       html += `<button class="rowcard${locked ? ' locked' : ''}" onclick="${locked ? `goPlans('${feat}')` : `pickSpread('${s.id}')`}">
         <span class="idx num">${s.cards_count}</span>
@@ -5165,7 +5186,7 @@ function pickSpread(id){
   document.getElementById('tb-name').textContent = s.name;
   document.getElementById('tb-desc').textContent = s.description || '';
   document.getElementById('tb-cards').textContent = s.cards_count + ' ' + tt('cards_word');
-  document.getElementById('tb-price').textContent = s.price === 0 ? tt('free') : (s.price + ' ' + tt('energy_unit'));
+  document.getElementById('tb-price').textContent = s.price === 0 ? tt('free') : (s.price + ' ' + energyWord(s.price));
   document.getElementById('tb-q').value = S.pendingQ || '';
   S.pendingQ = '';
   const hq = document.getElementById('hm-q'); if(hq) hq.value = '';
@@ -5577,7 +5598,7 @@ async function loadShop(){
       ? '<span class="plx-old">' + Math.round(it.price_rub_base) + ' ₽</span> ' : '';
     return `<button class="tile" onclick="pickPack('${it.id}')">
       <span class="tg num">${it.amount}</span>
-      <h4>${esc(tt('energy_unit'))}</h4>
+      <h4>${esc(energyWord(it.amount))}</h4>
       <p>${base}<span class="num">${price}</span></p>
       <span class="foot">${esc(tt('shop_pick'))} →</span>
     </button>`;
@@ -5596,7 +5617,7 @@ function paintOffer(offer){
   box.innerHTML = `<div class="panel panel-pad" style="border-color:var(--line);display:flex;gap:20px;align-items:center;flex-wrap:wrap">
     <div style="flex:1;min-width:200px">
       <div class="eyebrow" style="margin-bottom:10px">${esc(tt('shop_offer'))}</div>
-      <h3 class="h2" style="margin-bottom:6px"><span class="num">${amount}</span> ${esc(tt('energy_unit'))}</h3>
+      <h3 class="h2" style="margin-bottom:6px"><span class="num">${amount}</span> ${esc(energyWord(amount))}</h3>
       <p class="sub">${esc(tt('shop_offer_text'))} <span class="label">${esc(tt('shop_offer_left'))} <span class="num" id="offer-left">—</span></span></p>
     </div>
     <button class="btn btn-brass" onclick="pickOffer(${stars}, '${rub}')">${esc(tt('shop_pick'))} · <span class="num">${rub} ₽</span></button>
@@ -5618,7 +5639,7 @@ function pickPack(id){
   const it = S.shop.find(x => x.id === id);
   if(!it) return;
   S.shopPick = it;
-  document.getElementById('buy-title').textContent = it.amount + ' ' + tt('energy_unit');
+  document.getElementById('buy-title').textContent = it.amount + ' ' + energyWord(it.amount);
   document.getElementById('buy-sub').textContent = (it.discount_pct ? tt('shop_disc_on').replace('{n}', it.discount_pct) + ' · ' : '') + tt('shop_note');
   document.getElementById('buy-rub-val').textContent = (it.price_rub != null ? it.price_rub + ' ₽' : it.price_usd + ' $');
   openSheet('buy');
@@ -6042,10 +6063,7 @@ function shareRef(){
   copyRef();
 }
 /* ---------- ежедневная награда ---------- */
-function bnxEnergyWord(n){
-  if(lang === 'ru') return 'энергии';
-  return tt('energy_unit');
-}
+function bnxEnergyWord(n){ return energyWord(n); }
 function bnxDayWord(d){
   const map = {ru:'День', en:'Day', es:'Día', fr:'Jour', de:'Tag'};
   return (map[lang] || map.en) + ' ' + d;
