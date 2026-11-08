@@ -1221,6 +1221,7 @@ html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 .yn-s-q::before{content:'«'}.yn-s-q::after{content:'»'}
 .yn-s-card{display:flex;gap:16px;align-items:center;padding:14px;border-radius:16px;border:1px solid var(--line-soft);background:rgba(217,174,95,.05);margin-bottom:16px}
 .yn-s-img{width:78px;aspect-ratio:7/12;object-fit:cover;border-radius:9px;flex:none;box-shadow:0 10px 26px rgba(0,0,0,.35)}
+.yn-s-img[hidden]{display:none!important}
 .yn-s-meta{min-width:0}
 .yn-s-pill{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mist)}
 .yn-s-pill i{width:7px;height:7px;border-radius:50%;background:var(--gold)}
@@ -2702,7 +2703,7 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
   <div class="sheet-grip"></div>
   <div class="yn-s-head">
     <span class="tag">Ваш расклад · Да / Нет</span>
-    <button class="yn-s-x" type="button" onclick="closeSheets()" aria-label="Закрыть">✕</button>
+    <button class="yn-s-x" type="button" onclick="closeSheets()" aria-label="Закрыть"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </div>
   <p class="yn-s-q" id="yn-s-q"></p>
   <div class="yn-s-card">
@@ -4929,6 +4930,8 @@ async function boot(){
     /* Тарифы отдают guest_access: без него у гостя нет замков на премиум-раскладах. */
     renderShopPlans().then(() => { if(S.view === 'spreads') renderSpreads(); }).catch(() => {});
     renderSpreads();
+    /* Гость пришёл с лендинга по «Дочитать разбор» — сразу открываем разбор. */
+    showYnReading();
     return;
   }
 
