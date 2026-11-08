@@ -1213,6 +1213,33 @@ html[data-theme="dawn"] .fl-copy{color:rgba(110,102,86,.75)}
 .th-sw i{width:13px;height:13px;border-radius:50%;display:block;border:1px solid rgba(255,255,255,.16)}
 html[data-theme="dawn"] .th-sw i{border-color:rgba(36,31,22,.18)}
 
+/* ── разбор Да/Нет с лендинга ── */
+.yn-s-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.yn-s-x{width:32px;height:32px;border-radius:50%;border:1px solid var(--line-soft);background:transparent;color:var(--mist);font-size:13px;cursor:pointer;display:grid;place-items:center}
+.yn-s-x:hover{color:var(--ivory)}
+.yn-s-q{margin:0 0 16px;font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.35;color:var(--ivory)}
+.yn-s-q::before{content:'«'}.yn-s-q::after{content:'»'}
+.yn-s-card{display:flex;gap:16px;align-items:center;padding:14px;border-radius:16px;border:1px solid var(--line-soft);background:rgba(217,174,95,.05);margin-bottom:16px}
+.yn-s-img{width:78px;aspect-ratio:7/12;object-fit:cover;border-radius:9px;flex:none;box-shadow:0 10px 26px rgba(0,0,0,.35)}
+.yn-s-meta{min-width:0}
+.yn-s-pill{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mist)}
+.yn-s-pill i{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.yn-s-pill.is-yes i{background:#7FD3A0}.yn-s-pill.is-no i{background:#E8907E}.yn-s-pill.is-wait i{background:#E6C46A}
+.yn-s-verdict{margin:6px 0 4px;font-family:var(--serif);font-size:30px;line-height:1.05;font-weight:600;color:var(--ivory)}
+.yn-s-cardname{margin:0;font-size:13px;color:var(--mist)}
+.yn-s-text{font-size:15px;line-height:1.65;color:var(--ivory)}
+.yn-s-text p{margin:0 0 12px}
+.yn-s-text b{color:var(--gold-bright, var(--gold));font-weight:700}
+.yn-s-lock{position:relative;display:flex;gap:13px;align-items:flex-start;margin:6px 0 14px;padding:14px 15px;border-radius:14px;border:1px dashed var(--line);background:rgba(217,174,95,.06)}
+.yn-s-lock::before{content:'';position:absolute;left:0;right:0;top:-46px;height:46px;background:linear-gradient(to bottom,transparent,var(--yn-fade,#121829));pointer-events:none}
+.yn-s-lock-ico{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--gold);border:1px solid var(--line)}
+.yn-s-lock-ico svg{width:19px;height:19px}
+.yn-s-lock-t{font-weight:700;font-size:14.5px;color:var(--ivory);margin-bottom:3px}
+.yn-s-lock-s{margin:0;font-size:13px;line-height:1.5;color:var(--mist)}
+.yn-s-later{margin-top:8px}
+html[data-theme="obsidian"] .yn-sheet{--yn-fade:#090A0E}
+html[data-theme="dawn"] .yn-sheet{--yn-fade:#FEFBF4}
+html[data-theme="dawn"] .yn-s-card,html[data-theme="dawn"] .yn-s-lock{background:rgba(154,108,28,.06)}
 </style>
 <style>
 /* ===== ГОСТЕВОЙ РИТУАЛ КАРТЫ ДНЯ (3D REVEAL + BLUR PAYWALL) ===== */
@@ -2670,6 +2697,36 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
 </div>
 
 <!-- ежедневная награда -->
+<!-- разбор вопроса Да/Нет с лендинга -->
+<div class="sheet yn-sheet" id="sheet-yn" role="dialog" aria-labelledby="yn-s-title">
+  <div class="sheet-grip"></div>
+  <div class="yn-s-head">
+    <span class="tag">Ваш расклад · Да / Нет</span>
+    <button class="yn-s-x" type="button" onclick="closeSheets()" aria-label="Закрыть">✕</button>
+  </div>
+  <p class="yn-s-q" id="yn-s-q"></p>
+  <div class="yn-s-card">
+    <img class="yn-s-img" id="yn-s-img" src="" alt="" hidden>
+    <div class="yn-s-meta">
+      <span class="yn-s-pill" id="yn-s-pill"><i></i><span id="yn-s-pill-tx">Вердикт</span></span>
+      <h3 class="yn-s-verdict" id="yn-s-title"></h3>
+      <p class="yn-s-cardname" id="yn-s-cardname"></p>
+    </div>
+  </div>
+  <div class="yn-s-text" id="yn-s-text"></div>
+  <div class="yn-s-lock">
+    <div class="yn-s-lock-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M12 9.2V13l2.6 1.6M9.5 3.5h5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </div>
+    <div class="yn-s-lock-copy">
+      <div class="yn-s-lock-t">Когда ждать и что делать дальше</div>
+      <p class="yn-s-lock-s" id="yn-s-lock-s">Сроки по вашему вопросу и уточняющий вопрос оракулу. Вход — 10 секунд, в подарок +5 ⚡</p>
+    </div>
+  </div>
+  <button class="btn btn-brass btn-wide" type="button" id="yn-s-cta" onclick="ynUnlock()">Узнать сроки и спросить →</button>
+  <button class="btn btn-quiet btn-wide yn-s-later" type="button" onclick="closeSheets()">Посмотреть кабинет</button>
+</div>
+
 <div class="sheet" id="sheet-bonus">
   <div class="sheet-grip"></div>
   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px">
@@ -3531,8 +3588,9 @@ function guestLang(){
 function resumeGuestIntent(){
   let it = null;
   try{
-    it = JSON.parse(sessionStorage.getItem('neo_guest_intent') || 'null');
+    it = JSON.parse(sessionStorage.getItem('neo_guest_intent') || localStorage.getItem('neo_guest_intent') || 'null');
     sessionStorage.removeItem('neo_guest_intent');
+    localStorage.removeItem('neo_guest_intent');
   }catch(e){}
   if(!it || !it.action) return;
   if(it.ts && Date.now() - it.ts > 60 * 60 * 1000) return;   // старше часа — неактуально
@@ -3591,12 +3649,82 @@ function resumeGuestIntent(){
   }catch(e){}
 }
 
+/* ── Разбор Да/Нет, пришедший с лендинга (/app/?from=yesno) ──
+   Гостю показываем вердикт и разбор целиком (кроме сроков) без входа.
+   Вход спрашиваем только на «Узнать сроки и спросить». */
+let YN = null;
+function ynFormat(raw){
+  if(!raw) return '';
+  let t = String(raw).replace(/<br\s*\/?>/gi, '\n').replace(/<\/?p>/gi, '\n\n');
+  t = t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+       .replace(/&lt;b&gt;/gi,'<b>').replace(/&lt;\/b&gt;/gi,'</b>');
+  return t.split(/\n+/).map(x => x.trim()).filter(Boolean).map(x => '<p>' + x + '</p>').join('');
+}
+function ynClass(v){
+  const s = String(v || '').toLowerCase();
+  if(s.indexOf('нет') !== -1) return { cls:'is-no', label:'Ответ аркана' };
+  if(s.indexOf('время') !== -1) return { cls:'is-wait', label:'Пауза' };
+  return { cls:'is-yes', label:'Благоприятно' };
+}
+function showYnReading(){
+  let fromYn = false;
+  try{ fromYn = new URLSearchParams(location.search).get('from') === 'yesno'; }catch(e){}
+  if(!fromYn) return;
+  /* Убираем параметр: иначе он уйдёт в ?next= при входе и шторка откроется повторно. */
+  try{
+    const u = new URL(location.href);
+    u.searchParams.delete('from');
+    history.replaceState(null, '', u.pathname + (u.searchParams.toString() ? '?' + u.searchParams : '') + u.hash);
+  }catch(e){}
+  try{ YN = JSON.parse(localStorage.getItem('neo_yn') || 'null'); }catch(e){ YN = null; }
+  if(!YN || !YN.verdict || (YN.ts && Date.now() - YN.ts > 24 * 60 * 60 * 1000)) return;
+
+  const $id = id => document.getElementById(id);
+  const meta = ynClass(YN.verdict);
+  $id('yn-s-q').textContent = YN.q || '';
+  $id('yn-s-q').hidden = !YN.q;
+  $id('yn-s-pill').className = 'yn-s-pill ' + meta.cls;
+  $id('yn-s-pill-tx').textContent = meta.label;
+  $id('yn-s-title').textContent = YN.verdict;
+  $id('yn-s-cardname').textContent = YN.card ? ('Аркан: ' + YN.card) : '';
+  const img = $id('yn-s-img');
+  if(YN.image){ img.src = YN.image; img.alt = YN.card || 'Карта Таро'; img.hidden = false; img.onerror = () => { img.hidden = true; }; }
+  $id('yn-s-text').innerHTML = ynFormat(YN.more || YN.teaser);
+  if(!isGuest()){
+    $id('yn-s-lock-s').textContent = 'Сроки по вашему вопросу и уточняющий вопрос — в чате с оракулом.';
+    $id('yn-s-cta').textContent = 'Спросить оракула →';
+  }
+  setTimeout(() => openSheet('yn'), 420);
+  try{ neoGoal('yesno_sheet_view', { guest: isGuest() ? 1 : 0 }); }catch(e){}
+}
+function ynChatText(){
+  if(!YN) return '';
+  return 'Мой вопрос был: «' + (YN.q || '') + '». Выпала карта ' + (YN.card || '') +
+    ' (' + (YN.verdict || '') + '). Расскажи, в какие сроки это вероятно и как мне лучше поступить?';
+}
+function ynUnlock(){
+  const text = ynChatText();
+  try{ neoGoal('yesno_unlock_click', { guest: isGuest() ? 1 : 0 }); }catch(e){}
+  if(isGuest()){
+    requireAuth({ action: 'chat', text: text, src: 'yn' });
+    return;
+  }
+  closeSheets();
+  go('chat');
+  setTimeout(() => {
+    const el = document.getElementById('chat-in');
+    if(el && text){ el.value = text; if(typeof growInput === 'function'){ try{ growInput(el); }catch(e){} } el.focus(); }
+  }, 250);
+}
+
 function requireAuth(intent){
   if(!isGuest()) return false;
   try {
     if(intent){
       intent.ts = Date.now();
       sessionStorage.setItem('neo_guest_intent', JSON.stringify(intent));
+      /* Дубль в localStorage: вход через Telegram/почту может завершиться в другой вкладке. */
+      try{ localStorage.setItem('neo_guest_intent', JSON.stringify(intent)); }catch(e){}
     }
   } catch(e){}
   bounceToAuth();
@@ -4844,6 +4972,7 @@ async function boot(){
     if(r && bridge.isWeb) r.style.display = 'flex';
   });
   resumeGuestIntent();
+  showYnReading();
 }
 document.addEventListener('DOMContentLoaded', () => { drawTicks(); applyStrings(); boot(); });
 </script>
