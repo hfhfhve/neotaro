@@ -4937,7 +4937,7 @@ async function drawDaily(){
       paintDaily();
       bridge.haptic('ok');
       // Зажигаем цель для Яндекс Директа — человек реально вовлекся и вытянул карту!
-      if(window.neoGoal) neoGoal('daily_card', { mode: 'guest_preview' });
+      if(window.neoGoal) neoGoal('guest_daily_preview');
     } else {
       document.getElementById('daily-draw').style.display = 'flex';
       toast(tt('err'));
