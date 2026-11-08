@@ -221,6 +221,7 @@ body{
   .soc{background:rgba(11,15,30,.68)}
   .h1,.art-quote{text-shadow:0 4px 24px rgba(0,0,0,.75)}
 }
+.code-hint{margin:-4px 0 0;text-align:center;font-size:12.5px;line-height:1.45;opacity:.62}
 </style>
 <script src="https://browser.sentry-cdn.com/8.47.0/bundle.min.js" crossorigin="anonymous"></script>
 <script>
@@ -284,21 +285,14 @@ body{
         <div class="div">или по почте</div>
       </div>
 
-      <!-- Регистрация (всего 2 поля вместо 4!) -->
+      <!-- Вход по коду: одно поле, без пароля. Работает и для новых, и для старых аккаунтов -->
       <div class="scr is-on" id="s-register">
         <div>
           <label class="f-lab" for="rg-email">Ваша почта</label>
-          <input class="inp" id="rg-email" type="email" placeholder="you@mail.ru" autocomplete="email" spellcheck="false">
+          <input class="inp" id="rg-email" type="email" inputmode="email" placeholder="you@mail.ru" autocomplete="email" spellcheck="false" autocapitalize="off">
         </div>
-        <div>
-          <label class="f-lab" for="rg-pass">Придумайте пароль</label>
-          <div class="pass-wrap">
-            <input class="inp" id="rg-pass" type="password" placeholder="Минимум 8 символов" autocomplete="new-password">
-            <button class="pass-eye" type="button" onclick="aEye('rg-pass',this)">ПОКАЗАТЬ</button>
-          </div>
-        </div>
-        <button class="btn" type="button" onclick="aRegister()">Продолжить →</button>
-        <button class="lnk mid" type="button" onclick="aScreen('login')">У меня уже есть аккаунт</button>
+        <button class="btn" type="button" onclick="aStart()">Получить код →</button>
+        <p class="code-hint">Без пароля — пришлём 6-значный код на почту</p>
       </div>
 
       <!-- Вход -->
@@ -316,7 +310,7 @@ body{
         </div>
         <button class="btn" type="button" onclick="aLogin()">Войти</button>
         <div class="row">
-          <button class="lnk" type="button" onclick="aScreen('register')">Создать аккаунт</button>
+          <button class="lnk" type="button" onclick="aScreen('register')">Войти по коду</button>
           <button class="lnk" type="button" onclick="aScreen('forgot')">Забыли пароль?</button>
         </div>
       </div>
@@ -327,9 +321,9 @@ body{
           <label class="f-lab" for="vf-code">Код из письма</label>
           <input class="inp code" id="vf-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code">
         </div>
-        <button class="btn" type="button" onclick="aVerify()">Подтвердить и войти</button>
+        <button class="btn" type="button" onclick="aVerify()">Войти →</button>
         <div class="row">
-          <button class="lnk" type="button" onclick="aScreen('register')">Назад</button>
+          <button class="lnk" type="button" onclick="aBackFromVerify()">Изменить почту</button>
           <button class="lnk" id="resend1" type="button" onclick="aResend('verify')">Отправить код ещё раз</button>
         </div>
       </div>
@@ -413,7 +407,8 @@ const GOOGLE_CLIENT_ID = "67067405192-tfq2sj5kdk7no312f76lg4fenac49k08.apps.goog
     if(ref) localStorage.setItem("neotaro_ref", ref);
   } catch(e){}
   /* Уже вошёл — возвращаем туда, откуда прислало приложение (?next=/app/...). */
-  if(localStorage.getItem("neotaro_token")) location.replace(safeNext());
+  let _pm = false; try { _pm = (new URLSearchParams(location.search)).get('mode') === 'password'; } catch(e){}
+  if(localStorage.getItem("neotaro_token") && !_pm) location.replace(safeNext());
 })();
 
 function safeNext(){
@@ -425,18 +420,25 @@ function safeNext(){
   return APP_URL;
 }
 
-const A = { email:'', screen:'register', busy:false, cool:0, timer:null, poll:null, fromYesNo:false };
+const A = { email:'', screen:'register', busy:false, cool:0, timer:null, poll:null, fromYesNo:false, mode:'code', fromYnIntent:false };
 try { A.fromYesNo = (new URLSearchParams(location.search)).get('from') === 'yesno'; } catch(e){}
+/* Гость нажал «Узнать сроки» в пробном кабинете — напоминаем, зачем он здесь. */
+try {
+  const gi = JSON.parse(sessionStorage.getItem('neo_guest_intent') || localStorage.getItem('neo_guest_intent') || 'null');
+  A.fromYnIntent = !!(gi && gi.src === 'yn');
+} catch(e){}
 
 const TITLES = {
   register: [
-    A.fromYesNo ? 'Ваш расклад готов ✨' : 'Вход за 10 секунд',
-    A.fromYesNo
+    A.fromYnIntent ? 'Ещё шаг — и оракул ответит' : (A.fromYesNo ? 'Ваш расклад готов ✨' : 'Вход за 10 секунд'),
+    A.fromYnIntent
+      ? 'Войдите, чтобы узнать <b>сроки</b> и задать уточняющий вопрос. В подарок <b>+5 энергии</b>.'
+      : A.fromYesNo
       ? 'Войдите удобным способом, чтобы <b>открыть разбор</b> и получить <b>+5 энергии</b>.'
       : 'Выберите удобный способ — вы сразу получите <b>+5 энергии</b> и бесплатную <b>Карту дня</b>.'
   ],
-  login:    ['Вход в пространство', 'Продолжим там, где вы остановились.'],
-  verify:   ['Подтвердите почту', 'Мы отправили 6-значный код на <b>вашу почту</b>. Проверьте входящие и папку «Спам».'],
+  login:    ['Вход по паролю', 'Если вы задавали пароль. Нет пароля — войдите по коду из письма.'],
+  verify:   ['Проверьте почту', 'Мы отправили 6-значный код на <b>вашу почту</b>. Не видите письмо? Загляните в «Спам» или «Рассылки».'],
   forgot:   ['Восстановление', 'Укажите почту — пришлём код для смены пароля.'],
   reset:    ['Новый пароль', 'Код отправлен на <b>вашу почту</b>. Введите его и придумайте новый пароль.']
 };
@@ -448,7 +450,8 @@ const ERRS = {
   password_long:'Пароль слишком длинный.',
   password_mismatch:'Пароли не совпадают.',
   mail_failed:'Не удалось отправить письмо. Попробуйте войти через Telegram или Google выше.',
-  too_soon:'Код уже отправлен. Подождите минуту перед повтором.',
+  too_soon:'Код уже отправлен — проверьте почту. Повторить можно через минуту.',
+  invalid_credentials_hint:'Неверная почта или пароль. Можно войти по коду — без пароля.',
   too_many_requests:'Слишком много запросов. Попробуйте через час.',
   code_not_found:'Код не найден. Запросите новый.',
   code_expired:'Срок действия кода истёк. Запросите новый.',
@@ -497,9 +500,10 @@ function aScreen(name, keepMsg){
   soc.style.display = (name === 'register' || name === 'login') ? '' : 'none';
 
   const fs = document.getElementById('foot-switch');
-  fs.innerHTML = (name === 'register')
-    ? 'Уже есть аккаунт? <button class="lnk" type="button" onclick="aScreen(\'login\')">Войти</button>'
-    : 'Ещё нет аккаунта? <button class="lnk" type="button" onclick="aScreen(\'register\')">Создать</button>';
+  fs.innerHTML = (name === 'register' || name === 'verify')
+    ? 'Есть пароль? <button class="lnk" type="button" onclick="aScreen(\'login\')">Войти по паролю</button>'
+    : 'Нет пароля? <button class="lnk" type="button" onclick="aScreen(\'register\')">Войти по коду</button>';
+  fs.style.display = (name === 'verify' && A.mode === 'code') ? 'none' : '';
 
   if(!keepMsg) msg('');
 }
@@ -581,6 +585,34 @@ function enter(data, goalName, goalParams){
 }
 
 /* ==================== ПОЧТА ==================== */
+/* ==================== ВХОД ПО КОДУ ==================== */
+async function aStart(){
+  if(A.busy) return;
+  const email = val('rg-email').toLowerCase();
+  if(!email){ msg('Укажите почту — пришлём на неё код.', 'err'); document.getElementById('rg-email').focus(); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ err('email_invalid'); return; }
+  busy(true); msg('');
+  try {
+    const d = await post('/auth/email/start', { email: email, lang: 'ru' });
+    if(d.success || d.message === 'too_soon'){
+      A.email = email; A.mode = 'code';
+      if(window.neoGoal) window.neoGoal('email_code_sent', { is_new: d.is_new ? 1 : 0 });
+      aScreen('verify');
+      msg(d.success ? 'Код отправлен — введите 6 цифр из письма.' : ERRS.too_soon, 'ok');
+      cooldown(d.resend_after || d.retry_after || 60);
+      setTimeout(function(){ const c = document.getElementById('vf-code'); if(c){ c.value = ''; c.focus(); } }, 60);
+      return;
+    }
+    err(d.message);
+  } catch(e){ reportAuthError(e); }
+  finally { busy(false); }
+}
+function aBackFromVerify(){
+  aScreen(A.mode === 'code' ? 'register' : 'login');
+  const el = document.getElementById(A.mode === 'code' ? 'rg-email' : 'li-email');
+  if(el){ el.value = A.email || el.value; el.focus(); }
+}
+
 async function aRegister(){
   if(A.busy) return;
   const email = val('rg-email').toLowerCase();
@@ -619,13 +651,13 @@ async function aLogin(){
     const d = await post('/auth/login', { email: email, password: pass });
     if(d.success && d.token){ enter(d, 'signin', { method: 'email' }); return; }
     if(d.message === 'email_not_verified'){
-      A.email = email;
+      A.email = email; A.mode = 'legacy';
       aScreen('verify');
       msg('Почта ещё не подтверждена — мы отправили код.', 'ok');
       cooldown(60);
       return;
     }
-    err(d.message);
+    err(d.message === 'invalid_credentials' ? 'invalid_credentials_hint' : d.message);
   } catch(e){ reportAuthError(e); }
   finally { busy(false); }
 }
@@ -636,6 +668,13 @@ async function aVerify(){
   if(code.length < 4){ msg('Введите 6 цифр кода из письма.', 'err'); return; }
   busy(true); msg('');
   try {
+    if(A.mode === 'code'){
+      const d = await post('/auth/email/code', { email: A.email, code: code, lang: 'ru' });
+      if(d.success && d.token){ enter(d, d.is_new ? 'register' : 'signin', { method: 'email_code' }); return; }
+      err(d.message);
+      const c = document.getElementById('vf-code'); if(c){ c.select(); }
+      return;
+    }
     const d = await post('/auth/verify', { email: A.email, code: code });
     if(d.success && d.token){ enter(d, 'verify_email'); return; }
     err(d.message);
@@ -682,7 +721,9 @@ async function aResend(purpose){
   if(A.cool > 0 || !A.email) return;
   msg('');
   try {
-    const d = await post('/auth/resend', { email: A.email, lang: 'ru', purpose: purpose === 'reset' ? 'reset' : 'verify' });
+    const d = (purpose !== 'reset' && A.mode === 'code')
+      ? await post('/auth/email/start', { email: A.email, lang: 'ru' })
+      : await post('/auth/resend', { email: A.email, lang: 'ru', purpose: purpose === 'reset' ? 'reset' : 'verify' });
     if(d.success){ msg('Новый код отправлен.', 'ok'); cooldown(d.resend_after || 60); return; }
     err(d.message);
   } catch(e){ reportAuthError(e); }
@@ -784,6 +825,12 @@ document.addEventListener('DOMContentLoaded', function(){
   try {
     const q = new URLSearchParams(location.search);
     if(q.get('mode') === 'login') aScreen('login');
+    if(q.get('mode') === 'password'){
+      aScreen('forgot');
+      document.getElementById('a-title').textContent = 'Пароль для входа';
+      document.getElementById('a-lede').innerHTML = 'Укажите почту аккаунта — пришлём код, и вы зададите пароль. Это не обязательно: вход по коду работает всегда.';
+      try { const u = JSON.parse(localStorage.getItem('neotaro_user') || 'null'); if(u && u.email) document.getElementById('fg-email').value = u.email; } catch(e){}
+    }
   } catch(e){}
 });
 </script>
