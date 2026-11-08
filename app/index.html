@@ -3379,9 +3379,14 @@ class AppBridge {
     return null;
   }
   get startParam(){
-    if(this.isTG && tg.initDataUnsafe) return tg.initDataUnsafe.start_param || null;
+    if(this.isTG && tg.initDataUnsafe && tg.initDataUnsafe.start_param) return tg.initDataUnsafe.start_param;
     const u = new URLSearchParams(location.search);
-    return u.get('startapp') || u.get('ref') || null;
+    const fromUrl = u.get('startapp') || u.get('ref') || null;
+    if(fromUrl){
+      try{ localStorage.setItem('neotaro_ref', fromUrl); }catch(e){}
+      return fromUrl;
+    }
+    try{ return localStorage.getItem('neotaro_ref') || null; }catch(e){ return null; }
   }
   haptic(kind){
     if(this.isTG && tg.HapticFeedback){
