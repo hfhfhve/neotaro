@@ -1280,6 +1280,24 @@ html[data-theme="dawn"] .daily-fog-box{
   box-shadow:0 10px 30px rgba(90,66,26,.1);
 }
 html[data-theme="dawn"] .daily-fog-title{color:#4A3208}
+/* === NEOTARO: воронка «тизер → туман → касса» === */
+.fn-form{display:flex;flex-direction:column;gap:10px;margin-top:12px;text-align:left}
+.fn-lbl{font-size:13px;opacity:.85}
+.fn-email{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:12px;border:1px solid rgba(217,174,95,.45);background:rgba(7,10,20,.55);color:inherit;font-size:16px}
+.fn-email:focus{outline:none;border-color:#D9AE5F}
+.fn-agree{display:flex;gap:8px;align-items:flex-start;font-size:12px;opacity:.85;line-height:1.4}
+.fn-agree input{margin-top:2px;accent-color:#D9AE5F}
+.fn-agree a{color:#D9AE5F}
+.fn-btn{white-space:normal;line-height:1.3;min-height:48px}
+.fn-btn-alt{background:transparent;border:1px solid #D9AE5F;color:#F2D49A}
+.fn-note{font-size:12px;opacity:.7;margin:0;text-align:center}
+.fn-err{font-size:13px;color:#ff8f8f;margin:0;min-height:1em;text-align:center}
+.fn-upsell{margin-top:22px;padding:18px;border-radius:16px;border:1px solid rgba(217,174,95,.55);background:linear-gradient(135deg,rgba(217,174,95,.16),rgba(120,90,200,.12));text-align:center}
+.fn-upsell-t{font-size:18px;font-weight:600;color:#F2D49A;margin-bottom:6px}
+.fn-upsell p{margin:0 0 12px;opacity:.9}
+.fn-wait{text-align:center;opacity:.85;padding:18px 0}
+html[data-theme="dawn"] .fn-email{background:#fff;color:#2A1E08}
+html[data-theme="dawn"] .fn-upsell-t{color:#4A3208}
 /* ===== НАТАЛЬНАЯ КАРТА ===== */
 .nk-wheel-wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;margin-top:22px;align-items:start}
 .nk-wheel{position:relative;border:1px solid var(--line);border-radius:2px;background:
@@ -2721,7 +2739,7 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
     </div>
     <div class="yn-s-lock-copy">
       <div class="yn-s-lock-t">Когда ждать и что делать дальше</div>
-      <p class="yn-s-lock-s" id="yn-s-lock-s">Сроки по вашему вопросу и уточняющий вопрос оракулу. Вход — 10 секунд, в подарок +5 ⚡</p>
+      <p class="yn-s-lock-s" id="yn-s-lock-s">Сроки по вашему вопросу и полный разбор — от 99 ₽, без регистрации и паролей</p>
     </div>
   </div>
   <button class="btn btn-brass btn-wide" type="button" id="yn-s-cta" onclick="ynUnlock()">Узнать сроки и спросить →</button>
@@ -3512,7 +3530,7 @@ class AppBridge {
     }
   }
   headers(){
-    const h = { 'Content-Type': 'application/json' };
+    const h = { 'Content-Type': 'application/json', 'X-Device-Id': neoDeviceId() };
     if(this.isTG) h['X-Telegram-Init-Data'] = tg.initData;
     else if(this.isVK && this.vkInit) h['X-VK-Init-Data'] = this.vkInit;
     else if(this.token) h['Authorization'] = 'Bearer ' + this.token;
@@ -3563,7 +3581,7 @@ function isGuest(){
 function guestInviteHtml(row){
   const ru = lang === 'ru';
   const t = ru ? 'Войдите, чтобы открыть' : 'Sign in to unlock';
-  const n = ru ? 'Бесплатно · +5 энергии и Карта дня' : 'Free · +5 energy and a Daily card';
+  const n = ru ? 'Вход по почте или Telegram' : 'Sign in with email or Telegram';
   if(row){
     return '<button class="rowcard" onclick="requireAuth({ action: \'profile\' })">' +
       '<span class="mid"><strong>' + esc(t) + '</strong><span>' + esc(n) + '</span></span>' +
@@ -3707,7 +3725,8 @@ function ynUnlock(){
   const text = ynChatText();
   try{ neoGoal('yesno_unlock_click', { guest: isGuest() ? 1 : 0 }); }catch(e){}
   if(isGuest()){
-    requireAuth({ action: 'chat', text: text, src: 'yn' });
+    closeSheets();
+    funnelFromQuestion((typeof YN !== 'undefined' && YN && YN.q) || '');
     return;
   }
   closeSheets();
@@ -4532,15 +4551,15 @@ function paintEnergy(){
   // В верхней шапке (мобайл), в чате и в левой колонке (ПК)
   const tbBtn = document.querySelector('.tb-energy');
   if(tbBtn){
-    tbBtn.onclick = guest ? () => bounceToAuth() : () => go('shop');
+    tbBtn.onclick = guest ? () => go('spreads') : () => go('shop');
   }
   const chatBtn = document.querySelector('.chat-energy');
   if(chatBtn){
-    chatBtn.onclick = guest ? () => bounceToAuth() : () => go('shop');
+    chatBtn.onclick = guest ? () => go('spreads') : () => go('shop');
   }
   const meterBtn = document.querySelector('.meter');
   if(meterBtn){
-    meterBtn.onclick = guest ? () => bounceToAuth() : () => go('shop');
+    meterBtn.onclick = guest ? () => go('spreads') : () => go('shop');
   }
 
   ['m-energy','m-energy-2','m-energy-4'].forEach(id => {
@@ -4548,13 +4567,13 @@ function paintEnergy(){
     if(n) n.textContent = guest ? (lang === 'ru' ? 'Войти' : 'Sign in') : (id === 'm-energy' ? fmtNum(S.energy) : fmtEnergyShort(S.energy));
   });
 
-  // Прячем слово "энергия" рядом с кнопкой "Войти", чтобы было аккуратно: "Войти · +5 ⚡"
+  // У гостя рядом с «Войти» ничего не обещаем (стартовой энергии больше нет)
   document.querySelectorAll('.tb-energy .u, .chat-energy .u, .meter-unit').forEach(el => {
-    el.textContent = guest ? '+5 ⚡' : (Math.abs(Number(S.energy) || 0) >= 100000 ? tt('energy_unit') : energyWord(S.energy));
+    el.textContent = guest ? '⚡' : (Math.abs(Number(S.energy) || 0) >= 100000 ? tt('energy_unit') : energyWord(S.energy));
   });
 
   const mNote = document.querySelector('.meter-note');
-  if(mNote) mNote.textContent = guest ? (lang === 'ru' ? 'Получить +5 энергии →' : 'Claim +5 energy →') : tt('energy_top_up');
+  if(mNote) mNote.textContent = guest ? (lang === 'ru' ? 'Сделать расклад →' : 'Make a spread →') : tt('energy_top_up');
 
   const pe = document.getElementById('pf-energy');
   if(pe) pe.textContent = guest ? '0' : fmtNum(S.energy);
@@ -4976,8 +4995,9 @@ async function boot(){
   });
   resumeGuestIntent();
   showYnReading();
+  funnelResume();
 }
-document.addEventListener('DOMContentLoaded', () => { drawTicks(); applyStrings(); boot(); });
+document.addEventListener('DOMContentLoaded', () => { drawTicks(); applyStrings(); boot(); setTimeout(funnelResume, 2500); });
 </script>
 
 <script>
@@ -5115,12 +5135,12 @@ function fillDaily(c){
   const textBox = document.getElementById('daily-text');
   if(c.isGuestPreview){
     const ru = lang === 'ru';
-    const badge = ru ? 'Полный разбор + 5 ⚡ энергии' : 'Full reading + 5 ⚡ energy';
+    const badge = ru ? 'Полный разбор дня' : 'Full daily reading';
     const title = ru ? 'Что этот аркан готовит вам сегодня?' : 'What does this arcanum hold for you today?';
     const sub   = ru
-      ? 'Войдите за 10 секунд через Telegram или почту — мы сразу откроем совет дня по вашей карте и начислим +5 энергии на личный вопрос Оракулу.'
-      : 'Sign in in 10 seconds to unlock the full advice for your card and claim +5 free energy.';
-    const btnTx = ru ? 'Открыть полный разбор бесплатно →' : 'Unlock full reading for free →';
+      ? 'Задайте свой вопрос — Оракул сделает личный расклад на сегодня. Без регистрации и паролей.'
+      : 'Ask your question — the Oracle will make a personal spread for today. No sign-up.';
+    const btnTx = ru ? 'Сделать личный расклад на день →' : 'Make my spread for today →';
 
     textBox.innerHTML = `
       <div class="daily-teaser-wrap">
@@ -5163,7 +5183,8 @@ function fillDaily(c){
 
 function unlockGuestDaily(cardId){
   if(window.neoGoal) neoGoal('guest_daily_unlock_click', { card_id: cardId });
-  requireAuth({ action: 'daily', cardId: cardId });
+  /* Без редиректа на /login/: ведём в расклад-воронку с готовым вопросом. */
+  funnelFromQuestion(lang === 'ru' ? 'Что принесёт мне сегодняшний день и как мне лучше поступить?' : 'What will today bring and how should I act?');
 }
 
 async function drawDaily(){
@@ -5336,9 +5357,9 @@ function countQ(){
 async function dealSpread(){
   const q = document.getElementById('tb-q').value.trim();
   if(!q) return toast(tt('need_q'));
-  if(requireAuth({ action: 'spread', spreadId: S.spread ? S.spread.id : null, question: q })) return;
   const price = S.spread.price || 0;
-  if(S.energy < price){ openBuySpread(price); return; }
+  /* Новая воронка: никаких bounceToAuth до оплаты. */
+  if(isGuest() || S.energy < price || (!price && !S.purchased)){ return funnelDeal(q); }
   const picked = [];
   while(picked.length < S.spread.cards){
     const n = Math.floor(Math.random() * 78) + 1;
@@ -5599,7 +5620,7 @@ async function sendChat(){
   const text = input.value.trim();
   if(!text) return;
   if(requireAuth({ action: 'chat', text: text })) return;
-  if(S.energy < 1){ toast(tt('no_energy')); go('shop'); return; }
+  if(S.energy < 1){ funnelPlusOffer(); return; }
   const now = new Date().toLocaleTimeString(lang, { hour:'2-digit', minute:'2-digit' });
   const vmeta = window.__voiceMeta; window.__voiceMeta = null;
   S.chat.push({ type:'user', text, time: now, voiceSec: vmeta ? vmeta.sec : null });
@@ -5637,8 +5658,7 @@ async function sendChat(){
     if(typeof data.energy === 'number'){ S.energy = data.energy; paintEnergy(); }
     bridge.haptic('ok');
   } else if(data && data.message === 'no_energy'){
-    toast(tt('no_energy'));
-    go('shop');
+    setTimeout(funnelPlusOffer, 0);
   } else {
     toast(tt('err'));
   }
@@ -6327,6 +6347,11 @@ async function claimBonus(){
   if(btn){ btn.disabled = true; btn.textContent = tt('wait'); }
 
   const data = await api('/bonus/claim', 'POST');
+  if(data && data.message === 'need_purchase'){
+    if(btn){ btn.disabled = false; btn.textContent = lang === 'ru' ? 'Откроется после первой покупки' : 'Unlocks after first purchase'; }
+    toast(lang === 'ru' ? 'Ежедневный бонус доступен после первой покупки' : 'Daily bonus unlocks after your first purchase');
+    return;
+  }
   if(data && data.success){
     S.energy = data.energy;
     S.streak = data.streak || S.streak;
@@ -7722,6 +7747,287 @@ else { pwaPaintInstallRow(); loadPushState(); }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tick);
   else tick();
 })();
+</script>
+<script>
+/* ================= NEOTARO: воронка «тизер → туман → касса» ================= */
+function neoDeviceId(){
+  try{
+    let id = localStorage.getItem('neo_did');
+    if(!id || !/^[A-Za-z0-9_-]{16,64}$/.test(id)){
+      id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+        : ('d' + Date.now().toString(36) + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)).slice(0, 36);
+      localStorage.setItem('neo_did', id);
+    }
+    document.cookie = 'neo_did=' + id + '; path=/; max-age=31536000; SameSite=Lax';
+    return id;
+  }catch(e){ return ''; }
+}
+
+const FN = { id: null, k: null, q: '', picked: [], polling: false, resumed: false };
+const FN_RU = () => (typeof lang === 'undefined' || lang === 'ru');
+
+function fnSave(){
+  try{ localStorage.setItem('neo_funnel', JSON.stringify({ id: FN.id, k: FN.k, q: FN.q, picked: FN.picked, type: S.spread && S.spread.id })); }catch(e){}
+}
+function fnLoad(){
+  try{ return JSON.parse(localStorage.getItem('neo_funnel') || 'null'); }catch(e){ return null; }
+}
+function fnShowTable(q, picked){
+  go('table');
+  document.getElementById('tb-ask').style.display = 'none';
+  document.getElementById('tb-shuffle').style.display = 'none';
+  document.getElementById('tb-result').style.display = 'block';
+  document.getElementById('tb-qshow').textContent = q ? ('«' + q + '»') : '';
+  document.getElementById('tb-cards-out').innerHTML = (picked || []).map(id => `<img src="${CARD_IMG(id)}" alt="">`).join('');
+}
+
+/* Вопрос с главной / Да-Нет / Карты дня -> первый доступный короткий расклад с готовым вопросом. */
+function funnelFromQuestion(q){
+  const list = (S.spreads || S.templates || []).filter(t => t && !t.locked && (t.cards || 0) >= 1);
+  const pick = list.find(t => t.cards === 3) || list.find(t => t.cards <= 3) || list[0];
+  if(pick){ S.spread = Object.assign({}, pick); }
+  if(!S.spread){ go('spreads'); return; }
+  go('table');
+  const inp = document.getElementById('tb-q');
+  document.getElementById('tb-ask').style.display = 'block';
+  document.getElementById('tb-result').style.display = 'none';
+  if(inp){ inp.value = q || ''; }
+  if(q){ funnelDeal(q); } else if(inp){ inp.focus(); }
+}
+
+async function funnelDeal(q){
+  const picked = [];
+  while(picked.length < (S.spread.cards || 1)){
+    const n = Math.floor(Math.random() * 78) + 1;
+    if(!picked.includes(n)) picked.push(n);
+  }
+  S.spread.picked = picked; S.spread.question = q;
+  document.getElementById('tb-ask').style.display = 'none';
+  document.getElementById('tb-shuffle').style.display = 'block';
+  bridge.haptic();
+  if(window.neoGoal) neoGoal('funnel_spread_start', { spread: S.spread.id });
+
+  const wait = new Promise(r => setTimeout(r, 2600));
+  const call = api('/funnel/spread', 'POST', { spread_type: S.spread.id, cards: picked, question: q, lang: lang || 'ru' }, true);
+  const [, data] = await Promise.all([wait, call]);
+
+  fnShowTable(q, picked);
+  const out = document.getElementById('tb-reading');
+  if(data && data.success){
+    FN.id = data.spread_id; FN.k = data.view_key; FN.q = q; FN.picked = picked;
+    fnSave();
+    funnelRenderLocked(data.teaser || '');
+    if(window.neoGoal) neoGoal('funnel_teaser_shown', { spread: S.spread.id });
+  } else if(data && data.message === 'limit'){
+    out.innerHTML = '<p>' + esc(FN_RU()
+      ? 'На сегодня бесплатные превью раскладов закончились. Вернитесь завтра или оформите подписку ПЛЮС.'
+      : 'Free previews for today are over. Come back tomorrow or get PLUS.') + '</p>';
+  } else if(data && data.message === 'need_plan'){
+    if(typeof goPlans === 'function') goPlans(data.feature || 'plus');
+    out.innerHTML = '';
+  } else {
+    out.innerHTML = '<p>' + esc(tt('err')) + '</p>';
+  }
+}
+
+function funnelFogHtml(errText){
+  const ru = FN_RU();
+  let saved = '';
+  try{ saved = localStorage.getItem('neo_email') || ((bridge.webUser && bridge.webUser.email) || ''); }catch(e){}
+  return `
+    <div class="daily-fog-box" id="fn-fog">
+      <div class="daily-fog-preview">${esc(ru ? 'Карты показывают, что скрыто за ситуацией, чего ждать дальше и какой шаг сделать…' : 'The cards reveal what is hidden, what comes next and what step to take…')}</div>
+      <div class="daily-fog-card">
+        <span class="daily-fog-badge">${IC.spark} ${esc(ru ? 'Полный разбор готов' : 'Full reading is ready')}</span>
+        <div class="daily-fog-title">${esc(ru ? 'Продолжение скрыто туманом' : 'The rest is hidden in the fog')}</div>
+        <div class="fn-form">
+          <label class="fn-lbl" for="fn-email">${esc(ru ? 'Куда прислать копию разбора и чек? (Ваш Email)' : 'Where to send the reading copy and receipt? (Your email)')}</label>
+          <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email" placeholder="you@mail.ru" value="${esc(saved)}">
+          <label class="fn-agree"><input type="checkbox" id="fn-agree" checked>
+            <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a> и <a href="/privacy/" target="_blank" rel="noopener">политикой конфиденциальности</a>' : 'I agree to the <a href="/oferta/" target="_blank" rel="noopener">offer</a> and <a href="/privacy/" target="_blank" rel="noopener">privacy policy</a>'}</span></label>
+          <button class="btn btn-brass btn-wide fn-btn" id="fn-pay-tw" onclick="funnelPay('tripwire')">${esc(ru ? 'Открыть этот расклад + 3 ⚡ энергии — 99 ₽' : 'Unlock this spread + 3 ⚡ energy — 99 ₽')}</button>
+          <button class="btn btn-wide fn-btn fn-btn-alt" id="fn-pay-plus" onclick="funnelPay('plus')">${esc(ru ? 'Открыть расклад + Подписка ПЛЮС на месяц (150 ⚡ энергии) — 299 ₽' : 'Unlock + PLUS for a month (150 ⚡) — 299 ₽')}</button>
+          <p class="fn-note">${esc(ru ? 'Без автосписаний · чек по 54-ФЗ придёт на почту · без паролей' : 'No auto-renewal · receipt by email · no passwords')}</p>
+          <p class="fn-err" id="fn-err">${esc(errText || '')}</p>
+        </div>
+      </div>
+    </div>`;
+}
+
+function funnelRenderLocked(teaser, errText){
+  const out = document.getElementById('tb-reading');
+  out.innerHTML = `<div class="daily-teaser-wrap"><div class="daily-teaser-text">${clean(teaser || '')}</div>${funnelFogHtml(errText)}</div>`;
+}
+
+function fnUtm(){
+  const u = {};
+  try{ Object.assign(u, neoUtm('first') || {}); }catch(e){}
+  try{ Object.assign(u, neoUtm('last') || {}); }catch(e){}
+  return u;
+}
+
+async function funnelPay(plan){
+  const ru = FN_RU();
+  const err = document.getElementById('fn-err');
+  const email = ((document.getElementById('fn-email') || {}).value || '').trim().toLowerCase();
+  const agree = !!(document.getElementById('fn-agree') || {}).checked;
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ if(err) err.textContent = ru ? 'Укажите корректный email' : 'Enter a valid email'; return; }
+  if(!agree){ if(err) err.textContent = ru ? 'Подтвердите согласие с офертой' : 'Please accept the offer'; return; }
+  if(!FN.id){ const s = fnLoad(); if(s){ FN.id = s.id; FN.k = s.k; } }
+  if(!FN.id){ if(err) err.textContent = tt('err'); return; }
+  if(err) err.textContent = '';
+  ['fn-pay-tw','fn-pay-plus'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = true; });
+  try{ localStorage.setItem('neo_email', email); }catch(e){}
+
+  const price = plan === 'plus' ? 299 : 99;
+  S.payMeta = { goal: 'purchase_funnel', price: price, kind: 'funnel', item: plan };
+  if(window.neoGoal) neoGoal('purchase_start', { kind: 'funnel', item: plan, order_price: price });
+
+  const d = await api('/funnel/checkout', 'POST', { spread_id: FN.id, view_key: FN.k, email: email, plan: plan, agree: agree, utm: fnUtm() }, true);
+  ['fn-pay-tw','fn-pay-plus'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = false; });
+
+  if(d && d.success && d.already_paid){ funnelPoll(FN.id, FN.k); return; }
+  if(!(d && d.success && d.invoice_url)){
+    const m = d && d.message;
+    if(err) err.textContent = m === 'email_invalid' ? (ru ? 'Проверьте email' : 'Check your email')
+      : m === 'need_agree' ? (ru ? 'Подтвердите согласие с офертой' : 'Please accept the offer')
+      : (ru ? 'Не удалось создать оплату, попробуйте ещё раз' : 'Could not create payment, try again');
+    return;
+  }
+  /* Тихая авторегистрация: сервер вернул токен нового аккаунта */
+  if(d.neotaro_token){
+    try{
+      localStorage.setItem('neotaro_token', d.neotaro_token);
+      if(d.user) localStorage.setItem('neotaro_user', JSON.stringify(d.user));
+    }catch(e){}
+    bridge.token = d.neotaro_token;
+    if(d.user) bridge.webUser = d.user;
+  }
+  fnSave();
+  if(bridge.isWeb){
+    location.href = d.invoice_url;          /* вернёмся на /app/?paid_spread=ID&k=KEY */
+  } else {
+    bridge.openLink(d.invoice_url);          /* TG/VK: оплата во внешнем окне, ждём тут */
+    toast(tt('pay_wait'));
+    funnelPoll(FN.id, FN.k);
+  }
+}
+
+function funnelResume(){
+  if(FN.resumed) return;
+  const p = new URLSearchParams(location.search);
+  const id = parseInt(p.get('paid_spread') || '', 10);
+  if(!id) return;
+  FN.resumed = true;
+  const saved = fnLoad() || {};
+  FN.id = id;
+  FN.k = p.get('k') || (saved.id === id ? saved.k : '');
+  FN.q = saved.id === id ? (saved.q || '') : '';
+  FN.picked = saved.id === id ? (saved.picked || []) : [];
+  try{ history.replaceState(null, '', location.pathname + '#table'); }catch(e){}
+  fnShowTable(FN.q, FN.picked);
+  funnelPoll(FN.id, FN.k);
+}
+
+async function funnelPoll(id, k){
+  if(FN.polling) return;
+  FN.polling = true;
+  const out = document.getElementById('tb-reading');
+  out.innerHTML = `<div class="fn-wait">${IC.spark} ${esc(FN_RU() ? 'Проверяем оплату и рассеиваем туман…' : 'Checking payment…')}</div>`;
+  let last = null;
+  for(let i = 0; i < 72; i++){            /* ~3 минуты */
+    const d = await api('/funnel/status/' + id + '?k=' + encodeURIComponent(k || ''), 'GET', null, true);
+    last = d;
+    if(d && d.success && d.paid){ FN.polling = false; funnelRenderPaid(d); return; }
+    if(d && d.success && d.canceled){ break; }
+    if(d && d.success === false && d.message === 'not_found'){ break; }
+    await new Promise(r => setTimeout(r, 2500));
+  }
+  FN.polling = false;
+  if(last && last.cards && !FN.picked.length){ FN.picked = last.cards; fnShowTable(last.question || FN.q, FN.picked); }
+  funnelRenderLocked((last && last.teaser) || '', FN_RU()
+    ? ((last && last.canceled) ? 'Оплата не прошла — попробуйте ещё раз' : 'Оплата ещё не подтвердилась. Если вы оплатили — разбор придёт на почту в течение нескольких минут.')
+    : 'Payment not confirmed yet.');
+}
+
+function funnelRenderPaid(d){
+  const ru = FN_RU();
+  if(d.cards && d.cards.length){ FN.picked = d.cards; }
+  if(d.question){ FN.q = d.question; }
+  fnShowTable(FN.q, FN.picked);
+  if(typeof d.energy === 'number'){ S.energy = d.energy; try{ paintEnergy(); }catch(e){} }
+  FN.full = d.interpretation || '';
+  FN.type = d.spread_type || (S.spread && S.spread.id) || '';
+  const n = typeof d.energy === 'number' ? d.energy : (d.plan === 'plus' ? 150 : 3);
+  document.getElementById('tb-reading').innerHTML = clean(FN.full) + `
+    <div class="fn-upsell">
+      <div class="fn-upsell-t">${esc(ru ? 'Остались вопросы по раскладу?' : 'Questions about your spread?')}</div>
+      <p>${esc(ru ? ('У вас на балансе ' + n + ' ⚡ энергии — обсудите расклад с Оракулом') : ('You have ' + n + ' ⚡ energy — discuss the spread with the Oracle'))}</p>
+      <button class="btn btn-brass btn-wide" onclick="funnelDiscuss()">${esc(ru ? 'Обсудить с Оракулом →' : 'Discuss with the Oracle →')}</button>
+      <p class="fn-note" style="margin-top:10px">${esc(ru ? 'Копия разбора уже летит на вашу почту' : 'A copy is on its way to your inbox')}</p>
+    </div>`;
+  bridge.haptic('ok');
+  try{
+    const key = 'neo_funnel_goal_' + FN.id;
+    if(window.neoGoal && !localStorage.getItem(key)){
+      localStorage.setItem(key, '1');
+      neoGoal('purchase', { kind: 'funnel', item: d.plan || '', order_price: d.plan === 'plus' ? 299 : 99 });
+    }
+    localStorage.removeItem('neo_funnel');
+  }catch(e){}
+}
+
+function funnelDiscuss(){
+  const ru = FN_RU();
+  const text = ru ? ('Хочу обсудить мой расклад по вопросу «' + (FN.q || '') + '». На что мне обратить внимание в первую очередь?')
+                  : ('I want to discuss my spread about “' + (FN.q || '') + '”. What should I focus on first?');
+  const plain = String(FN.full || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 6000);
+  window.cardDiscussContext = '===HIDDEN_DATA===\nРасклад: ' + (FN.type || '') + '\nВопрос: ' + (FN.q || '') +
+    '\nКарты (id): ' + (FN.picked || []).join(', ') + '\nПолный разбор: ' + plain;
+  if(isGuest()){
+    /* Аккаунт с этим email уже был — токен не выдаём, нужен вход по коду */
+    requireAuth({ action: 'chat', text: text });
+    return;
+  }
+  go('chat');
+  setTimeout(() => {
+    const inp = document.getElementById('chat-in');
+    if(inp){ inp.value = text; inp.focus(); }
+  }, 300);
+}
+
+/* Энергия в чате закончилась -> оффер ПЛЮС 299 ₽ */
+function funnelPlusOffer(){
+  const ru = FN_RU();
+  const box = document.getElementById('chat-inner') || document.getElementById('chat-list') || document.querySelector('.chat-scroll');
+  if(!box){ if(typeof goPlans === 'function') goPlans('plus'); else go('shop'); return; }
+  const old = document.getElementById('fn-plus-offer'); if(old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'fn-plus-offer';
+  el.className = 'fn-upsell';
+  el.innerHTML = `
+    <div class="fn-upsell-t">${esc(ru ? 'Энергия закончилась' : 'Out of energy')}</div>
+    <p>${esc(ru ? 'Продолжите разговор с Оракулом: подписка ПЛЮС — 150 ⚡ энергии на месяц и все расклады.' : 'Continue with the Oracle: PLUS — 150 ⚡ per month and all spreads.')}</p>
+    <button class="btn btn-brass btn-wide" onclick="funnelBuyPlus()">${esc(ru ? 'Перейти на ПЛЮС — 299 ₽' : 'Get PLUS — 299 ₽')}</button>`;
+  box.appendChild(el);
+  try{ el.scrollIntoView({ behavior: 'smooth', block: 'end' }); }catch(e){}
+  if(window.neoGoal) neoGoal('plus_offer_shown', { src: 'chat_no_energy' });
+}
+
+async function funnelBuyPlus(){
+  if(requireAuth({ action: 'profile' })) return;
+  toast(tt('wait'));
+  const meta = { goal: 'purchase_sub', price: 299, kind: 'sub', item: 'plus' };
+  S.payMeta = meta;
+  if(window.neoGoal) neoGoal('purchase_start', { kind: 'sub', item: 'plus', order_price: 299 });
+  const d = await api('/subscription/invoice-rub', 'POST', { plan: 'plus', period: 'month' });
+  if(d && d.success && d.invoice_url){
+    bridge.openLink(d.invoice_url);
+    toast(tt('pay_wait'));
+    if(typeof watchPayment === 'function') watchPayment(function(){ try{ paintEnergy(); }catch(e){} }, meta);
+  } else toast(tt('err'));
+}
+
 </script>
 </body>
 </html>
