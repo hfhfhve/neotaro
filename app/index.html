@@ -8160,10 +8160,12 @@ async function funnelBuyPlus(){
   S.payMeta = meta;
   if(window.neoGoal) neoGoal('purchase_start', { kind: 'sub', item: 'plus', order_price: 299 });
   const d = await api('/subscription/invoice-rub', 'POST', { plan: 'plus', period: 'month' });
-  if(d && d.success && d.invoice_url){
-    bridge.openLink(d.invoice_url);
+  const payUrl = d && (d.url || d.invoice_url);
+  if(d && d.success && payUrl){
+    bridge.openLink(payUrl);
     toast(tt('pay_wait'));
-    if(typeof watchPayment === 'function') watchPayment(function(){ try{ paintEnergy(); }catch(e){} }, meta);
+    if(typeof watchSubscription === 'function') watchSubscription(d.amount || 299, 'plus', 'month');
+    else if(typeof watchPayment === 'function') watchPayment(function(){ try{ paintEnergy(); }catch(e){} }, meta);
   } else toast(tt('err'));
 }
 
