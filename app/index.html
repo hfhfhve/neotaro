@@ -1298,6 +1298,76 @@ html[data-theme="dawn"] .daily-fog-title{color:#4A3208}
 .fn-wait{text-align:center;opacity:.85;padding:18px 0}
 html[data-theme="dawn"] .fn-email{background:#fff;color:#2A1E08}
 html[data-theme="dawn"] .fn-upsell-t{color:#4A3208}
+
+/* === NEOTARO: анкета основных раскладов === */
+.fnq-intro{font-size:13.5px;line-height:1.55;color:var(--mist);margin:0 0 14px}
+.fnq-prog{position:sticky;top:0;z-index:3;padding:10px 0 12px;background:linear-gradient(var(--bg,#0b1020) 70%,transparent)}
+.fnq-prog-bar{height:4px;border-radius:4px;background:rgba(217,174,95,.15);overflow:hidden}
+.fnq-prog-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#B8873A,#F2D49A);transition:width .35s ease}
+.fnq-prog-t{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--brass-pale);margin-top:6px}
+.fnq{margin:0 0 18px}
+.fnq-l{display:block;font-size:14px;font-weight:600;color:var(--ivory);margin-bottom:4px}
+.fnq-h{display:block;font-size:12.5px;line-height:1.45;color:var(--mist);margin-bottom:8px}
+.fnq .field{width:100%;box-sizing:border-box;font-size:16px}
+.fnq textarea.field{min-height:92px;resize:vertical}
+.fnq-c{display:flex;justify-content:flex-end;font-family:var(--mono);font-size:10.5px;margin-top:5px;color:var(--mist)}
+.fnq-c.ok{color:#9BD48A}
+.fnq.bad .field{border-color:#d9775f}
+.fnq.shake{animation:fnqShake .4s}
+@keyframes fnqShake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.fnq-chips{display:flex;flex-wrap:wrap;gap:8px}
+.fnq-chip{padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ivory);font-size:13.5px;cursor:pointer}
+.fnq-chip.on{background:rgba(217,174,95,.18);border-color:#D9AE5F;color:#F2D49A}
+#tb-deal.is-wait{opacity:.6}
+html[data-theme="dawn"] .fnq-l{color:#2A1E08}
+html[data-theme="dawn"] .fnq-chip{color:#2A1E08}
+html[data-theme="dawn"] .fnq-prog{background:linear-gradient(#FBF7EF 70%,transparent)}
+
+/* === NEOTARO: хук перед туманом === */
+.fn-hook{position:relative;margin:16px 0 4px;padding:13px 15px;border-radius:12px;border-left:3px solid #D9AE5F;
+  background:linear-gradient(90deg,rgba(217,174,95,.14),rgba(217,174,95,.02));font-family:var(--serif);font-size:16px;line-height:1.5;color:#F2D49A}
+html[data-theme="dawn"] .fn-hook{color:#4A3208}
+
+/* === NEOTARO: живой туман ===
+   Только transform/opacity (считает GPU), без анимации filter:blur — иначе дешёвые Android лагают.
+   Вне экрана анимация ставится на паузу (IntersectionObserver), при reduced-motion — статика. */
+.daily-fog-box.fn-fogbox{contain:paint;isolation:isolate}
+.fn-fogbox .daily-fog-preview{max-height:110px;filter:blur(6px);opacity:.38}
+.fn-mist{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.fn-mist i{position:absolute;left:-50%;top:-50%;width:200%;height:200%;will-change:transform;backface-visibility:hidden}
+.fn-mist i:nth-child(1){
+  background:radial-gradient(28% 22% at 30% 40%,rgba(226,214,240,.30),transparent 70%),
+             radial-gradient(26% 20% at 70% 62%,rgba(210,190,235,.24),transparent 70%);
+  animation:fnMistA 19s ease-in-out infinite alternate}
+.fn-mist i:nth-child(2){
+  background:radial-gradient(30% 24% at 62% 36%,rgba(240,220,180,.20),transparent 70%),
+             radial-gradient(24% 18% at 38% 70%,rgba(200,210,240,.22),transparent 70%);
+  animation:fnMistB 26s ease-in-out infinite alternate}
+.fn-mist i:nth-child(3){
+  background:radial-gradient(34% 26% at 50% 52%,rgba(255,255,255,.14),transparent 72%);
+  animation:fnMistC 33s linear infinite}
+@keyframes fnMistA{0%{transform:translate3d(-8%,2%,0) scale(1)}100%{transform:translate3d(9%,-4%,0) scale(1.15)}}
+@keyframes fnMistB{0%{transform:translate3d(7%,5%,0) scale(1.1)}100%{transform:translate3d(-9%,-3%,0) scale(.95)}}
+@keyframes fnMistC{0%{transform:rotate(0) translate3d(4%,0,0)}100%{transform:rotate(360deg) translate3d(4%,0,0)}}
+.fn-mist.is-paused i{animation-play-state:paused}
+.fn-fogbox .daily-fog-card{z-index:2}
+.fn-fogbox .daily-fog-title{text-shadow:0 0 18px rgba(217,174,95,.45)}
+html[data-theme="dawn"] .fn-mist i{opacity:.55;mix-blend-mode:multiply}
+@media(max-width:640px){.fn-mist i:nth-child(3){display:none}}
+@media(prefers-reduced-motion:reduce){.fn-mist i{animation:none}}
+
+/* Рассеивание тумана после оплаты */
+.fn-lift{position:absolute;inset:-10px;z-index:5;pointer-events:none;overflow:hidden;border-radius:14px;
+  background:radial-gradient(120% 90% at 50% 30%,rgba(20,26,44,.96),rgba(14,20,36,.9));animation:fnLift 1.9s ease-out forwards}
+.fn-lift i{position:absolute;left:-50%;top:-50%;width:200%;height:200%;
+  background:radial-gradient(30% 24% at 40% 45%,rgba(226,214,240,.45),transparent 70%),radial-gradient(26% 20% at 65% 60%,rgba(240,220,180,.35),transparent 70%);
+  animation:fnLiftMist 1.9s ease-out forwards}
+@keyframes fnLift{0%{opacity:1}35%{opacity:.85}100%{opacity:0}}
+@keyframes fnLiftMist{0%{transform:scale(1)}100%{transform:scale(1.8) translate3d(0,-8%,0);opacity:0}}
+.fn-reveal{animation:fnReveal 1.4s ease-out both}
+@keyframes fnReveal{0%{opacity:.2;transform:translate3d(0,8px,0)}100%{opacity:1;transform:none}}
+html[data-theme="dawn"] .fn-lift{background:radial-gradient(120% 90% at 50% 30%,rgba(255,255,255,.97),rgba(250,244,232,.92))}
+@media(prefers-reduced-motion:reduce){.fn-lift,.fn-lift i,.fn-reveal{animation-duration:.01s}}
 /* ===== НАТАЛЬНАЯ КАРТА ===== */
 .nk-wheel-wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;margin-top:22px;align-items:start}
 .nk-wheel{position:relative;border:1px solid var(--line);border-radius:2px;background:
@@ -2058,13 +2128,16 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
             <p class="sub" id="tb-desc" style="margin-top:12px"></p>
 
             <div id="tb-ask" style="margin-top:28px">
+              <div id="tb-form"></div>
+              <div id="tb-free">
               <label class="field-lab" for="tb-q" data-t="table_q_label">Ваш вопрос</label>
               <textarea id="tb-q" class="field" rows="4" maxlength="500" oninput="countQ()" data-ph="table_q_ph" placeholder="Спрашивайте о одной ситуации: что происходит, чего вы хотите и что мешает."></textarea>
               <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
                 <span class="label num" id="tb-count">0 / 500</span>
                 <span class="label" data-t="table_hint">Открытые вопросы дают больше</span>
               </div>
-              <button class="btn btn-brass btn-wide" style="margin-top:20px" onclick="dealSpread()" data-t="table_deal">Разложить карты</button>
+              </div>
+              <button class="btn btn-brass btn-wide" id="tb-deal" style="margin-top:20px" onclick="dealSpread()" data-t="table_deal">Разложить карты</button>
             </div>
 
             <div id="tb-shuffle" style="display:none;text-align:center">
@@ -2077,10 +2150,11 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
               <div class="spread-out" id="tb-cards-out"></div>
               <div class="panel panel-pad">
                 <div class="orn"><span class="eyebrow" data-t="table_reading">Разбор</span></div>
-                <div class="reading" id="tb-reading"></div>
+                <div class="reading" id="tb-reading" style="position:relative"></div>
               </div>
-              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
-                <button class="btn btn-line" onclick="discussSpread()" data-t="table_discuss">Обсудить с оракулом</button>
+              <!-- Кнопки скрыты, пока пробный расклад не оплачен (см. fnActions) -->
+              <div id="tb-actions" style="display:none;gap:10px;flex-wrap:wrap;margin-top:18px">
+                <button class="btn btn-line" onclick="tbDiscuss()" data-t="table_discuss">Обсудить с оракулом</button>
                 <button class="btn btn-quiet" onclick="go('spreads')" data-t="table_again">Другой расклад</button>
               </div>
             </div>
@@ -5341,6 +5415,7 @@ function pickSpread(id){
   document.getElementById('tb-cards').textContent = s.cards_count + ' ' + tt('cards_word');
   document.getElementById('tb-price').textContent = s.price === 0 ? tt('free') : (s.price + ' ' + energyWord(s.price));
   document.getElementById('tb-q').value = S.pendingQ || '';
+  fnRenderForm(S.pendingQ || '');
   S.pendingQ = '';
   const hq = document.getElementById('hm-q'); if(hq) hq.value = '';
   document.querySelectorAll('#v-home .hm-chip').forEach(b => b.classList.remove('is-on'));
@@ -5348,6 +5423,7 @@ function pickSpread(id){
   document.getElementById('tb-ask').style.display = 'block';
   document.getElementById('tb-shuffle').style.display = 'none';
   document.getElementById('tb-result').style.display = 'none';
+  fnActions(false);
   go('table');
 }
 function countQ(){
@@ -5355,11 +5431,21 @@ function countQ(){
   document.getElementById('tb-count').textContent = v.length + ' / 500';
 }
 async function dealSpread(){
-  const q = document.getElementById('tb-q').value.trim();
-  if(!q) return toast(tt('need_q'));
+  /* Основные расклады — анкета, остальные — одно поле вопроса. */
+  let q = '', extra = null;
+  const form = fnFormFor(S.spread);
+  if(form){
+    const c = fnCollect(form);
+    if(!c.ok) return;
+    q = c.question; extra = c;
+  } else {
+    q = document.getElementById('tb-q').value.trim();
+    if(!q) return toast(tt('need_q'));
+  }
   const price = S.spread.price || 0;
   /* Новая воронка: никаких bounceToAuth до оплаты. */
-  if(isGuest() || S.energy < price || (!price && !S.purchased)){ return funnelDeal(q); }
+  if(isGuest() || S.energy < price || (!price && !S.purchased)){ return funnelDeal(q, extra); }
+  FN.paidView = false;
   const picked = [];
   while(picked.length < S.spread.cards){
     const n = Math.floor(Math.random() * 78) + 1;
@@ -5377,10 +5463,12 @@ async function dealSpread(){
 
   document.getElementById('tb-shuffle').style.display = 'none';
   document.getElementById('tb-result').style.display = 'block';
-  document.getElementById('tb-qshow').textContent = '«' + q + '»';
+  document.getElementById('tb-qshow').textContent = '«' + (extra ? extra.display : q) + '»';
   document.getElementById('tb-cards-out').innerHTML = picked.map(id => `<img src="${CARD_IMG(id)}" alt="">`).join('');
   const out = document.getElementById('tb-reading');
+  fnActions(true);
   if(data && data.success){
+    if(form) fnDraftClear(S.spread.id);
     out.innerHTML = clean(data.interpretation || '');
     if(typeof data.energy === 'number'){ S.energy = data.energy; paintEnergy(); }
     bridge.haptic('ok');
@@ -7779,6 +7867,7 @@ function fnShowTable(q, picked){
   document.getElementById('tb-result').style.display = 'block';
   document.getElementById('tb-qshow').textContent = q ? ('«' + q + '»') : '';
   document.getElementById('tb-cards-out').innerHTML = (picked || []).map(id => `<img src="${CARD_IMG(id)}" alt="">`).join('');
+  fnActions(false);   /* пока не оплачено — без «Обсудить» и «Другой расклад» */
 }
 
 /* Вопрос с главной / Да-Нет / Карты дня -> первый доступный короткий расклад с готовым вопросом. */
@@ -7795,7 +7884,8 @@ function funnelFromQuestion(q){
   if(q){ funnelDeal(q); } else if(inp){ inp.focus(); }
 }
 
-async function funnelDeal(q){
+async function funnelDeal(q, extra){
+  const shown = (extra && extra.display) || q;
   const picked = [];
   while(picked.length < (S.spread.cards || 1)){
     const n = Math.floor(Math.random() * 78) + 1;
@@ -7808,13 +7898,16 @@ async function funnelDeal(q){
   if(window.neoGoal) neoGoal('funnel_spread_start', { spread: S.spread.id });
 
   const wait = new Promise(r => setTimeout(r, 2600));
-  const call = api('/funnel/spread', 'POST', { spread_type: S.spread.id, cards: picked, question: q, lang: lang || 'ru' }, true);
+  const body = { spread_type: S.spread.id, cards: picked, question: q, lang: lang || 'ru' };
+  if(extra){ body.details = extra.details; body.subject_name = extra.subject || ''; }
+  const call = api('/funnel/spread', 'POST', body, true);
   const [, data] = await Promise.all([wait, call]);
 
-  fnShowTable(q, picked);
+  fnShowTable(shown, picked);
   const out = document.getElementById('tb-reading');
   if(data && data.success){
-    FN.id = data.spread_id; FN.k = data.view_key; FN.q = q; FN.picked = picked;
+    if(extra) fnDraftClear(S.spread.id);
+    FN.id = data.spread_id; FN.k = data.view_key; FN.q = shown; FN.picked = picked;
     fnSave();
     funnelRenderLocked(data.teaser || '');
     if(window.neoGoal) neoGoal('funnel_teaser_shown', { spread: S.spread.id });
@@ -7822,6 +7915,10 @@ async function funnelDeal(q){
     out.innerHTML = '<p>' + esc(FN_RU()
       ? 'На сегодня бесплатные превью раскладов закончились. Вернитесь завтра или оформите подписку ПЛЮС.'
       : 'Free previews for today are over. Come back tomorrow or get PLUS.') + '</p>';
+  } else if(data && data.message === 'need_more'){
+    document.getElementById('tb-result').style.display = 'none';
+    document.getElementById('tb-ask').style.display = 'block';
+    toast(FN_RU() ? 'Опишите ситуацию подробнее — картам нужны детали' : 'Describe the situation in more detail');
   } else if(data && data.message === 'need_plan'){
     if(typeof goPlans === 'function') goPlans(data.feature || 'plus');
     out.innerHTML = '';
@@ -7835,8 +7932,9 @@ function funnelFogHtml(errText){
   let saved = '';
   try{ saved = localStorage.getItem('neo_email') || ((bridge.webUser && bridge.webUser.email) || ''); }catch(e){}
   return `
-    <div class="daily-fog-box" id="fn-fog">
-      <div class="daily-fog-preview">${esc(ru ? 'Карты показывают, что скрыто за ситуацией, чего ждать дальше и какой шаг сделать…' : 'The cards reveal what is hidden, what comes next and what step to take…')}</div>
+    <div class="daily-fog-box fn-fogbox" id="fn-fog">
+      <div class="daily-fog-preview">${esc(ru ? 'Карты показывают, что на самом деле скрыто за этой ситуацией и какая сила ей управляет. Вторая карта раскрывает то, чего вы пока не знаете, а итог расклада указывает на один конкретный шаг и срок, когда всё изменится…' : 'The cards reveal what is really hidden behind this situation. The next card shows what you do not know yet, and the outcome points to one concrete step and the moment everything changes…')}</div>
+      <div class="fn-mist" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="daily-fog-card">
         <span class="daily-fog-badge">${IC.spark} ${esc(ru ? 'Полный разбор готов' : 'Full reading is ready')}</span>
         <div class="daily-fog-title">${esc(ru ? 'Продолжение скрыто туманом' : 'The rest is hidden in the fog')}</div>
@@ -7857,6 +7955,8 @@ function funnelFogHtml(errText){
 function funnelRenderLocked(teaser, errText){
   const out = document.getElementById('tb-reading');
   out.innerHTML = `<div class="daily-teaser-wrap"><div class="daily-teaser-text">${clean(teaser || '')}</div>${funnelFogHtml(errText)}</div>`;
+  fnActions(false);
+  fnMistWatch();
 }
 
 function fnUtm(){
@@ -7959,13 +8059,16 @@ function funnelRenderPaid(d){
   FN.full = d.interpretation || '';
   FN.type = d.spread_type || (S.spread && S.spread.id) || '';
   const n = typeof d.energy === 'number' ? d.energy : (d.plan === 'plus' ? 150 : 3);
-  document.getElementById('tb-reading').innerHTML = clean(FN.full) + `
+  FN.paidView = true;
+  document.getElementById('tb-reading').innerHTML = '<div class="fn-reveal">' + clean(FN.full) + '</div>' + `
     <div class="fn-upsell">
       <div class="fn-upsell-t">${esc(ru ? 'Остались вопросы по раскладу?' : 'Questions about your spread?')}</div>
       <p>${esc(ru ? ('У вас на балансе ' + n + ' ⚡ энергии — обсудите расклад с Оракулом') : ('You have ' + n + ' ⚡ energy — discuss the spread with the Oracle'))}</p>
       <button class="btn btn-brass btn-wide" onclick="funnelDiscuss()">${esc(ru ? 'Обсудить с Оракулом →' : 'Discuss with the Oracle →')}</button>
       <p class="fn-note" style="margin-top:10px">${esc(ru ? 'Копия разбора уже летит на вашу почту' : 'A copy is on its way to your inbox')}</p>
-    </div>`;
+    </div><div class="fn-lift" id="fn-lift" aria-hidden="true"><i></i></div>`;
+  setTimeout(() => { const l = document.getElementById('fn-lift'); if(l) l.remove(); }, 2000);
+  fnActions(true);   /* оплачено — возвращаем «Обсудить» и «Другой расклад» */
   bridge.haptic('ok');
   try{
     const key = 'neo_funnel_goal_' + FN.id;
@@ -8026,6 +8129,209 @@ async function funnelBuyPlus(){
     toast(tt('pay_wait'));
     if(typeof watchPayment === 'function') watchPayment(function(){ try{ paintEnergy(); }catch(e){} }, meta);
   } else toast(tt('err'));
+}
+
+/* ============================================================
+   NEOTARO: анкета основных раскладов
+   Человек тратит 1-2 минуты на рассказ -> ИИ получает детали,
+   разбор точнее, а сам человек уже «вложился» и охотнее платит.
+   Чтобы привязать форму к конкретному id расклада из БД — впишите его
+   в FUNNEL_FORM_IDS (например: { 'ppf_3': 'ppf' }). Иначе форма
+   подбирается по названию расклада в категории «Основные».
+   ============================================================ */
+const FUNNEL_FORM_IDS = {};
+
+const FUNNEL_FORMS = {
+  ppf: {
+    intro: ['Чем подробнее рассказ, тем точнее карты свяжут прошлое с будущим. Это займёт 1-2 минуты.', 'The more detail you give, the more precisely the cards connect past and future.'],
+    fields: [
+      { k:'sphere', type:'chips', req:true, label:['О какой сфере расклад?','Which area of life?'], opts:[['Любовь','Love'],['Работа','Career'],['Деньги','Money'],['Семья','Family'],['Я сам(а)','Myself']] },
+      { k:'past', type:'area', min:60, max:400, label:['С чего всё началось?','How did it all start?'], hint:['Что происходило раньше, какое событие запустило ситуацию','What happened before, what triggered the situation'], ph:['Например: год назад я сменила работу, и с тех пор…','E.g. a year ago I changed jobs and since then…'] },
+      { k:'now', type:'area', min:60, max:400, label:['Что происходит сейчас?','What is happening now?'], hint:['Опишите, как обстоят дела и что вы чувствуете','Describe how things are and how you feel'], ph:['Сейчас я чувствую, что…','Right now I feel that…'] },
+      { k:'future', type:'area', min:40, max:300, label:['Чего вы хотите и чего боитесь?','What do you want and fear?'], ph:['Хочу, чтобы… Боюсь, что…','I want… I am afraid that…'] },
+      { k:'q', type:'text', min:15, max:150, display:true, label:['Главный вопрос к картам','Your main question'], ph:['Что меня ждёт в ближайшие месяцы?','What awaits me in the coming months?'] }
+    ]
+  },
+  yesno: {
+    intro: ['Карта даст ответ «да» или «нет», а детали помогут понять, почему.', 'The card answers yes or no; details explain why.'],
+    fields: [
+      { k:'q', type:'text', min:15, max:150, display:true, label:['Вопрос, на который можно ответить «да» или «нет»','A yes/no question'], ph:['Стоит ли мне переезжать этой весной?','Should I move this spring?'] },
+      { k:'why', type:'area', min:50, max:400, label:['Почему этот вопрос важен именно сейчас?','Why does it matter now?'], ph:['Мне нужно решить до…, потому что…','I need to decide by… because…'] },
+      { k:'yes', type:'area', min:40, max:300, label:['Что изменится, если ответ «да»? А если «нет»?','What changes with yes? With no?'], ph:['Если да — … Если нет — …','If yes — … If no — …'] },
+      { k:'who', type:'text', min:0, max:100, subject:true, label:['Кто ещё участвует (имя)','Who else is involved (name)'], hint:['Необязательно','Optional'], ph:['Например: Максим','E.g. Max'] }
+    ]
+  },
+  feelings: {
+    intro: ['Карты увидят его чувства точнее, если вы расскажете историю ваших отношений. 1-2 минуты.', 'Tell the story of your relationship so the cards can read their feelings.'],
+    fields: [
+      { k:'name', type:'text', min:2, max:40, subject:true, label:['Имя человека','Their name'], ph:['Например: Андрей','E.g. Andrew'] },
+      { k:'role', type:'chips', req:true, label:['Кем он(а) вам приходится?','Who are they to you?'], opts:[['Партнёр','Partner'],['Бывший(ая)','Ex'],['Симпатия','Crush'],['Друг','Friend'],['Всё сложно','Complicated']] },
+      { k:'bond', type:'area', min:60, max:400, label:['Как вы познакомились и что вас связывает?','How did you meet, what connects you?'], ph:['Познакомились на… Нас связывает…','We met at… What connects us is…'] },
+      { k:'now', type:'area', min:60, max:400, label:['Что между вами происходит сейчас?','What is going on between you now?'], hint:['Как часто общаетесь, были ли ссоры, кто делает шаги навстречу','How often you talk, fights, who reaches out'], ph:['Последние недели он…','Lately they…'] },
+      { k:'want', type:'area', min:40, max:300, display:true, label:['Что вы хотите понять о его чувствах?','What do you want to know?'], ph:['Любит ли он меня по-настоящему и есть ли у нас будущее?','Do they really love me, do we have a future?'] }
+    ]
+  },
+  letgo: {
+    intro: ['Чтобы отпустить, карты должны понять, что именно вас держит.', 'To let go, the cards need to see what holds you.'],
+    fields: [
+      { k:'what', type:'text', min:5, max:120, subject:true, label:['Что или кого вы хотите отпустить?','What or whom do you want to let go?'], ph:['Например: бывшего, Дмитрия','E.g. my ex, Dmitry'] },
+      { k:'hold', type:'area', min:60, max:400, label:['Почему не получается отпустить?','Why can’t you let go?'], hint:['Воспоминания, обида, надежда, привычка — что держит сильнее всего','Memories, resentment, hope, habit'], ph:['Я до сих пор…','I still…'] },
+      { k:'accept', type:'area', min:40, max:300, label:['Что вы хотите впустить в жизнь вместо этого?','What do you want instead?'], ph:['Хочу снова чувствовать…','I want to feel… again'] },
+      { k:'q', type:'text', min:15, max:150, display:true, label:['Главный вопрос к картам','Your main question'], ph:['Как мне наконец освободиться?','How do I finally move on?'] }
+    ]
+  },
+  conflict: {
+    intro: ['Опишите конфликт с обеих сторон — так карты подскажут, где выход.', 'Describe both sides so the cards show the way out.'],
+    fields: [
+      { k:'who', type:'text', min:2, max:60, subject:true, label:['С кем конфликт? (имя)','Who is the conflict with? (name)'], ph:['Например: мама, Ольга','E.g. my mom, Olga'] },
+      { k:'start', type:'area', min:60, max:400, label:['Из-за чего всё началось?','How did it start?'], ph:['Всё началось, когда…','It started when…'] },
+      { k:'sides', type:'area', min:60, max:400, label:['Что говорите и чувствуете вы, а что — другая сторона?','Your side and theirs'], ph:['Я считаю… А она говорит…','I think… They say…'] },
+      { k:'goal', type:'area', min:30, max:300, display:true, label:['Каким вы хотите видеть исход?','What outcome do you want?'], ph:['Хочу помириться, но без…','I want to make peace, but without…'] }
+    ]
+  }
+};
+
+function fnL(v){ return Array.isArray(v) ? (FN_RU() ? v[0] : (v[1] || v[0])) : (v || ''); }
+
+function fnFormKey(sp){
+  if(!sp) return null;
+  if(FUNNEL_FORM_IDS[sp.id]) return FUNNEL_FORM_IDS[sp.id];
+  const full = (S.spreads || []).find(x => x.id === sp.id) || sp;
+  if(full.category && full.category !== 'basic') return null;
+  const n = ((full.name || '') + ' ' + (full.id || '')).toLowerCase();
+  if(/прошл|past/.test(n)) return 'ppf';
+  if(/да.?нет|yes.?no|yesno/.test(n)) return 'yesno';
+  if(/чувств|feeling/.test(n)) return 'feelings';
+  if(/отпуст|let.?go|release/.test(n)) return 'letgo';
+  if(/конфликт|conflict/.test(n)) return 'conflict';
+  return null;
+}
+function fnFormFor(sp){ const k = fnFormKey(sp); return k ? FUNNEL_FORMS[k] : null; }
+
+function fnDraftLoad(id){ try{ return JSON.parse(localStorage.getItem('neo_form_' + id) || '{}') || {}; }catch(e){ return {}; } }
+function fnDraftSave(id, d){ try{ localStorage.setItem('neo_form_' + id, JSON.stringify(d)); }catch(e){} }
+function fnDraftClear(id){ try{ localStorage.removeItem('neo_form_' + id); }catch(e){} }
+
+function fnRenderForm(prefill){
+  const box = document.getElementById('tb-form');
+  const free = document.getElementById('tb-free');
+  if(!box || !free) return;
+  const form = fnFormFor(S.spread);
+  if(!form){ box.innerHTML = ''; free.style.display = ''; fnSetDeal(null); return; }
+  free.style.display = 'none';
+  const d = fnDraftLoad(S.spread.id);
+  if(prefill){ const df = form.fields.find(f => f.display); if(df && !d[df.k]) d[df.k] = prefill; }
+  let html = `<p class="fnq-intro">${esc(fnL(form.intro))}</p>
+    <div class="fnq-prog"><div class="fnq-prog-bar"><i id="fnq-bar"></i></div>
+    <div class="fnq-prog-t"><span>${esc(FN_RU() ? 'Ваш рассказ' : 'Your story')}</span><span id="fnq-pct">0%</span></div></div>`;
+  form.fields.forEach(f => {
+    const v = d[f.k] || '';
+    html += `<div class="fnq" id="fnq-${f.k}"><label class="fnq-l" for="fnq-in-${f.k}">${esc(fnL(f.label))}</label>`;
+    if(f.hint) html += `<span class="fnq-h">${esc(fnL(f.hint))}</span>`;
+    if(f.type === 'chips'){
+      html += `<div class="fnq-chips">` + f.opts.map(o => {
+        const val = fnL(o);
+        return `<button type="button" class="fnq-chip${v === val ? ' on' : ''}" data-k="${f.k}" data-v="${esc(val)}" onclick="fnChip(this)">${esc(val)}</button>`;
+      }).join('') + `</div>`;
+    } else if(f.type === 'area'){
+      html += `<textarea class="field" id="fnq-in-${f.k}" rows="3" maxlength="${f.max}" placeholder="${esc(fnL(f.ph))}" oninput="fnFormCheck()">${esc(v)}</textarea><div class="fnq-c" id="fnq-c-${f.k}"></div>`;
+    } else {
+      html += `<input class="field" id="fnq-in-${f.k}" type="text" maxlength="${f.max}" placeholder="${esc(fnL(f.ph))}" value="${esc(v)}" oninput="fnFormCheck()"><div class="fnq-c" id="fnq-c-${f.k}"></div>`;
+    }
+    html += `</div>`;
+  });
+  box.innerHTML = html;
+  fnFormCheck();
+}
+
+function fnChip(btn){
+  const k = btn.getAttribute('data-k');
+  btn.parentNode.querySelectorAll('.fnq-chip').forEach(b => b.classList.toggle('on', b === btn));
+  try{ bridge.haptic(); }catch(e){}
+  fnFormCheck();
+}
+
+function fnFieldVal(f){
+  if(f.type === 'chips'){ const on = document.querySelector(`#fnq-${f.k} .fnq-chip.on`); return on ? on.getAttribute('data-v') : ''; }
+  const el = document.getElementById('fnq-in-' + f.k);
+  return el ? el.value.trim() : '';
+}
+function fnFieldOk(f, v){ return f.type === 'chips' ? (!f.req || !!v) : v.length >= (f.min || 0); }
+
+function fnFormCheck(){
+  const form = fnFormFor(S.spread);
+  if(!form) return;
+  const ru = FN_RU();
+  let need = 0, have = 0;
+  const draft = {};
+  form.fields.forEach(f => {
+    const v = fnFieldVal(f);
+    draft[f.k] = v;
+    const w = f.type === 'chips' ? (f.req ? 20 : 0) : (f.min || 0);
+    need += w;
+    have += f.type === 'chips' ? (v ? w : 0) : Math.min(v.length, w);
+    const c = document.getElementById('fnq-c-' + f.k);
+    if(c){
+      const ok = fnFieldOk(f, v);
+      c.classList.toggle('ok', ok && v.length > 0);
+      c.textContent = !f.min ? '' : ok ? '✓' : (ru ? ('ещё ' + (f.min - v.length) + ' симв.') : ((f.min - v.length) + ' more chars'));
+    }
+    if(fnFieldOk(f, v)){ const b = document.getElementById('fnq-' + f.k); if(b) b.classList.remove('bad'); }
+  });
+  fnDraftSave(S.spread.id, draft);
+  const pct = need ? Math.round(have / need * 100) : 100;
+  const bar = document.getElementById('fnq-bar'); if(bar) bar.style.width = pct + '%';
+  const p = document.getElementById('fnq-pct'); if(p) p.textContent = pct + '%';
+  fnSetDeal(pct);
+}
+
+function fnSetDeal(pct){
+  const b = document.getElementById('tb-deal');
+  if(!b) return;
+  if(pct === null || pct >= 100){ b.classList.remove('is-wait'); b.textContent = tt('table_deal'); return; }
+  b.classList.add('is-wait');
+  b.textContent = (FN_RU() ? 'Расскажите подробнее · ' : 'Tell more · ') + pct + '%';
+}
+
+function fnCollect(form){
+  const ru = FN_RU();
+  const details = [];
+  let subject = '', display = '', firstBad = null;
+  form.fields.forEach(f => {
+    const v = fnFieldVal(f);
+    if(!fnFieldOk(f, v) && !firstBad) firstBad = f;
+    if(v) details.push({ label: fnL(f.label), value: v });
+    if(f.subject && v) subject = v.split(/[,;]/).pop().trim();
+    if(f.display && v) display = v;
+  });
+  if(firstBad){
+    const el = document.getElementById('fnq-' + firstBad.k);
+    if(el){
+      el.classList.add('bad', 'shake');
+      setTimeout(() => el.classList.remove('shake'), 450);
+      try{ el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }catch(e){}
+      const inp = document.getElementById('fnq-in-' + firstBad.k); if(inp) setTimeout(() => inp.focus(), 300);
+    }
+    toast(ru ? 'Карты ждут подробностей — дополните ответ' : 'The cards need more details');
+    return { ok: false };
+  }
+  const question = details.map(x => x.label + ': ' + x.value).join('\n');
+  return { ok: true, details, subject, display: display || details[0].value, question };
+}
+
+/* Кнопки под раскладом: только после оплаты пробного (или в обычном платном раскладе) */
+function fnActions(show){
+  const a = document.getElementById('tb-actions');
+  if(a) a.style.display = show ? 'flex' : 'none';
+}
+function tbDiscuss(){ if(FN.paidView) return funnelDiscuss(); discussSpread(); }
+
+/* Туман анимируется только когда виден на экране — экономим батарею и FPS */
+function fnMistWatch(){
+  const m = document.querySelector('#tb-reading .fn-mist');
+  if(!m || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(es => es.forEach(e => m.classList.toggle('is-paused', !e.isIntersecting)), { threshold: 0 });
+  io.observe(m);
 }
 
 </script>
