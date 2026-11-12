@@ -4597,7 +4597,7 @@ window.addEventListener('popstate', function(e){
   closeSheets();
   let v = (e.state && e.state.v) || (location.hash || '').replace('#','') || 'home';
   if(v === 'subscription') v = 'profile';
-  if(!document.getElementById('v-' + v)) v = 'home';
+  if(!document.getElementById('v-' + v)){ if(fnDeepLink(v)) return; v = 'home'; }
   go(v, true);
 });
 
@@ -5017,7 +5017,7 @@ async function boot(){
     paintDaily();
     paintEnergy();
     var _gh = (location.hash || '').replace('#','');
-    go(_gh && document.getElementById('v-' + _gh) ? _gh : 'home');
+    if(!fnDeepLink(_gh)) go(_gh && document.getElementById('v-' + _gh) ? _gh : 'home');
     loadCalendar();
     loadProfileSub();
     /* Тарифы отдают guest_access: без него у гостя нет замков на премиум-раскладах. */
@@ -5059,7 +5059,7 @@ async function boot(){
   loadProfileSub();
   paintDaily();
   var _h = (location.hash || '').replace('#','');
-  go(_h && document.getElementById('v-' + _h) ? _h : 'home');
+  if(!fnDeepLink(_h)) go(_h && document.getElementById('v-' + _h) ? _h : 'home');
   loadCalendar();
   loadBonusBanner();
   renderSpreads();
@@ -8139,7 +8139,42 @@ async function funnelBuyPlus(){
    в FUNNEL_FORM_IDS (например: { 'ppf_3': 'ppf' }). Иначе форма
    подбирается по названию расклада в категории «Основные».
    ============================================================ */
-const FUNNEL_FORM_IDS = {};
+const FUNNEL_FORM_IDS = {
+  'past-present': 'ppf',
+  'one-card': 'yesno',
+  'feelings': 'feelings',
+  'let_go': 'letgo',
+  'conflict_resolution': 'conflict'
+};
+
+/* ---------- Прямые ссылки на расклады (для Директа) ----------
+   neotaro.ru/app/#feelings, #yes-no, #past-present, #conflict, #let-go и любой id из таблицы spreads.
+   Кнопка «назад» ведёт в список раскладов, а не снова на стол. */
+const SPREAD_ALIASES = {
+  'yes-no':'one-card', 'yesno':'one-card', 'da-net':'one-card', 'danet':'one-card', 'one_card':'one-card',
+  'ppf':'past-present', 'past':'past-present', 'past_present':'past-present', 'proshloe':'past-present',
+  'love':'feelings', 'chuvstva':'feelings',
+  'let-go':'let_go', 'letgo':'let_go', 'otpustit':'let_go',
+  'conflict':'conflict_resolution', 'conflict-resolution':'conflict_resolution', 'konflikt':'conflict_resolution'
+};
+const DEEP_SKIP = ['subscription', ''];
+function fnDeepLink(raw){
+  let hsh = decodeURIComponent(String(raw || '')).split(/[?&]/)[0].trim().toLowerCase();
+  if(DEEP_SKIP.indexOf(hsh) !== -1 || document.getElementById('v-' + hsh)) return false;
+  const want = SPREAD_ALIASES[hsh] || hsh;
+  const norm = x => String(x).toLowerCase().replace(/[-_]/g, '');
+  try{ history.replaceState({ v: 'spreads' }, '', '#spreads'); }catch(e){}
+  go('spreads', true);
+  (async () => {
+    for(let i = 0; i < 60 && !(S.spreads && S.spreads.length); i++) await new Promise(r => setTimeout(r, 150));
+    const s = (S.spreads || []).find(x => x.id === want || norm(x.id) === norm(want));
+    if(!s) return;
+    const feat = s.feature || (s.is_premium ? 'spread.premium' : null);
+    if(feat && !featOk(feat)) return goPlans(feat);
+    pickSpread(s.id);
+  })();
+  return true;
+}
 
 const FUNNEL_FORMS = {
   ppf: {
