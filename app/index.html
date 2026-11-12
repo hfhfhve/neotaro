@@ -8199,7 +8199,9 @@ const SPREAD_ALIASES = {
 };
 const DEEP_SKIP = ['subscription', ''];
 function fnDeepLink(raw){
-  let hsh = decodeURIComponent(String(raw || '')).split(/[?&]/)[0].trim().toLowerCase();
+  var fromQuery = '';
+  try { fromQuery = new URLSearchParams(location.search).get('spread') || ''; } catch(e){}
+  let hsh = decodeURIComponent(String(fromQuery || raw || '')).split(/[?&]/)[0].trim().toLowerCase();
   if(DEEP_SKIP.indexOf(hsh) !== -1 || document.getElementById('v-' + hsh)) return false;
   const want = SPREAD_ALIASES[hsh] || hsh;
   const norm = x => String(x).toLowerCase().replace(/[-_]/g, '');
