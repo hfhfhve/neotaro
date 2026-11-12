@@ -1291,6 +1291,35 @@ html[data-theme="dawn"] .daily-fog-title{color:#4A3208}
 .fn-btn{white-space:normal;line-height:1.3;min-height:48px}
 .fn-btn-alt{background:transparent;border:1px solid #D9AE5F;color:#F2D49A}
 .fn-note{font-size:12px;opacity:.7;margin:0;text-align:center}
+/* карточки оплаты вместо длинных кнопок */
+.fn-plan{position:relative;display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;padding:14px 16px;border-radius:16px;text-align:left;cursor:pointer;font:inherit;overflow:hidden;-webkit-tap-highlight-color:transparent;transition:transform .15s ease,opacity .2s}
+.fn-plan:active{transform:scale(.98)}
+.fn-plan:disabled{opacity:.55;cursor:default}
+.fn-plan-txt{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0}
+.fn-plan-txt b{font-size:16px;font-weight:600;line-height:1.25}
+.fn-plan-txt small{font-size:12.5px;line-height:1.35;opacity:.8}
+.fn-plan-price{flex:none;font-size:17px;font-weight:700;padding:7px 12px;border-radius:999px;white-space:nowrap}
+.fn-plan-main{border:0;color:#1E1405;background:linear-gradient(135deg,#F6DDA6 0%,#D9AE5F 55%,#B8873A 100%);box-shadow:0 8px 24px rgba(217,174,95,.28),inset 0 1px 0 rgba(255,255,255,.45)}
+.fn-plan-main .fn-plan-price{background:rgba(30,20,5,.14)}
+.fn-plan-main::after{content:"";position:absolute;top:0;left:0;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:translateX(-120%) skewX(-18deg);animation:fnShine 4.5s ease-in-out infinite;pointer-events:none}
+@keyframes fnShine{0%,62%{transform:translateX(-120%) skewX(-18deg)}100%{transform:translateX(330%) skewX(-18deg)}}
+.fn-plan-plus{margin-top:4px;border:1px solid rgba(217,174,95,.55);color:#F5E7C8;background:linear-gradient(135deg,rgba(217,174,95,.12),rgba(120,90,200,.14))}
+.fn-plan-plus .fn-plan-price{color:#F2D49A;border:1px solid rgba(217,174,95,.5)}
+.fn-plan-tag{position:absolute;top:0;right:14px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:0 0 8px 8px;background:#D9AE5F;color:#1E1405}
+.fn-plan-plus .fn-plan-txt{padding-top:6px}
+@media (prefers-reduced-motion:reduce){.fn-plan-main::after{animation:none;display:none}}
+html[data-theme="dawn"] .fn-plan-plus{color:#2A1E08;background:linear-gradient(135deg,rgba(217,174,95,.14),rgba(150,120,220,.1));border-color:rgba(184,135,58,.6)}
+html[data-theme="dawn"] .fn-plan-plus .fn-plan-price{color:#6B4A12;border-color:rgba(184,135,58,.6)}
+/* совместимость: плашка с процентом и знаками */
+.fn-compat{display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 0 18px;padding:16px;border-radius:18px;border:1px solid rgba(217,174,95,.4);background:radial-gradient(circle at 50% 0%,rgba(217,174,95,.18),rgba(120,90,200,.08) 70%);text-align:center}
+.fn-compat-p b{display:block;font-size:40px;line-height:1;font-weight:700;background:linear-gradient(135deg,#F6DDA6,#D9AE5F);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fn-compat-p small{display:block;margin-top:4px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-pale,#F2D49A)}
+.fn-compat-n{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 10px;font-size:15px;font-weight:600}
+.fn-compat-n span{font-weight:400;opacity:.8;font-size:13px}
+.fn-compat-n i{font-style:normal;color:#D9AE5F;font-size:18px}
+.fnq-date{min-height:48px;color-scheme:dark}
+html[data-theme="dawn"] .fnq-date{color-scheme:light}
+html[data-theme="dawn"] .fn-compat-p b{background:linear-gradient(135deg,#B8873A,#6B4A12);-webkit-background-clip:text;background-clip:text}
 .fn-err{font-size:13px;color:#ff8f8f;margin:0;min-height:1em;text-align:center}
 .fn-upsell{margin-top:22px;padding:18px;border-radius:16px;border:1px solid rgba(217,174,95,.55);background:linear-gradient(135deg,rgba(217,174,95,.16),rgba(120,90,200,.12));text-align:center}
 .fn-upsell-t{font-size:18px;font-weight:600;color:#F2D49A;margin-bottom:6px}
@@ -2813,7 +2842,7 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
     </div>
     <div class="yn-s-lock-copy">
       <div class="yn-s-lock-t">Когда ждать и что делать дальше</div>
-      <p class="yn-s-lock-s" id="yn-s-lock-s">Сроки по вашему вопросу и полный разбор — от 99 ₽, без регистрации и паролей</p>
+      <p class="yn-s-lock-s" id="yn-s-lock-s">Сроки по вашему вопросу и полный разбор — от 99 ₽, без регистрации</p>
     </div>
   </div>
   <button class="btn btn-brass btn-wide" type="button" id="yn-s-cta" onclick="ynUnlock()">Узнать сроки и спросить →</button>
@@ -5212,7 +5241,7 @@ function fillDaily(c){
     const badge = ru ? 'Полный разбор дня' : 'Full daily reading';
     const title = ru ? 'Что этот аркан готовит вам сегодня?' : 'What does this arcanum hold for you today?';
     const sub   = ru
-      ? 'Задайте свой вопрос — Оракул сделает личный расклад на сегодня. Без регистрации и паролей.'
+      ? 'Задайте свой вопрос — Оракул сделает личный расклад на сегодня. Без регистрации.'
       : 'Ask your question — the Oracle will make a personal spread for today. No sign-up.';
     const btnTx = ru ? 'Сделать личный расклад на день →' : 'Make my spread for today →';
 
@@ -5458,7 +5487,7 @@ async function dealSpread(){
   bridge.haptic();
 
   const wait = new Promise(r => setTimeout(r, 2600));
-  const call = api('/tarot/spread', 'POST', { spread_type: S.spread.id, cards: picked, question: q });
+  const call = api('/tarot/spread', 'POST', { spread_type: S.spread.id, cards: picked, question: q, compat: (extra && extra.compat) || null });
   const [, data] = await Promise.all([wait, call]);
 
   document.getElementById('tb-shuffle').style.display = 'none';
@@ -7899,7 +7928,7 @@ async function funnelDeal(q, extra){
 
   const wait = new Promise(r => setTimeout(r, 2600));
   const body = { spread_type: S.spread.id, cards: picked, question: q, lang: lang || 'ru' };
-  if(extra){ body.details = extra.details; body.subject_name = extra.subject || ''; }
+  if(extra){ body.details = extra.details; body.subject_name = extra.subject || ''; if(extra.compat) body.compat = extra.compat; }
   const call = api('/funnel/spread', 'POST', body, true);
   const [, data] = await Promise.all([wait, call]);
 
@@ -7939,13 +7968,20 @@ function funnelFogHtml(errText){
         <span class="daily-fog-badge">${IC.spark} ${esc(ru ? 'Полный разбор готов' : 'Full reading is ready')}</span>
         <div class="daily-fog-title">${esc(ru ? 'Продолжение скрыто туманом' : 'The rest is hidden in the fog')}</div>
         <div class="fn-form">
-          <label class="fn-lbl" for="fn-email">${esc(ru ? 'Куда прислать копию разбора и чек? (Ваш Email)' : 'Where to send the reading copy and receipt? (Your email)')}</label>
+          <label class="fn-lbl" for="fn-email">${esc(ru ? 'Ваш email — пришлём туда копию разбора' : 'Your email — we will send a copy of the reading')}</label>
           <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email" placeholder="you@mail.ru" value="${esc(saved)}">
           <label class="fn-agree"><input type="checkbox" id="fn-agree" checked>
             <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a> и <a href="/privacy/" target="_blank" rel="noopener">политикой конфиденциальности</a>' : 'I agree to the <a href="/oferta/" target="_blank" rel="noopener">offer</a> and <a href="/privacy/" target="_blank" rel="noopener">privacy policy</a>'}</span></label>
-          <button class="btn btn-brass btn-wide fn-btn" id="fn-pay-tw" onclick="funnelPay('tripwire')">${esc(ru ? 'Открыть этот расклад + 3 ⚡ энергии — 99 ₽' : 'Unlock this spread + 3 ⚡ energy — 99 ₽')}</button>
-          <button class="btn btn-wide fn-btn fn-btn-alt" id="fn-pay-plus" onclick="funnelPay('plus')">${esc(ru ? 'Открыть расклад + Подписка ПЛЮС на месяц (150 ⚡ энергии) — 299 ₽' : 'Unlock + PLUS for a month (150 ⚡) — 299 ₽')}</button>
-          <p class="fn-note">${esc(ru ? 'Без автосписаний · чек по 54-ФЗ придёт на почту · без паролей' : 'No auto-renewal · receipt by email · no passwords')}</p>
+          <button type="button" class="fn-plan fn-plan-main" id="fn-pay-tw" onclick="funnelPay('tripwire')">
+            <span class="fn-plan-txt"><b>${esc(ru ? 'Открыть расклад' : 'Unlock the reading')}</b><small>${esc(ru ? '+ 3 ⚡ энергии в подарок' : '+ 3 ⚡ energy as a gift')}</small></span>
+            <span class="fn-plan-price">99 ₽</span>
+          </button>
+          <button type="button" class="fn-plan fn-plan-plus" id="fn-pay-plus" onclick="funnelPay('plus')">
+            <span class="fn-plan-tag">${esc(ru ? 'выгоднее' : 'best value')}</span>
+            <span class="fn-plan-txt"><b>${esc(ru ? 'Расклад + ПЛЮС на месяц' : 'Reading + PLUS for a month')}</b><small>${esc(ru ? '150 ⚡ энергии · глубокие расклады · оракул' : '150 ⚡ energy · deep spreads · oracle')}</small></span>
+            <span class="fn-plan-price">299 ₽</span>
+          </button>
+          <p class="fn-note">${esc(ru ? 'Разбор откроется сразу после оплаты' : 'The reading opens right after payment')}</p>
           <p class="fn-err" id="fn-err">${esc(errText || '')}</p>
         </div>
       </div>
@@ -8140,6 +8176,7 @@ async function funnelBuyPlus(){
    подбирается по названию расклада в категории «Основные».
    ============================================================ */
 const FUNNEL_FORM_IDS = {
+  'compat': 'compat',
   'past-present': 'ppf',
   'one-card': 'yesno',
   'feelings': 'feelings',
@@ -8148,14 +8185,15 @@ const FUNNEL_FORM_IDS = {
 };
 
 /* ---------- Прямые ссылки на расклады (для Директа) ----------
-   neotaro.ru/app/#feelings, #yes-no, #past-present, #conflict, #let-go и любой id из таблицы spreads.
+   neotaro.ru/app/#feelings, #yes-no, #past-present, #conflict, #let-go, #compat и любой id из таблицы spreads.
    Кнопка «назад» ведёт в список раскладов, а не снова на стол. */
 const SPREAD_ALIASES = {
   'yes-no':'one-card', 'yesno':'one-card', 'da-net':'one-card', 'danet':'one-card', 'one_card':'one-card',
   'ppf':'past-present', 'past':'past-present', 'past_present':'past-present', 'proshloe':'past-present',
   'love':'feelings', 'chuvstva':'feelings',
   'let-go':'let_go', 'letgo':'let_go', 'otpustit':'let_go',
-  'conflict':'conflict_resolution', 'conflict-resolution':'conflict_resolution', 'konflikt':'conflict_resolution'
+  'conflict':'conflict_resolution', 'conflict-resolution':'conflict_resolution', 'konflikt':'conflict_resolution',
+  'compatibility':'compat', 'sovmestimost':'compat', 'sovmest':'compat', 'love-compat':'compat', 'para':'compat', 'couple':'compat'
 };
 const DEEP_SKIP = ['subscription', ''];
 function fnDeepLink(raw){
@@ -8177,51 +8215,64 @@ function fnDeepLink(raw){
 }
 
 const FUNNEL_FORMS = {
+  compat: {
+    compat: true,
+    intro: ['Карты Таро, знаки зодиака и числа ваших дат рождения — в одном разборе. Дата партнёра даст процент совместимости.', 'Tarot, zodiac signs and birth-date numbers in one reading. Your partner\u2019s date unlocks the compatibility percentage.'],
+    fields: [
+      { k:'myname', ck:'my_name', type:'text', max:40, label:['Ваше имя','Your name'], ph:['Например: Анна','E.g. Anna'] },
+      { k:'mydate', ck:'my_date', type:'date', need:true, label:['Ваша дата рождения','Your birth date'] },
+      { k:'pname', ck:'partner_name', type:'text', need:true, max:40, subject:true, label:['Имя партнёра','Partner\u2019s name'], ph:['Например: Андрей','E.g. Andrew'] },
+      { k:'pdate', ck:'partner_date', type:'date', label:['Дата рождения партнёра','Partner\u2019s birth date'], hint:['Если не знаете — оставьте пустым, карты всё равно ответят','Leave empty if unknown \u2014 the cards will still answer'] },
+      { k:'role', ck:'relation', type:'chips', req:true, label:['Кто вы друг другу?','What are you to each other?'], opts:[['Пара','Couple','partner'],['Супруги','Married','married'],['Влюблённость','Crush','crush'],['Бывшие','Exes','ex'],['Всё сложно','Complicated','complicated']] },
+      { k:'story', type:'area', max:400, label:['Как вы познакомились и что происходит сейчас?','How did you meet and what is happening now?'], hint:['Необязательно, но с историей разбор будет про вас, а не про знаки вообще','Optional, but it makes the reading about you'], ph:['Познакомились год назад… Сейчас между нами…','We met a year ago\u2026 Now\u2026'] },
+      { k:'q', type:'text', max:150, display:true, label:['Что хотите узнать о вашей паре?','What do you want to know about your couple?'], hint:['Необязательно','Optional'], ph:['Подходим ли мы друг другу и есть ли у нас будущее?','Are we a match, do we have a future?'] }
+    ]
+  },
   ppf: {
-    intro: ['Чем подробнее рассказ, тем точнее карты свяжут прошлое с будущим. Это займёт 1-2 минуты.', 'The more detail you give, the more precisely the cards connect past and future.'],
+    intro: ['Пара строк о ситуации — и карты свяжут ваше прошлое с будущим точнее. Заполняйте то, что хочется.', 'The more detail you give, the more precisely the cards connect past and future.'],
     fields: [
       { k:'sphere', type:'chips', req:true, label:['О какой сфере расклад?','Which area of life?'], opts:[['Любовь','Love'],['Работа','Career'],['Деньги','Money'],['Семья','Family'],['Я сам(а)','Myself']] },
-      { k:'past', type:'area', min:60, max:400, label:['С чего всё началось?','How did it all start?'], hint:['Что происходило раньше, какое событие запустило ситуацию','What happened before, what triggered the situation'], ph:['Например: год назад я сменила работу, и с тех пор…','E.g. a year ago I changed jobs and since then…'] },
-      { k:'now', type:'area', min:60, max:400, label:['Что происходит сейчас?','What is happening now?'], hint:['Опишите, как обстоят дела и что вы чувствуете','Describe how things are and how you feel'], ph:['Сейчас я чувствую, что…','Right now I feel that…'] },
-      { k:'future', type:'area', min:40, max:300, label:['Чего вы хотите и чего боитесь?','What do you want and fear?'], ph:['Хочу, чтобы… Боюсь, что…','I want… I am afraid that…'] },
-      { k:'q', type:'text', min:15, max:150, display:true, label:['Главный вопрос к картам','Your main question'], ph:['Что меня ждёт в ближайшие месяцы?','What awaits me in the coming months?'] }
+      { k:'past', type:'area', max:400, label:['С чего всё началось?','How did it all start?'], hint:['Что происходило раньше, какое событие запустило ситуацию','What happened before, what triggered the situation'], ph:['Например: год назад я сменила работу, и с тех пор…','E.g. a year ago I changed jobs and since then…'] },
+      { k:'now', type:'area', max:400, label:['Что происходит сейчас?','What is happening now?'], hint:['Опишите, как обстоят дела и что вы чувствуете','Describe how things are and how you feel'], ph:['Сейчас я чувствую, что…','Right now I feel that…'] },
+      { k:'future', type:'area', max:300, label:['Чего вы хотите и чего боитесь?','What do you want and fear?'], ph:['Хочу, чтобы… Боюсь, что…','I want… I am afraid that…'] },
+      { k:'q', type:'text', need:true, max:150, display:true, label:['Главный вопрос к картам','Your main question'], ph:['Что меня ждёт в ближайшие месяцы?','What awaits me in the coming months?'] }
     ]
   },
   yesno: {
     intro: ['Карта даст ответ «да» или «нет», а детали помогут понять, почему.', 'The card answers yes or no; details explain why.'],
     fields: [
-      { k:'q', type:'text', min:15, max:150, display:true, label:['Вопрос, на который можно ответить «да» или «нет»','A yes/no question'], ph:['Стоит ли мне переезжать этой весной?','Should I move this spring?'] },
-      { k:'why', type:'area', min:50, max:400, label:['Почему этот вопрос важен именно сейчас?','Why does it matter now?'], ph:['Мне нужно решить до…, потому что…','I need to decide by… because…'] },
-      { k:'yes', type:'area', min:40, max:300, label:['Что изменится, если ответ «да»? А если «нет»?','What changes with yes? With no?'], ph:['Если да — … Если нет — …','If yes — … If no — …'] },
-      { k:'who', type:'text', min:0, max:100, subject:true, label:['Кто ещё участвует (имя)','Who else is involved (name)'], hint:['Необязательно','Optional'], ph:['Например: Максим','E.g. Max'] }
+      { k:'q', type:'text', need:true, max:150, display:true, label:['Вопрос, на который можно ответить «да» или «нет»','A yes/no question'], ph:['Стоит ли мне переезжать этой весной?','Should I move this spring?'] },
+      { k:'why', type:'area', max:400, label:['Почему этот вопрос важен именно сейчас?','Why does it matter now?'], ph:['Мне нужно решить до…, потому что…','I need to decide by… because…'] },
+      { k:'yes', type:'area', max:300, label:['Что изменится, если ответ «да»? А если «нет»?','What changes with yes? With no?'], ph:['Если да — … Если нет — …','If yes — … If no — …'] },
+      { k:'who', type:'text', max:100, subject:true, label:['Кто ещё участвует (имя)','Who else is involved (name)'], hint:['Необязательно','Optional'], ph:['Например: Максим','E.g. Max'] }
     ]
   },
   feelings: {
-    intro: ['Карты увидят его чувства точнее, если вы расскажете историю ваших отношений. 1-2 минуты.', 'Tell the story of your relationship so the cards can read their feelings.'],
+    intro: ['Карты увидят его чувства точнее, если вы немного расскажете о вашей истории.', 'Tell the story of your relationship so the cards can read their feelings.'],
     fields: [
-      { k:'name', type:'text', min:2, max:40, subject:true, label:['Имя человека','Their name'], ph:['Например: Андрей','E.g. Andrew'] },
+      { k:'name', type:'text', need:true, max:40, subject:true, label:['Имя человека','Their name'], ph:['Например: Андрей','E.g. Andrew'] },
       { k:'role', type:'chips', req:true, label:['Кем он(а) вам приходится?','Who are they to you?'], opts:[['Партнёр','Partner'],['Бывший(ая)','Ex'],['Симпатия','Crush'],['Друг','Friend'],['Всё сложно','Complicated']] },
-      { k:'bond', type:'area', min:60, max:400, label:['Как вы познакомились и что вас связывает?','How did you meet, what connects you?'], ph:['Познакомились на… Нас связывает…','We met at… What connects us is…'] },
-      { k:'now', type:'area', min:60, max:400, label:['Что между вами происходит сейчас?','What is going on between you now?'], hint:['Как часто общаетесь, были ли ссоры, кто делает шаги навстречу','How often you talk, fights, who reaches out'], ph:['Последние недели он…','Lately they…'] },
-      { k:'want', type:'area', min:40, max:300, display:true, label:['Что вы хотите понять о его чувствах?','What do you want to know?'], ph:['Любит ли он меня по-настоящему и есть ли у нас будущее?','Do they really love me, do we have a future?'] }
+      { k:'bond', type:'area', max:400, label:['Как вы познакомились и что вас связывает?','How did you meet, what connects you?'], ph:['Познакомились на… Нас связывает…','We met at… What connects us is…'] },
+      { k:'now', type:'area', max:400, label:['Что между вами происходит сейчас?','What is going on between you now?'], hint:['Как часто общаетесь, были ли ссоры, кто делает шаги навстречу','How often you talk, fights, who reaches out'], ph:['Последние недели он…','Lately they…'] },
+      { k:'want', type:'area', max:300, display:true, label:['Что вы хотите понять о его чувствах?','What do you want to know?'], ph:['Любит ли он меня по-настоящему и есть ли у нас будущее?','Do they really love me, do we have a future?'] }
     ]
   },
   letgo: {
     intro: ['Чтобы отпустить, карты должны понять, что именно вас держит.', 'To let go, the cards need to see what holds you.'],
     fields: [
-      { k:'what', type:'text', min:5, max:120, subject:true, label:['Что или кого вы хотите отпустить?','What or whom do you want to let go?'], ph:['Например: бывшего, Дмитрия','E.g. my ex, Dmitry'] },
-      { k:'hold', type:'area', min:60, max:400, label:['Почему не получается отпустить?','Why can’t you let go?'], hint:['Воспоминания, обида, надежда, привычка — что держит сильнее всего','Memories, resentment, hope, habit'], ph:['Я до сих пор…','I still…'] },
-      { k:'accept', type:'area', min:40, max:300, label:['Что вы хотите впустить в жизнь вместо этого?','What do you want instead?'], ph:['Хочу снова чувствовать…','I want to feel… again'] },
-      { k:'q', type:'text', min:15, max:150, display:true, label:['Главный вопрос к картам','Your main question'], ph:['Как мне наконец освободиться?','How do I finally move on?'] }
+      { k:'what', type:'text', need:true, max:120, subject:true, label:['Что или кого вы хотите отпустить?','What or whom do you want to let go?'], ph:['Например: бывшего, Дмитрия','E.g. my ex, Dmitry'] },
+      { k:'hold', type:'area', max:400, label:['Почему не получается отпустить?','Why can’t you let go?'], hint:['Воспоминания, обида, надежда, привычка — что держит сильнее всего','Memories, resentment, hope, habit'], ph:['Я до сих пор…','I still…'] },
+      { k:'accept', type:'area', max:300, label:['Что вы хотите впустить в жизнь вместо этого?','What do you want instead?'], ph:['Хочу снова чувствовать…','I want to feel… again'] },
+      { k:'q', type:'text', max:150, display:true, label:['Главный вопрос к картам','Your main question'], ph:['Как мне наконец освободиться?','How do I finally move on?'] }
     ]
   },
   conflict: {
     intro: ['Опишите конфликт с обеих сторон — так карты подскажут, где выход.', 'Describe both sides so the cards show the way out.'],
     fields: [
-      { k:'who', type:'text', min:2, max:60, subject:true, label:['С кем конфликт? (имя)','Who is the conflict with? (name)'], ph:['Например: мама, Ольга','E.g. my mom, Olga'] },
-      { k:'start', type:'area', min:60, max:400, label:['Из-за чего всё началось?','How did it start?'], ph:['Всё началось, когда…','It started when…'] },
-      { k:'sides', type:'area', min:60, max:400, label:['Что говорите и чувствуете вы, а что — другая сторона?','Your side and theirs'], ph:['Я считаю… А она говорит…','I think… They say…'] },
-      { k:'goal', type:'area', min:30, max:300, display:true, label:['Каким вы хотите видеть исход?','What outcome do you want?'], ph:['Хочу помириться, но без…','I want to make peace, but without…'] }
+      { k:'who', type:'text', need:true, max:60, subject:true, label:['С кем конфликт? (имя)','Who is the conflict with? (name)'], ph:['Например: мама, Ольга','E.g. my mom, Olga'] },
+      { k:'start', type:'area', max:400, label:['Из-за чего всё началось?','How did it start?'], ph:['Всё началось, когда…','It started when…'] },
+      { k:'sides', type:'area', max:400, label:['Что говорите и чувствуете вы, а что — другая сторона?','Your side and theirs'], ph:['Я считаю… А она говорит…','I think… They say…'] },
+      { k:'goal', type:'area', max:300, display:true, label:['Каким вы хотите видеть исход?','What outcome do you want?'], ph:['Хочу помириться, но без…','I want to make peace, but without…'] }
     ]
   }
 };
@@ -8256,9 +8307,8 @@ function fnRenderForm(prefill){
   free.style.display = 'none';
   const d = fnDraftLoad(S.spread.id);
   if(prefill){ const df = form.fields.find(f => f.display); if(df && !d[df.k]) d[df.k] = prefill; }
-  let html = `<p class="fnq-intro">${esc(fnL(form.intro))}</p>
-    <div class="fnq-prog"><div class="fnq-prog-bar"><i id="fnq-bar"></i></div>
-    <div class="fnq-prog-t"><span>${esc(FN_RU() ? 'Ваш рассказ' : 'Your story')}</span><span id="fnq-pct">0%</span></div></div>`;
+  let html = `<p class="fnq-intro">${esc(fnL(form.intro))}</p>`;
+  const today = new Date().toISOString().slice(0, 10);
   form.fields.forEach(f => {
     const v = d[f.k] || '';
     html += `<div class="fnq" id="fnq-${f.k}"><label class="fnq-l" for="fnq-in-${f.k}">${esc(fnL(f.label))}</label>`;
@@ -8266,12 +8316,14 @@ function fnRenderForm(prefill){
     if(f.type === 'chips'){
       html += `<div class="fnq-chips">` + f.opts.map(o => {
         const val = fnL(o);
-        return `<button type="button" class="fnq-chip${v === val ? ' on' : ''}" data-k="${f.k}" data-v="${esc(val)}" onclick="fnChip(this)">${esc(val)}</button>`;
+        return `<button type="button" class="fnq-chip${v === val ? ' on' : ''}" data-k="${f.k}" data-v="${esc(val)}" data-c="${esc(o[2] || '')}" onclick="fnChip(this)">${esc(val)}</button>`;
       }).join('') + `</div>`;
     } else if(f.type === 'area'){
-      html += `<textarea class="field" id="fnq-in-${f.k}" rows="3" maxlength="${f.max}" placeholder="${esc(fnL(f.ph))}" oninput="fnFormCheck()">${esc(v)}</textarea><div class="fnq-c" id="fnq-c-${f.k}"></div>`;
+      html += `<textarea class="field" id="fnq-in-${f.k}" rows="3" maxlength="${f.max}" placeholder="${esc(fnL(f.ph))}" oninput="fnFormCheck()">${esc(v)}</textarea>`;
+    } else if(f.type === 'date'){
+      html += `<input class="field fnq-date" id="fnq-in-${f.k}" type="date" min="1920-01-01" max="${today}" value="${esc(v)}" onchange="fnFormCheck()" oninput="fnFormCheck()">`;
     } else {
-      html += `<input class="field" id="fnq-in-${f.k}" type="text" maxlength="${f.max}" placeholder="${esc(fnL(f.ph))}" value="${esc(v)}" oninput="fnFormCheck()"><div class="fnq-c" id="fnq-c-${f.k}"></div>`;
+      html += `<input class="field" id="fnq-in-${f.k}" type="text" maxlength="${f.max}" placeholder="${esc(fnL(f.ph))}" value="${esc(v)}" oninput="fnFormCheck()">`;
     }
     html += `</div>`;
   });
@@ -8291,41 +8343,31 @@ function fnFieldVal(f){
   const el = document.getElementById('fnq-in-' + f.k);
   return el ? el.value.trim() : '';
 }
-function fnFieldOk(f, v){ return f.type === 'chips' ? (!f.req || !!v) : v.length >= (f.min || 0); }
+function fnFieldOk(f, v){
+  if(f.type === 'chips') return !f.req || !!v;
+  if(f.type === 'date') return f.need ? /^(19[2-9]\d|20\d\d)-\d\d-\d\d$/.test(v) : (!v || /^(19[2-9]\d|20\d\d)-\d\d-\d\d$/.test(v));
+  return !f.need || v.length > 0;
+}
 
 function fnFormCheck(){
   const form = fnFormFor(S.spread);
   if(!form) return;
-  const ru = FN_RU();
-  let need = 0, have = 0;
   const draft = {};
   form.fields.forEach(f => {
     const v = fnFieldVal(f);
     draft[f.k] = v;
-    const w = f.type === 'chips' ? (f.req ? 20 : 0) : (f.min || 0);
-    need += w;
-    have += f.type === 'chips' ? (v ? w : 0) : Math.min(v.length, w);
-    const c = document.getElementById('fnq-c-' + f.k);
-    if(c){
-      const ok = fnFieldOk(f, v);
-      c.classList.toggle('ok', ok && v.length > 0);
-      c.textContent = !f.min ? '' : ok ? '✓' : (ru ? ('ещё ' + (f.min - v.length) + ' симв.') : ((f.min - v.length) + ' more chars'));
-    }
     if(fnFieldOk(f, v)){ const b = document.getElementById('fnq-' + f.k); if(b) b.classList.remove('bad'); }
   });
   fnDraftSave(S.spread.id, draft);
-  const pct = need ? Math.round(have / need * 100) : 100;
-  const bar = document.getElementById('fnq-bar'); if(bar) bar.style.width = pct + '%';
-  const p = document.getElementById('fnq-pct'); if(p) p.textContent = pct + '%';
-  fnSetDeal(pct);
+  fnSetDeal(null);
 }
 
-function fnSetDeal(pct){
+/* Кнопка «Разложить» всегда обычная — никаких процентов и «расскажите подробнее» */
+function fnSetDeal(){
   const b = document.getElementById('tb-deal');
   if(!b) return;
-  if(pct === null || pct >= 100){ b.classList.remove('is-wait'); b.textContent = tt('table_deal'); return; }
-  b.classList.add('is-wait');
-  b.textContent = (FN_RU() ? 'Расскажите подробнее · ' : 'Tell more · ') + pct + '%';
+  b.classList.remove('is-wait');
+  b.textContent = tt('table_deal');
 }
 
 function fnCollect(form){
@@ -8347,11 +8389,21 @@ function fnCollect(form){
       try{ el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }catch(e){}
       const inp = document.getElementById('fnq-in-' + firstBad.k); if(inp) setTimeout(() => inp.focus(), 300);
     }
-    toast(ru ? 'Карты ждут подробностей — дополните ответ' : 'The cards need more details');
+    toast((ru ? 'Заполните: ' : 'Please fill in: ') + fnL(firstBad.label));
     return { ok: false };
   }
+  let compat = null;
+  if(form.compat){
+    compat = {};
+    form.fields.forEach(f => {
+      if(!f.ck) return;
+      if(f.type === 'chips'){ const on = document.querySelector(`#fnq-${f.k} .fnq-chip.on`); compat[f.ck] = on ? (on.getAttribute('data-c') || '') : ''; }
+      else compat[f.ck] = fnFieldVal(f);
+    });
+    if(!display) display = (ru ? 'Совместимость с ' : 'Compatibility with ') + (compat.partner_name || '');
+  }
   const question = details.map(x => x.label + ': ' + x.value).join('\n');
-  return { ok: true, details, subject, display: display || details[0].value, question };
+  return { ok: true, details, subject, display: display || (details[0] && details[0].value) || '', question, compat };
 }
 
 /* Кнопки под раскладом: только после оплаты пробного (или в обычном платном раскладе) */
