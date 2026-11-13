@@ -952,38 +952,33 @@ body.chat-mode .chat-head{padding-top:16px}
 
 @media (max-width:900px){.scroll{padding-bottom:calc(var(--dock) + var(--sab) + 48px)}}
 
-/* === ЧИСТЫЙ ЛЮКСОВЫЙ ПЕЙВОЛЛ (ВМЕСТО 3 БАННЕРОВ) === */
-.fn-locked-positions{display:flex;flex-direction:column;gap:8px;margin:14px 0 18px;text-align:left}
-.fn-lpos{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:11px;border:1px solid var(--line-soft);background:rgba(11,15,30,.65)}
-.fn-lpos-ic{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--brass);flex:none;font-size:12px}
-.fn-lpos-txt{flex:1;min-width:0}
-.fn-lpos-txt b{display:block;font-size:13.5px;color:var(--ivory);font-weight:500}
-.fn-lpos-txt span{display:block;font-size:12px;color:var(--mist);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* === ЗАМОЧНАЯ СКВАЖИНА (ПОЗИЦИИ №2 И №3 ОТ ИИ) + ЧИСТЫЙ ПЕЙВОЛЛ === */
+.fn-khole-list{display:flex;flex-direction:column;gap:12px;margin:18px 0 6px;text-align:left}
+.fn-khole{padding:15px 16px;border-radius:13px;border:1px solid var(--line);background:linear-gradient(160deg,rgba(18,24,41,.9),rgba(11,15,30,.95));position:relative;overflow:hidden}
+.fn-khole-top{margin-bottom:9px}
+.fn-khole-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-bright);background:rgba(217,174,95,.14);border:1px solid var(--line);padding:4px 10px;border-radius:6px;margin-bottom:7px}
+.fn-khole-sub{font-family:var(--serif);font-size:17px;color:var(--ivory);line-height:1.3}
+.fn-khole-preview{font-size:14.5px;line-height:1.65;color:var(--ivory);position:relative}
+.fn-khole-vis{color:var(--ivory);opacity:.92}
+.fn-khole-blur{filter:blur(5px);opacity:.48;user-select:none;pointer-events:none;transition:filter .3s}
 
 .fn-tier-switch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 6px}
+@media(max-width:420px){.fn-tier-switch{grid-template-columns:1fr}}
 .fn-tier{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:14px;border-radius:13px;border:1px solid var(--line-soft);background:rgba(11,15,30,.65);text-align:left;cursor:pointer;transition:border-color .2s,background .2s}
 .fn-tier.is-on{border-color:var(--brass);background:linear-gradient(160deg,rgba(217,174,95,.15),rgba(18,24,41,.92));box-shadow:0 8px 24px -10px rgba(217,174,95,.3)}
 .fn-tier-badge{display:inline-block;align-self:flex-start;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:rgba(217,174,95,.18);color:var(--brass-bright);margin-bottom:6px}
 .fn-tier-name{font-family:var(--serif);font-size:16.5px;color:var(--ivory);line-height:1.2}
 .fn-tier-price{font-family:var(--serif);font-size:22px;color:var(--brass-bright);margin-top:8px}
 .fn-tier-desc{font-size:11.5px;color:var(--mist);line-height:1.4;margin-top:4px}
-@media(max-width:420px){.fn-tier-switch{grid-template-columns:1fr}}
-html[data-theme="dawn"] .fn-lpos,
+
+/* Заметная ошибка ПРЯМО НАД полем Email + тряска при пустом клике */
+.fn-email-wrap{position:relative;margin-top:4px}
+.fn-err-top{display:none;margin:0 0 8px;padding:9px 12px;border-radius:10px;border:1px solid rgba(255,120,120,.55);background:rgba(180,45,45,.22);color:#ffd2d2;font-size:13px;line-height:1.4;font-weight:500;text-align:left}
+.fn-err-top.is-on{display:block;animation:fnqShake .4s}
+.fn-email.is-err{border-color:#ff7878!important;box-shadow:0 0 0 3px rgba(255,120,120,.18);animation:fnqShake .4s}
+html[data-theme="dawn"] .fn-khole,
 html[data-theme="dawn"] .fn-tier{background:#FFFFFF}
 html[data-theme="dawn"] .fn-tier.is-on{background:linear-gradient(160deg,rgba(154,108,28,.14),#FFFFFF)}
-.fn-plan{flex-direction:column;align-items:stretch;gap:8px;padding:15px 16px;margin-top:6px}
-.fn-plan-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;width:100%}
-.fn-plan-pbox{display:flex;flex-direction:column;align-items:flex-end;flex:none;line-height:1.1}
-.fn-plan-old{font-size:11.5px;text-decoration:line-through;opacity:.6;margin-bottom:3px;font-weight:500}
-.fn-plan-perks{list-style:none;margin:2px 0 0;padding:8px 0 0;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:4px;font-size:12.5px;line-height:1.4;opacity:.92}
-.fn-plan-main .fn-plan-perks{border-top-color:rgba(30,20,5,.15)}
-.fn-plan-perks li::before{content:"✦ ";opacity:.85}
-.fn-plan-basic{border:1px solid rgba(217,174,95,.32);color:var(--ivory);background:rgba(18,24,41,.68)}
-.fn-plan-basic .fn-plan-price{color:var(--brass-pale);border:1px solid rgba(217,174,95,.38);padding:5px 11px;font-size:15.5px}
-.fn-plan-vip{border:1px solid rgba(196,154,255,.45);color:#F5E7C8;background:linear-gradient(135deg,rgba(140,95,220,.18),rgba(217,174,95,.14))}
-.fn-plan-vip .fn-plan-price{color:#F6DDA6;border:1px solid rgba(217,174,95,.55);padding:5px 11px;font-size:15.5px}
-.fn-plan-vip .fn-plan-tag{background:linear-gradient(90deg,#A78FD6,#D9AE5F);color:#0E101A}
-.fn-trust-bar{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 14px;margin-top:4px;font-size:11.5px;color:var(--mist);opacity:.85}
 
 /* ============ МОБИЛЬНАЯ НАВИГАЦИЯ v2 ============ */
 /* потянуть вниз = обновить (только телефон) */
@@ -8127,37 +8122,13 @@ function funnelFogHtml(errText){
   try{ saved = localStorage.getItem('neo_email') || ((bridge.webUser && bridge.webUser.email) || ''); }catch(e){}
   FN_SELECTED_PLAN = 'tripwire';
 
-  const totalCards = (FN.picked && FN.picked.length) || (S.spread && S.spread.cards) || 3;
-  let lockedPositionsHtml = '';
-  if(totalCards > 1){
-    const labelsRu = [
-      'Скрытые мотивы и то, о чём молчат',
-      'Что произойдёт дальше и главный совет арканов',
-      'Итог ситуации и ключевой поворот'
-    ];
-    let items = '';
-    for(let i = 2; i <= Math.min(totalCards, 4); i++){
-      const desc = labelsRu[i - 2] || 'Следующая позиция расклада';
-      items += `<div class="fn-lpos">
-        <span class="fn-lpos-ic">${IC.lock}</span>
-        <div class="fn-lpos-txt">
-          <b>${ru ? ('Позиция №' + i + ' · Закрыта туманом') : ('Position #' + i + ' · Locked')}</b>
-          <span>${esc(ru ? desc : 'Hidden card interpretation & advice')}</span>
-        </div>
-      </div>`;
-    }
-    lockedPositionsHtml = `<div class="fn-locked-positions">${items}</div>`;
-  }
-
   return `
     <div class="daily-fog-box fn-fogbox" id="fn-fog">
       <div class="fn-mist" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="daily-fog-card">
         <span class="daily-fog-badge">${IC.spark} ${esc(ru ? 'Продолжение расклада готово' : 'Full reading is ready')}</span>
-        <div class="daily-fog-title">${esc(ru ? 'Прочитайте расклад до конца' : 'Read the complete spread')}</div>
-        <p class="daily-fog-sub" style="margin-bottom:12px">${esc(ru ? 'Мы уже разложили все карты по вашей ситуации. Выберите формат доступа:' : 'All cards for your situation are drawn. Choose your access:')}</p>
-
-        ${lockedPositionsHtml}
+        <div class="daily-fog-title">${esc(ru ? 'Снимите туман с остальных карт' : 'Read the complete spread')}</div>
+        <p class="daily-fog-sub" style="margin-bottom:10px">${esc(ru ? 'Оракул уже связал все выпавшие карты в единый прогноз. Выберите формат доступа:' : 'All cards for your situation are drawn. Choose your access:')}</p>
 
         <div class="fn-form">
           <div class="fn-tier-switch">
@@ -8180,7 +8151,13 @@ function funnelFogHtml(errText){
             </button>
           </div>
 
-          <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email" placeholder="${esc(ru ? 'Куда прислать копию разбора (ваш email)' : 'Your email for the reading copy')}" value="${esc(saved)}">
+          <div class="fn-email-wrap" id="fn-email-wrap">
+            <div class="fn-err-top${errText ? ' is-on' : ''}" id="fn-err">${esc(errText || '')}</div>
+            <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email"
+              placeholder="${esc(ru ? 'Ваш email для открытия и копии расклада' : 'Your email for the reading copy')}"
+              value="${esc(saved)}"
+              oninput="this.classList.remove('is-err');var e=document.getElementById('fn-err');if(e)e.classList.remove('is-on')">
+          </div>
 
           <button type="button" class="btn btn-brass btn-wide" id="fn-submit-btn" style="margin-top:4px;min-height:50px;font-size:15.5px" onclick="funnelPay(FN_SELECTED_PLAN)">
             ${esc(ru ? 'Открыть разбор целиком · 199 ₽' : 'Unlock full reading · 199 ₽')}
@@ -8189,12 +8166,6 @@ function funnelFogHtml(errText){
           <label class="fn-agree"><input type="checkbox" id="fn-agree" checked>
             <span>${ru ? 'Принимаю <a href="/oferta/" target="_blank" rel="noopener">оферту</a>, <a href="/privacy/" target="_blank" rel="noopener">политику</a> и условия автопродления (отмена в 1 клик в Профиле)' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/privacy/" target="_blank" rel="noopener">privacy policy</a> and auto-renewal terms'}</span>
           </label>
-
-          <div class="fn-trust-bar">
-            <span>🔒 ${esc(ru ? 'СБП и банковские карты' : 'Secure payment')}</span>
-            <span>⚡ ${esc(ru ? 'Открывается мгновенно' : 'Opens instantly')}</span>
-          </div>
-          <p class="fn-err" id="fn-err">${esc(errText || '')}</p>
         </div>
       </div>
     </div>`;
@@ -8214,16 +8185,42 @@ function fnUtm(){
   return u;
 }
 
+function fnShowError(msg, focusEmail){
+  const err = document.getElementById('fn-err');
+  const inp = document.getElementById('fn-email');
+  if(err){
+    err.textContent = msg;
+    err.classList.remove('is-on');
+    void err.offsetWidth;
+    err.classList.add('is-on');
+  }
+  if(focusEmail && inp){
+    inp.classList.remove('is-err');
+    void inp.offsetWidth;
+    inp.classList.add('is-err');
+    try{ inp.scrollIntoView({ behavior: 'smooth', block: 'center' }); }catch(e){}
+    setTimeout(() => { try{ inp.focus(); }catch(e){} }, 250);
+  }
+  if(typeof bridge !== 'undefined' && bridge.haptic) bridge.haptic();
+}
+
 async function funnelPay(plan){
   const ru = FN_RU();
   const err = document.getElementById('fn-err');
   const email = ((document.getElementById('fn-email') || {}).value || '').trim().toLowerCase();
   const agree = !!(document.getElementById('fn-agree') || {}).checked;
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ if(err) err.textContent = ru ? 'Укажите корректный email' : 'Enter a valid email'; return; }
-  if(!agree){ if(err) err.textContent = ru ? 'Подтвердите согласие с офертой' : 'Please accept the offer'; return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+    fnShowError(ru ? '↑ Введите ваш email, чтобы мы открыли расклад и отправили вам копию' : '↑ Please enter a valid email address', true);
+    return;
+  }
+  if(!agree){
+    fnShowError(ru ? 'Поставьте галочку согласия с условиями ниже' : 'Please accept the offer terms', false);
+    return;
+  }
   if(!FN.id){ const s = fnLoad(); if(s){ FN.id = s.id; FN.k = s.k; } }
-  if(!FN.id){ if(err) err.textContent = tt('err'); return; }
-  if(err) err.textContent = '';
+  if(!FN.id){ fnShowError(tt('err'), false); return; }
+  if(err){ err.textContent = ''; err.classList.remove('is-on'); }
+
   ['fn-submit-btn','fn-pay-tw','fn-pay-plus','fn-pay-pro'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = true; });
   try{ localStorage.setItem('neo_email', email); }catch(e){}
 
@@ -8238,9 +8235,12 @@ async function funnelPay(plan){
   if(d && d.success && d.already_paid){ funnelPoll(FN.id, FN.k); return; }
   if(!(d && d.success && d.invoice_url)){
     const m = d && d.message;
-    if(err) err.textContent = m === 'email_invalid' ? (ru ? 'Проверьте email' : 'Check your email')
-      : m === 'need_agree' ? (ru ? 'Подтвердите согласие с офертой' : 'Please accept the offer')
-      : (ru ? 'Не удалось создать оплату, попробуйте ещё раз' : 'Could not create payment, try again');
+    fnShowError(
+      m === 'email_invalid' ? (ru ? '↑ Проверьте правильность email' : 'Check your email')
+      : m === 'need_agree' ? (ru ? 'Поставьте галочку согласия с условиями' : 'Please accept the offer')
+      : (ru ? 'Не удалось создать оплату, попробуйте ещё раз' : 'Could not create payment, try again'),
+      m === 'email_invalid'
+    );
     return;
   }
   if(d.neotaro_token){
