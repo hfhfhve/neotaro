@@ -8086,17 +8086,17 @@ function funnelFogHtml(errText){
           <label class="fn-lbl" for="fn-email">${esc(ru ? 'Ваш email — пришлём туда копию разбора' : 'Your email — we will send a copy of the reading')}</label>
           <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email" placeholder="you@mail.ru" value="${esc(saved)}">
           <label class="fn-agree"><input type="checkbox" id="fn-agree" checked>
-            <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a> и <a href="/privacy/" target="_blank" rel="noopener">политикой конфиденциальности</a>' : 'I agree to the <a href="/oferta/" target="_blank" rel="noopener">offer</a> and <a href="/privacy/" target="_blank" rel="noopener">privacy policy</a>'}</span></label>
+            <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a>, <a href="/privacy/" target="_blank" rel="noopener">политикой</a> и условиями автопродления ПЛЮС (отмена в 1 клик в Профиле)' : 'I agree to the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/privacy/" target="_blank" rel="noopener">privacy policy</a> and auto-renewal terms'}</span></label>
           <button type="button" class="fn-plan fn-plan-main" id="fn-pay-tw" onclick="funnelPay('tripwire')">
-            <span class="fn-plan-txt"><b>${esc(ru ? 'Открыть расклад' : 'Unlock the reading')}</b><small>${esc(ru ? '+ 3 ⚡ энергии в подарок' : '+ 3 ⚡ energy as a gift')}</small></span>
-            <span class="fn-plan-price">99 ₽</span>
+            <span class="fn-plan-txt"><b>${esc(ru ? 'Открыть этот расклад' : 'Unlock this reading')}</b><small>${esc(ru ? '+ 5 ⚡ для чата с Оракулом и 3 дня ПЛЮС' : '+ 5 ⚡ energy & 3 days PLUS')}</small></span>
+            <span class="fn-plan-price">199 ₽</span>
           </button>
           <button type="button" class="fn-plan fn-plan-plus" id="fn-pay-plus" onclick="funnelPay('plus')">
             <span class="fn-plan-tag">${esc(ru ? 'выгоднее' : 'best value')}</span>
-            <span class="fn-plan-txt"><b>${esc(ru ? 'Расклад + ПЛЮС на месяц' : 'Reading + PLUS for a month')}</b><small>${esc(ru ? '150 ⚡ энергии · глубокие расклады · оракул' : '150 ⚡ energy · deep spreads · oracle')}</small></span>
-            <span class="fn-plan-price">299 ₽</span>
+            <span class="fn-plan-txt"><b>${esc(ru ? 'Расклад + ПЛЮС на месяц' : 'Reading + PLUS for a month')}</b><small>${esc(ru ? '150 ⚡ энергии · все расклады · натальная карта' : '150 ⚡ energy · all spreads · natal chart')}</small></span>
+            <span class="fn-plan-price">399 ₽</span>
           </button>
-          <p class="fn-note">${esc(ru ? 'Разбор откроется сразу после оплаты' : 'The reading opens right after payment')}</p>
+          <p class="fn-note">${esc(ru ? 'Разбор откроется мгновенно после оплаты · отмена в любой момент' : 'Opens right after payment · cancel anytime')}</p>
           <p class="fn-err" id="fn-err">${esc(errText || '')}</p>
         </div>
       </div>
@@ -8130,7 +8130,7 @@ async function funnelPay(plan){
   ['fn-pay-tw','fn-pay-plus'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = true; });
   try{ localStorage.setItem('neo_email', email); }catch(e){}
 
-  const price = plan === 'plus' ? 299 : 99;
+  const price = plan === 'plus' ? 399 : 199;
   S.payMeta = { goal: 'purchase_funnel', price: price, kind: 'funnel', item: plan };
   if(window.neoGoal) neoGoal('purchase_start', { kind: 'funnel', item: plan, order_price: price });
 
@@ -8209,7 +8209,7 @@ function funnelRenderPaid(d){
   if(typeof d.energy === 'number'){ S.energy = d.energy; try{ paintEnergy(); }catch(e){} }
   FN.full = d.interpretation || '';
   FN.type = d.spread_type || (S.spread && S.spread.id) || '';
-  const n = typeof d.energy === 'number' ? d.energy : (d.plan === 'plus' ? 150 : 3);
+  const n = typeof d.energy === 'number' ? d.energy : (d.plan === 'plus' ? 150 : 5);
   FN.paidView = true;
   document.getElementById('tb-reading').innerHTML = '<div class="fn-reveal">' + clean(FN.full) + '</div>' + `
     <div class="fn-upsell">
@@ -8225,7 +8225,7 @@ function funnelRenderPaid(d){
     const key = 'neo_funnel_goal_' + FN.id;
     if(window.neoGoal && !localStorage.getItem(key)){
       localStorage.setItem(key, '1');
-      neoGoal('purchase', { kind: 'funnel', item: d.plan || '', order_price: d.plan === 'plus' ? 299 : 99 });
+      neoGoal('purchase', { kind: 'funnel', item: d.plan || '', order_price: d.plan === 'plus' ? 399 : 199 });
     }
     localStorage.removeItem('neo_funnel');
   }catch(e){}
@@ -8261,8 +8261,8 @@ function funnelPlusOffer(){
   el.className = 'fn-upsell';
   el.innerHTML = `
     <div class="fn-upsell-t">${esc(ru ? 'Энергия закончилась' : 'Out of energy')}</div>
-    <p>${esc(ru ? 'Продолжите разговор с Оракулом: подписка ПЛЮС — 150 ⚡ энергии на месяц и все расклады.' : 'Continue with the Oracle: PLUS — 150 ⚡ per month and all spreads.')}</p>
-    <button class="btn btn-brass btn-wide" onclick="funnelBuyPlus()">${esc(ru ? 'Перейти на ПЛЮС — 299 ₽' : 'Get PLUS — 299 ₽')}</button>`;
+    <p>${esc(ru ? 'Продолжите разговор с Оракулом: подписка ПЛЮС — 150 ⚡ энергии на месяц и все глубокие расклады.' : 'Continue with the Oracle: PLUS — 150 ⚡ per month and all spreads.')}</p>
+    <button class="btn btn-brass btn-wide" onclick="funnelBuyPlus()">${esc(ru ? 'Перейти на ПЛЮС — 399 ₽' : 'Get PLUS — 399 ₽')}</button>`;
   box.appendChild(el);
   try{ el.scrollIntoView({ behavior: 'smooth', block: 'end' }); }catch(e){}
   if(window.neoGoal) neoGoal('plus_offer_shown', { src: 'chat_no_energy' });
@@ -8271,15 +8271,15 @@ function funnelPlusOffer(){
 async function funnelBuyPlus(){
   if(requireAuth({ action: 'profile' })) return;
   toast(tt('wait'));
-  const meta = { goal: 'purchase_sub', price: 299, kind: 'sub', item: 'plus' };
+  const meta = { goal: 'purchase_sub', price: 399, kind: 'sub', item: 'plus' };
   S.payMeta = meta;
-  if(window.neoGoal) neoGoal('purchase_start', { kind: 'sub', item: 'plus', order_price: 299 });
+  if(window.neoGoal) neoGoal('purchase_start', { kind: 'sub', item: 'plus', order_price: 399 });
   const d = await api('/subscription/invoice-rub', 'POST', { plan: 'plus', period: 'month' });
   const payUrl = d && (d.url || d.invoice_url);
   if(d && d.success && payUrl){
     bridge.openLink(payUrl);
     toast(tt('pay_wait'));
-    if(typeof watchSubscription === 'function') watchSubscription(d.amount || 299, 'plus', 'month');
+    if(typeof watchSubscription === 'function') watchSubscription(d.amount || 399, 'plus', 'month');
     else if(typeof watchPayment === 'function') watchPayment(function(){ try{ paintEnergy(); }catch(e){} }, meta);
   } else toast(tt('err'));
 }
