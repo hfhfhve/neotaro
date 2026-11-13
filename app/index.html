@@ -952,6 +952,22 @@ body.chat-mode .chat-head{padding-top:16px}
 
 @media (max-width:900px){.scroll{padding-bottom:calc(var(--dock) + var(--sab) + 48px)}}
 
+/* === ЧИСТЫЙ ЛЮКСОВЫЙ ПЕЙВОЛЛ (ВМЕСТО 3 БАННЕРОВ) === */
+.fn-locked-positions{display:flex;flex-direction:column;gap:8px;margin:14px 0 18px;text-align:left}
+.fn-lpos{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:11px;border:1px solid var(--line-soft);background:rgba(11,15,30,.65)}
+.fn-lpos-ic{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--brass);flex:none;font-size:12px}
+.fn-lpos-txt{flex:1;min-width:0}
+.fn-lpos-txt b{display:block;font-size:13.5px;color:var(--ivory);font-weight:500}
+.fn-lpos-txt span{display:block;font-size:12px;color:var(--mist);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.fn-tier-switch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 6px}
+.fn-tier{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:14px;border-radius:13px;border:1px solid var(--line-soft);background:rgba(11,15,30,.65);text-align:left;cursor:pointer;transition:border-color .2s,background .2s}
+.fn-tier.is-on{border-color:var(--brass);background:linear-gradient(160deg,rgba(217,174,95,.15),rgba(18,24,41,.92));box-shadow:0 8px 24px -10px rgba(217,174,95,.3)}
+.fn-tier-badge{display:inline-block;align-self:flex-start;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:rgba(217,174,95,.18);color:var(--brass-bright);margin-bottom:6px}
+.fn-tier-name{font-family:var(--serif);font-size:16.5px;color:var(--ivory);line-height:1.2}
+.fn-tier-price{font-family:var(--serif);font-size:22px;color:var(--brass-bright);margin-top:8px}
+.fn-tier-desc{font-size:11.5px;color:var(--mist);line-height:1.4;margin-top:4px}
+
 /* === ПСИХОЛОГИЧЕСКИЙ ПЕЙВОЛЛ (ANCHORING + DECOY) === */
 .fn-plan{flex-direction:column;align-items:stretch;gap:8px;padding:15px 16px;margin-top:6px}
 .fn-plan-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;width:100%}
@@ -4697,15 +4713,15 @@ function paintEnergy(){
   // В верхней шапке (мобайл), в чате и в левой колонке (ПК)
   const tbBtn = document.querySelector('.tb-energy');
   if(tbBtn){
-    tbBtn.onclick = guest ? () => go('spreads') : () => go('shop');
+    tbBtn.onclick = guest ? () => requireAuth({ action: S.view || 'home' }) : () => go('shop');
   }
   const chatBtn = document.querySelector('.chat-energy');
   if(chatBtn){
-    chatBtn.onclick = guest ? () => go('spreads') : () => go('shop');
+    chatBtn.onclick = guest ? () => requireAuth({ action: 'chat' }) : () => go('shop');
   }
   const meterBtn = document.querySelector('.meter');
   if(meterBtn){
-    meterBtn.onclick = guest ? () => go('spreads') : () => go('shop');
+    meterBtn.onclick = guest ? () => requireAuth({ action: S.view || 'home' }) : () => go('shop');
   }
 
   ['m-energy','m-energy-2','m-energy-4'].forEach(id => {
@@ -4719,7 +4735,7 @@ function paintEnergy(){
   });
 
   const mNote = document.querySelector('.meter-note');
-  if(mNote) mNote.textContent = guest ? (lang === 'ru' ? 'Сделать расклад →' : 'Make a spread →') : tt('energy_top_up');
+  if(mNote) mNote.textContent = guest ? (lang === 'ru' ? 'Войти в кабинет →' : 'Sign in →') : tt('energy_top_up');
 
   const pe = document.getElementById('pf-energy');
   if(pe) pe.textContent = guest ? '0' : fmtNum(S.energy);
@@ -8086,75 +8102,95 @@ async function funnelDeal(q, extra){
   }
 }
 
+let FN_SELECTED_PLAN = 'tripwire';
+
+function fnPickTier(plan){
+  FN_SELECTED_PLAN = plan;
+  document.querySelectorAll('.fn-tier').forEach(el => {
+    el.classList.toggle('is-on', el.dataset.plan === plan);
+  });
+  const btn = document.getElementById('fn-submit-btn');
+  if(btn){
+    const ru = FN_RU();
+    const price = plan === 'plus' ? '399 ₽' : '199 ₽';
+    btn.textContent = ru
+      ? `Открыть разбор целиком · ${price}`
+      : `Unlock full reading · ${price}`;
+  }
+}
+
 function funnelFogHtml(errText){
   const ru = FN_RU();
   let saved = '';
   try{ saved = localStorage.getItem('neo_email') || ((bridge.webUser && bridge.webUser.email) || ''); }catch(e){}
+  FN_SELECTED_PLAN = 'tripwire';
+
+  const totalCards = (FN.picked && FN.picked.length) || (S.spread && S.spread.cards) || 3;
+  let lockedPositionsHtml = '';
+  if(totalCards > 1){
+    const labelsRu = [
+      'Скрытые мотивы и то, о чём молчат',
+      'Что произойдёт дальше и главный совет арканов',
+      'Итог ситуации и ключевой поворот'
+    ];
+    let items = '';
+    for(let i = 2; i <= Math.min(totalCards, 4); i++){
+      const desc = labelsRu[i - 2] || 'Следующая позиция расклада';
+      items += `<div class="fn-lpos">
+        <span class="fn-lpos-ic">${IC.lock}</span>
+        <div class="fn-lpos-txt">
+          <b>${ru ? ('Позиция №' + i + ' · Закрыта туманом') : ('Position #' + i + ' · Locked')}</b>
+          <span>${esc(ru ? desc : 'Hidden card interpretation & advice')}</span>
+        </div>
+      </div>`;
+    }
+    lockedPositionsHtml = `<div class="fn-locked-positions">${items}</div>`;
+  }
+
   return `
     <div class="daily-fog-box fn-fogbox" id="fn-fog">
-      <div class="daily-fog-preview">${esc(ru ? 'Карты показывают, что на самом деле скрыто за этой ситуацией и какая сила ей управляет. Вторая карта раскрывает то, чего вы пока не знаете, а итог расклада указывает на один конкретный шаг и срок, когда всё изменится…' : 'The cards reveal what is really hidden behind this situation. The next card shows what you do not know yet, and the outcome points to one concrete step and the moment everything changes…')}</div>
       <div class="fn-mist" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="daily-fog-card">
-        <span class="daily-fog-badge">${IC.spark} ${esc(ru ? 'Все карты разложены · ждём открытия' : 'Full reading is ready')}</span>
-        <div class="daily-fog-title">${esc(ru ? 'Узнайте всю правду до конца' : 'Reveal the full truth')}</div>
+        <span class="daily-fog-badge">${IC.spark} ${esc(ru ? 'Продолжение расклада готово' : 'Full reading is ready')}</span>
+        <div class="daily-fog-title">${esc(ru ? 'Прочитайте расклад до конца' : 'Read the complete spread')}</div>
+        <p class="daily-fog-sub" style="margin-bottom:12px">${esc(ru ? 'Мы уже разложили все карты по вашей ситуации. Выберите формат доступа:' : 'All cards for your situation are drawn. Choose your access:')}</p>
+
+        ${lockedPositionsHtml}
+
         <div class="fn-form">
-          <label class="fn-lbl" for="fn-email">${esc(ru ? 'Куда отправить полную копию вашего расклада:' : 'Where to send a copy of your reading:')}</label>
-          <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email" placeholder="Ваш email (например, anna@mail.ru)" value="${esc(saved)}">
+          <div class="fn-tier-switch">
+            <button type="button" class="fn-tier is-on" data-plan="tripwire" onclick="fnPickTier('tripwire')">
+              <div>
+                <span class="fn-tier-badge">${esc(ru ? 'Этот расклад' : 'Single')}</span>
+                <div class="fn-tier-name">${esc(ru ? 'Полный разбор' : 'This reading')}</div>
+                <div class="fn-tier-desc">${esc(ru ? 'Все карты + 5 вопросов Оракулу + 3 дня ПЛЮС' : 'All cards + 5 Oracle questions')}</div>
+              </div>
+              <div class="fn-tier-price">199 ₽</div>
+            </button>
+
+            <button type="button" class="fn-tier" data-plan="plus" onclick="fnPickTier('plus')">
+              <div>
+                <span class="fn-tier-badge">${esc(ru ? 'Месяц без рамок' : 'Best value')}</span>
+                <div class="fn-tier-name">${esc(ru ? 'Подписка ПЛЮС' : 'PLUS Membership')}</div>
+                <div class="fn-tier-desc">${esc(ru ? 'Этот расклад + все расклады + Космо-паспорт + 150 ⚡' : 'All spreads + Natal chart + 150 ⚡')}</div>
+              </div>
+              <div class="fn-tier-price">399 ₽</div>
+            </button>
+          </div>
+
+          <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email" placeholder="${esc(ru ? 'Куда прислать копию разбора (ваш email)' : 'Your email for the reading copy')}" value="${esc(saved)}">
+
+          <button type="button" class="btn btn-brass btn-wide" id="fn-submit-btn" style="margin-top:4px;min-height:50px;font-size:15.5px" onclick="funnelPay(FN_SELECTED_PLAN)">
+            ${esc(ru ? 'Открыть разбор целиком · 199 ₽' : 'Unlock full reading · 199 ₽')}
+          </button>
+
           <label class="fn-agree"><input type="checkbox" id="fn-agree" checked>
-            <span>${ru ? 'Принимаю <a href="/oferta/" target="_blank" rel="noopener">оферту</a>, <a href="/privacy/" target="_blank" rel="noopener">политику</a> и условия подписки с автопродлением (отмена в 1 клик в Профиле)' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/privacy/" target="_blank" rel="noopener">privacy policy</a> and auto-renewal terms'}</span></label>
-
-          <!-- ТАРИФ 2 (ГЛАВНЫЙ ХИТ — 399 ₽, стоит первым/главным для максимального чека) -->
-          <button type="button" class="fn-plan fn-plan-main" id="fn-pay-plus" onclick="funnelPay('plus')">
-            <span class="fn-plan-tag" style="background:#1E1405;color:#F6DDA6">${esc(ru ? '★ выбор 78% клиентов' : '★ most popular')}</span>
-            <div class="fn-plan-head" style="padding-top:8px">
-              <span class="fn-plan-txt">
-                <b>${esc(ru ? 'Полное досье + ПЛЮС на месяц' : 'Full dossier + PLUS for 1 month')}</b>
-                <small>${esc(ru ? 'Идеально, чтобы разобрать отношения со всех сторон' : 'Best to explore your situation in depth')}</small>
-              </span>
-              <span class="fn-plan-pbox">
-                <span class="fn-plan-old">990 ₽</span>
-                <span class="fn-plan-price">399 ₽</span>
-              </span>
-            </div>
-            <ul class="fn-plan-perks">
-              <li>${esc(ru ? 'Полная расшифровка всех карт этого расклада' : 'Full interpretation of this spread')}</li>
-              <li>${esc(ru ? 'Доступ ко всем раскладам («Его чувства», «Совместимость», «Будущее»)' : 'All relationship & compatibility spreads unlocked')}</li>
-              <li>${esc(ru ? '150 ⚡ на личный диалог и вопросы Оракулу в чате' : '150 ⚡ for follow-up questions to the Oracle')}</li>
-            </ul>
-          </button>
-
-          <!-- ТАРИФ 1 (БАЗОВЫЙ — 199 ₽ + 3 дня триал ПЛЮС) -->
-          <button type="button" class="fn-plan fn-plan-basic" id="fn-pay-tw" onclick="funnelPay('tripwire')">
-            <div class="fn-plan-head">
-              <span class="fn-plan-txt">
-                <b>${esc(ru ? 'Открыть только этот расклад' : 'Unlock this reading only')}</b>
-                <small>${esc(ru ? '+ 5 вопросов Оракулу в чате и 3 дня ПЛЮС в подарок' : '+ 5 Oracle questions & 3 days PLUS trial')}</small>
-              </span>
-              <span class="fn-plan-pbox">
-                <span class="fn-plan-old">490 ₽</span>
-                <span class="fn-plan-price">199 ₽</span>
-              </span>
-            </div>
-          </button>
-
-          <!-- ТАРИФ 3 (VIP-ЯКОРЬ — 699 ₽ ПРО) -->
-          <button type="button" class="fn-plan fn-plan-vip" id="fn-pay-pro" onclick="funnelPay('pro')">
-            <span class="fn-plan-tag">${esc(ru ? 'VIP · максимум' : 'VIP · all-in')}</span>
-            <div class="fn-plan-head" style="padding-top:8px">
-              <span class="fn-plan-txt">
-                <b>${esc(ru ? 'VIP-разбор судьбы · тариф ПРО' : 'VIP Destiny Reading · PRO')}</b>
-                <small>${esc(ru ? 'Этот расклад + Полная Матрица Судьбы (22 аркана) + Натальная карта + 350 ⚡ для чата' : 'This reading + Full Destiny Matrix + Natal Chart + 350 ⚡')}</small>
-              </span>
-              <span class="fn-plan-pbox">
-                <span class="fn-plan-old">1 690 ₽</span>
-                <span class="fn-plan-price">699 ₽</span>
-              </span>
-            </div>
-          </button>
+            <span>${ru ? 'Принимаю <a href="/oferta/" target="_blank" rel="noopener">оферту</a>, <a href="/privacy/" target="_blank" rel="noopener">политику</a> и условия автопродления (отмена в 1 клик в Профиле)' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/privacy/" target="_blank" rel="noopener">privacy policy</a> and auto-renewal terms'}</span>
+          </label>
 
           <div class="fn-trust-bar">
-            <span>🔒 ${esc(ru ? 'Безопасная оплата СБП / Картой' : 'Secure payment')}</span>
-            <span>⚡ ${esc(ru ? 'Открывается за 2 секунды' : 'Instant access')}</span>
+            <span>🔒 ${esc(ru ? 'СБП и банковские карты' : 'Secure payment')}</span>
+            <span>⚡ ${esc(ru ? 'Открывается мгновенно' : 'Opens instantly')}</span>
           </div>
           <p class="fn-err" id="fn-err">${esc(errText || '')}</p>
         </div>
@@ -8186,7 +8222,7 @@ async function funnelPay(plan){
   if(!FN.id){ const s = fnLoad(); if(s){ FN.id = s.id; FN.k = s.k; } }
   if(!FN.id){ if(err) err.textContent = tt('err'); return; }
   if(err) err.textContent = '';
-  ['fn-pay-tw','fn-pay-plus','fn-pay-pro'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = true; });
+  ['fn-submit-btn','fn-pay-tw','fn-pay-plus','fn-pay-pro'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = true; });
   try{ localStorage.setItem('neo_email', email); }catch(e){}
 
   const priceMap = { tripwire: 199, plus: 399, pro: 699 };
@@ -8195,7 +8231,7 @@ async function funnelPay(plan){
   if(window.neoGoal) neoGoal('purchase_start', { kind: 'funnel', item: plan, order_price: price });
 
   const d = await api('/funnel/checkout', 'POST', { spread_id: FN.id, view_key: FN.k, email: email, plan: plan, agree: agree, utm: fnUtm() }, true);
-  ['fn-pay-tw','fn-pay-plus','fn-pay-pro'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = false; });
+  ['fn-submit-btn','fn-pay-tw','fn-pay-plus','fn-pay-pro'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = false; });
 
   if(d && d.success && d.already_paid){ funnelPoll(FN.id, FN.k); return; }
   if(!(d && d.success && d.invoice_url)){
