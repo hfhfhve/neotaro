@@ -1422,6 +1422,66 @@ html[data-theme="dawn"] .fnq-l{color:#2A1E08}
 html[data-theme="dawn"] .fnq-chip{color:#2A1E08}
 html[data-theme="dawn"] .fnq-prog{background:linear-gradient(#FBF7EF 70%,transparent)}
 
+/* === NEOTARO: квиз (один вопрос на экран) === */
+.qz{max-width:560px;margin:0 auto}
+.qz-top{display:flex;align-items:center;justify-content:space-between;min-height:30px;margin-bottom:8px}
+.qz-back{background:none;border:0;padding:4px 2px;color:var(--mist);font-size:13.5px;cursor:pointer}
+.qz-back:hover{color:var(--brass-bright)}
+.qz-count{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-pale)}
+.qz-bar{height:3px;border-radius:3px;background:rgba(217,174,95,.15);overflow:hidden;margin-bottom:18px}
+.qz-bar i{display:block;height:100%;background:linear-gradient(90deg,#B8873A,#F2D49A);transition:width .4s ease}
+.qz-card{animation:qzIn .32s ease both}
+.qz-card.shake{animation:fnqShake .4s}
+@keyframes qzIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.qz-q{font-family:var(--serif);font-size:22px;line-height:1.3;color:var(--ivory);margin-bottom:6px}
+.qz-h{font-size:13px;line-height:1.5;color:var(--mist);margin-bottom:14px}
+.qz-opts{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+.qz-opt{width:100%;text-align:left;padding:14px 16px;border-radius:13px;border:1px solid var(--line-soft);background:rgba(11,15,30,.6);color:var(--ivory);font-size:15px;line-height:1.35;cursor:pointer;transition:border-color .15s,background .15s,transform .1s}
+.qz-opt:hover{border-color:var(--line)}
+.qz-opt:active{transform:scale(.99)}
+.qz-opt.on{border-color:var(--brass);background:linear-gradient(160deg,rgba(217,174,95,.18),rgba(18,24,41,.9));color:#F2D49A}
+.qz-opts.is-multi .qz-opt{padding-left:44px;position:relative}
+.qz-opts.is-multi .qz-opt::before{content:"";position:absolute;left:16px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:5px;border:1.5px solid var(--line)}
+.qz-opts.is-multi .qz-opt.on::before{background:var(--brass);border-color:var(--brass)}
+.qz-in{width:100%;box-sizing:border-box;font-size:16px;margin-top:12px}
+textarea.qz-in{min-height:110px;resize:vertical}
+.qz-sugg{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.qz-chip{padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ivory);font-size:13.5px;line-height:1.3;cursor:pointer;text-align:left}
+.qz-chip.on{background:rgba(217,174,95,.18);border-color:#D9AE5F;color:#F2D49A}
+.qz-next{margin-top:18px;min-height:50px}
+.qz-skip{display:block;margin:12px auto 0;background:none;border:0;color:var(--mist);font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.qz-card.is-echo{text-align:center;padding:26px 18px 20px;border-radius:16px;border:1px solid rgba(217,174,95,.35);background:radial-gradient(circle at 50% 0%,rgba(217,174,95,.14),rgba(18,24,41,.6) 70%)}
+.qz-echo-mark{font-size:22px;color:var(--brass);margin-bottom:10px}
+.qz-echo{font-family:var(--serif);font-size:18px;line-height:1.5;color:var(--ivory);margin:0}
+html[data-theme="dawn"] .qz-q,html[data-theme="dawn"] .qz-opt,html[data-theme="dawn"] .qz-chip,html[data-theme="dawn"] .qz-echo{color:#2A1E08}
+html[data-theme="dawn"] .qz-opt{background:#FFFFFF}
+html[data-theme="dawn"] .qz-opt.on,html[data-theme="dawn"] .qz-chip.on{color:#4A3208;background:rgba(217,174,95,.2)}
+html[data-theme="dawn"] .qz-card.is-echo{background:radial-gradient(circle at 50% 0%,rgba(217,174,95,.18),#FFFFFF 70%)}
+
+/* === NEOTARO: тизер из реального разбора === */
+.fn-ind{margin:0 0 16px;padding:14px 16px;border-radius:14px;border:1px solid rgba(217,174,95,.4);background:radial-gradient(circle at 50% 0%,rgba(217,174,95,.16),rgba(18,24,41,.6) 75%)}
+.fn-ind-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.fn-ind-l{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-pale)}
+.fn-ind-v{font-family:var(--serif);font-size:30px;line-height:1;color:var(--brass-bright)}
+.fn-ind-bar{height:5px;border-radius:5px;background:rgba(217,174,95,.15);margin:10px 0 8px;overflow:hidden}
+.fn-ind-bar i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#B8873A,#F6DDA6)}
+.fn-ind-w{font-size:13.5px;color:var(--ivory);opacity:.85}
+.fn-pos-open{margin:0 0 6px}
+.fn-pos-badge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-bright);background:rgba(217,174,95,.14);border:1px solid var(--line);padding:4px 10px;border-radius:6px;margin-bottom:8px}
+.fn-pos-title{font-family:var(--serif);font-size:19px;line-height:1.3;color:var(--brass-pale);margin-bottom:8px}
+.fn-pos-body{font-size:15.5px;line-height:1.75;color:var(--ivory)}
+.fn-khole.is-warn{border-color:rgba(214,120,90,.55)}
+.fn-khole-warn{display:inline-block;margin:0 0 7px 6px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#F0B49C;background:rgba(214,120,90,.16);border:1px solid rgba(214,120,90,.45);padding:4px 8px;border-radius:6px}
+.fn-lpoints{margin:14px 0 4px;padding:13px 15px;border-radius:12px;border-left:3px solid #D9AE5F;background:linear-gradient(90deg,rgba(217,174,95,.12),rgba(217,174,95,.02))}
+.fn-lpoints-t{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-pale);margin-bottom:8px}
+.fn-lpoints ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.fn-lpoints li{position:relative;padding-left:18px;font-size:14.5px;line-height:1.45;color:var(--ivory)}
+.fn-lpoints li::before{content:"✦";position:absolute;left:0;top:0;color:var(--brass);font-size:11px}
+html[data-theme="dawn"] .fn-ind{background:radial-gradient(circle at 50% 0%,rgba(217,174,95,.2),#FFFFFF 75%)}
+html[data-theme="dawn"] .fn-pos-title{color:#6B4A12}
+html[data-theme="dawn"] .fn-pos-body,html[data-theme="dawn"] .fn-lpoints li,html[data-theme="dawn"] .fn-ind-w{color:#2A1E08}
+html[data-theme="dawn"] .fn-khole-warn{color:#8A3A1E}
+
 /* === NEOTARO: хук перед туманом === */
 .fn-hook{position:relative;margin:16px 0 4px;padding:13px 15px;border-radius:12px;border-left:3px solid #D9AE5F;
   background:linear-gradient(90deg,rgba(217,174,95,.14),rgba(217,174,95,.02));font-family:var(--serif);font-size:16px;line-height:1.5;color:#F2D49A}
@@ -8048,9 +8108,24 @@ function startSpreadRitual(cardsCount, subjectName){
   }
   tick();
   clearInterval(_ritualTimer);
+  /* Полный разбор пишется целиком и иногда идёт 20–40 секунд. Чтобы экран не «завис»
+     на 96%, после основных шагов показываем, что именно сейчас делает Оракул. */
+  const waitLines = [
+    ['Сверяем позиции между собой…', 'Каждая карта читается в связке с остальными'],
+    ['Ищем точные сроки…', 'Масти и арканы подсказывают, когда всё сдвинется'],
+    ['Оракул дописывает итог…', 'Собираем совет: что делать и чего не делать'],
+    ['Проверяем, чтобы всё было про вас…', 'Ещё немного — разбор почти готов']
+  ];
+  let wl = 0, wt = 0;
   _ritualTimer = setInterval(() => {
-    if(idx < steps.length) tick();
-    else if(barEl) barEl.style.width = '96%';
+    if(idx < steps.length){ tick(); return; }
+    if(barEl) barEl.style.width = Math.min(97, 92 + wl) + '%';
+    if(wt++ % 2 === 0){
+      const line = waitLines[wl % waitLines.length];
+      if(stepEl) stepEl.textContent = line[0];
+      if(subEl) subEl.textContent = line[1];
+      wl++;
+    }
   }, 2100);
 }
 
@@ -8058,6 +8133,21 @@ function stopSpreadRitual(){
   clearInterval(_ritualTimer);
   const barEl = document.getElementById('tb-ritual-fill');
   if(barEl) barEl.style.width = '100%';
+}
+
+/* Ключ попытки для сервера: ретрай с тем же ключом ждёт уже идущую генерацию,
+   а не запускает новую и не тратит лимит. Другие ответы или карты — другой ключ. */
+function fnHash(s){ let h = 5381; s = String(s || ''); for(let i = 0; i < s.length; i++){ h = ((h << 5) + h + s.charCodeAt(i)) | 0; } return (h >>> 0).toString(36); }
+function fnReqId(q, picked){
+  if(!S.spread.reqBase) S.spread.reqBase = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  return S.spread.reqBase + '-' + fnHash(q + '|' + (picked || []).join(','));
+}
+/* Из анкеты («поле: значение» по строкам) достаём только главный вопрос для заголовка. */
+function fnShortQ(q){
+  const s = String(q || '');
+  if(s.indexOf('\n') === -1) return s;
+  const m = /^(?:Главный вопрос к картам|Вопрос \(да или нет\)|Каким хочет видеть исход|Что хочет узнать о паре):\s*(.+)$/m.exec(s);
+  return m ? m[1].trim() : '';
 }
 
 async function funnelDeal(q, extra){
@@ -8081,6 +8171,7 @@ async function funnelDeal(q, extra){
   try{ savedMail = localStorage.getItem('neo_email') || ''; }catch(e){}
   const body = { spread_type: S.spread.id, cards: picked, question: q, lang: lang || 'ru', guest_email: savedMail };
   if(extra){ body.details = extra.details; body.subject_name = extra.subject || ''; if(extra.compat) body.compat = extra.compat; }
+  body.req_id = fnReqId(q, picked);
 
   /* До 2 автоматических попыток на случай сетевого чиха или долгого ответа LLM */
   let data = null;
@@ -8102,14 +8193,25 @@ async function funnelDeal(q, extra){
   const out = document.getElementById('tb-reading');
   if(data && data.success){
     if(extra) fnDraftClear(S.spread.id);
+    S.spread.reqBase = null;
     FN.id = data.spread_id; FN.k = data.view_key; FN.q = shown; FN.picked = picked;
+    FN.plans = data.plans || FN.plans || null;
     fnSave();
     funnelRenderLocked(data.teaser || '');
     if(window.neoGoal) neoGoal('funnel_teaser_shown', { spread: S.spread.id });
   } else if(data && data.message === 'limit'){
-    out.innerHTML = '<p>' + esc(FN_RU()
-      ? 'На сегодня бесплатные превью раскладов закончились. Оформите подписку ПЛЮС, чтобы делать расклады без ограничений.'
-      : 'Free previews for today are over. Get PLUS for unlimited spreads.') + '</p>';
+    /* Упёрся в лимит — самый горячий лид. Не тупик: ведём к его уже готовому раскладу. */
+    const ru = FN_RU();
+    const prev = fnLoad();
+    const hasPrev = !!(prev && prev.id && prev.k);
+    out.innerHTML = `<div class="fn-retry-box"><p>${esc(hasPrev
+        ? (ru ? 'Бесплатные расклады на сегодня закончились. Ваш последний расклад уже готов и сохранён — откройте его целиком.' : 'Free readings for today are over. Your last reading is ready — open it in full.')
+        : (ru ? 'Бесплатные расклады на сегодня закончились. С подпиской ПЛЮС расклады без ограничений.' : 'Free readings for today are over. Get PLUS for unlimited readings.'))}</p>` +
+      (hasPrev
+        ? `<button type="button" class="btn btn-brass btn-wide" onclick="fnResumeLast()">${esc(ru ? 'Открыть мой расклад →' : 'Open my reading →')}</button>`
+        : `<button type="button" class="btn btn-brass btn-wide" onclick="goPlans('plus')">${esc(ru ? 'Смотреть тарифы →' : 'See plans →')}</button>`) +
+      `</div>`;
+    if(window.neoGoal) neoGoal('funnel_limit', { has_prev: hasPrev ? 1 : 0 });
   } else if(data && data.message === 'need_more'){
     document.getElementById('tb-result').style.display = 'none';
     document.getElementById('tb-ask').style.display = 'block';
@@ -8126,6 +8228,22 @@ async function funnelDeal(q, extra){
       </button>
     </div>`;
   }
+}
+
+/* Вернуть человека к его последнему (неоплаченному) раскладу — с тем же тизером и кассой. */
+async function fnResumeLast(){
+  const s = fnLoad();
+  if(!s || !s.id) return;
+  const d = await api('/funnel/status/' + s.id + '?k=' + encodeURIComponent(s.k || ''), 'GET', null, true);
+  if(!(d && d.success)){ try{ localStorage.removeItem('neo_funnel'); }catch(e){} toast(tt('err')); return; }
+  FN.id = s.id; FN.k = s.k;
+  FN.q = s.q || fnShortQ(d.question);
+  FN.picked = d.cards || s.picked || [];
+  if(d.plans) FN.plans = d.plans;
+  if(d.paid){ funnelRenderPaid(d); return; }
+  fnShowTable(FN.q, FN.picked);
+  funnelRenderLocked(d.teaser || '');
+  if(window.neoGoal) neoGoal('funnel_limit_resume');
 }
 
 let FN_SELECTED_PLAN = 'plus';
@@ -8182,6 +8300,13 @@ function funnelFogHtml(errText){
   let saved = '';
   try{ saved = localStorage.getItem('neo_email') || ((bridge.webUser && bridge.webUser.email) || ''); }catch(e){}
   FN_SELECTED_PLAN = 'plus';
+  /* Энергия тарифов — из БД (приходит в ответе /funnel/spread и /funnel/status), а не зашита в вёрстку. */
+  const pl = FN.plans || {};
+  const twEn = (pl.tripwire && pl.tripwire.energy) || 5;
+  const plusEn = pl.plus && pl.plus.energy;
+  const plusChat = ru
+    ? ('Личный таролог в чате на весь месяц' + (plusEn ? ' (до ' + plusEn + ' ответов)' : ''))
+    : ('Personal AI Tarot chat all month' + (plusEn ? ' (' + plusEn + ' answers)' : ''));
 
   return `
     <div class="daily-fog-box fn-fogbox" id="fn-fog">
@@ -8207,7 +8332,7 @@ function funnelFogHtml(errText){
                 <div class="fn-tier-name">${esc(ru ? 'Открыть расклад' : 'Unlock reading')}</div>
                 <ul class="fn-tier-list">
                   <li>${esc(ru ? 'Расшифровка всех выпавших вам карт и совет' : 'Full interpretation of all drawn cards')}</li>
-                  <li>${esc(ru ? '5 личных вопросов тарологу в чате' : '5 personal questions to the AI Tarot reader')}</li>
+                  <li>${esc(ru ? (twEn + ' личных вопросов тарологу в чате') : (twEn + ' personal questions to the AI Tarot reader'))}</li>
                   <li>${esc(ru ? '+ 3 дня полного доступа в подарок' : '+ 3 days of full access included')}</li>
                 </ul>
               </div>
@@ -8228,7 +8353,7 @@ function funnelFogHtml(errText){
                 <ul class="fn-tier-list">
                   <li>${esc(ru ? 'Этот расклад + более 30 раскладов на любовь и будущее' : 'This spread + 30+ spreads for love & future')}</li>
                   <li>${esc(ru ? 'Полный разбор вашей Натальной карты (11 сфер жизни)' : 'Full Natal chart reading (11 life areas)')}</li>
-                  <li>${esc(ru ? 'Личный таролог в чате на весь месяц (до 150 ответов)' : 'Personal AI Tarot chat all month (150 answers)')}</li>
+                  <li>${esc(plusChat)}</li>
                 </ul>
               </div>
               <div class="fn-tier-pwrap">
@@ -8381,8 +8506,9 @@ async function funnelResume(){
     const d = await api('/funnel/status/' + FN.id + '?k=' + encodeURIComponent(FN.k || ''), 'GET', null, true);
     if(d && d.success){
       if(d.email){ try{ localStorage.setItem('neo_email', d.email); }catch(e){} }
+      if(d.plans) FN.plans = d.plans;
       if(d.paid){ funnelRenderPaid(d); return; }
-      FN.q = d.question || FN.q;
+      FN.q = FN.q || fnShortQ(d.question);
       FN.picked = d.cards || FN.picked;
       fnSave();
       fnShowTable(FN.q, FN.picked);
@@ -8405,13 +8531,14 @@ async function funnelPoll(id, k){
   for(let i = 0; i < 72; i++){            /* ~3 минуты */
     const d = await api('/funnel/status/' + id + '?k=' + encodeURIComponent(k || ''), 'GET', null, true);
     last = d;
+    if(d && d.plans) FN.plans = d.plans;
     if(d && d.success && d.paid){ FN.polling = false; funnelRenderPaid(d); return; }
     if(d && d.success && d.canceled){ break; }
     if(d && d.success === false && d.message === 'not_found'){ break; }
     await new Promise(r => setTimeout(r, 2500));
   }
   FN.polling = false;
-  if(last && last.cards && !FN.picked.length){ FN.picked = last.cards; fnShowTable(last.question || FN.q, FN.picked); }
+  if(last && last.cards && !FN.picked.length){ FN.picked = last.cards; fnShowTable(FN.q || fnShortQ(last.question), FN.picked); }
   funnelRenderLocked((last && last.teaser) || '', FN_RU()
     ? ((last && last.canceled) ? 'Оплата не прошла — попробуйте ещё раз' : 'Оплата ещё не подтвердилась. Если вы оплатили — разбор придёт на почту в течение нескольких минут.')
     : 'Payment not confirmed yet.');
@@ -8420,12 +8547,14 @@ async function funnelPoll(id, k){
 function funnelRenderPaid(d){
   const ru = FN_RU();
   if(d.cards && d.cards.length){ FN.picked = d.cards; }
-  if(d.question){ FN.q = d.question; }
+  if(d.question && !FN.q){ FN.q = fnShortQ(d.question); }
   fnShowTable(FN.q, FN.picked);
   if(typeof d.energy === 'number'){ S.energy = d.energy; try{ paintEnergy(); }catch(e){} }
   FN.full = d.interpretation || '';
   FN.type = d.spread_type || (S.spread && S.spread.id) || '';
-  const n = typeof d.energy === 'number' ? d.energy : (d.plan === 'pro' ? 350 : (d.plan === 'plus' ? 150 : 5));
+  const pl = FN.plans || {};
+  const n = typeof d.energy === 'number' ? d.energy
+    : ((pl[d.plan] && pl[d.plan].energy) || (pl.tripwire && pl.tripwire.energy) || 5);
   FN.paidView = true;
   document.getElementById('tb-reading').innerHTML = '<div class="fn-reveal">' + clean(FN.full) + '</div>' + `
     <div class="fn-upsell">
@@ -8550,70 +8679,260 @@ function fnDeepLink(raw){
   return true;
 }
 
+/* === NEO-QUIZ:BEGIN === */
+/* ============================================================
+   NEOTARO: квиз вместо анкеты-простыни.
+   Один вопрос на экран, кнопки вместо полей, ветки по ответам (бывший / партнёр /
+   симпатия / всё сложно...), «эхо»-экраны между вопросами, прогресс, черновик.
+   Наружу отдаёт ТОТ ЖЕ формат, что старая анкета: fnCollect() -> { ok, details, subject,
+   display, question, compat } — бэкенд и dealSpread не меняются.
+
+   Шаг:
+     id      — ключ ответа;  type — chips | multi | text | area | date | ask | echo
+     label   — подпись в анкете для ИИ (Имя человека / Имя партнёра / «С кем конфликт?
+               (имя)» нужны именно такие: по ним письмо-дожим достаёт имя)
+     q/hint/ph — текст или функция от ответов;  when(a) — показывать ли шаг
+     req/need — обязателен;  opt — можно пропустить;  subject — имя человека
+     display — главный вопрос над картами;  ck — поле для совместимости
+     after(a) — доставить ответы после выбора (например, «мама» -> женский род)
+   ============================================================ */
+function fnL(v){ return Array.isArray(v) ? (FN_RU() ? v[0] : (v[1] || v[0])) : (v || ''); }
+function qzR(ru, en){ return FN_RU() ? ru : (en || ru); }
+function qzG(a, m, f){ return (a && a.gender === 'f') ? f : m; }
+function qzN(a){
+  const n = String((a && a.name) || '').trim();
+  return n || qzG(a, 'этот человек', 'этот человек');
+}
+
+/* Знак зодиака по дате: [месяц, последний день знака, знак, стихия] */
+const QZ_SIGNS = [[1,19,'Козерог','earth'],[2,18,'Водолей','air'],[3,20,'Рыбы','water'],[4,19,'Овен','fire'],[5,20,'Телец','earth'],[6,20,'Близнецы','air'],[7,22,'Рак','water'],[8,22,'Лев','fire'],[9,22,'Дева','earth'],[10,22,'Весы','air'],[11,21,'Скорпион','water'],[12,21,'Стрелец','fire'],[12,31,'Козерог','earth']];
+function qzSign(v){
+  const m = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/.exec(v || '');
+  if(!m) return null;
+  const mo = +m[2], d = +m[3];
+  for(const s of QZ_SIGNS){ if(mo < s[0] || (mo === s[0] && d <= s[1])) return { name: s[2], el: s[3] }; }
+  return null;
+}
+function qzCompatEcho(a){
+  const s1 = qzSign(a.mydate), s2 = qzSign(a.pdate), n = qzN(a);
+  if(!s1) return 'Даты сохранены. Карты свяжут их с тем, что происходит между вами.';
+  if(!s2) return `Ваш знак — ${s1.name}. Даже без даты рождения партнёра карты увидят, как ${n} проявляется рядом с вами.`;
+  const pair = [s1.el, s2.el].sort().join('+');
+  let t;
+  if(s1.el === s2.el) t = 'Одна стихия: вы чувствуете друг друга без слов, но и раздражаетесь из-за одного и того же.';
+  else if(pair === 'air+fire' || pair === 'earth+water') t = 'Ваши стихии питают друг друга — такие пары держатся крепче, чем кажется со стороны.';
+  else t = 'Стихии разные: притяжение сильное, но и искры неизбежны. Карты покажут, что перевесит.';
+  return `${s1.name} и ${s2.name}. ${t}`;
+}
+
 const FUNNEL_FORMS = {
+  /* ---------- ЧТО ОН(А) ЧУВСТВУЕТ ---------- */
+  feelings: {
+    display: a => `Что ${qzN(a)} чувствует ко мне на самом деле?`,
+    steps: [
+      { id:'gender', type:'chips', req:true, label:'О ком расклад', q:'О ком будем делать расклад?', hint:'Карты настроятся на энергию этого человека',
+        opts:[['m','О мужчине'],['f','О женщине']] },
+      { id:'name', type:'text', need:true, subject:true, max:40, label:'Имя человека',
+        q: a => `Как ${qzG(a,'его','её')} зовут?`, hint:'Имя помогает картам точнее считать связь между вами',
+        ph: a => qzG(a,'Например: Андрей','Например: Алина') },
+      { id:'role', type:'chips', req:true, label:'Кем приходится', q: a => `Кто ${qzN(a)} для вас сейчас?`,
+        opts: a => [['partner', qzG(a,'Мой партнёр, муж','Моя партнёрша, жена')],['ex', qzG(a,'Бывший','Бывшая')],['crush','Симпатия — мы не вместе'],['complicated','Всё сложно'],['friend', qzG(a,'Друг','Подруга')]] },
+
+      /* ветка: бывший(ая) */
+      { id:'ex_when', when: a => a.role === 'ex', type:'chips', req:true, label:'Как давно расстались', q:'Как давно вы расстались?',
+        opts:[['lt1m','Меньше месяца назад'],['1to6','1–6 месяцев назад'],['6to12','Полгода – год назад'],['gt1y','Больше года назад']] },
+      { id:'ex_who', when: a => a.role === 'ex', type:'chips', req:true, label:'Кто инициатор расставания', q:'Кто стал инициатором расставания?',
+        opts: a => [['me','Я'],['them', qzN(a)],['both','Решили вместе'],['drift','Никто — просто отдалились']] },
+      { id:'ex_contact', when: a => a.role === 'ex', type:'chips', req:true, label:'Общаются ли сейчас', q:'Вы сейчас общаетесь?',
+        opts:[['none','Нет, полная тишина'],['block','Блок или игнор'],['rare','Иногда пишем друг другу'],['friends','Общаемся как друзья'],['close','Бывает близость']] },
+      { id:'ex_echo', when: a => a.role === 'ex', type:'echo',
+        text: a => `${qzN(a)} может молчать, но молчание — не всегда равнодушие. После расставания люди часто думают о человеке намного больше, чем показывают. Карты покажут, что у ${qzG(a,'него','неё')} внутри на самом деле.` },
+      { id:'ex_want', when: a => a.role === 'ex', type:'chips', req:true, label:'Чего хочет клиент', q:'Чего вы хотите сейчас?',
+        opts: a => [['back', `Вернуть ${qzG(a,'его','её')}`],['understand','Понять, что это было'],['letgo','Отпустить и жить дальше'],['unsure','Пока не знаю']] },
+
+      /* ветка: партнёр */
+      { id:'p_long', when: a => a.role === 'partner', type:'chips', req:true, label:'Сколько вместе', q:'Сколько вы вместе?',
+        opts:[['lt6','Меньше полугода'],['6to24','От полугода до 2 лет'],['2to5','2–5 лет'],['gt5','Больше 5 лет']] },
+      { id:'p_worry', when: a => a.role === 'partner', type:'multi', req:true, label:'Что тревожит', q:'Что вас тревожит в последнее время?', hint:'Можно выбрать несколько',
+        opts: a => [['cold', qzG(a,'Он стал холоднее','Она стала холоднее')],['less','Меньше внимания и нежности'],['fights','Частые ссоры'],['other','Подозреваю, что есть кто-то ещё'],['future', qzG(a,'Он не говорит о будущем','Она не говорит о будущем')],['ok','Всё хорошо — хочу понять глубже']] },
+      { id:'p_echo', when: a => a.role === 'partner', type:'echo',
+        text: a => (a.p_worry || []).indexOf('other') !== -1
+          ? 'Подозрение — тяжёлое чувство, и оно редко возникает на пустом месте. Карты не обвиняют — они показывают, что происходит на самом деле. Разберёмся честно.'
+          : `Когда близкий человек меняется, за этим почти всегда стоит то, о чём он молчит. Карты покажут, что сейчас происходит в душе у ${qzN(a)}.` },
+      { id:'p_want', when: a => a.role === 'partner', type:'chips', req:true, label:'Чего ждёт от отношений', q:'Чего вы ждёте от этих отношений?',
+        opts:[['family','Брака, семьи'],['warmth','Больше тепла и внимания'],['clarity','Ясности — куда мы идём'],['keep','Сохранить то, что есть']] },
+
+      /* ветка: симпатия */
+      { id:'c_contact', when: a => a.role === 'crush', type:'chips', req:true, label:'Как общаются', q: a => `Как вы общаетесь с ${qzG(a,'ним','ней')}?`,
+        opts:[['text','Только переписка'],['meet','Видимся на работе или учёбе'],['dates','Уже были свидания'],['rare','Почти не общаемся']] },
+      { id:'c_signs', when: a => a.role === 'crush', type:'chips', req:true, label:'Есть ли взаимность', q:'Вы чувствуете взаимность?',
+        opts:[['yes','Да, есть знаки'],['hotcold','То тепло, то холодно'],['unclear','Не могу понять'],['no','Скорее нет']] },
+      { id:'c_echo', when: a => a.role === 'crush', type:'echo',
+        text: a => a.c_signs === 'hotcold'
+          ? `«То тепло, то холодно» — один из самых частых сценариев, и у него почти всегда есть конкретная причина. Карты покажут, какая она у ${qzN(a)}.`
+          : `Даже когда человек не делает шагов, его отношение к вам уже сложилось. Карты покажут, что ${qzN(a)} думает о вас на самом деле.` },
+      { id:'c_want', when: a => a.role === 'crush', type:'chips', req:true, label:'Чего хочет клиент', q:'Чего вы хотите?',
+        opts: a => [['step', qzG(a,'Чтобы он сделал первый шаг','Чтобы она сделала первый шаг')],['chance','Понять, есть ли шанс'],['me','Решиться на шаг самой / самому'],['wait','Понять, стоит ли ждать']] },
+
+      /* ветка: всё сложно */
+      { id:'x_what', when: a => a.role === 'complicated', type:'multi', req:true, label:'Что происходит', q:'Что у вас происходит?', hint:'Можно выбрать несколько',
+        opts: a => [['onoff','Сходимся и расходимся'],['taken', qzG(a,'Он несвободен','Она несвободна')],['distance','Нас разделяет расстояние'],['family','Мешают родные или обстоятельства'],['hurt','Обида, которую трудно отпустить'],['status','Непонятный статус']] },
+      { id:'x_long', when: a => a.role === 'complicated', type:'chips', req:true, label:'Сколько длится', q:'Как давно это длится?',
+        opts:[['lt3','Меньше 3 месяцев'],['3to12','3–12 месяцев'],['gt1y','Больше года']] },
+      { id:'x_echo', when: a => a.role === 'complicated', type:'echo',
+        text: a => `В таких историях обоих обычно держит что-то сильнее слов. Карты покажут, что держит ${qzN(a)} — и куда всё идёт.` },
+
+      /* ветка: друг */
+      { id:'f_what', when: a => a.role === 'friend', type:'chips', req:true, label:'Что изменилось', q:'Что изменилось между вами?',
+        opts: a => [['more','Чувствую больше, чем дружбу'],['distance','Мы отдалились'],['conflict','Был конфликт'],['unclear', `Не понимаю, как ${qzG(a,'он','она')} ко мне относится`]] },
+
+      { id:'story', type:'area', opt:true, max:500, label:'Ситуация своими словами',
+        q: a => `Что сейчас происходит между вами? Пара фраз про ${qzN(a)}`,
+        hint:'Своими словами — и разбор будет именно про вас. Можно пропустить.',
+        ph: a => qzG(a,'Например: последние две недели он отвечает коротко и…','Например: последние две недели она отвечает коротко и…') },
+      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Что вы больше всего хотите узнать?', hint:'Выберите или напишите свой вопрос',
+        sugg: a => {
+          const n = qzN(a), he = qzG(a,'он','она');
+          if(a.role === 'ex') return [`Думает ли ${n} обо мне?`, `Вернётся ли ${he}?`, 'Есть ли у нас будущее?'];
+          if(a.role === 'crush') return [`Нравлюсь ли я ${qzG(a,'ему','ей')}?`, `Сделает ли ${he} первый шаг?`, 'Есть ли у нас шанс?'];
+          if(a.role === 'friend') return [`Что ${n} на самом деле ко мне чувствует?`, 'Может ли дружба стать чем-то большим?', 'Как вернуть прежнюю близость?'];
+          return [`Что ${n} на самом деле чувствует ко мне?`, `Что ${he} от меня скрывает?`, 'Куда движутся наши отношения?'];
+        } }
+    ]
+  },
+
+  /* ---------- ПРОШЛОЕ — НАСТОЯЩЕЕ — БУДУЩЕЕ ---------- */
+  ppf: {
+    display: () => 'Что меня ждёт в ближайшие месяцы?',
+    steps: [
+      { id:'sphere', type:'chips', req:true, label:'Сфера', q:'О какой сфере жизни расклад?', hint:'Карты свяжут прошлое, настоящее и будущее именно в ней',
+        opts:[['love','Любовь и отношения'],['work','Работа и карьера'],['money','Деньги'],['family','Семья'],['self','Я сам(а): состояние, путь']] },
+      { id:'l_status', when: a => a.sphere === 'love', type:'chips', req:true, label:'Личная жизнь', q:'Что сейчас в личной жизни?',
+        opts:[['rel','Я в отношениях'],['broke','Недавно расстались'],['single','Я один / одна'],['compl','Всё сложно']] },
+      { id:'name', when: a => a.sphere === 'love' && !!a.l_status && a.l_status !== 'single', type:'text', opt:true, subject:true, max:40, label:'Имя человека',
+        q:'Как зовут человека, о котором вы думаете?', hint:'Можно пропустить', ph:'Например: Андрей' },
+      { id:'w_now', when: a => a.sphere === 'work', type:'chips', req:true, label:'Ситуация с работой', q:'Что сейчас с работой?',
+        opts:[['ok','Работаю, в целом устраивает'],['leave','Работаю, но хочу уйти'],['search','Ищу работу'],['biz','Своё дело или фриланс']] },
+      { id:'w_pain', when: a => a.sphere === 'work', type:'multi', req:true, label:'Что беспокоит', q:'Что беспокоит больше всего?', hint:'Можно выбрать несколько',
+        opts:[['pay','Мало платят'],['people','Начальство или коллеги'],['burn','Выгорание, нет сил'],['growth','Нет роста'],['fear','Страх перемен']] },
+      { id:'m_now', when: a => a.sphere === 'money', type:'chips', req:true, label:'Финансовая ситуация', q:'Что сейчас с деньгами?',
+        opts:[['short','Не хватает до зарплаты'],['debt','Есть долги или кредиты'],['stable','Стабильно, но хочется больше'],['loss','Была крупная потеря']] },
+      { id:'m_want', when: a => a.sphere === 'money', type:'chips', req:true, label:'Финансовая цель', q:'Чего вы хотите?',
+        opts:[['out','Выбраться из долгов'],['more','Увеличить доход'],['decide','Принять денежное решение'],['calm','Перестать тревожиться о деньгах']] },
+      { id:'fm_who', when: a => a.sphere === 'family', type:'chips', req:true, label:'О ком вопрос', q:'О ком этот вопрос?',
+        opts:[['parents','Родители'],['kids','Дети'],['spouse','Муж или жена'],['kin','Другие родственники']] },
+      { id:'fm_state', when: a => a.sphere === 'family', type:'chips', req:true, label:'Что происходит в семье', q:'Что происходит?',
+        opts:[['conflict','Конфликт или напряжение'],['distance','Отдалились друг от друга'],['worry','Тревожусь за близкого'],['decision','Нужно семейное решение']] },
+      { id:'s_feel', when: a => a.sphere === 'self', type:'multi', req:true, label:'Состояние', q:'Что вы чувствуете последнее время?', hint:'Можно выбрать несколько',
+        opts:[['apathy','Апатия'],['anxiety','Тревога'],['lost','Потерянность'],['change','Хочется перемен'],['rise','Подъём и силы']] },
+      { id:'ppf_echo', type:'echo', text:'Прошлое держит настоящее сильнее, чем кажется. Первая карта покажет, где всё началось, — и почему ситуация развивается именно так.' },
+      { id:'past', type:'area', opt:true, max:400, label:'С чего всё началось', q:'С чего, по-вашему, всё началось?', hint:'Событие или решение, после которого всё изменилось. Можно пропустить.', ph:'Например: год назад я сменил(а) работу, и с тех пор…' },
+      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Главный вопрос к картам', hint:'Выберите или напишите свой',
+        sugg: a => ({
+          love: ['Что ждёт меня в любви в ближайшие месяцы?', 'Встречу ли я своего человека?', 'Есть ли будущее у этих отношений?'],
+          work: ['Стоит ли мне менять работу?', 'Что ждёт меня в карьере?', 'Когда придёт рост?'],
+          money: ['Когда наладится финансовое положение?', 'Что мешает мне зарабатывать больше?', 'Стоит ли рисковать деньгами сейчас?'],
+          family: ['Как наладить отношения в семье?', 'Что ждёт мою семью?', 'Как мне поступить?'],
+          self: ['Куда мне двигаться дальше?', 'Что мешает мне быть счастливее?', 'Что меня ждёт в ближайшие месяцы?']
+        }[a.sphere] || ['Что меня ждёт в ближайшие месяцы?']) }
+    ]
+  },
+
+  /* ---------- ДА / НЕТ ---------- */
+  yesno: {
+    display: () => 'Да или нет?',
+    steps: [
+      { id:'topic', type:'chips', req:true, label:'Тема вопроса', q:'О чём ваш вопрос?',
+        opts:[['love','Отношения'],['work','Работа'],['money','Деньги'],['move','Переезд или поездка'],['choice','Решение или выбор']] },
+      { id:'q', type:'ask', need:true, display:true, max:150, label:'Вопрос (да или нет)', q:'Сформулируйте вопрос так, чтобы на него можно было ответить «да» или «нет»',
+        hint:'Выберите или напишите свой',
+        sugg: a => ({
+          love: ['Будем ли мы вместе?', 'Стоит ли мне сделать первый шаг?', 'Есть ли у нас будущее?'],
+          work: ['Стоит ли мне менять работу?', 'Получу ли я эту должность?', 'Стоит ли просить повышение?'],
+          money: ['Выберусь ли я из долгов в этом году?', 'Стоит ли брать кредит?', 'Стоит ли вкладываться в это дело?'],
+          move: ['Стоит ли мне переезжать?', 'Будет ли поездка удачной?', 'Приживусь ли я на новом месте?'],
+          choice: ['Правильное ли это решение?', 'Стоит ли соглашаться?', 'Стоит ли ждать?']
+        }[a.topic] || []), ph:'Ваш вопрос…' },
+      { id:'who', when: a => a.topic === 'love', type:'text', opt:true, subject:true, max:40, label:'Имя человека', q:'Как зовут человека, о котором вопрос?', hint:'Можно пропустить', ph:'Например: Максим' },
+      { id:'urgency', type:'chips', req:true, label:'Когда нужно решение', q:'Когда вам нужно решение?',
+        opts:[['now','Сегодня или завтра'],['week','На этой неделе'],['month','В этом месяце'],['later','Не срочно']] },
+      { id:'hope', type:'chips', req:true, label:'На какой ответ надеется', q:'Какой ответ вы надеетесь услышать?', hint:'Карты ответят честно — а это поможет понять, что для вас на самом деле важно',
+        opts:[['yes','«Да»'],['no','«Нет»'],['dunno','Не знаю']] },
+      { id:'yn_echo', type:'echo', text:'Колода уже настроена на ваш вопрос. Осталась одна деталь — и ответ будет не общим, а про вашу ситуацию.' },
+      { id:'why', type:'area', opt:true, max:400, label:'Почему важно сейчас', q:'Почему этот вопрос важен именно сейчас?', hint:'Можно пропустить', ph:'Мне нужно решить до…, потому что…' }
+    ]
+  },
+
+  /* ---------- КАК ОТПУСТИТЬ ---------- */
+  letgo: {
+    display: () => 'Как мне наконец отпустить?',
+    steps: [
+      { id:'what', type:'chips', req:true, label:'Что нужно отпустить', q:'Что вы хотите отпустить?',
+        opts:[['person','Человека'],['hurt','Обиду'],['past','Прошлое или ошибку'],['fear','Страх или тревогу'],['dream','Несбывшуюся мечту']] },
+      { id:'gender', when: a => a.what === 'person', type:'chips', req:true, label:'О ком расклад', q:'Это мужчина или женщина?', opts:[['m','Мужчина'],['f','Женщина']] },
+      { id:'name', when: a => a.what === 'person', type:'text', need:true, subject:true, max:40, label:'Имя человека',
+        q: a => `Как ${qzG(a,'его','её')} зовут?`, ph: a => qzG(a,'Например: Дмитрий','Например: Анна') },
+      { id:'lg_role', when: a => a.what === 'person', type:'chips', req:true, label:'Кем был(а) для клиента', q: a => `Кем ${qzN(a)} ${qzG(a,'был','была')} для вас?`,
+        opts: a => [['ex', qzG(a,'Бывший','Бывшая')],['unreq','Безответная любовь'],['friend', qzG(a,'Друг','Подруга')],['family','Родственник']] },
+      { id:'lg_desc', when: a => !!a.what && a.what !== 'person', type:'text', need:true, max:120, label:'Что именно',
+        q: a => ({ hurt:'На кого или на что обида?', past:'Что именно из прошлого не отпускает?', fear:'Чего именно вы боитесь?', dream:'О какой мечте речь?' }[a.what] || 'Что именно?'),
+        ph: a => ({ hurt:'Например: на маму за слова в детстве', past:'Например: развод, увольнение, свою ошибку', fear:'Например: страх остаться одной', dream:'Например: переезд к морю' }[a.what] || '') },
+      { id:'lg_when', type:'chips', req:true, label:'Как давно', q:'Как давно это держит вас?',
+        opts:[['lt3','Меньше 3 месяцев'],['3to12','3–12 месяцев'],['1to3','1–3 года'],['gt3','Дольше 3 лет']] },
+      { id:'hold', type:'multi', req:true, label:'Что держит', q:'Что держит сильнее всего?', hint:'Можно выбрать несколько',
+        opts:[['memories','Воспоминания'],['hope','Надежда, что всё вернётся'],['hurt','Обида'],['guilt','Чувство вины'],['habit','Привычка'],['alone','Страх одиночества']] },
+      { id:'lg_echo', type:'echo', text:'То, что не отпускает, почти всегда держится не за событие, а за что-то внутри нас. Карты покажут, за что именно — и какой шаг освободит.' },
+      { id:'want', type:'area', opt:true, max:300, label:'Что хочет впустить', q:'Что вы хотите впустить в жизнь вместо этого?', hint:'Можно пропустить', ph:'Хочу снова чувствовать…' },
+      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Что вы хотите узнать?', hint:'Выберите или напишите свой',
+        sugg:['Как мне наконец освободиться?', 'Почему я не могу отпустить?', 'Что ждёт меня, когда я отпущу?'] }
+    ]
+  },
+
+  /* ---------- КОНФЛИКТ ---------- */
+  conflict: {
+    display: () => 'Как выйти из этого конфликта?',
+    steps: [
+      { id:'cf_who', type:'chips', req:true, label:'С кем конфликт', q:'С кем у вас конфликт?',
+        opts:[['partner','С партнёром'],['mother','С мамой'],['father','С папой'],['kin','С родственником'],['friend','С другом или подругой'],['work','С коллегой или начальником']],
+        after: a => { if(a.cf_who === 'mother') a.gender = 'f'; else if(a.cf_who === 'father') a.gender = 'm'; } },
+      { id:'gender', when: a => !!a.cf_who && a.cf_who !== 'mother' && a.cf_who !== 'father', type:'chips', req:true, label:'Пол человека', q:'Это мужчина или женщина?', opts:[['m','Мужчина'],['f','Женщина']] },
+      { id:'name', type:'text', need:true, subject:true, max:40, label:'С кем конфликт? (имя)',
+        q: a => (a.cf_who === 'mother' || a.cf_who === 'father') ? `Как вы ${qzG(a,'его','её')} называете?` : `Как ${qzG(a,'его','её')} зовут?`,
+        ph: a => a.cf_who === 'mother' ? 'Например: мама' : (a.cf_who === 'father' ? 'Например: папа' : qzG(a,'Например: Олег','Например: Ольга')) },
+      { id:'cf_long', type:'chips', req:true, label:'Как давно длится', q:'Как давно длится конфликт?',
+        opts:[['days','Вспыхнул на днях'],['weeks','Несколько недель'],['months','Месяцами'],['years','Годами']] },
+      { id:'cf_now', type:'chips', req:true, label:'Что между ними сейчас', q:'Что между вами сейчас?',
+        opts:[['silent','Не разговариваем'],['cold','Холодно и вежливо'],['fight','Постоянно ссоримся'],['pretend','Делаем вид, что всё нормально']] },
+      { id:'cf_fault', type:'chips', req:true, label:'Кто неправ, по мнению клиента', q:'Как вам кажется, кто неправ?',
+        opts: a => [['them', qzN(a)],['me','Я'],['both','Оба'],['dunno','Не знаю']] },
+      { id:'cf_echo', type:'echo', text: a => `За резкими словами почти всегда стоит то, что человек боится сказать прямо. Карты покажут, что на самом деле чувствует ${qzN(a)} — и с чего начать разговор.` },
+      { id:'cf_start', type:'area', opt:true, max:400, label:'С чего началось', q:'Из-за чего всё началось?', hint:'Можно пропустить', ph:'Всё началось, когда…' },
+      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Каким хочет видеть исход', q:'Каким вы хотите видеть исход?', hint:'Выберите или напишите свой',
+        sugg:['Помириться и сохранить отношения', 'Чтобы меня наконец поняли', 'Спокойно отдалиться без войны', 'Понять, как себя вести'] }
+    ]
+  },
+
+  /* ---------- СОВМЕСТИМОСТЬ ПАРЫ ---------- */
   compat: {
     compat: true,
-    intro: ['Карты Таро, знаки зодиака и числа ваших дат рождения — в одном разборе. Дата партнёра даст процент совместимости.', 'Tarot, zodiac signs and birth-date numbers in one reading. Your partner\u2019s date unlocks the compatibility percentage.'],
-    fields: [
-      { k:'myname', ck:'my_name', type:'text', max:40, label:['Ваше имя','Your name'], ph:['Например: Анна','E.g. Anna'] },
-      { k:'mydate', ck:'my_date', type:'date', need:true, label:['Ваша дата рождения','Your birth date'] },
-      { k:'pname', ck:'partner_name', type:'text', need:true, max:40, subject:true, label:['Имя партнёра','Partner\u2019s name'], ph:['Например: Андрей','E.g. Andrew'] },
-      { k:'pdate', ck:'partner_date', type:'date', label:['Дата рождения партнёра','Partner\u2019s birth date'], hint:['Если не знаете — оставьте пустым, карты всё равно ответят','Leave empty if unknown \u2014 the cards will still answer'] },
-      { k:'role', ck:'relation', type:'chips', req:true, label:['Кто вы друг другу?','What are you to each other?'], opts:[['Пара','Couple','partner'],['Супруги','Married','married'],['Влюблённость','Crush','crush'],['Бывшие','Exes','ex'],['Всё сложно','Complicated','complicated']] },
-      { k:'story', type:'area', max:400, label:['Как вы познакомились и что происходит сейчас?','How did you meet and what is happening now?'], hint:['Необязательно, но с историей разбор будет про вас, а не про знаки вообще','Optional, but it makes the reading about you'], ph:['Познакомились год назад… Сейчас между нами…','We met a year ago\u2026 Now\u2026'] },
-      { k:'q', type:'text', max:150, display:true, label:['Что хотите узнать о вашей паре?','What do you want to know about your couple?'], hint:['Необязательно','Optional'], ph:['Подходим ли мы друг другу и есть ли у нас будущее?','Are we a match, do we have a future?'] }
-    ]
-  },
-  ppf: {
-    intro: ['Пара строк о ситуации — и карты свяжут ваше прошлое с будущим точнее. Заполняйте то, что хочется.', 'The more detail you give, the more precisely the cards connect past and future.'],
-    fields: [
-      { k:'sphere', type:'chips', req:true, label:['О какой сфере расклад?','Which area of life?'], opts:[['Любовь','Love'],['Работа','Career'],['Деньги','Money'],['Семья','Family'],['Я сам(а)','Myself']] },
-      { k:'past', type:'area', max:400, label:['С чего всё началось?','How did it all start?'], hint:['Что происходило раньше, какое событие запустило ситуацию','What happened before, what triggered the situation'], ph:['Например: год назад я сменила работу, и с тех пор…','E.g. a year ago I changed jobs and since then…'] },
-      { k:'now', type:'area', max:400, label:['Что происходит сейчас?','What is happening now?'], hint:['Опишите, как обстоят дела и что вы чувствуете','Describe how things are and how you feel'], ph:['Сейчас я чувствую, что…','Right now I feel that…'] },
-      { k:'future', type:'area', max:300, label:['Чего вы хотите и чего боитесь?','What do you want and fear?'], ph:['Хочу, чтобы… Боюсь, что…','I want… I am afraid that…'] },
-      { k:'q', type:'text', need:true, max:150, display:true, label:['Главный вопрос к картам','Your main question'], ph:['Что меня ждёт в ближайшие месяцы?','What awaits me in the coming months?'] }
-    ]
-  },
-  yesno: {
-    intro: ['Карта даст ответ «да» или «нет», а детали помогут понять, почему.', 'The card answers yes or no; details explain why.'],
-    fields: [
-      { k:'q', type:'text', need:true, max:150, display:true, label:['Вопрос, на который можно ответить «да» или «нет»','A yes/no question'], ph:['Стоит ли мне переезжать этой весной?','Should I move this spring?'] },
-      { k:'why', type:'area', max:400, label:['Почему этот вопрос важен именно сейчас?','Why does it matter now?'], ph:['Мне нужно решить до…, потому что…','I need to decide by… because…'] },
-      { k:'yes', type:'area', max:300, label:['Что изменится, если ответ «да»? А если «нет»?','What changes with yes? With no?'], ph:['Если да — … Если нет — …','If yes — … If no — …'] },
-      { k:'who', type:'text', max:100, subject:true, label:['Кто ещё участвует (имя)','Who else is involved (name)'], hint:['Необязательно','Optional'], ph:['Например: Максим','E.g. Max'] }
-    ]
-  },
-  feelings: {
-    intro: ['Карты увидят его чувства точнее, если вы немного расскажете о вашей истории.', 'Tell the story of your relationship so the cards can read their feelings.'],
-    fields: [
-      { k:'name', type:'text', need:true, max:40, subject:true, label:['Имя человека','Their name'], ph:['Например: Андрей','E.g. Andrew'] },
-      { k:'role', type:'chips', req:true, label:['Кем он(а) вам приходится?','Who are they to you?'], opts:[['Партнёр','Partner'],['Бывший(ая)','Ex'],['Симпатия','Crush'],['Друг','Friend'],['Всё сложно','Complicated']] },
-      { k:'bond', type:'area', max:400, label:['Как вы познакомились и что вас связывает?','How did you meet, what connects you?'], ph:['Познакомились на… Нас связывает…','We met at… What connects us is…'] },
-      { k:'now', type:'area', max:400, label:['Что между вами происходит сейчас?','What is going on between you now?'], hint:['Как часто общаетесь, были ли ссоры, кто делает шаги навстречу','How often you talk, fights, who reaches out'], ph:['Последние недели он…','Lately they…'] },
-      { k:'want', type:'area', max:300, display:true, label:['Что вы хотите понять о его чувствах?','What do you want to know?'], ph:['Любит ли он меня по-настоящему и есть ли у нас будущее?','Do they really love me, do we have a future?'] }
-    ]
-  },
-  letgo: {
-    intro: ['Чтобы отпустить, карты должны понять, что именно вас держит.', 'To let go, the cards need to see what holds you.'],
-    fields: [
-      { k:'what', type:'text', need:true, max:120, subject:true, label:['Что или кого вы хотите отпустить?','What or whom do you want to let go?'], ph:['Например: бывшего, Дмитрия','E.g. my ex, Dmitry'] },
-      { k:'hold', type:'area', max:400, label:['Почему не получается отпустить?','Why can’t you let go?'], hint:['Воспоминания, обида, надежда, привычка — что держит сильнее всего','Memories, resentment, hope, habit'], ph:['Я до сих пор…','I still…'] },
-      { k:'accept', type:'area', max:300, label:['Что вы хотите впустить в жизнь вместо этого?','What do you want instead?'], ph:['Хочу снова чувствовать…','I want to feel… again'] },
-      { k:'q', type:'text', max:150, display:true, label:['Главный вопрос к картам','Your main question'], ph:['Как мне наконец освободиться?','How do I finally move on?'] }
-    ]
-  },
-  conflict: {
-    intro: ['Опишите конфликт с обеих сторон — так карты подскажут, где выход.', 'Describe both sides so the cards show the way out.'],
-    fields: [
-      { k:'who', type:'text', need:true, max:60, subject:true, label:['С кем конфликт? (имя)','Who is the conflict with? (name)'], ph:['Например: мама, Ольга','E.g. my mom, Olga'] },
-      { k:'start', type:'area', max:400, label:['Из-за чего всё началось?','How did it start?'], ph:['Всё началось, когда…','It started when…'] },
-      { k:'sides', type:'area', max:400, label:['Что говорите и чувствуете вы, а что — другая сторона?','Your side and theirs'], ph:['Я считаю… А она говорит…','I think… They say…'] },
-      { k:'goal', type:'area', max:300, display:true, label:['Каким вы хотите видеть исход?','What outcome do you want?'], ph:['Хочу помириться, но без…','I want to make peace, but without…'] }
+    display: a => 'Совместимость: вы и ' + qzN(a),
+    steps: [
+      { id:'role', ck:'relation', type:'chips', req:true, label:'Кто вы друг другу', q:'Кто вы друг другу?',
+        opts:[['partner','Пара'],['married','Супруги'],['crush','Влюблённость'],['ex','Бывшие'],['complicated','Всё сложно']] },
+      { id:'gender', type:'chips', req:true, label:'Партнёр', q:'Ваш партнёр — мужчина или женщина?', opts:[['m','Мужчина'],['f','Женщина']] },
+      { id:'name', ck:'partner_name', type:'text', need:true, subject:true, max:40, label:'Имя партнёра',
+        q: a => `Как ${qzG(a,'его','её')} зовут?`, ph: a => qzG(a,'Например: Андрей','Например: Алина') },
+      { id:'mydate', ck:'my_date', type:'date', need:true, label:'Дата рождения клиента', q:'Ваша дата рождения', hint:'По ней считаются ваш знак и числа совместимости' },
+      { id:'pdate', ck:'partner_date', type:'date', opt:true, label:'Дата рождения партнёра', q: a => `Когда ${qzG(a,'родился','родилась')} ${qzN(a)}?`,
+        hint:'Не знаете — пропустите, карты всё равно ответят. С датой будет точный процент совместимости.' },
+      { id:'cp_echo', type:'echo', text: a => qzCompatEcho(a) },
+      { id:'myname', ck:'my_name', type:'text', opt:true, max:40, label:'Имя клиента', q:'Как вас зовут?', hint:'Чтобы разбор обращался к вам лично. Можно пропустить.', ph:'Например: Анна' },
+      { id:'story', type:'area', opt:true, max:400, label:'История пары', q:'Как вы познакомились и что происходит сейчас?', hint:'С историей разбор будет про вас, а не про знаки вообще. Можно пропустить.', ph:'Познакомились год назад… Сейчас между нами…' },
+      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Что хочет узнать о паре', q:'Что хотите узнать о вашей паре?', hint:'Выберите или напишите свой',
+        sugg:['Подходим ли мы друг другу?', 'Есть ли у нас будущее?', 'Что мешает нам быть ближе?'] }
     ]
   }
 };
-
-function fnL(v){ return Array.isArray(v) ? (FN_RU() ? v[0] : (v[1] || v[0])) : (v || ''); }
 
 function fnFormKey(sp){
   if(!sp) return null;
@@ -8634,71 +8953,185 @@ function fnDraftLoad(id){ try{ return JSON.parse(localStorage.getItem('neo_form_
 function fnDraftSave(id, d){ try{ localStorage.setItem('neo_form_' + id, JSON.stringify(d)); }catch(e){} }
 function fnDraftClear(id){ try{ localStorage.removeItem('neo_form_' + id); }catch(e){} }
 
+/* ---------- движок квиза ---------- */
+const QZ = { a: {}, i: -1, hist: [] };
+
+function qzForm(){ return fnFormFor(S.spread); }
+function qzVal(x, a){ return typeof x === 'function' ? x(a) : fnL(x); }
+function qzList(x, a){ const v = typeof x === 'function' ? x(a) : x; return Array.isArray(v) ? v : []; }
+function qzOpts(st, a){
+  return qzList(st.opts, a).map(o => Array.isArray(o) ? { v: o[0], l: o[1] } : o);
+}
+function qzOn(st, a){ return !st.when || !!st.when(a); }
+function qzNextIdx(steps, from){
+  for(let j = from + 1; j < steps.length; j++){ if(qzOn(steps[j], QZ.a)) return j; }
+  return -1;
+}
+/* Человеческий ответ: для кнопок — их подпись, а не код. Именно его читает ИИ. */
+function qzHuman(st, a){
+  const v = a[st.id];
+  if(v == null || v === '' || (Array.isArray(v) && !v.length)) return '';
+  if(st.type === 'chips'){ const o = qzOpts(st, a).find(o => o.v === v); return o ? o.l : String(v); }
+  if(st.type === 'multi'){
+    const os = qzOpts(st, a);
+    return (Array.isArray(v) ? v : [v]).map(x => { const o = os.find(o => o.v === x); return o ? o.l : String(x); }).join(', ');
+  }
+  return String(v).trim();
+}
+function qzValid(st, a){
+  if(st.type === 'echo') return true;
+  if(st.type === 'date'){
+    const v = a[st.id] || '';
+    if(!v) return !st.need;
+    return /^(19[2-9][0-9]|20[0-9][0-9])-[0-9][0-9]-[0-9][0-9]$/.test(v) && v <= new Date().toISOString().slice(0, 10);
+  }
+  if(st.req || st.need) return qzHuman(st, a) !== '';
+  return true;
+}
+function qzSave(){ if(S.spread) fnDraftSave(S.spread.id, { v: 2, a: QZ.a, i: QZ.i, hist: QZ.hist }); }
+function qzStep(){ const f = qzForm(); return f ? f.steps[QZ.i] : null; }
+
 function fnRenderForm(prefill){
   const box = document.getElementById('tb-form');
   const free = document.getElementById('tb-free');
+  const deal = document.getElementById('tb-deal');
   if(!box || !free) return;
   const form = fnFormFor(S.spread);
-  if(!form){ box.innerHTML = ''; free.style.display = ''; fnSetDeal(null); return; }
+  if(!form){ box.innerHTML = ''; free.style.display = ''; if(deal) deal.style.display = ''; fnSetDeal(null); return; }
   free.style.display = 'none';
+  if(deal) deal.style.display = 'none';   /* у квиза своя кнопка на последнем шаге */
   const d = fnDraftLoad(S.spread.id);
-  if(prefill){ const df = form.fields.find(f => f.display); if(df && !d[df.k]) d[df.k] = prefill; }
-  let html = `<p class="fnq-intro">${esc(fnL(form.intro))}</p>`;
-  const today = new Date().toISOString().slice(0, 10);
-  form.fields.forEach(f => {
-    const v = d[f.k] || '';
-    html += `<div class="fnq" id="fnq-${f.k}"><label class="fnq-l" for="fnq-in-${f.k}">${esc(fnL(f.label))}</label>`;
-    if(f.hint) html += `<span class="fnq-h">${esc(fnL(f.hint))}</span>`;
-    if(f.type === 'chips'){
-      html += `<div class="fnq-chips">` + f.opts.map(o => {
-        const val = fnL(o);
-        return `<button type="button" class="fnq-chip${v === val ? ' on' : ''}" data-k="${f.k}" data-v="${esc(val)}" data-c="${esc(o[2] || '')}" onclick="fnChip(this)">${esc(val)}</button>`;
+  const ok = d && d.v === 2 && d.a && typeof d.a === 'object';
+  QZ.a = ok ? d.a : {};
+  QZ.hist = ok && Array.isArray(d.hist) ? d.hist.filter(n => typeof n === 'number') : [];
+  QZ.i = ok && typeof d.i === 'number' ? d.i : -1;
+  if(prefill){ const ds = form.steps.find(s => s.display); if(ds && !QZ.a[ds.id]) QZ.a[ds.id] = prefill; }
+  if(QZ.i < 0 || QZ.i >= form.steps.length || !qzOn(form.steps[QZ.i], QZ.a)){
+    QZ.i = qzNextIdx(form.steps, -1);
+    QZ.hist = [];
+  }
+  qzSave();
+  qzRender();
+}
+
+function qzRender(){
+  const box = document.getElementById('tb-form');
+  const form = qzForm();
+  if(!box || !form) return;
+  const steps = form.steps, a = QZ.a, st = steps[QZ.i];
+  if(!st) return;
+  const ru = FN_RU();
+  const asked = steps.filter(s => s.type !== 'echo' && qzOn(s, a));
+  let pos = asked.indexOf(st);
+  if(pos < 0) pos = asked.filter(s => steps.indexOf(s) < QZ.i).length;
+  const pct = Math.max(6, Math.round(pos / Math.max(asked.length, 1) * 100));
+  const last = qzNextIdx(steps, QZ.i) === -1;
+  const nextTx = last ? tt('table_deal') : (st.type === 'echo' ? qzR('Продолжить', 'Continue') : qzR('Далее', 'Next'));
+
+  let html = `<div class="qz" data-step="${esc(st.id)}">`;
+  html += `<div class="qz-top">` + (QZ.hist.length
+    ? `<button type="button" class="qz-back" onclick="qzBack()">‹ ${esc(qzR('Назад', 'Back'))}</button>`
+    : `<span></span>`) +
+    `<span class="qz-count">${st.type === 'echo' ? '✦' : esc((ru ? 'Вопрос ' : 'Question ') + (pos + 1) + (ru ? ' из ' : ' of ') + asked.length)}</span></div>`;
+  html += `<div class="qz-bar"><i style="width:${pct}%"></i></div>`;
+  html += `<div class="qz-card${st.type === 'echo' ? ' is-echo' : ''}">`;
+
+  if(st.type === 'echo'){
+    html += `<div class="qz-echo-mark" aria-hidden="true">✦</div><p class="qz-echo">${esc(qzVal(st.text, a))}</p>`;
+    html += `<button type="button" class="btn btn-brass btn-wide qz-next" onclick="qzNext()">${esc(nextTx)}</button>`;
+  } else {
+    html += `<div class="qz-q">${esc(qzVal(st.q, a))}</div>`;
+    if(st.hint) html += `<div class="qz-h">${esc(qzVal(st.hint, a))}</div>`;
+    const v = a[st.id];
+    if(st.type === 'chips' || st.type === 'multi'){
+      html += `<div class="qz-opts${st.type === 'multi' ? ' is-multi' : ''}">` + qzOpts(st, a).map((o, k) => {
+        const on = st.type === 'multi' ? (Array.isArray(v) && v.indexOf(o.v) !== -1) : v === o.v;
+        return `<button type="button" class="qz-opt${on ? ' on' : ''}" onclick="qzPick(${k})">${esc(o.l)}</button>`;
       }).join('') + `</div>`;
-    } else if(f.type === 'area'){
-      html += `<textarea class="field" id="fnq-in-${f.k}" rows="3" maxlength="${f.max}" placeholder="${esc(fnL(f.ph))}" oninput="fnFormCheck()">${esc(v)}</textarea>`;
-    } else if(f.type === 'date'){
-      html += `<input class="field fnq-date" id="fnq-in-${f.k}" type="date" min="1920-01-01" max="${today}" value="${esc(v)}" onchange="fnFormCheck()" oninput="fnFormCheck()">`;
+    } else if(st.type === 'area'){
+      html += `<textarea class="field qz-in" id="qz-in" rows="4" maxlength="${st.max || 500}" placeholder="${esc(qzVal(st.ph, a))}" oninput="qzInput(this.value)">${esc(v || '')}</textarea>`;
+    } else if(st.type === 'date'){
+      html += `<input class="field qz-in fnq-date" id="qz-in" type="date" min="1920-01-01" max="${new Date().toISOString().slice(0, 10)}" value="${esc(v || '')}" oninput="qzInput(this.value)" onchange="qzInput(this.value)">`;
     } else {
-      html += `<input class="field" id="fnq-in-${f.k}" type="text" maxlength="${f.max}" placeholder="${esc(fnL(f.ph))}" value="${esc(v)}" oninput="fnFormCheck()">`;
+      if(st.type === 'ask'){
+        const sg = qzList(st.sugg, a);
+        if(sg.length) html += `<div class="qz-sugg">` + sg.map((s, k) => `<button type="button" class="qz-chip${v === s ? ' on' : ''}" onclick="qzSugg(${k})">${esc(s)}</button>`).join('') + `</div>`;
+      }
+      html += `<input class="field qz-in" id="qz-in" type="text" maxlength="${st.max || 150}" placeholder="${esc(qzVal(st.ph, a))}" value="${esc(v || '')}" oninput="qzInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();qzNext()}">`;
     }
-    html += `</div>`;
-  });
+    /* Одиночный выбор перелистывается сам; кнопка нужна остальным и последнему шагу. */
+    if(st.type !== 'chips' || last){
+      html += `<button type="button" class="btn btn-brass btn-wide qz-next" onclick="qzNext()">${esc(nextTx)}</button>`;
+    }
+    if(st.opt && st.type !== 'chips'){
+      html += `<button type="button" class="qz-skip" onclick="qzSkip()">${esc(last ? qzR('Разложить без этого', 'Skip and deal') : qzR('Пропустить', 'Skip'))}</button>`;
+    }
+  }
+  html += `</div></div>`;
   box.innerHTML = html;
-  fnFormCheck();
+
+  const inp = document.getElementById('qz-in');
+  if(inp && st.type !== 'date' && !('ontouchstart' in window)){ setTimeout(() => { try{ inp.focus(); }catch(e){} }, 60); }
 }
 
-function fnChip(btn){
-  const k = btn.getAttribute('data-k');
-  btn.parentNode.querySelectorAll('.fnq-chip').forEach(b => b.classList.toggle('on', b === btn));
+function qzPick(k){
+  const form = qzForm(), st = qzStep();
+  if(!form || !st) return;
+  const o = qzOpts(st, QZ.a)[k];
+  if(!o) return;
   try{ bridge.haptic(); }catch(e){}
-  fnFormCheck();
+  if(st.type === 'multi'){
+    let arr = Array.isArray(QZ.a[st.id]) ? QZ.a[st.id].slice() : [];
+    arr = arr.indexOf(o.v) !== -1 ? arr.filter(x => x !== o.v) : arr.concat([o.v]);
+    QZ.a[st.id] = arr;
+    qzSave(); qzRender();
+    return;
+  }
+  QZ.a[st.id] = o.v;
+  if(typeof st.after === 'function'){ try{ st.after(QZ.a); }catch(e){} }
+  qzSave(); qzRender();
+  if(qzNextIdx(form.steps, QZ.i) !== -1){
+    const at = QZ.i;
+    setTimeout(() => { if(QZ.i === at) qzAdvance(); }, 220);   /* показать выбор и перелистнуть */
+  }
+}
+function qzInput(v){ const st = qzStep(); if(!st) return; QZ.a[st.id] = v; qzSave(); }
+function qzSugg(k){
+  const st = qzStep(); if(!st) return;
+  const s = qzList(st.sugg, QZ.a)[k]; if(!s) return;
+  QZ.a[st.id] = s; qzSave(); qzRender();
+  try{ bridge.haptic(); }catch(e){}
+}
+function qzShake(){
+  const c = document.querySelector('#tb-form .qz-card');
+  if(c){ c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); }
+}
+function qzNext(){
+  const st = qzStep(); if(!st) return;
+  if(!qzValid(st, QZ.a)){
+    qzShake();
+    toast(st.type === 'date' ? qzR('Укажите дату', 'Enter the date') : qzR('Ответьте, чтобы продолжить', 'Answer to continue'));
+    return;
+  }
+  qzAdvance();
+}
+function qzSkip(){ const st = qzStep(); if(!st) return; QZ.a[st.id] = ''; qzAdvance(); }
+function qzAdvance(){
+  const form = qzForm(); if(!form) return;
+  const j = qzNextIdx(form.steps, QZ.i);
+  if(j === -1){ qzSave(); dealSpread(); return; }
+  QZ.hist.push(QZ.i); QZ.i = j;
+  qzSave(); qzRender();
+  if(window.neoGoal) neoGoal('quiz_step', { spread: (S.spread && S.spread.id) || '', step: form.steps[j].id });
+  try{ document.getElementById('tb-form').scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }catch(e){}
+}
+function qzBack(){
+  if(!QZ.hist.length) return;
+  QZ.i = QZ.hist.pop();
+  qzSave(); qzRender();
 }
 
-function fnFieldVal(f){
-  if(f.type === 'chips'){ const on = document.querySelector(`#fnq-${f.k} .fnq-chip.on`); return on ? on.getAttribute('data-v') : ''; }
-  const el = document.getElementById('fnq-in-' + f.k);
-  return el ? el.value.trim() : '';
-}
-function fnFieldOk(f, v){
-  if(f.type === 'chips') return !f.req || !!v;
-  if(f.type === 'date') return f.need ? /^(19[2-9]\d|20\d\d)-\d\d-\d\d$/.test(v) : (!v || /^(19[2-9]\d|20\d\d)-\d\d-\d\d$/.test(v));
-  return !f.need || v.length > 0;
-}
-
-function fnFormCheck(){
-  const form = fnFormFor(S.spread);
-  if(!form) return;
-  const draft = {};
-  form.fields.forEach(f => {
-    const v = fnFieldVal(f);
-    draft[f.k] = v;
-    if(fnFieldOk(f, v)){ const b = document.getElementById('fnq-' + f.k); if(b) b.classList.remove('bad'); }
-  });
-  fnDraftSave(S.spread.id, draft);
-  fnSetDeal(null);
-}
-
-/* Кнопка «Разложить» всегда обычная — никаких процентов и «расскажите подробнее» */
+/* Кнопка «Разложить» для раскладов без квиза */
 function fnSetDeal(){
   const b = document.getElementById('tb-deal');
   if(!b) return;
@@ -8706,41 +9139,41 @@ function fnSetDeal(){
   b.textContent = tt('table_deal');
 }
 
+/* Сбор ответов в тот же формат, что у старой анкеты. Учитываются только шаги
+   выбранной ветки: ответы из брошенной ветки (человек передумал) в ИИ не уходят. */
 function fnCollect(form){
-  const ru = FN_RU();
+  const a = QZ.a, steps = form.steps;
   const details = [];
-  let subject = '', display = '', firstBad = null;
-  form.fields.forEach(f => {
-    const v = fnFieldVal(f);
-    if(!fnFieldOk(f, v) && !firstBad) firstBad = f;
-    if(v) details.push({ label: fnL(f.label), value: v });
-    if(f.subject && v) subject = v.split(/[,;]/).pop().trim();
-    if(f.display && v) display = v;
-  });
-  if(firstBad){
-    const el = document.getElementById('fnq-' + firstBad.k);
-    if(el){
-      el.classList.add('bad', 'shake');
-      setTimeout(() => el.classList.remove('shake'), 450);
-      try{ el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }catch(e){}
-      const inp = document.getElementById('fnq-in-' + firstBad.k); if(inp) setTimeout(() => inp.focus(), 300);
+  let subject = '', display = '';
+  for(let idx = 0; idx < steps.length; idx++){
+    const st = steps[idx];
+    if(st.type === 'echo' || !qzOn(st, a)) continue;
+    if(!qzValid(st, a)){
+      if(QZ.i !== idx){ QZ.hist.push(QZ.i); QZ.i = idx; }
+      qzSave(); qzRender(); qzShake();
+      toast(qzR('Ответьте на этот вопрос', 'Please answer this question'));
+      return { ok: false };
     }
-    toast((ru ? 'Заполните: ' : 'Please fill in: ') + fnL(firstBad.label));
-    return { ok: false };
+    const hv = qzHuman(st, a);
+    if(!hv) continue;
+    details.push({ label: String(qzVal(st.label, a)), value: hv });
+    if(st.subject) subject = hv.split(/[,;]/).pop().trim();
+    if(st.display) display = hv;
   }
+  if(!display && typeof form.display === 'function') display = form.display(a);
   let compat = null;
   if(form.compat){
     compat = {};
-    form.fields.forEach(f => {
-      if(!f.ck) return;
-      if(f.type === 'chips'){ const on = document.querySelector(`#fnq-${f.k} .fnq-chip.on`); compat[f.ck] = on ? (on.getAttribute('data-c') || '') : ''; }
-      else compat[f.ck] = fnFieldVal(f);
+    steps.forEach(st => {
+      if(!st.ck || !qzOn(st, a)) return;
+      const v = a[st.id];
+      compat[st.ck] = v == null ? '' : String(v).trim();
     });
-    if(!display) display = (ru ? 'Совместимость с ' : 'Compatibility with ') + (compat.partner_name || '');
   }
   const question = details.map(x => x.label + ': ' + x.value).join('\n');
   return { ok: true, details, subject, display: display || (details[0] && details[0].value) || '', question, compat };
 }
+/* === NEO-QUIZ:END === */
 
 /* Кнопки под раскладом: только после оплаты пробного (или в обычном платном раскладе) */
 function fnActions(show){
