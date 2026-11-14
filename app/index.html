@@ -8126,7 +8126,7 @@ async function funnelDeal(q, extra){
   }
 }
 
-let FN_SELECTED_PLAN = 'tripwire';
+let FN_SELECTED_PLAN = 'plus';
 let _fnHoldTimer = null;
 
 function fnStartHoldTimer(){
@@ -8179,7 +8179,7 @@ function funnelFogHtml(errText){
   const ru = FN_RU();
   let saved = '';
   try{ saved = localStorage.getItem('neo_email') || ((bridge.webUser && bridge.webUser.email) || ''); }catch(e){}
-  FN_SELECTED_PLAN = 'tripwire';
+  FN_SELECTED_PLAN = 'plus';
 
   return `
     <div class="daily-fog-box fn-fogbox" id="fn-fog">
@@ -8196,7 +8196,7 @@ function funnelFogHtml(errText){
 
         <div class="fn-form">
           <div class="fn-tier-switch">
-            <button type="button" class="fn-tier is-on" data-plan="tripwire" onclick="fnPickTier('tripwire')">
+            <button type="button" class="fn-tier" data-plan="tripwire" onclick="fnPickTier('tripwire')">
               <div>
                 <div class="fn-tier-top">
                   <span class="fn-tier-badge">${esc(ru ? 'Только этот расклад' : 'Single reading')}</span>
@@ -8216,7 +8216,7 @@ function funnelFogHtml(errText){
               </div>
             </button>
 
-            <button type="button" class="fn-tier" data-plan="plus" onclick="fnPickTier('plus')">
+            <button type="button" class="fn-tier is-on" data-plan="plus" onclick="fnPickTier('plus')">
               <div>
                 <div class="fn-tier-top">
                   <span class="fn-tier-badge is-hot">${esc(ru ? 'Выгода −60% · Хит' : 'Save 60% · Best value')}</span>
@@ -8246,7 +8246,7 @@ function funnelFogHtml(errText){
           </div>
 
           <button type="button" class="btn btn-brass btn-wide" id="fn-submit-btn" style="margin-top:4px;min-height:50px;font-size:15.5px" onclick="funnelPay(FN_SELECTED_PLAN)">
-            ${esc(ru ? 'Открыть этот расклад целиком · 199 ₽' : 'Unlock full reading · 199 ₽')}
+            ${esc(ru ? 'Получить полный доступ на месяц · 399 ₽' : 'Get full access for 1 month · 399 ₽')}
           </button>
 
           <label class="fn-agree"><input type="checkbox" id="fn-agree" checked>
