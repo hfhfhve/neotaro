@@ -1482,6 +1482,28 @@ html[data-theme="dawn"] .fn-pos-title{color:#6B4A12}
 html[data-theme="dawn"] .fn-pos-body,html[data-theme="dawn"] .fn-lpoints li,html[data-theme="dawn"] .fn-ind-w{color:#2A1E08}
 html[data-theme="dawn"] .fn-khole-warn{color:#8A3A1E}
 
+/* === NEOTARO: допродажа после оплаты === */
+.fn-up{margin-top:22px}
+.fn-up:empty{display:none}
+.fn-up-wait{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 8px;color:var(--mist);font-size:13.5px;text-align:center}
+.fn-up-card{padding:18px 16px 16px;border-radius:16px;border:1px solid rgba(217,174,95,.55);background:linear-gradient(160deg,rgba(217,174,95,.13),rgba(18,24,41,.94));animation:qzIn .35s ease both}
+.fn-up-card.is-open{border-color:rgba(217,174,95,.35)}
+.fn-up-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-bright);margin-bottom:6px}
+.fn-up-title{font-family:var(--serif);font-size:22px;line-height:1.25;color:var(--ivory);margin-bottom:6px}
+.fn-up-sub{font-size:14px;line-height:1.5;color:var(--mist);margin:0 0 6px}
+.fn-up-cards{margin:12px 0}
+.fn-up-cards img{width:62px}
+.fn-up-teaser{margin:4px 0 14px}
+.fn-up-note{font-size:12px;line-height:1.5;color:var(--mist);text-align:center;margin:10px 0 0}
+.fn-up-note a{text-decoration:underline;text-underline-offset:2px}
+.fn-hold-timer.is-save{background:rgba(214,120,90,.14);border-color:rgba(214,120,90,.5);color:#F0B49C}
+.fn-hold-timer.is-save b{color:#FFD2BF}
+.fn-tier.is-save{box-shadow:0 10px 30px -10px rgba(217,174,95,.55),inset 0 0 0 1px rgba(217,174,95,.4)}
+html[data-theme="dawn"] .fn-up-card{background:linear-gradient(160deg,rgba(217,174,95,.16),#FFFFFF)}
+html[data-theme="dawn"] .fn-up-title{color:#2A1E08}
+html[data-theme="dawn"] .fn-hold-timer.is-save{color:#8A3A1E}
+html[data-theme="dawn"] .fn-hold-timer.is-save b{color:#6B2A12}
+
 /* === NEOTARO: хук перед туманом === */
 .fn-hook{position:relative;margin:16px 0 4px;padding:13px 15px;border-radius:12px;border-left:3px solid #D9AE5F;
   background:linear-gradient(90deg,rgba(217,174,95,.14),rgba(217,174,95,.02));font-family:var(--serif);font-size:16px;line-height:1.5;color:#F2D49A}
@@ -2280,7 +2302,7 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
 
         <!-- ============ СТОЛ ============ -->
         <section class="view" id="v-table">
-          <button class="btn btn-quiet btn-sm" onclick="go('spreads')" style="margin-bottom:24px" data-t="back">← Назад</button>
+          <button class="btn btn-quiet btn-sm" onclick="tbBack()" style="margin-bottom:24px" data-t="back">← Назад</button>
           <div class="ritual">
             <div class="eyebrow" style="margin-bottom:12px"><span id="tb-cards">—</span> · <span id="tb-price">—</span></div>
             <h1 class="h1" id="tb-name">—</h1>
@@ -3989,7 +4011,7 @@ function requireAuth(intent){
 }
 
 async function api(endpoint, method = 'POST', data = {}, silent = false){
-  const isHeavy = /\/funnel\/(spread|checkout)|\/tarot\/(daily|spread|synastry)|\/free\/(daily|yesno)|\/chat\/send|\/astro\/(chart|reading)|\/matrix\/(get|reading|compat)|\/stt\//.test(endpoint);
+  const isHeavy = /\/funnel\/(spread|checkout|upsell)|\/tarot\/(daily|spread|synastry)|\/free\/(daily|yesno)|\/chat\/send|\/astro\/(chart|reading)|\/matrix\/(get|reading|compat)|\/stt\//.test(endpoint);
   const timeoutMs = isHeavy ? 45000 : 18000;
   const maxAttempts = isHeavy ? 2 : 3;
 
@@ -8196,6 +8218,7 @@ async function funnelDeal(q, extra){
     S.spread.reqBase = null;
     FN.id = data.spread_id; FN.k = data.view_key; FN.q = shown; FN.picked = picked;
     FN.plans = data.plans || FN.plans || null;
+    FN.shownAt = Date.now(); FN.paidView = false; FN.up = null;
     fnSave();
     funnelRenderLocked(data.teaser || '');
     if(window.neoGoal) neoGoal('funnel_teaser_shown', { spread: S.spread.id });
@@ -8249,19 +8272,69 @@ async function fnResumeLast(){
 let FN_SELECTED_PLAN = 'plus';
 let _fnHoldTimer = null;
 
+/* ---------- цены тарифов воронки (с сервера, с запасными числами) ---------- */
+const FN_PRICE_FALLBACK = { tripwire: 199, tripwire_save: 99, plus: 399, pro: 699, upsell: 149 };
+function fnPlanPrice(plan){
+  const p = FN.plans && FN.plans[plan] && FN.plans[plan].price;
+  return p || FN_PRICE_FALLBACK[plan] || 199;
+}
+
+/* ---------- СКИДКА ПРИ УХОДЕ ----------
+   Один раз на расклад: кнопка «Назад», возврат на вкладку после ухода, отменённая оплата.
+   Тот же расклад и те же 3 дня доступа, дешевле, с настоящим таймером: когда он
+   доходит до нуля, скидка исчезает и возвращается обычная цена. */
+const FN_SAVE_MINUTES = 10;
+function fnSaveKey(){ return 'neo_save_' + (FN.id || ''); }
+function fnSaveEnd(){ if(!FN.id) return 0; try{ return parseInt(localStorage.getItem(fnSaveKey()) || '0', 10) || 0; }catch(e){ return 0; } }
+function fnSaveActive(){ return fnSaveEnd() > Date.now(); }
+function fnOfferSave(reason){
+  if(!FN.id || FN.paidView || fnSaveEnd()) return false;               /* уже оплачено или скидку уже показывали */
+  if(!document.getElementById('fn-fog')) return false;                  /* на экране нет оплаты */
+  if(!(FN.plans && FN.plans.tripwire_save)) return false;               /* сервер ещё не знает про скидку */
+  if(FN.shownAt && Date.now() - FN.shownAt < 21000) return false;       /* сервер принимает скидку через 20 с */
+  try{ localStorage.setItem(fnSaveKey(), String(Date.now() + FN_SAVE_MINUTES * 60 * 1000)); }catch(e){ return false; }
+  funnelRenderLocked(FN.teaser || '');
+  const fog = document.getElementById('fn-fog'), sc = document.getElementById('scroll');
+  if(fog && sc){
+    const top = fog.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop - 12;
+    try{ sc.scrollTo({ top: Math.max(0, top), behavior: 'smooth' }); }catch(e){ sc.scrollTop = Math.max(0, top); }
+  }
+  try{ bridge.haptic('ok'); }catch(e){}
+  if(window.neoGoal) neoGoal('downsell_shown', { reason: reason || '', spread: FN.id });
+  return true;
+}
+/* «← Назад» на экране расклада: первое нажатие на неоплаченном раскладе показывает скидку. */
+function tbBack(){
+  if(fnOfferSave('back')) return;
+  go('spreads');
+}
+(function(){
+  let hiddenAt = 0;
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){ hiddenAt = Date.now(); return; }
+    if(hiddenAt && Date.now() - hiddenAt > 5000) fnOfferSave('return');
+    hiddenAt = 0;
+  });
+})();
+
 function fnStartHoldTimer(){
   clearInterval(_fnHoldTimer);
   const el = document.getElementById('fn-hold-clock');
   if(!el) return;
+  const saveMode = fnSaveActive();
   const key = 'neo_hold_' + (FN.id || 'cur');
   let end = 0;
-  try{
-    end = parseInt(sessionStorage.getItem(key) || '0', 10);
-    if(!end || end < Date.now()){
-      end = Date.now() + 15 * 60 * 1000;
-      sessionStorage.setItem(key, String(end));
-    }
-  }catch(e){ end = Date.now() + 15 * 60 * 1000; }
+  if(saveMode){
+    end = fnSaveEnd();
+  } else {
+    try{
+      end = parseInt(sessionStorage.getItem(key) || '0', 10);
+      if(!end || end < Date.now()){
+        end = Date.now() + 15 * 60 * 1000;
+        sessionStorage.setItem(key, String(end));
+      }
+    }catch(e){ end = Date.now() + 15 * 60 * 1000; }
+  }
 
   function tick(){
     const node = document.getElementById('fn-hold-clock');
@@ -8270,6 +8343,11 @@ function fnStartHoldTimer(){
     const m = String(Math.floor(left / 60)).padStart(2, '0');
     const s = String(left % 60).padStart(2, '0');
     node.textContent = m + ':' + s;
+    if(saveMode && left <= 0){
+      /* Скидка закончилась по-настоящему: возвращаем обычные цены. */
+      clearInterval(_fnHoldTimer);
+      if(document.getElementById('fn-fog')) funnelRenderLocked(FN.teaser || '');
+    }
   }
   tick();
   _fnHoldTimer = setInterval(tick, 1000);
@@ -8283,14 +8361,15 @@ function fnPickTier(plan){
   const btn = document.getElementById('fn-submit-btn');
   if(btn){
     const ru = FN_RU();
+    const price = fnPlanPrice(plan);
     if(plan === 'plus'){
       btn.textContent = ru
-        ? 'Получить полный доступ на месяц · 399 ₽'
-        : 'Get full access for 1 month · 399 ₽';
+        ? 'Получить полный доступ на месяц · ' + price + ' ₽'
+        : 'Get full access for 1 month · ' + price + ' ₽';
     } else {
       btn.textContent = ru
-        ? 'Открыть этот расклад целиком · 199 ₽'
-        : 'Unlock this reading · 199 ₽';
+        ? 'Открыть этот расклад целиком · ' + price + ' ₽'
+        : 'Unlock this reading · ' + price + ' ₽';
     }
   }
 }
@@ -8300,6 +8379,12 @@ function funnelFogHtml(errText){
   let saved = '';
   try{ saved = localStorage.getItem('neo_email') || ((bridge.webUser && bridge.webUser.email) || ''); }catch(e){}
   FN_SELECTED_PLAN = 'plus';
+  /* Скидка при уходе активна: вместо «расклад за 199» — тот же расклад дешевле, он же выбран. */
+  const save = fnSaveActive();
+  const twPlan = save ? 'tripwire_save' : 'tripwire';
+  const twPrice = fnPlanPrice(twPlan), twOld = save ? fnPlanPrice('tripwire') : 390;
+  if(save) FN_SELECTED_PLAN = 'tripwire_save';
+  const plusPrice = fnPlanPrice('plus');
   /* Энергия тарифов — из БД (приходит в ответе /funnel/spread и /funnel/status), а не зашита в вёрстку. */
   const pl = FN.plans || {};
   const twEn = (pl.tripwire && pl.tripwire.energy) || 5;
@@ -8312,21 +8397,23 @@ function funnelFogHtml(errText){
     <div class="daily-fog-box fn-fogbox" id="fn-fog">
       <div class="fn-mist" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="daily-fog-card">
-        <span class="daily-fog-badge">${IC.spark} ${esc(ru ? 'Продолжение расклада готово' : 'Full reading is ready')}</span>
-        <div class="daily-fog-title">${esc(ru ? 'Снимите туман с остальных карт' : 'Read the complete spread')}</div>
-        <p class="daily-fog-sub" style="margin-bottom:8px">${esc(ru ? 'Оракул уже связал все выпавшие карты в единый прогноз. Выберите формат доступа:' : 'All cards for your situation are drawn. Choose your access:')}</p>
+        <span class="daily-fog-badge">${IC.spark} ${esc(save ? (ru ? 'Скидка только для вас' : 'A discount just for you') : (ru ? 'Продолжение расклада готово' : 'Full reading is ready'))}</span>
+        <div class="daily-fog-title">${esc(save ? (ru ? 'Не уходите, не узнав ответа' : 'Don\'t leave without the answer') : (ru ? 'Снимите туман с остальных карт' : 'Read the complete spread'))}</div>
+        <p class="daily-fog-sub" style="margin-bottom:8px">${esc(save
+          ? (ru ? ('Мы придержали для вас цену ' + twPrice + ' ₽ вместо ' + twOld + ' ₽. Это тот же полный расклад и те же 3 дня доступа.') : ('We held a price of ' + twPrice + ' ₽ instead of ' + twOld + ' ₽ for you.'))
+          : (ru ? 'Оракул уже связал все выпавшие карты в единый прогноз. Выберите формат доступа:' : 'All cards for your situation are drawn. Choose your access:'))}</p>
 
-        <div class="fn-hold-timer">
+        <div class="fn-hold-timer${save ? ' is-save' : ''}">
           <span class="fn-hold-dot"></span>
-          <span>${esc(ru ? 'Спеццена к вашему первому раскладу:' : 'Special offer held for:')} <b id="fn-hold-clock">15:00</b></span>
+          <span>${esc(save ? (ru ? 'Скидка сгорит через:' : 'Discount ends in:') : (ru ? 'Спеццена к вашему первому раскладу:' : 'Special offer held for:'))} <b id="fn-hold-clock">${save ? (String(FN_SAVE_MINUTES).padStart(2, '0') + ':00') : '15:00'}</b></span>
         </div>
 
         <div class="fn-form">
           <div class="fn-tier-switch">
-            <button type="button" class="fn-tier" data-plan="tripwire" onclick="fnPickTier('tripwire')">
+            <button type="button" class="fn-tier${save ? ' is-on is-save' : ''}" data-plan="${twPlan}" onclick="fnPickTier('${twPlan}')">
               <div>
                 <div class="fn-tier-top">
-                  <span class="fn-tier-badge">${esc(ru ? 'Только этот расклад' : 'Single reading')}</span>
+                  <span class="fn-tier-badge${save ? ' is-hot' : ''}">${esc(save ? (ru ? 'Скидка только сейчас' : 'Only now') : (ru ? 'Только этот расклад' : 'Single reading'))}</span>
                   <span class="fn-tier-radio"></span>
                 </div>
                 <div class="fn-tier-name">${esc(ru ? 'Открыть расклад' : 'Unlock reading')}</div>
@@ -8337,13 +8424,13 @@ function funnelFogHtml(errText){
                 </ul>
               </div>
               <div class="fn-tier-pwrap">
-                <span class="fn-tier-old">390 ₽</span>
-                <span class="fn-tier-price">199 ₽</span>
+                <span class="fn-tier-old">${twOld} ₽</span>
+                <span class="fn-tier-price">${twPrice} ₽</span>
                 <span class="fn-tier-per">${esc(ru ? 'разово' : 'once')}</span>
               </div>
             </button>
 
-            <button type="button" class="fn-tier is-on" data-plan="plus" onclick="fnPickTier('plus')">
+            <button type="button" class="fn-tier${save ? '' : ' is-on'}" data-plan="plus" onclick="fnPickTier('plus')">
               <div>
                 <div class="fn-tier-top">
                   <span class="fn-tier-badge is-hot">${esc(ru ? 'Выгода −60% · Хит' : 'Save 60% · Best value')}</span>
@@ -8358,7 +8445,7 @@ function funnelFogHtml(errText){
               </div>
               <div class="fn-tier-pwrap">
                 <span class="fn-tier-old">990 ₽</span>
-                <span class="fn-tier-price">399 ₽</span>
+                <span class="fn-tier-price">${plusPrice} ₽</span>
                 <span class="fn-tier-per">${esc(ru ? 'за месяц' : '/ month')}</span>
               </div>
             </button>
@@ -8374,7 +8461,9 @@ function funnelFogHtml(errText){
           </div>
 
           <button type="button" class="btn btn-brass btn-wide" id="fn-submit-btn" style="margin-top:4px;min-height:50px;font-size:15.5px" onclick="funnelPay(FN_SELECTED_PLAN)">
-            ${esc(ru ? 'Получить полный доступ на месяц · 399 ₽' : 'Get full access for 1 month · 399 ₽')}
+            ${esc(save
+              ? (ru ? ('Открыть этот расклад целиком · ' + twPrice + ' ₽') : ('Unlock this reading · ' + twPrice + ' ₽'))
+              : (ru ? ('Получить полный доступ на месяц · ' + plusPrice + ' ₽') : ('Get full access for 1 month · ' + plusPrice + ' ₽')))}
           </button>
 
           <label class="fn-agree"><input type="checkbox" id="fn-agree" checked>
@@ -8387,6 +8476,7 @@ function funnelFogHtml(errText){
 
 function funnelRenderLocked(teaser, errText){
   const out = document.getElementById('tb-reading');
+  FN.teaser = teaser || FN.teaser || '';
   out.innerHTML = `<div class="daily-teaser-wrap"><div class="daily-teaser-text">${clean(teaser || '')}</div>${funnelFogHtml(errText)}</div>`;
   fnActions(false);
   fnMistWatch();
@@ -8439,8 +8529,7 @@ async function funnelPay(plan){
   ['fn-submit-btn','fn-pay-tw','fn-pay-plus','fn-pay-pro'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = true; });
   try{ localStorage.setItem('neo_email', email); }catch(e){}
 
-  const priceMap = { tripwire: 199, plus: 399, pro: 699 };
-  const price = priceMap[plan] || 199;
+  const price = fnPlanPrice(plan);
   S.payMeta = { goal: 'purchase_funnel', price: price, kind: 'funnel', item: plan };
 
   const d = await api('/funnel/checkout', 'POST', { spread_id: FN.id, view_key: FN.k, email: email, plan: plan, agree: agree, utm: fnUtm() }, true);
@@ -8542,6 +8631,8 @@ async function funnelPoll(id, k){
   funnelRenderLocked((last && last.teaser) || '', FN_RU()
     ? ((last && last.canceled) ? 'Оплата не прошла — попробуйте ещё раз' : 'Оплата ещё не подтвердилась. Если вы оплатили — разбор придёт на почту в течение нескольких минут.')
     : 'Payment not confirmed yet.');
+  /* Оплату отменили — один раз предлагаем тот же расклад дешевле. */
+  if(last && last.canceled) setTimeout(() => fnOfferSave('canceled'), 700);
 }
 
 function funnelRenderPaid(d){
@@ -8556,7 +8647,7 @@ function funnelRenderPaid(d){
   const n = typeof d.energy === 'number' ? d.energy
     : ((pl[d.plan] && pl[d.plan].energy) || (pl.tripwire && pl.tripwire.energy) || 5);
   FN.paidView = true;
-  document.getElementById('tb-reading').innerHTML = '<div class="fn-reveal">' + clean(FN.full) + '</div>' + `
+  document.getElementById('tb-reading').innerHTML = '<div class="fn-reveal">' + clean(FN.full) + '</div><div id="fn-up" class="fn-up"></div>' + `
     <div class="fn-upsell">
       <div class="fn-upsell-t">${esc(ru ? 'Остались вопросы по раскладу?' : 'Questions about your spread?')}</div>
       <p>${esc(ru ? ('У вас на балансе ' + n + ' ⚡ энергии — обсудите расклад с Оракулом') : ('You have ' + n + ' ⚡ energy — discuss the spread with the Oracle'))}</p>
@@ -8570,11 +8661,182 @@ function funnelRenderPaid(d){
     const key = 'neo_funnel_goal_' + FN.id;
     if(window.neoGoal && !localStorage.getItem(key)){
       localStorage.setItem(key, '1');
-      const paidPrice = d.plan === 'pro' ? 699 : (d.plan === 'plus' ? 399 : 199);
+      const paidPrice = fnPlanPrice(d.plan || 'tripwire');
       neoGoal('purchase', { kind: 'funnel', item: d.plan || '', order_price: paidPrice });
     }
     localStorage.removeItem('neo_funnel');
   }catch(e){}
+  /* Допродажа сразу после оплаты (к самой допродаже не предлагаем). */
+  if(d.plan !== 'upsell') fnLoadUpsell();
+}
+
+/* ============================================================
+   ДОПРОДАЖА ПОСЛЕ ОПЛАТЫ
+   Сервер сам решает, что и кому предлагать (/funnel/upsell/offer):
+     buy    — купил за 199/99: расклад «Совместимость с {имя}» уже сделан и закрыт,
+              оплата в 1 клик по сохранённой карте или обычной оплатой;
+     energy — купил месяц: ничего не продаём, кнопка сделать расклад за энергию;
+     null   — в раскладе нет конкретного человека или это не романтика: ничего не показываем.
+   ============================================================ */
+function fnUpTitles(o){
+  const n = o.name || '';
+  if(o.kind === 'compat') return {
+    t: 'Совместимость: вы и ' + n,
+    s: 'Что на самом деле связывает вас, где главный риск для пары и есть ли у вас будущее.'
+  };
+  return {
+    t: 'Что ' + n + ' чувствует к вам',
+    s: 'Что ' + n + ' на самом деле чувствует, что скрывает и чего ждать дальше.'
+  };
+}
+
+async function fnLoadUpsell(){
+  const box = document.getElementById('fn-up');
+  if(!box || !FN.id || !FN.k) return;
+  const baseId = FN.id;
+  box.innerHTML = `<div class="fn-up-wait"><span class="spin"></span>${esc('Оракул смотрит, что ещё карты говорят о вашей ситуации…')}</div>`;
+  const res = await api('/funnel/upsell/offer', 'POST', { spread_id: FN.id, view_key: FN.k }, true);
+  if(FN.id !== baseId) return;                       /* человек уже ушёл к другому раскладу */
+  const cur = document.getElementById('fn-up');
+  const o = res && res.success && res.offer;
+  if(!cur) return;
+  if(!o){ cur.innerHTML = ''; return; }
+  FN.up = o;
+  fnRenderUpsell();
+  if(window.neoGoal) neoGoal('upsell_view', { mode: o.mode, kind: o.kind });
+}
+
+function fnRenderUpsell(errText){
+  const box = document.getElementById('fn-up');
+  const o = FN.up;
+  if(!box || !o) return;
+  const T = fnUpTitles(o);
+  if(o.mode === 'energy'){
+    box.innerHTML = `<div class="fn-up-card">
+      <div class="fn-up-eyebrow">${esc('Следующий шаг')}</div>
+      <div class="fn-up-title">${esc(T.t)}</div>
+      <p class="fn-up-sub">${esc(T.s)}</p>
+      <button type="button" class="btn btn-brass btn-wide" onclick="fnUpsellEnergy()">${esc('Сделать расклад · ' + o.cost + ' ⚡')}</button>
+      <p class="fn-up-note">${esc('Энергия спишется из вашей подписки — доплачивать ничего не нужно.')}</p>
+    </div>`;
+    return;
+  }
+  if(o.paid){
+    box.innerHTML = `<div class="fn-up-card is-open">
+      <div class="fn-up-eyebrow">${esc('Открыто · копия уже на почте')}</div>
+      <div class="fn-up-title">${esc(T.t)}</div>
+      <div class="spread-out fn-up-cards">${(o.cards || []).map(id => `<img src="${CARD_IMG(id)}" alt="">`).join('')}</div>
+      <div class="reading fn-reveal">${clean(o.interpretation || '')}</div>
+    </div>`;
+    return;
+  }
+  const btn = o.one_click
+    ? ('Открыть за ' + o.price + ' ₽' + (o.card ? ' · ' + o.card : ''))
+    : ('Открыть за ' + o.price + ' ₽');
+  const note = o.one_click
+    ? 'Спишем с карты, которой вы только что оплатили, — вводить ничего не нужно. Разовая покупка, без подписки.'
+    : 'Разовая покупка, без подписки. Копия расклада придёт на почту.';
+  box.innerHTML = `<div class="fn-up-card" id="fn-up-card">
+    <div class="fn-up-eyebrow">${esc('Карты уже легли · только для вас')}</div>
+    <div class="fn-up-title">${esc(T.t)}</div>
+    <p class="fn-up-sub">${esc(T.s)}</p>
+    <div class="spread-out fn-up-cards">${(o.cards || []).map(id => `<img src="${CARD_IMG(id)}" alt="">`).join('')}</div>
+    <div class="daily-teaser-text fn-up-teaser">${clean(o.teaser || '')}</div>
+    <div class="fn-err-top${errText ? ' is-on' : ''}" id="fn-up-err">${esc(errText || '')}</div>
+    <button type="button" class="btn btn-brass btn-wide" id="fn-up-btn" style="min-height:50px" onclick="fnBuyUpsell()">${esc(btn)}</button>
+    <p class="fn-up-note">${esc(note)} Нажимая кнопку, вы принимаете <a href="/oferta/" target="_blank" rel="noopener">оферту</a>.</p>
+  </div>`;
+}
+
+function fnUpsellPaid(html){
+  const o = FN.up;
+  if(!o) return;
+  o.paid = true;
+  o.interpretation = html || '';
+  fnRenderUpsell();
+  try{ bridge.haptic('ok'); }catch(e){}
+  try{
+    const key = 'neo_funnel_goal_' + o.spread_id;
+    if(window.neoGoal && !localStorage.getItem(key)){
+      localStorage.setItem(key, '1');
+      neoGoal('purchase', { kind: 'upsell', item: o.kind, order_price: o.price });
+    }
+  }catch(e){}
+}
+
+async function fnBuyUpsell(){
+  const o = FN.up;
+  if(!o || o.paid || o.busy) return;
+  o.busy = true;
+  const btn = document.getElementById('fn-up-btn');
+  const label = btn ? btn.textContent : '';
+  const fail = (msg) => {
+    o.busy = false;
+    if(btn){ btn.disabled = false; btn.textContent = label; }
+    const e = document.getElementById('fn-up-err');
+    if(e){ e.textContent = msg; e.classList.remove('is-on'); void e.offsetWidth; e.classList.add('is-on'); }
+  };
+  if(btn){ btn.disabled = true; btn.textContent = 'Оплачиваем…'; }
+  if(window.neoGoal) neoGoal('purchase_start', { kind: 'upsell', item: o.kind, order_price: o.price });
+
+  /* 1) В 1 клик по сохранённой карте */
+  if(o.one_click){
+    const r = await api('/funnel/upsell/buy', 'POST', { spread_id: o.spread_id, view_key: o.view_key }, true);
+    if(r && r.success && r.paid){ o.busy = false; fnUpsellPaid(r.interpretation); return; }
+    if(r && r.success && r.pending){
+      for(let i = 0; i < 24; i++){
+        await new Promise(res => setTimeout(res, 2500));
+        const s = await api('/funnel/status/' + o.spread_id + '?k=' + encodeURIComponent(o.view_key), 'GET', null, true);
+        if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(s.interpretation); return; }
+        if(s && s.success && s.canceled) break;
+      }
+    }
+    /* иначе — обычная оплата ниже */
+  }
+
+  /* 2) Обычная оплата через ЮKassa */
+  let email = o.email || '';
+  try{ email = email || localStorage.getItem('neo_email') || ''; }catch(e){}
+  if(!email){ fail('Не нашли ваш email — обновите страницу и попробуйте ещё раз'); return; }
+  const d = await api('/funnel/checkout', 'POST', { spread_id: o.spread_id, view_key: o.view_key, email: email, plan: 'upsell', agree: true, utm: fnUtm() }, true);
+  if(d && d.success && d.already_paid){
+    const s = await api('/funnel/status/' + o.spread_id + '?k=' + encodeURIComponent(o.view_key), 'GET', null, true);
+    if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(s.interpretation); return; }
+  }
+  if(!(d && d.success && d.invoice_url)){ fail('Не удалось создать оплату, попробуйте ещё раз'); return; }
+  if(bridge.isWeb){
+    /* После оплаты ЮKassa вернёт на ?paid_spread=<этот расклад> — он откроется целиком. */
+    FN.id = o.spread_id; FN.k = o.view_key; FN.q = fnUpTitles(o).t; FN.picked = o.cards || [];
+    fnSave();
+    location.href = d.invoice_url;
+    return;
+  }
+  bridge.openLink(d.invoice_url);
+  toast(tt('pay_wait'));
+  for(let i = 0; i < 72; i++){
+    await new Promise(res => setTimeout(res, 2500));
+    const s = await api('/funnel/status/' + o.spread_id + '?k=' + encodeURIComponent(o.view_key), 'GET', null, true);
+    if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(s.interpretation); return; }
+    if(s && s.success && s.canceled) break;
+  }
+  fail('Оплата не подтвердилась. Если вы оплатили — расклад придёт на почту.');
+}
+
+/* Купил месяц: открываем квиз нужного расклада с уже вписанным именем — расклад за энергию. */
+async function fnUpsellEnergy(){
+  const o = FN.up;
+  if(!o) return;
+  const id = o.kind === 'compat' ? 'compat' : 'feelings';
+  const a = { name: o.name };
+  if(o.gender) a.gender = o.gender;
+  if(id === 'compat' && o.relation) a.role = o.relation;
+  fnDraftSave(id, { v: 2, a: a, i: -1, hist: [] });
+  if(window.neoGoal) neoGoal('upsell_energy_click', { kind: o.kind });
+  if(!S.spreads || !S.spreads.length){
+    const d = await api('/spreads?lang=' + encodeURIComponent(lang || 'ru'), 'GET', {}, true);
+    if(d && d.success && d.spreads) S.spreads = d.spreads;
+  }
+  if((S.spreads || []).find(x => x.id === id)) pickSpread(id); else go('spreads');
 }
 
 function funnelDiscuss(){
@@ -9007,11 +9269,28 @@ function fnRenderForm(prefill){
   QZ.i = ok && typeof d.i === 'number' ? d.i : -1;
   if(prefill){ const ds = form.steps.find(s => s.display); if(ds && !QZ.a[ds.id]) QZ.a[ds.id] = prefill; }
   if(QZ.i < 0 || QZ.i >= form.steps.length || !qzOn(form.steps[QZ.i], QZ.a)){
-    QZ.i = qzNextIdx(form.steps, -1);
-    QZ.hist = [];
+    const f = qzFirstOpen(form.steps);
+    QZ.i = f.i;
+    QZ.hist = f.hist;
   }
   qzSave();
   qzRender();
+}
+
+/* Первый неотвеченный вопрос: если имя и пол уже известны (допродажа после оплаты),
+   не спрашиваем их заново. Пройденные шаги кладём в историю — «Назад» к ним работает. */
+function qzFirstOpen(steps){
+  const hist = [];
+  let i = qzNextIdx(steps, -1);
+  while(i !== -1){
+    const st = steps[i];
+    if(st.type !== 'echo' && !qzHuman(st, QZ.a)) return { i: i, hist: hist };
+    const j = qzNextIdx(steps, i);
+    if(j === -1) return { i: i, hist: hist };
+    hist.push(i);
+    i = j;
+  }
+  return { i: qzNextIdx(steps, -1), hist: [] };
 }
 
 function qzRender(){
