@@ -8305,7 +8305,6 @@ async function funnelPay(plan){
   const priceMap = { tripwire: 199, plus: 399, pro: 699 };
   const price = priceMap[plan] || 199;
   S.payMeta = { goal: 'purchase_funnel', price: price, kind: 'funnel', item: plan };
-  if(window.neoGoal) neoGoal('purchase_start', { kind: 'funnel', item: plan, order_price: price });
 
   const d = await api('/funnel/checkout', 'POST', { spread_id: FN.id, view_key: FN.k, email: email, plan: plan, agree: agree, utm: fnUtm() }, true);
   ['fn-submit-btn','fn-pay-tw','fn-pay-plus','fn-pay-pro'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = false; });
@@ -8313,14 +8312,17 @@ async function funnelPay(plan){
   if(d && d.success && d.already_paid){ funnelPoll(FN.id, FN.k); return; }
   if(!(d && d.success && d.invoice_url)){
     const m = d && d.message;
+    if(m === 'not_found'){ try{ localStorage.removeItem('neo_funnel'); }catch(e){} }
     fnShowError(
       m === 'email_invalid' ? (ru ? '↑ Проверьте правильность email' : 'Check your email')
       : m === 'need_agree' ? (ru ? 'Поставьте галочку согласия с условиями' : 'Please accept the offer')
+      : m === 'not_found' ? (ru ? 'Расклад устарел — обновите страницу и разложите карты заново' : 'Reading expired — please refresh and draw cards again')
       : (ru ? 'Не удалось создать оплату, попробуйте ещё раз' : 'Could not create payment, try again'),
       m === 'email_invalid'
     );
     return;
   }
+  if(window.neoGoal) neoGoal('purchase_start', { kind: 'funnel', item: plan, order_price: price });
   if(d.neotaro_token){
     try{
       localStorage.setItem('neotaro_token', d.neotaro_token);
