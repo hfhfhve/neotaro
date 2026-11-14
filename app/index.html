@@ -8077,7 +8077,9 @@ async function funnelDeal(q, extra){
   if(window.neoGoal) neoGoal('funnel_spread_start', { spread: S.spread.id });
 
   const wait = new Promise(r => setTimeout(r, 3200));
-  const body = { spread_type: S.spread.id, cards: picked, question: q, lang: lang || 'ru' };
+  let savedMail = '';
+  try{ savedMail = localStorage.getItem('neo_email') || ''; }catch(e){}
+  const body = { spread_type: S.spread.id, cards: picked, question: q, lang: lang || 'ru', guest_email: savedMail };
   if(extra){ body.details = extra.details; body.subject_name = extra.subject || ''; if(extra.compat) body.compat = extra.compat; }
 
   /* До 2 автоматических попыток на случай сетевого чиха или долгого ответа LLM */
@@ -8242,6 +8244,7 @@ function funnelFogHtml(errText){
             <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email"
               placeholder="${esc(ru ? 'Ваш email для открытия и копии расклада' : 'Your email for the reading copy')}"
               value="${esc(saved)}"
+              onblur="fnSaveEmailInput(this.value)"
               oninput="this.classList.remove('is-err');var e=document.getElementById('fn-err');if(e)e.classList.remove('is-on')">
           </div>
 
@@ -8350,10 +8353,21 @@ async function funnelPay(plan){
   }
 }
 
-function funnelResume(){
+function fnSaveEmailInput(val){
+  const email = (val || '').trim().toLowerCase();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return;
+  try{ localStorage.setItem('neo_email', email); }catch(e){}
+  if(FN.id && FN.k){
+    api('/funnel/save-email', 'POST', { spread_id: FN.id, view_key: FN.k, email: email }, true);
+  }
+}
+
+async function funnelResume(){
   if(FN.resumed) return;
   const p = new URLSearchParams(location.search);
-  const id = parseInt(p.get('paid_spread') || '', 10);
+  const paidId = parseInt(p.get('paid_spread') || '', 10);
+  const resumeId = parseInt(p.get('resume_spread') || '', 10);
+  const id = paidId || resumeId;
   if(!id) return;
   FN.resumed = true;
   const saved = fnLoad() || {};
@@ -8362,6 +8376,22 @@ function funnelResume(){
   FN.q = saved.id === id ? (saved.q || '') : '';
   FN.picked = saved.id === id ? (saved.picked || []) : [];
   try{ history.replaceState(null, '', location.pathname + '#table'); }catch(e){}
+
+  if(resumeId && !paidId){
+    const d = await api('/funnel/status/' + FN.id + '?k=' + encodeURIComponent(FN.k || ''), 'GET', null, true);
+    if(d && d.success){
+      if(d.email){ try{ localStorage.setItem('neo_email', d.email); }catch(e){} }
+      if(d.paid){ funnelRenderPaid(d); return; }
+      FN.q = d.question || FN.q;
+      FN.picked = d.cards || FN.picked;
+      fnSave();
+      fnShowTable(FN.q, FN.picked);
+      funnelRenderLocked(d.teaser || '');
+      if(window.neoGoal) neoGoal('funnel_reminder_open');
+      return;
+    }
+  }
+
   fnShowTable(FN.q, FN.picked);
   funnelPoll(FN.id, FN.k);
 }
