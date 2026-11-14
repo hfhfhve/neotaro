@@ -9119,17 +9119,66 @@ function qzSkip(){ const st = qzStep(); if(!st) return; QZ.a[st.id] = ''; qzAdva
 function qzAdvance(){
   const form = qzForm(); if(!form) return;
   const j = qzNextIdx(form.steps, QZ.i);
+  qzBlurInput();
   if(j === -1){ qzSave(); dealSpread(); return; }
   QZ.hist.push(QZ.i); QZ.i = j;
   qzSave(); qzRender();
   if(window.neoGoal) neoGoal('quiz_step', { spread: (S.spread && S.spread.id) || '', step: form.steps[j].id });
-  try{ document.getElementById('tb-form').scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }catch(e){}
+  qzScrollTop();
 }
 function qzBack(){
   if(!QZ.hist.length) return;
+  qzBlurInput();
   QZ.i = QZ.hist.pop();
   qzSave(); qzRender();
+  qzScrollTop();
 }
+
+/* ---------- мобильная клавиатура ----------
+   iOS и Яндекс.Браузер при открытии клавиатуры сдвигают всю страницу вверх. Если поле
+   ввода исчезает (следующий шаг квиза) раньше, чем клавиатура спряталась, страница
+   так и остаётся сдвинутой: нижнее меню посередине, под ним пустота. Возвращаем на место. */
+function qzBlurInput(){
+  const ae = document.activeElement;
+  if(ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA')){ try{ ae.blur(); }catch(e){} }
+}
+function qzResetViewport(){
+  const ae = document.activeElement;
+  if(ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable)) return;  /* клавиатура ещё нужна */
+  if((window.scrollY || window.pageYOffset || 0) !== 0 || document.documentElement.scrollTop || document.body.scrollTop){
+    try{ window.scrollTo(0, 0); }catch(e){}
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
+}
+function qzScrollTop(){
+  /* Крутим только внутреннюю область приложения, а не всю страницу (scrollIntoView двигал и её). */
+  const sc = document.getElementById('scroll'), box = document.getElementById('tb-form');
+  if(sc && box && sc.getBoundingClientRect){
+    const top = box.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop - 16;
+    if(top < sc.scrollTop){ try{ sc.scrollTo({ top: Math.max(0, top), behavior: 'smooth' }); }catch(e){ sc.scrollTop = Math.max(0, top); } }
+  }
+  setTimeout(qzResetViewport, 60);
+  setTimeout(qzResetViewport, 380);
+}
+(function(){
+  if(window.__qzViewportFix) return;
+  window.__qzViewportFix = true;
+  document.addEventListener('focusout', function(e){
+    const t = e.target;
+    if(!t || (t.tagName !== 'INPUT' && t.tagName !== 'TEXTAREA')) return;
+    setTimeout(qzResetViewport, 80);
+    setTimeout(qzResetViewport, 400);
+  }, true);
+  if(window.visualViewport){
+    let lastH = window.visualViewport.height;
+    window.visualViewport.addEventListener('resize', function(){
+      const h = window.visualViewport.height;
+      if(h > lastH + 80) setTimeout(qzResetViewport, 50);   /* клавиатура закрылась */
+      lastH = h;
+    });
+  }
+})();
 
 /* Кнопка «Разложить» для раскладов без квиза */
 function fnSetDeal(){
