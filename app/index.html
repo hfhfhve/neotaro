@@ -3695,9 +3695,10 @@ class AppBridge {
     this.isVK = /vk_app_id/.test(window.location.search) || /vk_platform/.test(window.location.search);
     this.isWeb = !this.isTG && !this.isVK;
     this.vkInit = null;
-    this.token = localStorage.getItem('neotaro_token');
+    this.token = null;
     this.webUser = null;
-    try { this.webUser = JSON.parse(localStorage.getItem('neotaro_user') || 'null'); } catch(e){}
+    try { this.token = localStorage.getItem('neotaro_token'); } catch(e){}
+    try { this.webUser = JSON.parse((localStorage && localStorage.getItem('neotaro_user')) || 'null'); } catch(e){}
   }
   async ready(){
     if(this.isTG){ tg.ready(); tg.expand(); try{ tg.setHeaderColor('#070A14'); tg.setBackgroundColor('#070A14'); }catch(e){} }
@@ -3928,9 +3929,8 @@ function requireAuth(intent){
 }
 
 async function api(endpoint, method = 'POST', data = {}, silent = false){
-  // Для тяжелых ИИ-запросов даем 28 секунд, для быстрых — 12 секунд (чтобы не висело вечно!)
   const isHeavy = /\/funnel\/(spread|checkout)|\/tarot\/(daily|spread|synastry)|\/free\/(daily|yesno)|\/chat\/send|\/astro\/(chart|reading)|\/matrix\/(get|reading|compat)|\/stt\//.test(endpoint);
-  const timeoutMs = isHeavy ? 28000 : 12000;
+  const timeoutMs = isHeavy ? 45000 : 18000;
   const maxAttempts = isHeavy ? 2 : 3;
 
   for(let attempt = 0; attempt < maxAttempts; attempt++){
@@ -3946,19 +3946,20 @@ async function api(endpoint, method = 'POST', data = {}, silent = false){
       clearTimeout(timer);
 
       if(res.status === 401 && bridge.isWeb){
-        localStorage.removeItem('neotaro_token');
-        localStorage.removeItem('neotaro_user');
+        try {
+          localStorage.removeItem('neotaro_token');
+          localStorage.removeItem('neotaro_user');
+        } catch(e){}
         bridge.token = null;
         bridge.webUser = null;
         if(!silent) bounceToAuth();
         return { success:false, unauthorized:true };
       }
 
-      // Если сервер вернул 500 / 502 / 503 / 504 — сразу фиксируем статус!
       if(!res.ok && res.status >= 500){
         const rawText = await res.text().catch(() => '');
         const httpErr = new Error(`API HTTP ${res.status} on ${endpoint}`);
-        if(window.Sentry){
+        if(window.Sentry && attempt === maxAttempts - 1){
           Sentry.captureException(httpErr, {
             tags: { endpoint, http_status: res.status, attempt: attempt + 1 },
             extra: { elapsed_ms: Date.now() - t0, response_preview: rawText.slice(0, 300) }
@@ -3977,8 +3978,7 @@ async function api(endpoint, method = 'POST', data = {}, silent = false){
       const isTimeout = e && e.name === 'AbortError';
       const elapsed = Date.now() - t0;
 
-      // Отправляем в Sentry СРАЗУ при первом же таймауте или на последней попытке сетевого сбоя!
-      if(window.Sentry && (isTimeout || attempt === maxAttempts - 1)){
+      if(window.Sentry && attempt === maxAttempts - 1){
         const reportErr = isTimeout
           ? new Error(`API TIMEOUT (${elapsed}ms) on ${method} ${endpoint}`)
           : new Error(`API NETWORK FAIL on ${method} ${endpoint}: ${e.message || e}`);
@@ -5534,6 +5534,15 @@ function countQ(){
   document.getElementById('tb-count').textContent = v.length + ' / 500';
 }
 async function dealSpread(){
+  if(!S.spread){
+    const fb = (S.spreads || []).find(x => x.id === 'one-card') || (S.spreads || [])[0];
+    if(fb){
+      S.spread = { id: fb.id, cards: fb.cards_count, price: fb.price, name: fb.name, question: '', picked: [] };
+    } else {
+      go('spreads');
+      return;
+    }
+  }
   /* Основные расклады — анкета, остальные — одно поле вопроса. */
   let q = '', extra = null;
   const form = fnFormFor(S.spread);
