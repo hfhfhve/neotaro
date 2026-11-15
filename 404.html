@@ -1,137 +1,710 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- neotaro-metrika -->
-<script type="text/javascript">
-   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-   m[i].l=1*new Date();
-   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#000000" id="meta-theme-color">
+  <meta name="robots" content="noindex, nofollow">
+  <title>404 — Координата вне атласа · NEOTARO</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&family=Prata&display=swap" rel="stylesheet">
 
-   ym(111297297, "init", {
-        clickmap: true,
-        trackLinks: true,
-        accurateTrackBounce: true,
-        webvisor: true
-   });
+  <script>
+    /* Подхватываем тему пользователя до первой отрисовки */
+    (function(){
+      var TC = {ink:'#0B0F1E', obsidian:'#000000', dawn:'#FDF9F0'};
+      var pref = 'obsidian';
+      try {
+        var picked = localStorage.getItem('neo_theme_pick');
+        var saved  = localStorage.getItem('neo_theme');
+        pref = picked ? (saved || 'obsidian') : 'obsidian';
+      } catch(e){}
+      if(['ink','obsidian','dawn','auto'].indexOf(pref) < 0) pref = 'obsidian';
+      var real = pref;
+      if(pref === 'auto'){
+        var mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)');
+        real = (mq && mq.matches) ? 'dawn' : 'obsidian';
+      }
+      document.documentElement.setAttribute('data-theme', real);
+      var meta = document.getElementById('meta-theme-color');
+      if(meta && TC[real]) meta.setAttribute('content', TC[real]);
+    })();
+  </script>
 
-   /* Единая точка для целей. Везде в коде зовём neoGoal('register'),
-      а не ym(...) напрямую: номер счётчика остаётся в одном месте,
-      и при блокировщике рекламы страница не падает с ошибкой. */
-   window.NEO_METRIKA_ID = 111297297;
-   window.neoGoal = function(name, params){
-     try { if (typeof ym === 'function') ym(111297297, 'reachGoal', name, params || {}); } catch(e){}
-   };
-   window.neoHit = function(url, options){
-     try { if (typeof ym === 'function') ym(111297297, 'hit', url, options || {}); } catch(e){}
-   };
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/111297297" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /neotaro-metrika -->
-<title>Страница не найдена — NEOTARO</title>
-<meta name="description" content="Страница не найдена. Перейди в сонник, к значениям карт Таро, числам на часах или совместимости знаков.">
-<meta name="robots" content="noindex, follow">
-<meta property="og:title" content="Страница не найдена — NEOTARO">
-<meta property="og:description" content="Страница не найдена. Перейди в сонник, к значениям карт Таро, числам на часах или совместимости знаков.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://neotaro.ru/404.html">
-<meta property="og:site_name" content="NEOTARO">
-<meta name="theme-color" content="#0B0F1E">
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Prata&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css">
+  <style>
+    :root {
+      --ink-950: #000000;
+      --ink-900: #05060A;
+      --ink-850: #090A0F;
+      --brass: #E6BC66;
+      --brass-pale: #F2E1B6;
+      --brass-bright: #FCF0CC;
+      --ivory: #F7F3E9;
+      --mist: #9BA0AE;
+      --line: rgba(230, 188, 102, 0.26);
+      --line-soft: rgba(230, 188, 102, 0.13);
+      --line-cold: rgba(155, 160, 174, 0.16);
+      --serif: 'Prata', 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Manrope', system-ui, -apple-system, sans-serif;
+      --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+    }
+
+    html[data-theme="ink"] {
+      --ink-950: #070A14;
+      --ink-900: #0B0F1E;
+      --ink-850: #0E1424;
+      --brass: #D9AE5F;
+      --brass-pale: #E9D9AC;
+      --brass-bright: #F0DDB0;
+      --ivory: #F2EDE0;
+      --mist: #93A0C0;
+      --line: rgba(217, 174, 95, 0.22);
+      --line-soft: rgba(217, 174, 95, 0.11);
+      --line-cold: rgba(147, 160, 192, 0.14);
+    }
+
+    html[data-theme="dawn"] {
+      --ink-950: #F5EFE2;
+      --ink-900: #FBF6EA;
+      --ink-850: #FFFFFF;
+      --brass: #9A6C1C;
+      --brass-pale: #7C5412;
+      --brass-bright: #4A3208;
+      --ivory: #241F16;
+      --mist: #6E6656;
+      --line: rgba(154, 108, 28, 0.30);
+      --line-soft: rgba(154, 108, 28, 0.16);
+      --line-cold: rgba(110, 102, 86, 0.20);
+      color-scheme: light;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; height: 100dvh; }
+
+    body {
+      background: linear-gradient(178deg, #0C0E13 0%, #050609 46%, #000000 100%);
+      color: var(--ivory);
+      font-family: var(--sans);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+      -webkit-font-smoothing: antialiased;
+    }
+    html[data-theme="ink"] body {
+      background: var(--ink-950);
+    }
+    html[data-theme="dawn"] body {
+      background: linear-gradient(178deg, #FDF9F0 0%, #F6F0E3 52%, #F1E9DA 100%);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 45% at 22% -8%, rgba(38, 44, 62, 0.55), transparent 62%),
+        radial-gradient(ellipse 50% 40% at 88% 12%, rgba(230, 188, 102, 0.075), transparent 60%);
+    }
+    html[data-theme="dawn"] body::before {
+      background:
+        radial-gradient(ellipse 72% 46% at 20% -8%, rgba(154, 108, 28, 0.10), transparent 64%),
+        radial-gradient(ellipse 54% 44% at 94% 4%, rgba(211, 168, 96, 0.14), transparent 62%);
+    }
+
+    #neo-sky-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    #neo-sky-canvas.is-ready { opacity: 1; }
+
+    /* Верхняя шапка */
+    .top-bar {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1120px;
+      padding: 26px 28px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      text-decoration: none;
+      font-family: var(--serif);
+      font-size: 19px;
+      letter-spacing: 0.2em;
+      color: var(--brass-pale);
+      transition: opacity 0.2s;
+    }
+    .brand b { font-weight: 400; color: var(--brass); }
+    .brand:hover { opacity: 0.85; }
+    .coord-pill {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--mist);
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line-soft);
+      background: rgba(12, 15, 24, 0.55);
+      backdrop-filter: blur(8px);
+    }
+    html[data-theme="dawn"] .coord-pill {
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    /* Центральная карточка-компас */
+    .center-stage {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 560px;
+      padding: 24px 22px;
+      text-align: center;
+      margin: auto 0;
+      animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* Анимированная астролябия 404 */
+    .seal-wrap {
+      position: relative;
+      width: 184px;
+      height: 184px;
+      margin: 0 auto 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .seal-wrap svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .orbit-cw  { transform-origin: 100px 100px; animation: spin 70s linear infinite; }
+    .orbit-ccw { transform-origin: 100px 100px; animation: spin 46s linear infinite reverse; }
+    .orbit-dot { transform-origin: 100px 100px; animation: spin 16s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .seal-num {
+      position: relative;
+      z-index: 1;
+      font-family: var(--serif);
+      font-size: 46px;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      color: var(--brass-bright);
+      text-shadow: 0 0 32px rgba(230, 188, 102, 0.25);
+    }
+    .seal-num span {
+      display: block;
+      margin-top: 6px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--brass);
+      opacity: 0.85;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(26px, 4.5vw, 36px);
+      line-height: 1.18;
+      color: var(--brass-bright);
+      margin-bottom: 12px;
+    }
+    .lead {
+      font-size: 15px;
+      line-height: 1.68;
+      color: var(--mist);
+      max-width: 42ch;
+      margin: 0 auto 28px;
+    }
+
+    /* Кнопки */
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 48px;
+      padding: 0 24px;
+      border-radius: 999px;
+      font-size: 14.5px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.16s, box-shadow 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .btn:active { transform: scale(0.975); }
+    .btn-brass {
+      background: linear-gradient(140deg, var(--brass-pale), #C0913F);
+      color: #0B0F1E;
+      box-shadow: 0 10px 28px rgba(217, 174, 95, 0.22);
+    }
+    .btn-brass:hover {
+      box-shadow: 0 14px 34px rgba(217, 174, 95, 0.34);
+    }
+    html[data-theme="dawn"] .btn-brass {
+      background: linear-gradient(140deg, #B98829, #8A5C12);
+      color: #FFF8E6;
+    }
+    .btn-line {
+      border: 1px solid var(--line);
+      color: var(--brass-pale);
+      background: rgba(14, 18, 30, 0.5);
+      backdrop-filter: blur(8px);
+    }
+    .btn-line:hover {
+      border-color: var(--brass);
+      background: rgba(217, 174, 95, 0.09);
+    }
+    html[data-theme="dawn"] .btn-line {
+      background: rgba(255, 255, 255, 0.8);
+      color: #7C5412;
+    }
+
+    /* Быстрые ориентиры снизу */
+    .quick-nav {
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line-soft);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 18px;
+    }
+    .quick-nav a {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--mist);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .quick-nav a:hover {
+      color: var(--brass-bright);
+    }
+
+    /* Подвал */
+    .foot {
+      position: relative;
+      z-index: 2;
+      padding: 0 20px 24px;
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mist);
+      opacity: 0.65;
+      text-align: center;
+    }
+
+    @media (max-width: 520px) {
+      .top-bar { padding: 20px 18px 0; }
+      .coord-pill { display: none; }
+      .seal-wrap { width: 156px; height: 156px; margin-bottom: 20px; }
+      .seal-num { font-size: 38px; }
+      .actions { flex-direction: column; }
+      .actions .btn { width: 100%; }
+    }
+  </style>
 </head>
 <body>
-<header class="top"><div class="wrap top-in">
-<a class="brand" href="/">NEO<b>TARO</b></a>
-<nav class="nav" aria-label="Основные разделы">
-<a href="/sonnik/">Сонник</a>
-<a href="/chisla/">Числа на часах</a>
-<a href="/karty/">Карты Таро</a>
-<a href="/rasklady/">Расклады</a>
-<a href="/sovmestimost/">Совместимость</a>
-</nav>
-<a class="cta-mini" href="/">Открыть карту дня</a>
-</div></header>
-<main class="wrap"><section class="nf">
-<div class="nf-card" aria-hidden="true">?</div>
-<h1>Такой страницы здесь нет</h1>
-<p>Адрес набран с ошибкой или страница переехала. Начни с раздела ниже — в каждом есть поиск по символам и полный указатель.</p>
-<div><a class="btn-gold" href="/">На главную</a><a class="btn-ghost" href="/sonnik/">В сонник</a></div>
-</section>
-<section class="block"><h2>Куда можно пойти</h2><div class="orn">✦</div>
-<div class="contact-grid">
-<div class="contact-card"><div class="c-tag">Сны</div><div class="c-val"><a href="/sonnik/">Сонник</a></div><p>Толкования самых частых образов — от воды и змей до выпавших зубов.</p></div>
-<div class="contact-card"><div class="c-tag">Таро</div><div class="c-val"><a href="/karty/">Карты</a> и <a href="/rasklady/">расклады</a></div><p>Значения 78 карт и сотня схем под конкретные вопросы.</p></div>
-<div class="contact-card"><div class="c-tag">Числа</div><div class="c-val"><a href="/chisla/">Числа на часах</a></div><p>Одинаковое время, зеркальные и ангельские числа.</p></div>
-<div class="contact-card"><div class="c-tag">Астрология</div><div class="c-val"><a href="/sovmestimost/">Совместимость</a></div><p>Пары знаков зодиака и <a href="/matrica/">матрица судьбы</a>.</p></div>
-</div>
-<p>Если сюда привела сломанная ссылка с нашего сайта — сообщи об этом на <a href="mailto:support@neotaro.ru">support@neotaro.ru</a>, починим.</p>
-</section></main>
-<footer class="site-foot"><div class="wrap foot-grid">
-<div class="foot-brand">
-<a class="brand" href="/">NEO<b>TARO</b></a>
-<p class="foot-about">Онлайн-Таро, сонник и нумерология с ИИ-оракулом. Карта дня, расклады и толкование снов — без регистрации.</p>
-<a class="btn-gold foot-cta" href="/">Открыть карту дня</a>
-</div>
-<nav class="foot-col" aria-label="Сонник">
-<div class="fc-title">Сонник</div>
-<a href="/sonnik/">Все толкования снов</a>
-<a href="/sonnik/voda/">К чему снится вода</a>
-<a href="/sonnik/zmeya/">Сны про змею</a>
-<a href="/sonnik/zuby/">Выпадение зубов</a>
-<a href="/karty/luna/">Карта Луна</a>
-<a href="/rasklady/keltskiy-krest/">Кельтский крест</a>
-<a href="/matrica/chislo-sudby/">Число судьбы</a>
-</nav>
-<nav class="foot-col" aria-label="Таро">
-<div class="fc-title">Таро</div>
-<a href="/karty/">Значения 78 карт</a>
-<a href="/rasklady/">Все расклады</a>
-<a href="/rasklady/keltskiy-krest-situaciya/">Кельтский крест</a>
-<a href="/rasklady/tri-karty-lyubov/">Три карты на любовь</a>
-<a href="/rasklady/da-ili-net-situaciya/">Расклад «Да или нет»</a>
-<a href="/karty/shut/">Шут</a>
-<a href="/karty/bashnya/">Башня</a>
-</nav>
-<nav class="foot-col" aria-label="Числа и матрица">
-<div class="fc-title">Числа</div>
-<a href="/chisla/">Числа на часах</a>
-<a href="/chisla/11-11/">11:11 на часах</a>
-<a href="/chisla/zerkalnye/">Зеркальные числа</a>
-<a href="/chisla/angelskie/">Ангельская нумерология</a>
-<a href="/matrica/">Матрица судьбы</a>
-<a href="/matrica/kak-rasschitat/">Как рассчитать матрицу</a>
-<a href="/matrica/chislo-sudby/">Число судьбы</a>
-</nav>
-<nav class="foot-col" aria-label="Астрология и проект">
-<div class="fc-title">Астрология</div>
-<a href="/sovmestimost/">Совместимость знаков</a>
-<a href="/sovmestimost/oven/">Овен</a>
-<a href="/sovmestimost/lev/">Лев</a>
-<a href="/sovmestimost/skorpion/">Скорпион</a>
-<div class="fc-title fc-second">Проект</div>
-<a href="/o-proekte/">О проекте</a>
-<a href="/kontakty/">Контакты</a>
-</nav>
-<div class="foot-contact">
-<div class="fc-title">Связаться</div>
-<a class="fc-mail" href="mailto:support@neotaro.ru">support@neotaro.ru</a>
-<a class="fc-tg" href="https://t.me/otcars">Telegram — @otcars</a>
-<p class="fc-note">Отвечаем на письма в течение трёх рабочих дней.</p>
-</div>
-</div>
-<div class="wrap foot-bottom">
-<p class="foot-note">NEOTARO — онлайн-Таро, сонник и ИИ-оракул. Материалы сайта носят развлекательный характер и не заменяют консультацию врача, психолога или юриста. 18+</p>
-<div class="foot-legal">
-<a href="/soglashenie/">Пользовательское соглашение</a>
-<a href="/politika/">Политика конфиденциальности</a>
-<span class="fl-copy">© 2026 NEOTARO</span>
-</div>
-</div></footer>
+
+  <canvas id="neo-sky-canvas" aria-hidden="true"></canvas>
+
+  <header class="top-bar">
+    <a href="/" class="brand">NEO<b>TARO</b></a>
+    <span class="coord-pill">RA 00h 00m · DEC −00°</span>
+  </header>
+
+  <main class="center-stage">
+    <div class="seal-wrap" aria-hidden="true">
+      <svg viewBox="0 0 200 200">
+        <defs>
+          <radialGradient id="sealGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#D9AE5F" stop-opacity=".18"/>
+            <stop offset="65%" stop-color="#D9AE5F" stop-opacity=".04"/>
+            <stop offset="100%" stop-color="#D9AE5F" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="100" cy="100" r="94" fill="url(#sealGlow)"/>
+        <circle cx="100" cy="100" r="88" fill="none" stroke="var(--brass)" stroke-opacity=".30"/>
+        <circle cx="100" cy="100" r="64" fill="none" stroke="var(--brass)" stroke-opacity=".18"/>
+
+        <g class="orbit-cw" stroke="var(--brass)" stroke-opacity=".42" stroke-width="1">
+          <circle cx="100" cy="100" r="76" fill="none" stroke-dasharray="2 6"/>
+          <line x1="100" y1="6" x2="100" y2="16"/>
+          <line x1="100" y1="184" x2="100" y2="194"/>
+          <line x1="6" y1="100" x2="16" y2="100"/>
+          <line x1="184" y1="100" x2="194" y2="100"/>
+        </g>
+
+        <g class="orbit-ccw" stroke="var(--brass)" stroke-opacity=".22" stroke-width="1">
+          <polygon points="100,26 174,100 100,174 26,100" fill="none"/>
+          <polygon points="48,48 152,48 152,152 48,152" fill="none"/>
+        </g>
+
+        <g class="orbit-dot">
+          <circle cx="100" cy="24" r="3" fill="var(--brass-bright)"/>
+          <circle cx="100" cy="24" r="7" fill="var(--brass)" fill-opacity=".22"/>
+        </g>
+      </svg>
+
+      <div class="seal-num">
+        404
+        <span>არკანი · void</span>
+      </div>
+    </div>
+
+    <div class="eyebrow">Координата вне атласа</div>
+    <h1>Этой страницы нет на звёздной карте</h1>
+    <p class="lead">
+      Возможно, ссылка устарела или была введена с опечаткой. Но колода, ваш кабинет и Оракул — на своих местах.
+    </p>
+
+    <div class="actions">
+      <a href="/app/" class="btn btn-brass">Открыть кабинет →</a>
+      <a href="/" class="btn btn-line">На главную</a>
+    </div>
+
+    <nav class="quick-nav" aria-label="Быстрые переходы">
+      <a href="/app/#feelings">✦ Расклад на чувства</a>
+      <a href="/app/#past-present">✦ Прошлое · Настоящее · Будущее</a>
+      <a href="/app/#astro">✦ Натальная карта</a>
+      <a href="javascript:location.reload()">↻ Обновить</a>
+    </nav>
+  </main>
+
+  <footer class="foot">
+    NEOTARO · НОЧНОЙ АТЛАС ТАРО И АСТРОЛОГИИ
+  </footer>
+
+  <script>
+    /* Живой атлас созвездий из кабинета */
+    (function(){
+      var canvas = document.getElementById('neo-sky-canvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      var W = 0, H = 0, dpr = 1;
+      var mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, px: -9999, py: -9999, active: false };
+
+      var CONSTELLATIONS = [
+        {
+          name: 'CASSIOPEIA', sub: 'RA 01h 19m · +60°',
+          stars: [[0.12,0.62,1.5],[0.32,0.26,1.4],[0.52,0.46,1.6],[0.74,0.20,1.5],[0.90,0.54,1.3]],
+          lines: [[0,1],[1,2],[2,3],[3,4]]
+        },
+        {
+          name: 'CYGNUS · α DENEB', sub: 'RA 20h 41m · +45°',
+          stars: [[0.50,0.12,1.7],[0.50,0.44,1.5],[0.50,0.86,1.3],[0.16,0.48,1.3],[0.84,0.42,1.3],[0.32,0.32,1.0],[0.68,0.30,1.0]],
+          lines: [[0,1],[1,2],[3,5],[5,1],[1,6],[6,4]]
+        },
+        {
+          name: 'ORION', sub: 'RA 05h 35m · −05°',
+          stars: [[0.26,0.16,1.7],[0.72,0.20,1.4],[0.42,0.48,1.3],[0.50,0.50,1.4],[0.58,0.52,1.3],[0.30,0.84,1.3],[0.74,0.82,1.8]],
+          lines: [[0,2],[1,4],[2,3],[3,4],[2,5],[4,6],[0,1],[5,6]]
+        },
+        {
+          name: 'URSA MAJOR', sub: 'RA 11h 03m · +56°',
+          stars: [[0.10,0.28,1.5],[0.28,0.22,1.4],[0.44,0.34,1.3],[0.58,0.44,1.3],[0.56,0.68,1.4],[0.82,0.72,1.6],[0.86,0.44,1.6]],
+          lines: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,3]]
+        },
+        {
+          name: 'LYRA · α VEGA', sub: 'RA 18h 36m · +38°',
+          stars: [[0.28,0.18,1.9],[0.46,0.32,1.2],[0.42,0.52,1.3],[0.68,0.48,1.3],[0.64,0.74,1.4],[0.38,0.76,1.3]],
+          lines: [[0,1],[1,2],[1,3],[2,5],[3,4],[4,5],[2,3]]
+        },
+        {
+          name: 'AQUARIUS · ♒', sub: 'RA 22h 17m · −07°',
+          stars: [[0.18,0.22,1.3],[0.34,0.16,1.5],[0.48,0.28,1.2],[0.42,0.46,1.1],[0.62,0.40,1.4],[0.78,0.52,1.1],[0.56,0.68,1.2]],
+          lines: [[0,1],[1,2],[2,3],[2,4],[4,5],[4,6]]
+        }
+      ];
+
+      var ZONES = [
+        { x: 0.04, y: 0.08, w: 0.24, h: 0.28 },
+        { x: 0.72, y: 0.08, w: 0.24, h: 0.28 },
+        { x: 0.04, y: 0.60, w: 0.24, h: 0.28 },
+        { x: 0.72, y: 0.60, w: 0.24, h: 0.28 }
+      ];
+
+      var bgStars = [];
+      var activeConstellations = [];
+      var usedIdx = 0;
+      var meteor = null;
+      var nextMeteorAt = performance.now() + 6000;
+      var wheelAngle = 0;
+
+      function spawnConstellation(zoneIndex, delayMs) {
+        var def = CONSTELLATIONS[usedIdx % CONSTELLATIONS.length];
+        usedIdx++;
+        return {
+          def: def,
+          zoneIndex: zoneIndex,
+          zone: ZONES[zoneIndex % ZONES.length],
+          born: performance.now() + (delayMs || 0),
+          drawDur: 3400,
+          holdDur: 8000 + Math.random() * 3000,
+          fadeDur: 3200
+        };
+      }
+
+      function initScene() {
+        bgStars = [];
+        var count = W >= 900 ? 130 : 65;
+        var palettes = [[240, 221, 176], [242, 237, 224], [155, 178, 230]];
+        for (var i = 0; i < count; i++) {
+          bgStars.push({
+            x: Math.random(),
+            y: Math.random(),
+            z: 0.2 + Math.random() * 0.8,
+            r: 0.55 + Math.random() * 1.35,
+            rgb: palettes[i % 5 === 0 ? 2 : (i % 2 === 0 ? 0 : 1)],
+            phase: Math.random() * Math.PI * 2,
+            speed: 0.0007 + Math.random() * 0.0014
+          });
+        }
+        activeConstellations = [
+          spawnConstellation(0, 0),
+          spawnConstellation(1, 1800),
+          spawnConstellation(2, 3600),
+          spawnConstellation(3, 5400)
+        ];
+      }
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = Math.floor(W * dpr);
+        canvas.height = Math.floor(H * dpr);
+        if (!bgStars.length) initScene();
+      }
+
+      window.addEventListener('resize', resize, { passive: true });
+      window.addEventListener('mousemove', function(e) {
+        mouse.tx = e.clientX / Math.max(W, 1);
+        mouse.ty = e.clientY / Math.max(H, 1);
+        mouse.px = e.clientX;
+        mouse.py = e.clientY;
+        mouse.active = true;
+      }, { passive: true });
+
+      function isDawn() {
+        return document.documentElement.getAttribute('data-theme') === 'dawn';
+      }
+
+      function drawFlare(x, y, radius, alpha, rgb) {
+        ctx.save();
+        ctx.fillStyle = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + (alpha * 0.22) + ')';
+        ctx.beginPath();
+        ctx.arc(x, y, radius * 3.6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + alpha + ')';
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function render(now) {
+        requestAnimationFrame(render);
+        if (document.hidden) return;
+
+        mouse.x += (mouse.tx - mouse.x) * 0.05;
+        mouse.y += (mouse.ty - mouse.y) * 0.05;
+        wheelAngle += 0.00012;
+
+        var dawn = isDawn();
+        var lineRgb = dawn ? '154,108,28' : '217,174,95';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, W, H);
+
+        /* Большое водяное кольцо астролябии */
+        var R = Math.min(W, H) * 0.44;
+        if (R > 160) {
+          ctx.save();
+          ctx.translate(W * 0.5, H * 0.5);
+          ctx.rotate(wheelAngle);
+          ctx.strokeStyle = 'rgba(' + lineRgb + ', 0.045)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(0, 0, R, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        /* Звёзды + отклик на курсор */
+        var pxShift = (mouse.x - 0.5) * 20;
+        var pyShift = (mouse.y - 0.5) * 16;
+
+        for (var i = 0; i < bgStars.length; i++) {
+          var s = bgStars[i];
+          var sx = (s.x * W + pxShift * s.z + W) % W;
+          var sy = (s.y * H + pyShift * s.z + H) % H;
+          var tw = 0.45 + 0.55 * Math.sin(now * s.speed + s.phase);
+          var alpha = (dawn ? 0.25 : 0.48) * tw * (0.5 + s.z * 0.5);
+
+          if (mouse.active && W >= 900) {
+            var dx = sx - mouse.px, dy = sy - mouse.py;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              var boost = 1 - dist / 120;
+              alpha = Math.min(0.92, alpha + boost * 0.45);
+              if (dist < 90 && i % 2 === 0) {
+                ctx.strokeStyle = 'rgba(' + lineRgb + ',' + (boost * 0.14).toFixed(3) + ')';
+                ctx.lineWidth = 0.65;
+                ctx.beginPath();
+                ctx.moveTo(sx, sy);
+                ctx.lineTo(mouse.px, mouse.py);
+                ctx.stroke();
+              }
+            }
+          }
+
+          var sc = dawn ? [138, 92, 18] : s.rgb;
+          ctx.fillStyle = 'rgba(' + sc[0] + ',' + sc[1] + ',' + sc[2] + ',' + alpha.toFixed(3) + ')';
+          ctx.beginPath();
+          ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        /* Живые созвездия */
+        for (var cIdx = 0; cIdx < activeConstellations.length; cIdx++) {
+          var item = activeConstellations[cIdx];
+          var age = now - item.born;
+          if (age < 0) continue;
+
+          var totalLife = item.drawDur + item.holdDur + item.fadeDur;
+          if (age >= totalLife) {
+            activeConstellations[cIdx] = spawnConstellation(item.zoneIndex, 400);
+            continue;
+          }
+
+          var drawProg = Math.min(1, age / item.drawDur);
+          var fadeAlpha = age < 900 ? (age / 900) : (age > item.drawDur + item.holdDur ? 1 - (age - item.drawDur - item.holdDur) / item.fadeDur : 1);
+          fadeAlpha = Math.max(0, Math.min(1, fadeAlpha));
+
+          var z = item.zone;
+          var ox = z.x * W + pxShift * 0.6;
+          var oy = z.y * H + pyShift * 0.6;
+          var zw = z.w * W, zh = z.h * H;
+
+          var pts = item.def.stars.map(function(st) {
+            return { x: ox + st[0] * zw, y: oy + st[1] * zh, mag: st[2] };
+          });
+
+          var lines = item.def.lines;
+          var segFloat = drawProg * lines.length;
+          ctx.save();
+          ctx.strokeStyle = 'rgba(' + lineRgb + ',' + (fadeAlpha * 0.26).toFixed(3) + ')';
+          ctx.lineWidth = 0.9;
+
+          for (var l = 0; l < lines.length; l++) {
+            var segProg = Math.max(0, Math.min(1, segFloat - l));
+            if (segProg <= 0) break;
+            var p1 = pts[lines[l][0]], p2 = pts[lines[l][1]];
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p1.x + (p2.x - p1.x) * segProg, p1.y + (p2.y - p1.y) * segProg);
+            ctx.stroke();
+          }
+
+          var starRgb = dawn ? [138, 92, 18] : [240, 221, 176];
+          for (var p = 0; p < pts.length; p++) {
+            drawFlare(pts[p].x, pts[p].y, pts[p].mag * 1.15, fadeAlpha * 0.76, starRgb);
+          }
+
+          if (W >= 768 && drawProg > 0.45) {
+            var la = Math.min(1, (drawProg - 0.45) / 0.4) * fadeAlpha * 0.36;
+            ctx.font = '500 9.5px "IBM Plex Mono", monospace';
+            ctx.fillStyle = 'rgba(' + lineRgb + ',' + la.toFixed(3) + ')';
+            ctx.fillText(item.def.name, pts[0].x + 10, pts[0].y - 8);
+          }
+          ctx.restore();
+        }
+
+        /* Падающая звезда */
+        if (now >= nextMeteorAt && !meteor && W >= 640) {
+          meteor = {
+            x: (0.25 + Math.random() * 0.55) * W,
+            y: (0.06 + Math.random() * 0.28) * H,
+            vx: -4.6 - Math.random() * 2.2,
+            vy: 2.1 + Math.random() * 1.4,
+            born: now,
+            dur: 900
+          };
+          nextMeteorAt = now + 14000 + Math.random() * 12000;
+        }
+        if (meteor) {
+          var mAge = now - meteor.born;
+          if (mAge >= meteor.dur) {
+            meteor = null;
+          } else {
+            var mAlpha = Math.sin((mAge / meteor.dur) * Math.PI) * (dawn ? 0.45 : 0.75);
+            var mx = meteor.x + meteor.vx * (mAge * 0.06);
+            var my = meteor.y + meteor.vy * (mAge * 0.06);
+            var tx = mx - meteor.vx * 14, ty = my - meteor.vy * 14;
+            var mg = ctx.createLinearGradient(mx, my, tx, ty);
+            mg.addColorStop(0, 'rgba(240, 221, 176, ' + mAlpha.toFixed(3) + ')');
+            mg.addColorStop(1, 'rgba(240, 221, 176, 0)');
+            ctx.strokeStyle = mg;
+            ctx.lineWidth = 1.3;
+            ctx.beginPath();
+            ctx.moveTo(mx, my);
+            ctx.lineTo(tx, ty);
+            ctx.stroke();
+          }
+        }
+      }
+
+      resize();
+      requestAnimationFrame(render);
+      setTimeout(function(){ canvas.classList.add('is-ready'); }, 60);
+    })();
+  </script>
 </body>
 </html>
