@@ -9555,5 +9555,845 @@ function fnMistWatch(){
 }
 
 </script>
+<!-- ==================== DESKTOP NIGHT ATLAS & LIVING CONSTELLATIONS ==================== -->
+<style id="neo-desktop-atlas">
+  #neo-sky-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+  #neo-sky-canvas.is-ready {
+    opacity: 1;
+  }
+
+  /* На мобилке правые панели-компаньоны скрыты, вёрстка 1-в-1 как была */
+  .neo-desk-aside {
+    display: none;
+  }
+
+  /* ==================== ТОЛЬКО ДЛЯ ПК (>= 1024px) ==================== */
+  @media (min-width: 1024px) {
+    .wrap {
+      max-width: 1260px;
+      padding: 42px 48px 72px;
+    }
+
+    /* Полупрозрачные карточки с мягким стеклом, чтобы небо дышало под ними */
+    html[data-theme="obsidian"] .panel,
+    html[data-theme="obsidian"] .hm-daily,
+    html[data-theme="obsidian"] .hm-cell,
+    html[data-theme="obsidian"] .hm-pill,
+    html[data-theme="obsidian"] .rowcard,
+    html[data-theme="obsidian"] .zbtn {
+      background: linear-gradient(160deg, rgba(16, 19, 27, 0.84), rgba(6, 8, 13, 0.88));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    html[data-theme="obsidian"] .hm-ask,
+    html[data-theme="obsidian"] .hm-oracle {
+      background: linear-gradient(160deg, rgba(217, 174, 95, 0.08), rgba(6, 8, 13, 0.88) 62%);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* Укрупняем Главную (#home) для больших экранов */
+    .hm-hero {
+      gap: 22px;
+    }
+    .hm-daily, .hm-ask {
+      padding: 26px 28px;
+      border-radius: 20px;
+    }
+    .hm-card {
+      width: 122px;
+      height: 204px;
+    }
+    .hm-dtitle, .hm-ask-t {
+      font-size: 23px;
+    }
+    .hm-dlead, .hm-ask-s {
+      font-size: 14.5px;
+      line-height: 1.62;
+    }
+    .hm-q {
+      min-height: 82px;
+      font-size: 15.5px;
+    }
+    .hm-daily .hm-alm {
+      padding-top: 16px !important;
+      margin-top: 6px !important;
+    }
+    .hm-daily .hm-pill .v {
+      font-size: 15px;
+    }
+    .hm-oracle {
+      padding: 18px 22px;
+      margin-bottom: 14px;
+      border-radius: 17px;
+    }
+    .hm-prx {
+      gap: 14px;
+    }
+    .hm-cell {
+      padding: 18px 20px;
+      border-radius: 17px;
+      min-height: 88px;
+    }
+    .hm-ic {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+    }
+    .hm-ct b {
+      font-size: 17px;
+    }
+    .hm-ct span {
+      font-size: 13px;
+    }
+    .hm-ref {
+      padding: 16px 22px;
+      margin-top: 26px;
+    }
+
+    /* Двухколоночная сетка для одиноких форм (Совместимость, Сонник, форма Космо-паспорта) */
+    .neo-split-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(340px, 0.88fr);
+      gap: 28px;
+      align-items: stretch;
+      margin-top: 24px;
+    }
+    .neo-split-grid > .panel {
+      margin-top: 0 !important;
+      max-width: none !important;
+      width: 100%;
+    }
+    .neo-desk-aside {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 28px 26px;
+      border-radius: 16px;
+      border: 1px solid var(--line-soft);
+      background:
+        radial-gradient(120% 90% at 85% 10%, rgba(217, 174, 95, 0.09), transparent 65%),
+        linear-gradient(160deg, rgba(16, 20, 34, 0.78), rgba(8, 11, 20, 0.84));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    html[data-theme="dawn"] .neo-desk-aside {
+      background:
+        radial-gradient(120% 90% at 85% 10%, rgba(154, 108, 28, 0.1), transparent 65%),
+        linear-gradient(160deg, #FFFFFF, #FDF9F0);
+    }
+    .neo-da-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .neo-da-sigil {
+      width: 84px;
+      height: 84px;
+      flex: 0 0 84px;
+    }
+    .neo-da-sigil svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .neo-da-title {
+      font-family: var(--serif);
+      font-size: 22px;
+      line-height: 1.25;
+      color: var(--brass-bright);
+      margin-bottom: 8px;
+    }
+    html[data-theme="dawn"] .neo-da-title {
+      color: #4A3208;
+    }
+    .neo-da-lead {
+      font-size: 13.5px;
+      line-height: 1.62;
+      color: var(--mist);
+      margin-bottom: 20px;
+    }
+    .neo-da-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      border-top: 1px solid var(--line-soft);
+      padding-top: 18px;
+    }
+    .neo-da-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .neo-da-list .num-mark {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--brass);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 3px 7px;
+      margin-top: 2px;
+      flex: 0 0 auto;
+      background: rgba(217, 174, 95, 0.07);
+    }
+    .neo-da-list b {
+      display: block;
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 16px;
+      color: var(--ivory);
+      margin-bottom: 2px;
+    }
+    .neo-da-list span {
+      display: block;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--mist);
+    }
+    .neo-da-foot {
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brass);
+      opacity: 0.85;
+    }
+  }
+</style>
+
+<script id="neo-desktop-atlas-js">
+(function(){
+  /* ------------------------------------------------------------
+     1. ИСПРАВЛЕНИЕ ПОДПИСИ ДОМА В ТИЗЕРЕ КОСМО-ПАСПОРТА («— 6» -> «— 6 дом»)
+     ------------------------------------------------------------ */
+  if (typeof window.hookText === 'function') {
+    var _origHookText = window.hookText;
+    window.hookText = function(h) {
+      if (h && h.kind === 'stellium' && h.payload && h.payload.kind === 'house') {
+        var bodies = (h.payload.bodies || []).map(nkBody).join(' \u00b7 ');
+        var houseNum = h.payload.where;
+        var houseWord = (typeof lang !== 'undefined' && lang !== 'ru') ? ('House ' + houseNum) : (houseNum + ' дом');
+        return bodies + ' \u2014 ' + houseWord;
+      }
+      return _origHookText.apply(this, arguments);
+    };
+  }
+
+  /* ------------------------------------------------------------
+     2. ПРАВЫЕ АЛЬМАНАХ-ПАНЕЛИ ДЛЯ ОДИНОКИХ ФОРМ НА ПК
+     ------------------------------------------------------------ */
+  function injectDesktopCompanions() {
+    /* а) Совместимость (#syn-form) */
+    var synForm = document.getElementById('syn-form');
+    if (synForm && !synForm.querySelector('.neo-split-grid')) {
+      var synPanel = synForm.querySelector('.panel');
+      if (synPanel) {
+        var grid = document.createElement('div');
+        grid.className = 'neo-split-grid';
+        synPanel.parentNode.insertBefore(grid, synPanel);
+        grid.appendChild(synPanel);
+
+        var aside = document.createElement('aside');
+        aside.className = 'neo-desk-aside';
+        aside.innerHTML =
+          '<div>' +
+            '<div class="neo-da-top">' +
+              '<div>' +
+                '<div class="eyebrow" style="margin-bottom:6px">СИНАСТРИЯ · II КАРТЫ</div>' +
+                '<div class="neo-da-title">Атлас совместимости</div>' +
+              '</div>' +
+              '<div class="neo-da-sigil">' +
+                '<svg viewBox="0 0 100 100" aria-hidden="true">' +
+                  '<g class="neo-rot" style="transform-origin:50px 50px">' +
+                    '<circle cx="50" cy="50" r="44" fill="none" stroke="#D9AE5F" stroke-opacity=".28" stroke-dasharray="2 5"/>' +
+                  '</g>' +
+                  '<circle cx="38" cy="50" r="22" fill="none" stroke="#E9D9AC" stroke-opacity=".65" stroke-width="1.2"/>' +
+                  '<circle cx="62" cy="50" r="22" fill="none" stroke="#D9AE5F" stroke-opacity=".65" stroke-width="1.2"/>' +
+                  '<path d="M50 31.5 L52.5 47.5 L68 50 L52.5 52.5 L50 68.5 L47.5 52.5 L32 50 L47.5 47.5 Z" fill="#F0DDB0" fill-opacity=".22"/>' +
+                  '<circle cx="50" cy="50" r="2.6" fill="#F0DDB0"/>' +
+                '</svg>' +
+              '</div>' +
+            '</div>' +
+            '<p class="neo-da-lead">Сопоставление солнечных и лунных ритмов показывает не абстрактный процент, а живую механику вашей связи: на чём она держится и где требует бережности.</p>' +
+            '<ul class="neo-da-list">' +
+              '<li><span class="num-mark">I</span><div><b>Кармический узел</b><span>Зачем вы встретились и какой урок приносите друг другу.</span></div></li>' +
+              '<li><span class="num-mark">II</span><div><b>Эмоции и притяжение</b><span>Как сходятся ваши темпераменты, близость и язык заботы.</span></div></li>' +
+              '<li><span class="num-mark">III</span><div><b>Точки напряжения</b><span>Из-за чего вспыхивают ссоры и как обходить острые углы.</span></div></li>' +
+              '<li><span class="num-mark">IV</span><div><b>Итоговый совет Оракула</b><span>Главный ключ к сохранению и росту этого союза.</span></div></li>' +
+            '</ul>' +
+          '</div>' +
+          '<div class="neo-da-foot"><span>SWISS EPHEMERIS · TAROT</span><span>IV ГЛАВЫ РАЗБОРА</span></div>';
+        grid.appendChild(aside);
+      }
+    }
+
+    /* б) Сонник (#v-dream) */
+    var dreamView = document.getElementById('v-dream');
+    if (dreamView && !dreamView.querySelector('.neo-split-grid')) {
+      var dreamPanel = dreamView.querySelector('.panel');
+      if (dreamPanel) {
+        var dGrid = document.createElement('div');
+        dGrid.className = 'neo-split-grid';
+        dreamPanel.parentNode.insertBefore(dGrid, dreamPanel);
+        dGrid.appendChild(dreamPanel);
+
+        var dAside = document.createElement('aside');
+        dAside.className = 'neo-desk-aside';
+        dAside.innerHTML =
+          '<div>' +
+            '<div class="neo-da-top">' +
+              '<div>' +
+                '<div class="eyebrow" style="margin-bottom:6px">АРХЕТИПЫ · ЮНГ</div>' +
+                '<div class="neo-da-title">Как читается сон</div>' +
+              '</div>' +
+              '<div class="neo-da-sigil">' +
+                '<svg viewBox="0 0 100 100" aria-hidden="true">' +
+                  '<circle cx="50" cy="50" r="42" fill="none" stroke="#D9AE5F" stroke-opacity=".28" stroke-dasharray="3 5"/>' +
+                  '<path d="M58 24a26 26 0 1 0 0 52 27 27 0 0 1-11-26 27 27 0 0 1 11-26z" fill="none" stroke="#E9D9AC" stroke-opacity=".75" stroke-width="1.3"/>' +
+                  '<circle cx="66" cy="38" r="2" fill="#F0DDB0"/>' +
+                  '<circle cx="74" cy="52" r="1.4" fill="#D9AE5F"/>' +
+                '</svg>' +
+              '</div>' +
+            '</div>' +
+            '<p class="neo-da-lead">Сон никогда не говорит буквально — он показывает то, что сознание вытесняет днём. Даже короткого обрывка достаточно для точного разбора.</p>' +
+            '<ul class="neo-da-list">' +
+              '<li><span class="num-mark">01</span><div><b>Послевкусие на пробуждении</b><span>Тревога, облегчение, тоска или покой — главный маркер смысла сна.</span></div></li>' +
+              '<li><span class="num-mark">02</span><div><b>Фигуры и незнакомцы</b><span>Люди во сне отражают ваши собственные скрытые черты и желания.</span></div></li>' +
+              '<li><span class="num-mark">03</span><div><b>Пространство и движение</b><span>Падение, вода, поиск выхода или чужой дом показывают точку жизни сейчас.</span></div></li>' +
+            '</ul>' +
+          '</div>' +
+          '<div class="neo-da-foot"><span>ДИАЛОГ С ОРАКУЛОМ</span><span>ПАМЯТЬ СИМВОЛОВ</span></div>';
+        dGrid.appendChild(dAside);
+      }
+    }
+
+    /* в) Форма Космо-паспорта до расчёта (#astro-empty) */
+    var astroEmpty = document.getElementById('astro-empty');
+    if (astroEmpty && !astroEmpty.querySelector('.neo-split-grid')) {
+      var astroPanel = astroEmpty.querySelector('.panel');
+      if (astroPanel) {
+        var aGrid = document.createElement('div');
+        aGrid.className = 'neo-split-grid';
+        astroPanel.parentNode.insertBefore(aGrid, astroPanel);
+        aGrid.appendChild(astroPanel);
+
+        var aAside = document.createElement('aside');
+        aAside.className = 'neo-desk-aside';
+        aAside.innerHTML =
+          '<div>' +
+            '<div class="neo-da-top">' +
+              '<div>' +
+                '<div class="eyebrow" style="margin-bottom:6px">НАТАЛЬНОЕ КОЛЕСО</div>' +
+                '<div class="neo-da-title">Что даст расчёт карты</div>' +
+              '</div>' +
+              '<div class="neo-da-sigil">' +
+                '<svg viewBox="0 0 100 100" aria-hidden="true">' +
+                  '<circle cx="50" cy="50" r="42" fill="none" stroke="#D9AE5F" stroke-opacity=".35"/>' +
+                  '<ellipse cx="50" cy="50" rx="40" ry="18" transform="rotate(-24 50 50)" fill="none" stroke="#E9D9AC" stroke-opacity=".6"/>' +
+                  '<circle cx="50" cy="50" r="6" fill="none" stroke="#F0DDB0" stroke-opacity=".85"/>' +
+                '</svg>' +
+              '</div>' +
+            '</div>' +
+            '<p class="neo-da-lead">Точный астрономический расчёт по швейцарским эфемеридам с учётом исторического часового пояса вашего города.</p>' +
+            '<ul class="neo-da-list">' +
+              '<li><span class="num-mark">☉☽↑</span><div><b>Большая тройка и стихии</b><span>Солнце, Луна, Асцендент, управитель карты и баланс стихий.</span></div></li>' +
+              '<li><span class="num-mark">XII</span><div><b>12 домов и аспекты</b><span>Точная геометрия планет, стеллиумы, узлы и ретроградность.</span></div></li>' +
+              '<li><span class="num-mark">XI</span><div><b>11 глав глубокого разбора</b><span>Личность, любовь, деньги, призвание, тень и прогноз на год.</span></div></li>' +
+            '</ul>' +
+          '</div>' +
+          '<div class="neo-da-foot"><span>SWISS EPHEMERIS</span><span>РАСЧЁТ БЕСПЛАТНО</span></div>';
+        aGrid.appendChild(aAside);
+      }
+    }
+  }
+
+  /* ------------------------------------------------------------
+     3. ЖИВОЙ АТЛАС СОЗВЕЗДИЙ (CANVAS)
+     ------------------------------------------------------------ */
+  function initConstellationSky() {
+    if (document.getElementById('neo-sky-canvas')) return;
+    var canvas = document.createElement('canvas');
+    canvas.id = 'neo-sky-canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    document.body.insertBefore(canvas, document.body.firstChild);
+
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    var W = 0, H = 0, dpr = 1;
+    var mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, px: -9999, py: -9999, active: false };
+
+    /* 10 реальных созвездий: координаты звезд (0..1 внутри сектора) + ребра соединения */
+    var CONSTELLATIONS = [
+      {
+        name: 'AQUARIUS · ♒', sub: 'RA 22h 17m · −07°',
+        stars: [[0.18,0.22,1.3],[0.34,0.16,1.5],[0.48,0.28,1.2],[0.42,0.46,1.1],[0.62,0.40,1.4],[0.78,0.52,1.1],[0.56,0.68,1.2],[0.30,0.72,1.0],[0.72,0.78,1.1]],
+        lines: [[0,1],[1,2],[2,3],[2,4],[4,5],[4,6],[3,7],[6,8]]
+      },
+      {
+        name: 'CASSIOPEIA', sub: 'RA 01h 19m · +60°',
+        stars: [[0.12,0.62,1.5],[0.32,0.26,1.4],[0.52,0.46,1.6],[0.74,0.20,1.5],[0.90,0.54,1.3]],
+        lines: [[0,1],[1,2],[2,3],[3,4]]
+      },
+      {
+        name: 'CYGNUS · α DENEB', sub: 'RA 20h 41m · +45°',
+        stars: [[0.50,0.12,1.7],[0.50,0.44,1.5],[0.50,0.86,1.3],[0.16,0.48,1.3],[0.84,0.42,1.3],[0.32,0.32,1.0],[0.68,0.30,1.0]],
+        lines: [[0,1],[1,2],[3,5],[5,1],[1,6],[6,4]]
+      },
+      {
+        name: 'ORION', sub: 'RA 05h 35m · −05°',
+        stars: [[0.26,0.16,1.7],[0.72,0.20,1.4],[0.42,0.48,1.3],[0.50,0.50,1.4],[0.58,0.52,1.3],[0.30,0.84,1.3],[0.74,0.82,1.8]],
+        lines: [[0,2],[1,4],[2,3],[3,4],[2,5],[4,6],[0,1],[5,6]]
+      },
+      {
+        name: 'URSA MAJOR', sub: 'RA 11h 03m · +56°',
+        stars: [[0.10,0.28,1.5],[0.28,0.22,1.4],[0.44,0.34,1.3],[0.58,0.44,1.3],[0.56,0.68,1.4],[0.82,0.72,1.6],[0.86,0.44,1.6]],
+        lines: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,3]]
+      },
+      {
+        name: 'LEO · ♌', sub: 'RA 10h 08m · +11°',
+        stars: [[0.78,0.20,1.2],[0.64,0.14,1.3],[0.54,0.26,1.3],[0.60,0.42,1.4],[0.68,0.68,1.8],[0.32,0.50,1.4],[0.14,0.66,1.6],[0.28,0.72,1.2]],
+        lines: [[0,1],[1,2],[2,3],[3,4],[3,5],[5,6],[6,7],[7,4]]
+      },
+      {
+        name: 'SCORPIUS · ♏', sub: 'RA 16h 29m · −26°',
+        stars: [[0.20,0.18,1.2],[0.16,0.34,1.3],[0.26,0.46,1.2],[0.38,0.34,1.8],[0.52,0.48,1.3],[0.62,0.66,1.2],[0.58,0.84,1.3],[0.76,0.88,1.4],[0.86,0.74,1.5]],
+        lines: [[0,3],[1,3],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8]]
+      },
+      {
+        name: 'LYRA · α VEGA', sub: 'RA 18h 36m · +38°',
+        stars: [[0.28,0.18,1.9],[0.46,0.32,1.2],[0.42,0.52,1.3],[0.68,0.48,1.3],[0.64,0.74,1.4],[0.38,0.76,1.3]],
+        lines: [[0,1],[1,2],[1,3],[2,5],[3,4],[4,5],[2,3]]
+      },
+      {
+        name: 'CORONA BOREALIS', sub: 'RA 15h 34m · +26°',
+        stars: [[0.16,0.36,1.1],[0.26,0.58,1.3],[0.42,0.72,1.7],[0.60,0.70,1.3],[0.76,0.56,1.2],[0.84,0.34,1.1]],
+        lines: [[0,1],[1,2],[2,3],[3,4],[4,5]]
+      },
+      {
+        name: 'TAURUS · ♉', sub: 'RA 04h 35m · +16°',
+        stars: [[0.16,0.22,1.4],[0.44,0.42,1.3],[0.54,0.52,1.8],[0.64,0.46,1.2],[0.72,0.56,1.2],[0.88,0.74,1.3],[0.22,0.54,1.4]],
+        lines: [[0,1],[1,2],[2,3],[3,4],[2,4],[4,5],[6,2]]
+      }
+    ];
+
+    /* 6 зон неба по краям и углам рабочей области, где созвездия лучше всего читаются */
+    var ZONES = [
+      { x: 0.04, y: 0.07, w: 0.23, h: 0.28 },
+      { x: 0.73, y: 0.06, w: 0.23, h: 0.28 },
+      { x: 0.03, y: 0.56, w: 0.24, h: 0.30 },
+      { x: 0.72, y: 0.54, w: 0.24, h: 0.30 },
+      { x: 0.38, y: 0.04, w: 0.24, h: 0.23 },
+      { x: 0.40, y: 0.68, w: 0.24, h: 0.25 }
+    ];
+
+    var bgStars = [];
+    var activeConstellations = [];
+    var usedConstIdx = 0;
+    var meteor = null;
+    var nextMeteorAt = performance.now() + 9000;
+    var wheelAngle = 0;
+
+    function buildStars() {
+      bgStars = [];
+      var count = W >= 1024 ? 145 : 65;
+      var palettes = [
+        [240, 221, 176], // золотистая латунь
+        [242, 237, 224], // слоновая кость
+        [155, 178, 230]  // холодная голубая звезда
+      ];
+      for (var i = 0; i < count; i++) {
+        var c = palettes[i % 5 === 0 ? 2 : (i % 2 === 0 ? 0 : 1)];
+        bgStars.push({
+          x: Math.random(),
+          y: Math.random(),
+          z: 0.2 + Math.random() * 0.8,
+          r: 0.55 + Math.random() * 1.35,
+          rgb: c,
+          phase: Math.random() * Math.PI * 2,
+          speed: 0.0007 + Math.random() * 0.0014
+        });
+      }
+    }
+
+    function spawnConstellation(zoneIndex, delayMs) {
+      var def = CONSTELLATIONS[usedConstIdx % CONSTELLATIONS.length];
+      usedConstIdx++;
+      var z = ZONES[zoneIndex % ZONES.length];
+      var now = performance.now() + (delayMs || 0);
+      return {
+        def: def,
+        zoneIndex: zoneIndex,
+        zone: z,
+        born: now,
+        drawDur: 3600,
+        holdDur: 8500 + Math.random() * 3500,
+        fadeDur: 3400
+      };
+    }
+
+    function initActiveConstellations() {
+      activeConstellations = [
+        spawnConstellation(0, 0),
+        spawnConstellation(1, 2200),
+        spawnConstellation(3, 4600),
+        spawnConstellation(2, 7000)
+      ];
+    }
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = Math.floor(W * dpr);
+      canvas.height = Math.floor(H * dpr);
+      if (!bgStars.length) {
+        buildStars();
+        initActiveConstellations();
+      }
+    }
+
+    window.addEventListener('resize', resize, { passive: true });
+    window.addEventListener('mousemove', function(e) {
+      mouse.tx = e.clientX / Math.max(W, 1);
+      mouse.ty = e.clientY / Math.max(H, 1);
+      mouse.px = e.clientX;
+      mouse.py = e.clientY;
+      mouse.active = true;
+    }, { passive: true });
+
+    /* При смене вкладки в меню плавно пробуждаем новое созвездие */
+    window.neoSkyPulse = function() {
+      if (!activeConstellations.length) return;
+      var pick = activeConstellations[Math.floor(Math.random() * activeConstellations.length)];
+      var now = performance.now();
+      var elapsed = now - pick.born;
+      if (elapsed > pick.drawDur && elapsed < pick.drawDur + pick.holdDur) {
+        pick.born = now - pick.drawDur - pick.holdDur + 600;
+      }
+    };
+
+    function isDawn() {
+      return document.documentElement.getAttribute('data-theme') === 'dawn';
+    }
+
+    function drawStarFlare(x, y, radius, alpha, rgb) {
+      ctx.save();
+      ctx.fillStyle = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + (alpha * 0.22) + ')';
+      ctx.beginPath();
+      ctx.arc(x, y, radius * 3.8, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + alpha + ')';
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (radius >= 1.45 && alpha > 0.35) {
+        var arm = radius * 5.2;
+        ctx.strokeStyle = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + (alpha * 0.48) + ')';
+        ctx.lineWidth = 0.75;
+        ctx.beginPath();
+        ctx.moveTo(x - arm, y); ctx.lineTo(x + arm, y);
+        ctx.moveTo(x, y - arm); ctx.lineTo(x, y + arm);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function drawAstrolabeWatermark(cx, cy, dawn) {
+      var R = Math.min(W, H) * 0.46;
+      if (R < 220) return;
+      var strokeBase = dawn ? '154,108,28' : '217,174,95';
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(wheelAngle);
+
+      ctx.strokeStyle = 'rgba(' + strokeBase + ', 0.045)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(0, 0, R, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = 'rgba(' + strokeBase + ', 0.032)';
+      ctx.setLineDash([3, 7]);
+      ctx.beginPath();
+      ctx.arc(0, 0, R * 0.82, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      /* Тонкие градусные засечки по внешнему кольцу */
+      ctx.strokeStyle = 'rgba(' + strokeBase + ', 0.055)';
+      for (var i = 0; i < 72; i++) {
+        var a = (i / 72) * Math.PI * 2;
+        var major = i % 6 === 0;
+        var r1 = R - (major ? 9 : 4);
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(a) * r1, Math.sin(a) * r1);
+        ctx.lineTo(Math.cos(a) * R, Math.sin(a) * R);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function render(now) {
+      requestAnimationFrame(render);
+      if (document.hidden) return;
+
+      mouse.x += (mouse.tx - mouse.x) * 0.05;
+      mouse.y += (mouse.ty - mouse.y) * 0.05;
+      wheelAngle += 0.00012;
+
+      var dawn = isDawn();
+      var railOffset = W >= 901 ? 132 : 0; // смещаем центр относительно левого меню (264px / 2)
+      var cx = W * 0.5 + railOffset;
+      var cy = H * 0.5;
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+
+      /* 1. Мягкое туманное свечение в рабочей зоне (убирает «чёрную дыру» на мониторах) */
+      var g1 = ctx.createRadialGradient(cx, cy * 0.85, 20, cx, cy * 0.85, Math.max(W, H) * 0.62);
+      if (dawn) {
+        g1.addColorStop(0, 'rgba(184, 138, 48, 0.07)');
+        g1.addColorStop(0.55, 'rgba(154, 108, 28, 0.03)');
+        g1.addColorStop(1, 'rgba(245, 239, 226, 0)');
+      } else {
+        g1.addColorStop(0, 'rgba(217, 174, 95, 0.055)');
+        g1.addColorStop(0.45, 'rgba(48, 62, 108, 0.065)');
+        g1.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      }
+      ctx.fillStyle = g1;
+      ctx.fillRect(0, 0, W, H);
+
+      /* 2. Гравированное кольцо астролябии на заднем плане (для ПК) */
+      if (W >= 1024) {
+        drawAstrolabeWatermark(cx, cy, dawn);
+      }
+
+      /* 3. Фоновое звёздное поле с параллаксом и откликом на курсор */
+      var pxShift = (mouse.x - 0.5) * 22;
+      var pyShift = (mouse.y - 0.5) * 18;
+      var lineRgb = dawn ? '154,108,28' : '217,174,95';
+
+      for (var i = 0; i < bgStars.length; i++) {
+        var s = bgStars[i];
+        var sx = (s.x * W + pxShift * s.z + W) % W;
+        var sy = (s.y * H + pyShift * s.z + H) % H;
+        var tw = 0.45 + 0.55 * Math.sin(now * s.speed + s.phase);
+        var alpha = (dawn ? 0.25 : 0.48) * tw * (0.5 + s.z * 0.5);
+
+        if (mouse.active && W >= 1024) {
+          var dx = sx - mouse.px;
+          var dy = sy - mouse.py;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 125) {
+            var boost = (1 - dist / 125);
+            alpha = Math.min(0.92, alpha + boost * 0.45);
+            if (dist < 95 && i % 2 === 0) {
+              ctx.strokeStyle = 'rgba(' + lineRgb + ',' + (boost * 0.14).toFixed(3) + ')';
+              ctx.lineWidth = 0.65;
+              ctx.beginPath();
+              ctx.moveTo(sx, sy);
+              ctx.lineTo(mouse.px, mouse.py);
+              ctx.stroke();
+            }
+          }
+        }
+
+        var starColor = dawn ? [138, 92, 18] : s.rgb;
+        ctx.fillStyle = 'rgba(' + starColor[0] + ',' + starColor[1] + ',' + starColor[2] + ',' + alpha.toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      /* 4. Живые меняющиеся созвездия */
+      var workLeft = W >= 901 ? 264 : 0;
+      var workW = W - workLeft;
+
+      for (var cIdx = 0; cIdx < activeConstellations.length; cIdx++) {
+        var item = activeConstellations[cIdx];
+        var age = now - item.born;
+        if (age < 0) continue;
+
+        var totalLife = item.drawDur + item.holdDur + item.fadeDur;
+        if (age >= totalLife) {
+          /* Перерождаем созвездие в свободном секторе */
+          var usedZones = activeConstellations.map(function(x){ return x.zoneIndex; });
+          var nextZone = (item.zoneIndex + 2) % ZONES.length;
+          for (var zTry = 0; zTry < ZONES.length; zTry++) {
+            var cand = (item.zoneIndex + 1 + zTry) % ZONES.length;
+            if (usedZones.indexOf(cand) === -1) { nextZone = cand; break; }
+          }
+          activeConstellations[cIdx] = spawnConstellation(nextZone, 400);
+          continue;
+        }
+
+        var drawProgress = Math.min(1, age / item.drawDur);
+        var fadeAlpha = 1;
+        if (age < 900) fadeAlpha = age / 900;
+        else if (age > item.drawDur + item.holdDur) {
+          fadeAlpha = 1 - (age - item.drawDur - item.holdDur) / item.fadeDur;
+        }
+        fadeAlpha = Math.max(0, Math.min(1, fadeAlpha));
+
+        var z = item.zone;
+        var ox = workLeft + z.x * workW + pxShift * 0.65;
+        var oy = z.y * H + pyShift * 0.65;
+        var zw = z.w * workW;
+        var zh = z.h * H;
+
+        var pts = item.def.stars.map(function(st) {
+          return {
+            x: ox + st[0] * zw,
+            y: oy + st[1] * zh,
+            mag: st[2]
+          };
+        });
+
+        /* Прочерчивание золотых линий от звезды к звезде */
+        var lines = item.def.lines;
+        var totalSegs = lines.length;
+        var segFloat = drawProgress * totalSegs;
+
+        ctx.save();
+        ctx.strokeStyle = 'rgba(' + lineRgb + ',' + (fadeAlpha * (dawn ? 0.24 : 0.28)).toFixed(3) + ')';
+        ctx.lineWidth = 0.9;
+
+        for (var l = 0; l < totalSegs; l++) {
+          var segProg = Math.max(0, Math.min(1, segFloat - l));
+          if (segProg <= 0) break;
+          var p1 = pts[lines[l][0]];
+          var p2 = pts[lines[l][1]];
+          var ex = p1.x + (p2.x - p1.x) * segProg;
+          var ey = p1.y + (p2.y - p1.y) * segProg;
+
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(ex, ey);
+          ctx.stroke();
+        }
+
+        /* Узловые звёзды созвездия */
+        var starRgb = dawn ? [138, 92, 18] : [240, 221, 176];
+        for (var p = 0; p < pts.length; p++) {
+          var pulse = 0.82 + 0.18 * Math.sin(now * 0.0022 + p * 1.3);
+          drawStarFlare(pts[p].x, pts[p].y, pts[p].mag * 1.15, fadeAlpha * 0.78 * pulse, starRgb);
+        }
+
+        /* Гравированная подпись созвездия */
+        if (W >= 900 && drawProgress > 0.45) {
+          var labelAlpha = Math.min(1, (drawProgress - 0.45) / 0.4) * fadeAlpha * (dawn ? 0.42 : 0.38);
+          var anchor = pts[0];
+          ctx.font = '500 9.5px "IBM Plex Mono", monospace';
+          ctx.fillStyle = 'rgba(' + lineRgb + ',' + labelAlpha.toFixed(3) + ')';
+          ctx.letterSpacing = '2px';
+          ctx.fillText(item.def.name, anchor.x + 10, anchor.y - 8);
+          ctx.font = '400 8px "IBM Plex Mono", monospace';
+          ctx.fillStyle = 'rgba(' + lineRgb + ',' + (labelAlpha * 0.68).toFixed(3) + ')';
+          ctx.fillText(item.def.sub, anchor.x + 10, anchor.y + 4);
+        }
+        ctx.restore();
+      }
+
+      /* 5. Редкая падающая звезда */
+      if (now >= nextMeteorAt && !meteor && W >= 768) {
+        meteor = {
+          x: workLeft + (0.2 + Math.random() * 0.65) * workW,
+          y: (0.06 + Math.random() * 0.32) * H,
+          vx: -4.8 - Math.random() * 2.5,
+          vy: 2.2 + Math.random() * 1.6,
+          born: now,
+          dur: 950
+        };
+        nextMeteorAt = now + 19000 + Math.random() * 16000;
+      }
+      if (meteor) {
+        var mAge = now - meteor.born;
+        if (mAge >= meteor.dur) {
+          meteor = null;
+        } else {
+          var mProg = mAge / meteor.dur;
+          var mAlpha = Math.sin(mProg * Math.PI) * (dawn ? 0.45 : 0.75);
+          var mx = meteor.x + meteor.vx * (mAge * 0.06);
+          var my = meteor.y + meteor.vy * (mAge * 0.06);
+          var tailX = mx - meteor.vx * 14;
+          var tailY = my - meteor.vy * 14;
+
+          var mg = ctx.createLinearGradient(mx, my, tailX, tailY);
+          mg.addColorStop(0, 'rgba(240, 221, 176, ' + mAlpha.toFixed(3) + ')');
+          mg.addColorStop(1, 'rgba(240, 221, 176, 0)');
+          ctx.strokeStyle = mg;
+          ctx.lineWidth = 1.3;
+          ctx.beginPath();
+          ctx.moveTo(mx, my);
+          ctx.lineTo(tailX, tailY);
+          ctx.stroke();
+        }
+      }
+    }
+
+    resize();
+    requestAnimationFrame(render);
+    setTimeout(function(){ canvas.classList.add('is-ready'); }, 80);
+  }
+
+  /* Перехватываем переключение экранов go(), чтобы небо мягко откликалось */
+  function hookNavigation() {
+    if (typeof window.go === 'function' && !window.go.__skyHooked) {
+      var _origGo = window.go;
+      var wrapped = function() {
+        var r = _origGo.apply(this, arguments);
+        if (typeof window.neoSkyPulse === 'function') window.neoSkyPulse();
+        return r;
+      };
+      wrapped.__skyHooked = true;
+      window.go = wrapped;
+    }
+  }
+
+  function bootDesktopAtlas() {
+    try {
+      injectDesktopCompanions();
+      initConstellationSky();
+      hookNavigation();
+    } catch (e) {
+      console.warn('[DesktopAtlas]', e);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootDesktopAtlas);
+  } else {
+    bootDesktopAtlas();
+  }
+})();
+</script>
+<!-- ==================== /DESKTOP NIGHT ATLAS ==================== -->
 </body>
 </html>
