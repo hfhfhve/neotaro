@@ -4137,7 +4137,7 @@ function hideToast(){ document.getElementById('toast').classList.remove('is-on')
 /* ---------- шторки ---------- */
 function openSheet(id){
   // Если гость жмет на закрытые шторки (награды, история, рефералка, настройки) — сразу ведем на вход!
-  if(isGuest() && ['bonus','referral','history','name','birth','sub','tone','length'].indexOf(id) !== -1){
+  if(isGuest() && ['bonus','referral','history','name','sub','tone','length'].indexOf(id) !== -1){
     requireAuth({ action: id });
     return;
   }
@@ -5932,7 +5932,7 @@ async function sendChat(){
   const input = document.getElementById('chat-in');
   const text = input.value.trim();
   if(!text) return;
-  if(requireAuth({ action: 'chat', text: text })) return;
+  if(isGuest()){ input.value = ''; funnelFromQuestion(text); return; }
   if(S.energy < 1){ funnelPlusOffer(); return; }
   const now = new Date().toLocaleTimeString(lang, { hour:'2-digit', minute:'2-digit' });
   const vmeta = window.__voiceMeta; window.__voiceMeta = null;
@@ -6010,6 +6010,11 @@ function sendDream(){
   const el = document.getElementById('dream-in');
   const text = el.value.trim();
   if(!text) return toast(tt('need_dream'));
+  if(isGuest()){
+    el.value = '';
+    funnelFromQuestion((lang === 'ru' ? 'Растолкуй мой сон и что он предвещает: ' : 'Interpret my dream: ') + text);
+    return;
+  }
   go('chat');
   setTimeout(() => {
     document.getElementById('chat-in').value = tt('dream_prefix') + text;
@@ -6299,11 +6304,33 @@ function validDate(y, m, d){
   return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
 }
 function pad(v){ v = String(v).trim(); return v.length === 1 ? '0' + v : v; }
+function calcGuestMatrixPoints(iso){
+  const red = n => { while(n > 22){ n = String(n).split('').reduce((s, d) => s + (+d), 0); } return n > 0 ? n : 22; };
+  const [year, month, day] = iso.split('-').map(Number);
+  const a = red(day), b = red(month), c = red(String(year).split('').reduce((s, d) => s + (+d), 0));
+  const d = red(a + b + c), center = red(a + b + c + d);
+  const f = red(a + b), g = red(b + c), h = red(c + d), i = red(d + a);
+  const sky = red(b + d), earth = red(a + c);
+  const personal_purpose = red(sky + earth), social_purpose = red(f + g + h + i);
+  const general_purpose = red(personal_purpose + social_purpose);
+  const love = red(h + d), money = red(h + c);
+  return { a, b, c, d, center, f, g, h, i, sky, earth, personal_purpose, social_purpose, general_purpose, love, money, karmic_tail: [i, red(i + d), d] };
+}
+
 async function saveBirth(){
   const d = pad(document.getElementById('b-d').value), m = pad(document.getElementById('b-m').value), y = document.getElementById('b-y').value.trim();
   if(!validDate(y, m, d)) return toast(tt('bad_date'));
   const iso = `${y}-${m}-${d}`;
-  if(requireAuth({ action: 'birth', birth_date: iso })) return;
+  if(isGuest()){
+    S.birth = iso;
+    try{ localStorage.setItem('neo_guest_birth', iso); }catch(e){}
+    paintProfile();
+    closeSheets();
+    toast(tt('saved'));
+    S.mx = null;
+    if(S.view === 'matrix') loadMatrix();
+    return;
+  }
   const data = await api('/profile/update', 'POST', { birth_date: iso });
   if(data && data.success){
     S.birth = iso;
@@ -6314,6 +6341,7 @@ async function saveBirth(){
     if(S.view === 'matrix') loadMatrix();
   } else toast(tt('err'));
 }
+
 /* ---------- оформление ---------- */
 const THEMES = [
   {code:'ink',      sw:['#0B0F1E','#232C47','#D9AE5F']},
@@ -6323,6 +6351,8 @@ const THEMES = [
 ];
 const THEME_TC = {ink:'#0B0F1E', obsidian:'#000000', dawn:'#FDF9F0'};
 let themePref = (window.__themeBoot && window.__themeBoot.pref) || 'obsidian';
+
+function resolveTheme(pref){
 
 function resolveTheme(pref){
   if(pref !== 'auto') return pref;
@@ -6945,6 +6975,11 @@ function lockTag(key){
 /* Одна точка входа в тарифы из любого места приложения.
    Подписки живут ТОЛЬКО в магазине — никаких дублей экрана оплаты. */
 function goPlans(key){
+  if(isGuest() && key === 'matrix.full' && S.birth){
+    closeSheets();
+    funnelFromQuestion('Моя дата рождения ' + formatDate(S.birth) + '. Расскажи подробно про моё предназначение, деньги, отношения и кармический урок.');
+    return;
+  }
   if(key) toast(tt('pw_locked_toast').replace('{plan}', planTitleFor(key)));
   /* Вход в тарифы — вершина воронки оплаты. Знаем, откуда пришли. */
   if(window.neoGoal) neoGoal('plans_view', { from: key || 'menu' }); /* neotaro-goal */
@@ -7170,10 +7205,23 @@ function askAboutChart(){
 async function loadMatrix(silent){
   const L = document.getElementById('mx-loading'), NB = document.getElementById('mx-nobirth'), B = document.getElementById('mx-body');
   NB.style.display = 'none';
-  /* Гостю матрицу не считаем: показываем экран «укажите дату», а кнопка там уже ведёт на вход. */
-  if(isGuest()){ L.style.display = 'none'; B.style.display = 'none'; NB.style.display = 'block'; return; }
-  if(!silent) S.mxPolls = 0;   /* человек сам открыл экран — опрос начинаем заново */
-  if(S.mx && (S.mx.teaser || silent)){ renderMatrix(); return; }
+  if(isGuest()){
+    if(!S.birth){ try{ S.birth = localStorage.getItem('neo_guest_birth') || null; }catch(e){} }
+    if(!S.birth){ L.style.display = 'none'; B.style.display = 'none'; NB.style.display = 'block'; return; }
+    const pts = calcGuestMatrixPoints(S.birth);
+    const kt = pts.karmic_tail;
+    S.mx = {
+      points: pts,
+      is_paid: false,
+      teaser: {
+        center: 'В центре вашей Матрицы стоит ' + pts.center + ' аркан (' + arcName(pts.center) + ') — это точка вашей внутренней силы, через которую раскрываются отношения, деньги и призвание.',
+        karma_hook: 'Ваш кармический хвост (' + kt.join(' — ') + ': ' + arcName(kt) + ') указывает на повторяющийся жизненный сценарий, который влияет на выбор партнёров и финансовый потолок…'
+      }
+    };
+    L.style.display = 'none';
+    renderMatrix();
+    return;
+  }
   if(!silent){ B.style.display = 'none'; L.style.display = 'flex'; L.style.flexDirection = 'column'; }
   const data = await api('/matrix/get', 'GET');
   L.style.display = 'none';
@@ -8124,8 +8172,10 @@ async function funnelFromQuestion(q){
     S.spread = { id: pick.id, cards: c, price: pick.price, name: pick.name, question: q || '', picked: [] };
     document.getElementById('tb-name').textContent = pick.name || '';
     document.getElementById('tb-desc').textContent = pick.description || '';
-    document.getElementById('tb-cards').textContent = c + ' ' + tt('cards_word');
-    document.getElementById('tb-price').textContent = pick.price === 0 ? tt('free') : (pick.price + ' ' + energyWord(pick.price));
+    document.getElementById('tb-cards').textContent = c + ' ' + cardsWord(c);
+    document.getElementById('tb-price').textContent = isGuest()
+      ? (lang === 'ru' ? 'личный расклад' : 'personal reading')
+      : (pick.price === 0 ? tt('free') : (pick.price + ' ' + energyWord(pick.price)));
   }
   if(!S.spread){ go('spreads'); return; }
   go('table');
@@ -8936,9 +8986,14 @@ const SPREAD_ALIASES = {
 const DEEP_SKIP = ['subscription', ''];
 function fnDeepLink(raw){
   var fromQuery = '';
-  try { fromQuery = new URLSearchParams(location.search).get('spread') || ''; } catch(e){}
+  try { fromQuery = new URLSearchParams(location.search).get('spread') || new URLSearchParams(location.search).get('view') || ''; } catch(e){}
   let hsh = decodeURIComponent(String(fromQuery || raw || '')).split(/[?&]/)[0].trim().toLowerCase();
-  if(DEEP_SKIP.indexOf(hsh) !== -1 || document.getElementById('v-' + hsh)) return false;
+  if(DEEP_SKIP.indexOf(hsh) !== -1) return false;
+  if(hsh === 'matrix' || hsh === 'astro' || hsh === 'dream' || hsh === 'chat' || hsh === 'calendar'){
+    go(hsh, true);
+    return true;
+  }
+  if(document.getElementById('v-' + hsh)) return false;
   const want = SPREAD_ALIASES[hsh] || hsh;
   const norm = x => String(x).toLowerCase().replace(/[-_]/g, '');
   try{ history.replaceState({ v: 'spreads' }, '', '#spreads'); }catch(e){}
