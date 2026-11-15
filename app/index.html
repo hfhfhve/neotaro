@@ -8985,9 +8985,10 @@ const DEEP_SKIP = ['subscription', ''];
 function fnDeepLink(raw){
   var fromQuery = '';
   try { fromQuery = new URLSearchParams(location.search).get('spread') || new URLSearchParams(location.search).get('view') || ''; } catch(e){}
-  let hsh = decodeURIComponent(String(fromQuery || raw || '')).split(/[?&]/)[0].trim().toLowerCase();
+  let hsh = decodeURIComponent(String(raw || fromQuery || '')).split(/[?&]/)[0].trim().toLowerCase();
   if(DEEP_SKIP.indexOf(hsh) !== -1) return false;
-  if(hsh === 'matrix' || hsh === 'astro' || hsh === 'dream' || hsh === 'chat' || hsh === 'calendar'){
+  if(document.getElementById('v-' + hsh)){
+    try{ history.replaceState({ v: hsh }, '', '#' + hsh); }catch(e){}
     go(hsh, true);
     return true;
   }
