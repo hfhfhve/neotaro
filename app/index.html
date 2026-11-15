@@ -5576,6 +5576,16 @@ async function openDailySpread(spreadId){
   }
 }
 /* ============================ РАСКЛАДЫ ============================ */
+function cardsWord(n){
+  const v = Math.abs(Math.floor(Number(n) || 0));
+  if(lang === 'ru'){
+    if(v % 10 === 1 && v % 100 !== 11) return 'карта';
+    if(v % 10 >= 2 && v % 10 <= 4 && (v % 100 < 10 || v % 100 >= 20)) return 'карты';
+    return 'карт';
+  }
+  return tt('cards_word');
+}
+
 async function renderSpreads(){
   const box = document.getElementById('spreads-list');
   if(!S.spreads.length){
@@ -5584,6 +5594,7 @@ async function renderSpreads(){
     if(!data || !data.success || !data.spreads){ box.innerHTML = `<div class="empty"><div class="g">${IC.cards}</div><p>${esc(tt('err'))}</p></div>`; return; }
     S.spreads = data.spreads;
   }
+  const guest = isGuest();
   const cats = [['elite','cat_elite'],['basic','cat_basic'],['love','cat_love'],['career','cat_career'],['deep','cat_deep']];
   let html = '';
   cats.forEach(([id, key]) => {
@@ -5591,14 +5602,13 @@ async function renderSpreads(){
     if(!items.length) return;
     html += `<div class="orn" style="margin:22px 0 6px"><span class="eyebrow">${esc(tt(key))}</span></div>`;
     items.forEach(s => {
-      // Какой тариф нужен, решает бэкенд (поле feature): глубокие расклады — spread.elite (ПРО),
-      // остальные сложные — spread.premium (ПЛЮС). Фронт не хранит эти правила у себя.
       const feat = s.feature || (s.is_premium ? 'spread.premium' : null);
       const locked = !!feat && !featOk(feat);
-      // Энергия тратится у всех, включая подписчиков: цена показывается всегда.
-      const price = s.price === 0
-        ? `<span class="tag">${esc(tt('free'))}</span>`
-        : `<span class="tag"><span class="num">${s.price}</span> ${esc(energyWord(s.price))}</span>`;
+      const price = guest
+        ? `<span class="tag">→</span>`
+        : (s.price === 0
+            ? `<span class="tag">${esc(tt('free'))}</span>`
+            : `<span class="tag"><span class="num">${s.price}</span> ${esc(energyWord(s.price))}</span>`);
       const end = locked ? lockTag(feat) : price;
       html += `<button class="rowcard${locked ? ' locked' : ''}" onclick="${locked ? `goPlans('${feat}')` : `pickSpread('${s.id}')`}">
         <span class="idx num">${s.cards_count}</span>
@@ -5616,8 +5626,10 @@ function pickSpread(id){
   S.spread = { id, cards: s.cards_count, price: s.price, name: s.name, question: '', picked: [] };
   document.getElementById('tb-name').textContent = s.name;
   document.getElementById('tb-desc').textContent = s.description || '';
-  document.getElementById('tb-cards').textContent = s.cards_count + ' ' + tt('cards_word');
-  document.getElementById('tb-price').textContent = s.price === 0 ? tt('free') : (s.price + ' ' + energyWord(s.price));
+  document.getElementById('tb-cards').textContent = s.cards_count + ' ' + cardsWord(s.cards_count);
+  document.getElementById('tb-price').textContent = isGuest()
+    ? (lang === 'ru' ? 'личный расклад' : 'personal reading')
+    : (s.price === 0 ? tt('free') : (s.price + ' ' + energyWord(s.price)));
   document.getElementById('tb-q').value = S.pendingQ || '';
   fnRenderForm(S.pendingQ || '');
   S.pendingQ = '';
@@ -7337,7 +7349,17 @@ function pickRel(type){
   document.querySelectorAll('#syn-rel .rel-chip').forEach(c => c.classList.toggle('is-on', c.dataset.rel === type));
   bridge.haptic();
 }
-function renderSyn(){
+async function renderSyn(){
+  if(isGuest()){
+    if(!S.spreads || !S.spreads.length){
+      const d = await api('/spreads?lang=' + encodeURIComponent(lang || 'ru'), 'GET', {}, true);
+      if(d && d.success && d.spreads) S.spreads = d.spreads;
+    }
+    if((S.spreads || []).some(x => x.id === 'compat')){
+      pickSpread('compat');
+      return;
+    }
+  }
   const hasBirth = !!S.birth;
   document.getElementById('syn-nobirth').style.display = hasBirth ? 'none' : 'block';
   document.getElementById('syn-form').style.display = (hasBirth && !synLast) ? 'block' : 'none';
