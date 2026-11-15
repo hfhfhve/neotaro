@@ -8065,10 +8065,27 @@ function fnShowTable(q, picked){
 }
 
 /* Вопрос с главной / Да-Нет / Карты дня -> первый доступный короткий расклад с готовым вопросом. */
-function funnelFromQuestion(q){
-  const list = (S.spreads || S.templates || []).filter(t => t && !t.locked && (t.cards || 0) >= 1);
-  const pick = list.find(t => t.cards === 3) || list.find(t => t.cards <= 3) || list[0];
-  if(pick){ S.spread = Object.assign({}, pick); }
+async function funnelFromQuestion(q){
+  if(!S.spreads || !S.spreads.length){
+    const d = await api('/spreads?lang=' + encodeURIComponent(lang || 'ru'), 'GET', {}, true);
+    if(d && d.success && d.spreads) S.spreads = d.spreads;
+  }
+  const list = (S.spreads || []).filter(t => {
+    if(!t || t.id === 'compat') return false;
+    const feat = t.feature || (t.is_premium ? 'spread.premium' : null);
+    const locked = !!feat && !featOk(feat);
+    return !locked && (t.cards_count || t.cards || 0) >= 1;
+  });
+  const cnt = t => t.cards_count || t.cards || 1;
+  const pick = list.find(t => t.id === 'past-present') || list.find(t => cnt(t) === 3) || list.find(t => cnt(t) <= 3) || list[0];
+  if(pick){
+    const c = cnt(pick);
+    S.spread = { id: pick.id, cards: c, price: pick.price, name: pick.name, question: q || '', picked: [] };
+    document.getElementById('tb-name').textContent = pick.name || '';
+    document.getElementById('tb-desc').textContent = pick.description || '';
+    document.getElementById('tb-cards').textContent = c + ' ' + tt('cards_word');
+    document.getElementById('tb-price').textContent = pick.price === 0 ? tt('free') : (pick.price + ' ' + energyWord(pick.price));
+  }
   if(!S.spread){ go('spreads'); return; }
   go('table');
   const inp = document.getElementById('tb-q');
