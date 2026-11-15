@@ -6353,8 +6353,6 @@ const THEME_TC = {ink:'#0B0F1E', obsidian:'#000000', dawn:'#FDF9F0'};
 let themePref = (window.__themeBoot && window.__themeBoot.pref) || 'obsidian';
 
 function resolveTheme(pref){
-
-function resolveTheme(pref){
   if(pref !== 'auto') return pref;
   const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)');
   return (mq && mq.matches) ? 'dawn' : 'obsidian';
