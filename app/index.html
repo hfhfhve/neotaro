@@ -6973,9 +6973,9 @@ function lockTag(key){
 /* Одна точка входа в тарифы из любого места приложения.
    Подписки живут ТОЛЬКО в магазине — никаких дублей экрана оплаты. */
 function goPlans(key){
-  if(isGuest() && key === 'matrix.full' && S.birth){
+  if(isGuest() && key === 'matrix.full'){
     closeSheets();
-    funnelFromQuestion('Моя дата рождения ' + formatDate(S.birth) + '. Расскажи подробно про моё предназначение, деньги, отношения и кармический урок.');
+    openMatrixFunnel(S.birth);
     return;
   }
   if(key) toast(tt('pw_locked_toast').replace('{plan}', planTitleFor(key)));
@@ -7205,19 +7205,7 @@ async function loadMatrix(silent){
   NB.style.display = 'none';
   if(isGuest()){
     if(!S.birth){ try{ S.birth = localStorage.getItem('neo_guest_birth') || null; }catch(e){} }
-    if(!S.birth){ L.style.display = 'none'; B.style.display = 'none'; NB.style.display = 'block'; return; }
-    const pts = calcGuestMatrixPoints(S.birth);
-    const kt = pts.karmic_tail;
-    S.mx = {
-      points: pts,
-      is_paid: false,
-      teaser: {
-        center: 'В центре вашей Матрицы стоит ' + pts.center + ' аркан (' + arcName(pts.center) + ') — это точка вашей внутренней силы, через которую раскрываются отношения, деньги и призвание.',
-        karma_hook: 'Ваш кармический хвост (' + kt.join(' — ') + ': ' + arcName(kt) + ') указывает на повторяющийся жизненный сценарий, который влияет на выбор партнёров и финансовый потолок…'
-      }
-    };
-    L.style.display = 'none';
-    renderMatrix();
+    openMatrixFunnel(S.birth);
     return;
   }
   if(!silent){ B.style.display = 'none'; L.style.display = 'flex'; L.style.flexDirection = 'column'; }
@@ -8132,22 +8120,54 @@ function neoDeviceId(){
   }catch(e){ return ''; }
 }
 
-const FN = { id: null, k: null, q: '', picked: [], polling: false, resumed: false };
+const FN = { id: null, k: null, q: '', picked: [], type: '', matrixPts: null, polling: false, resumed: false };
 const FN_RU = () => (typeof lang === 'undefined' || lang === 'ru');
 
 function fnSave(){
-  try{ localStorage.setItem('neo_funnel', JSON.stringify({ id: FN.id, k: FN.k, q: FN.q, picked: FN.picked, type: S.spread && S.spread.id })); }catch(e){}
+  try{ localStorage.setItem('neo_funnel', JSON.stringify({ id: FN.id, k: FN.k, q: FN.q, picked: FN.picked, type: FN.type || (S.spread && S.spread.id), matrixPts: FN.matrixPts })); }catch(e){}
 }
 function fnLoad(){
   try{ return JSON.parse(localStorage.getItem('neo_funnel') || 'null'); }catch(e){ return null; }
 }
-function fnShowTable(q, picked){
+function fnMatrixSvg(p){
+  if(!p) return '';
+  const POS = { b:[160,40], c:[280,160], d:[160,280], a:[40,160], f:[75,75], g:[245,75], h:[245,245], i:[75,245] };
+  let svg = '<svg viewBox="0 0 320 320" style="width:min(260px,78vw);height:auto;display:block;margin:0 auto" role="img" aria-label="Матрица судьбы">';
+  svg += '<polygon points="160,40 280,160 160,280 40,160" fill="none" stroke="rgba(217,174,95,.42)"/>';
+  svg += '<polygon points="75,75 245,75 245,245 75,245" fill="none" stroke="rgba(147,160,192,.32)"/>';
+  svg += '<line x1="40" y1="160" x2="280" y2="160" stroke="rgba(217,174,95,.16)"/><line x1="160" y1="40" x2="160" y2="280" stroke="rgba(217,174,95,.16)"/>';
+  svg += '<line x1="75" y1="75" x2="245" y2="245" stroke="rgba(147,160,192,.14)"/><line x1="245" y1="75" x2="75" y2="245" stroke="rgba(147,160,192,.14)"/>';
+  for(const k in POS){
+    const [x, y] = POS[k];
+    svg += `<g><circle cx="${x}" cy="${y}" r="19" fill="#0B0F1E" stroke="rgba(217,174,95,.55)"/><text x="${x}" y="${y + 5.5}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="14" fill="#F2EDE0">${p[k]}</text></g>`;
+  }
+  svg += `<g><circle cx="160" cy="160" r="28" fill="#0B0F1E" stroke="#D9AE5F" stroke-width="1.6"/><text x="160" y="168" text-anchor="middle" font-family="Prata,serif" font-size="22" fill="#F0DDB0">${p.center}</text></g>`;
+  return svg + '</svg>';
+}
+function openMatrixFunnel(prefillBirth){
+  const m = { id:'matrix', cards_count:4, price:7, name:'Матрица Судьбы', description:'Полный расчёт 22 арканов: центр силы, деньги, любовь и кармический хвост' };
+  if(!S.spreads.some(x => x.id === 'matrix')) S.spreads.unshift(m);
+  if(prefillBirth){
+    const cur = fnDraftLoad('matrix');
+    const a = (cur && cur.a) || {};
+    if(!a.birth) a.birth = prefillBirth;
+    fnDraftSave('matrix', { v: 2, a: a, i: -1, hist: [] });
+  }
+  pickSpread('matrix');
+}
+function fnShowTable(q, picked, matrixPts){
   go('table');
   document.getElementById('tb-ask').style.display = 'none';
   document.getElementById('tb-shuffle').style.display = 'none';
   document.getElementById('tb-result').style.display = 'block';
   document.getElementById('tb-qshow').textContent = q ? ('«' + q + '»') : '';
-  document.getElementById('tb-cards-out').innerHTML = (picked || []).map(id => `<img src="${CARD_IMG(id)}" alt="">`).join('');
+  const cOut = document.getElementById('tb-cards-out');
+  const pts = matrixPts || FN.matrixPts;
+  if(pts && (FN.type === 'matrix' || (S.spread && S.spread.id === 'matrix'))){
+    cOut.innerHTML = fnMatrixSvg(pts);
+  } else {
+    cOut.innerHTML = (picked || []).map(id => `<img src="${CARD_IMG(id)}" alt="">`).join('');
+  }
   fnActions(false);   /* пока не оплачено — без «Обсудить» и «Другой расклад» */
 }
 
@@ -8287,6 +8307,18 @@ async function funnelDeal(q, extra){
     const n = Math.floor(Math.random() * 78) + 1;
     if(!picked.includes(n)) picked.push(n);
   }
+  const isMx = S.spread.id === 'matrix';
+  if(isMx && QZ && QZ.a && QZ.a.birth){
+    const mxPts = calcGuestMatrixPoints(QZ.a.birth);
+    picked.splice(0, picked.length, mxPts.center, mxPts.money, mxPts.love, mxPts.karmic_tail[0]);
+    extra = extra || {};
+    extra.compat = {
+      birth_date: QZ.a.birth,
+      gender: QZ.a.gender || '',
+      name: QZ.a.name || '',
+      focus: Array.isArray(QZ.a.focus) ? QZ.a.focus.join(', ') : (QZ.a.focus || '')
+    };
+  }
   S.spread.picked = picked; S.spread.question = q; S.spread.lastExtra = extra || null;
   document.getElementById('tb-ask').style.display = 'none';
   document.getElementById('tb-result').style.display = 'none';
@@ -8317,7 +8349,9 @@ async function funnelDeal(q, extra){
   [, data] = await Promise.all([wait, call]);
   stopSpreadRitual();
 
-  fnShowTable(shown, picked);
+  FN.type = S.spread.id;
+  FN.matrixPts = (data && data.matrix_points) || (isMx && QZ && QZ.a && QZ.a.birth ? calcGuestMatrixPoints(QZ.a.birth) : null);
+  fnShowTable(shown, picked, FN.matrixPts);
   const out = document.getElementById('tb-reading');
   if(data && data.success){
     if(extra) fnDraftClear(S.spread.id);
@@ -8368,9 +8402,11 @@ async function fnResumeLast(){
   FN.id = s.id; FN.k = s.k;
   FN.q = s.q || fnShortQ(d.question);
   FN.picked = d.cards || s.picked || [];
+  FN.type = d.spread_type || s.type || '';
+  FN.matrixPts = d.matrix_points || s.matrixPts || null;
   if(d.plans) FN.plans = d.plans;
   if(d.paid){ funnelRenderPaid(d); return; }
-  fnShowTable(FN.q, FN.picked);
+  fnShowTable(FN.q, FN.picked, FN.matrixPts);
   funnelRenderLocked(d.teaser || '');
   if(window.neoGoal) neoGoal('funnel_limit_resume');
 }
@@ -8649,6 +8685,8 @@ async function funnelResume(){
   FN.k = p.get('k') || (saved.id === id ? saved.k : '');
   FN.q = saved.id === id ? (saved.q || '') : '';
   FN.picked = saved.id === id ? (saved.picked || []) : [];
+  FN.type = saved.id === id ? (saved.type || '') : '';
+  FN.matrixPts = saved.id === id ? (saved.matrixPts || null) : null;
   try{ history.replaceState(null, '', location.pathname + '#table'); }catch(e){}
 
   if(resumeId && !paidId){
@@ -8659,15 +8697,17 @@ async function funnelResume(){
       if(d.paid){ funnelRenderPaid(d); return; }
       FN.q = FN.q || fnShortQ(d.question);
       FN.picked = d.cards || FN.picked;
+      FN.type = d.spread_type || FN.type || '';
+      if(d.matrix_points) FN.matrixPts = d.matrix_points;
       fnSave();
-      fnShowTable(FN.q, FN.picked);
+      fnShowTable(FN.q, FN.picked, FN.matrixPts);
       funnelRenderLocked(d.teaser || '');
       if(window.neoGoal) neoGoal('funnel_reminder_open');
       return;
     }
   }
 
-  fnShowTable(FN.q, FN.picked);
+  fnShowTable(FN.q, FN.picked, FN.matrixPts);
   funnelPoll(FN.id, FN.k);
 }
 
@@ -8687,7 +8727,9 @@ async function funnelPoll(id, k){
     await new Promise(r => setTimeout(r, 2500));
   }
   FN.polling = false;
-  if(last && last.cards && !FN.picked.length){ FN.picked = last.cards; fnShowTable(FN.q || fnShortQ(last.question), FN.picked); }
+  if(last && last.spread_type) FN.type = last.spread_type;
+  if(last && last.matrix_points) FN.matrixPts = last.matrix_points;
+  if(last && last.cards && !FN.picked.length){ FN.picked = last.cards; fnShowTable(FN.q || fnShortQ(last.question), FN.picked, FN.matrixPts); }
   funnelRenderLocked((last && last.teaser) || '', FN_RU()
     ? ((last && last.canceled) ? 'Оплата не прошла — попробуйте ещё раз' : 'Оплата ещё не подтвердилась. Если вы оплатили — разбор придёт на почту в течение нескольких минут.')
     : 'Payment not confirmed yet.');
@@ -8699,10 +8741,11 @@ function funnelRenderPaid(d){
   const ru = FN_RU();
   if(d.cards && d.cards.length){ FN.picked = d.cards; }
   if(d.question && !FN.q){ FN.q = fnShortQ(d.question); }
-  fnShowTable(FN.q, FN.picked);
+  FN.type = d.spread_type || (S.spread && S.spread.id) || FN.type || '';
+  if(d.matrix_points) FN.matrixPts = d.matrix_points;
+  fnShowTable(FN.q, FN.picked, FN.matrixPts);
   if(typeof d.energy === 'number'){ S.energy = d.energy; try{ paintEnergy(); }catch(e){} }
   FN.full = d.interpretation || '';
-  FN.type = d.spread_type || (S.spread && S.spread.id) || '';
   const pl = FN.plans || {};
   const n = typeof d.energy === 'number' ? d.energy
     : ((pl[d.plan] && pl[d.plan].energy) || (pl.tripwire && pl.tripwire.energy) || 5);
@@ -8963,6 +9006,7 @@ async function funnelBuyPlus(){
    ============================================================ */
 const FUNNEL_FORM_IDS = {
   'compat': 'compat',
+  'matrix': 'matrix',
   'past-present': 'ppf',
   'one-card': 'yesno',
   'feelings': 'feelings',
@@ -8987,6 +9031,10 @@ function fnDeepLink(raw){
   try { fromQuery = new URLSearchParams(location.search).get('spread') || new URLSearchParams(location.search).get('view') || ''; } catch(e){}
   let hsh = decodeURIComponent(String(raw || fromQuery || '')).split(/[?&]/)[0].trim().toLowerCase();
   if(DEEP_SKIP.indexOf(hsh) !== -1) return false;
+  if(hsh === 'matrix' && isGuest()){
+    openMatrixFunnel();
+    return true;
+  }
   if(document.getElementById('v-' + hsh)){
     try{ history.replaceState({ v: hsh }, '', '#' + hsh); }catch(e){}
     go(hsh, true);
@@ -9259,6 +9307,46 @@ const FUNNEL_FORMS = {
       { id:'story', type:'area', opt:true, max:400, label:'История пары', q:'Как вы познакомились и что происходит сейчас?', hint:'С историей разбор будет про вас, а не про знаки вообще. Можно пропустить.', ph:'Познакомились год назад… Сейчас между нами…' },
       { id:'q', type:'ask', opt:true, display:true, max:150, label:'Что хочет узнать о паре', q:'Что хотите узнать о вашей паре?', hint:'Выберите или напишите свой',
         sugg:['Подходим ли мы друг другу?', 'Есть ли у нас будущее?', 'Что мешает нам быть ближе?'] }
+    ]
+  },
+
+  /* ---------- МАТРИЦА СУДЬБЫ ---------- */
+  matrix: {
+    display: a => 'Матрица Судьбы по дате ' + (a.birth ? formatDate(a.birth) : ''),
+    steps: [
+      { id:'birth', type:'date', need:true, label:'Дата рождения',
+        q:'Когда вы родились?',
+        hint:'Из цифр вашей даты собирается октаграмма из 22 арканов судьбы' },
+      { id:'gender', type:'chips', req:true, label:'Пол',
+        q:'Ваш пол', hint:'Поможет точнее раскрыть энергии любви и самореализации',
+        opts:[['f','Женщина'],['m','Мужчина']] },
+      { id:'name', type:'text', opt:true, max:40, label:'Имя',
+        q:'Как вас зовут?', hint:'Чтобы разбор обращался к вам лично. Можно пропустить.',
+        ph:'Например: Анна' },
+      { id:'focus', type:'multi', req:true, label:'Главный фокус',
+        q:'Что сейчас волнует сильнее всего?', hint:'Выберите 1–3 темы для глубокого разбора',
+        opts:[
+          ['money','Деньги и финансовый потолок'],
+          ['love','Любовь, отношения и партнёр'],
+          ['purpose','Предназначение и в чём мой талант'],
+          ['karma','Кармический хвост и повторяющиеся сценарии'],
+          ['year','Прогноз и главные уроки года']
+        ] },
+      { id:'mx_echo', type:'echo',
+        text: a => {
+          if(!a.birth) return 'Дата принята. Сейчас мы соберём ваши 22 аркана и найдём главные точки силы.';
+          const pts = calcGuestMatrixPoints(a.birth);
+          const kt = pts.karmic_tail;
+          return `Матрица собрана. Ваш центр силы — аркан ${pts.center} (${arcName(pts.center)}), денежная линия — ${pts.money} (${arcName(pts.money)}), кармический хвост — ${kt.join('–')}. В них уже видно, где утекает ваша энергия.`;
+        } },
+      { id:'q', type:'ask', opt:true, display:true, max:160, label:'Главный вопрос к Матрице',
+        q:'Что вы больше всего хотите понять о себе сейчас?', hint:'Выберите или напишите свой запрос',
+        sugg: a => {
+          const f = Array.isArray(a.focus) ? a.focus : [];
+          if(f.indexOf('money') !== -1) return ['Как пробить мой финансовый потолок?', 'Через какое дело ко мне приходят деньги?', 'Почему деньги не задерживаются?'];
+          if(f.indexOf('love') !== -1) return ['Какой партнёр мне подходит по судьбе?', 'Почему в любви повторяется один сценарий?', 'Что мешает гармоничным отношениям?'];
+          return ['В чём моё главное предназначение?', 'Какой урок не даёт мне расти?', 'Как вывести главные арканы в плюс?'];
+        } }
     ]
   }
 };
