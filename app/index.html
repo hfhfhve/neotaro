@@ -1892,11 +1892,23 @@ html[data-theme="dawn"] .bnx-burst{background:#FFFFFF;color:#5C3D08}
 <script>
 /* NEO:SENTRY */
 (function(){
+  if (/Android.*wv\)|; wv\)/i.test(navigator.userAgent || '') && !window.mraidbridge) {
+    window.mraidbridge = {
+      fireChangeEvent: function(){},
+      notifyReadyEvent: function(){},
+      notifyErrorEvent: function(){},
+      notifySizeChangeEvent: function(){},
+      nativeCallComplete: function(){}
+    };
+  }
   if(!window.Sentry) return;
-  // ВПИШИ СЮДА СВОЙ SENTRY_DSN ИЗ .env ВМЕСТО КАВЫЧЕК (если вдруг оставишь пустым — он попробует скачать с бэка как раньше)
   var STATIC_DSN = "https://ab1fbcfb979d73619d2c9255eaca13f8@o4511189625274368.ingest.de.sentry.io/4511514128810064"; 
 
-  var IGN = ['ResizeObserver loop'];
+  var IGN = [
+    'ResizeObserver loop',
+    'Error invoking post: Method not found',
+    /fireChangeEvent|notifyReadyEvent|notifyErrorEvent|notifySizeChangeEvent|nativeCallComplete|mraidbridge/i
+  ];
   function boot(dsn){
     if(!dsn || dsn.indexOf('http') !== 0 || window.__sentryBooted) return;
     window.__sentryBooted = true;
@@ -1905,7 +1917,14 @@ html[data-theme="dawn"] .bnx-burst{background:#FFFFFF;color:#5C3D08}
         dsn: dsn,
         environment: location.hostname,
         tracesSampleRate: 0.2,
-        ignoreErrors: IGN
+        ignoreErrors: IGN,
+        beforeSend: function(event){
+          try{
+            var val = event.exception && event.exception.values && event.exception.values[0] && event.exception.values[0].value || '';
+            if(/mraidbridge|fireChangeEvent|notifyReadyEvent/i.test(val)) return null;
+          }catch(e){}
+          return event;
+        }
       });
       var u = null;
       try{ u = JSON.parse(localStorage.getItem('neotaro_user') || 'null'); }catch(e){}
