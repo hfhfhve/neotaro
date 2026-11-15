@@ -4119,7 +4119,7 @@ const S = {
   history: [], histOffset: 0, histMore: false, histCur: -1,
   mx: null, mxText: null,
   access: {plan:'free', plan_title:'', level:0, paid:false, features:{}},
-  plansData: null, per: 'month',
+  plansData: null, per: 'year',
   view: 'home', poll: null, offerTimer: null
 };
 
@@ -8305,72 +8305,40 @@ async function fnResumeLast(){
   if(window.neoGoal) neoGoal('funnel_limit_resume');
 }
 
-let FN_SELECTED_PLAN = 'plus';
+let FN_SELECTED_PLAN = 'pro';
 let _fnHoldTimer = null;
 
 /* ---------- цены тарифов воронки (с сервера, с запасными числами) ---------- */
-const FN_PRICE_FALLBACK = { tripwire: 199, tripwire_save: 99, plus: 399, pro: 699, upsell: 149 };
+const FN_PRICE_FALLBACK = { tripwire: 199, tripwire_save: 199, plus: 399, pro: 499, upsell: 149 };
 function fnPlanPrice(plan){
   const p = FN.plans && FN.plans[plan] && FN.plans[plan].price;
   return p || FN_PRICE_FALLBACK[plan] || 199;
 }
 
-/* ---------- СКИДКА ПРИ УХОДЕ ----------
-   Один раз на расклад: кнопка «Назад», возврат на вкладку после ухода, отменённая оплата.
-   Тот же расклад и те же 3 дня доступа, дешевле, с настоящим таймером: когда он
-   доходит до нуля, скидка исчезает и возвращается обычная цена. */
+/* Отключаем скидку 99 ₽ при сворачивании вкладки — цена всегда 199 ₽ */
 const FN_SAVE_MINUTES = 10;
 function fnSaveKey(){ return 'neo_save_' + (FN.id || ''); }
-function fnSaveEnd(){ if(!FN.id) return 0; try{ return parseInt(localStorage.getItem(fnSaveKey()) || '0', 10) || 0; }catch(e){ return 0; } }
-function fnSaveActive(){ return fnSaveEnd() > Date.now(); }
-function fnOfferSave(reason){
-  if(!FN.id || FN.paidView || fnSaveEnd()) return false;               /* уже оплачено или скидку уже показывали */
-  if(!document.getElementById('fn-fog')) return false;                  /* на экране нет оплаты */
-  if(!(FN.plans && FN.plans.tripwire_save)) return false;               /* сервер ещё не знает про скидку */
-  if(FN.shownAt && Date.now() - FN.shownAt < 21000) return false;       /* сервер принимает скидку через 20 с */
-  try{ localStorage.setItem(fnSaveKey(), String(Date.now() + FN_SAVE_MINUTES * 60 * 1000)); }catch(e){ return false; }
-  funnelRenderLocked(FN.teaser || '');
-  const fog = document.getElementById('fn-fog'), sc = document.getElementById('scroll');
-  if(fog && sc){
-    const top = fog.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop - 12;
-    try{ sc.scrollTo({ top: Math.max(0, top), behavior: 'smooth' }); }catch(e){ sc.scrollTop = Math.max(0, top); }
-  }
-  try{ bridge.haptic('ok'); }catch(e){}
-  if(window.neoGoal) neoGoal('downsell_shown', { reason: reason || '', spread: FN.id });
-  return true;
-}
-/* «← Назад» на экране расклада: первое нажатие на неоплаченном раскладе показывает скидку. */
+function fnSaveEnd(){ return 0; }
+function fnSaveActive(){ return false; }
+function fnOfferSave(reason){ return false; }
+
 function tbBack(){
-  if(fnOfferSave('back')) return;
   go('spreads');
 }
-(function(){
-  let hiddenAt = 0;
-  document.addEventListener('visibilitychange', function(){
-    if(document.hidden){ hiddenAt = Date.now(); return; }
-    if(hiddenAt && Date.now() - hiddenAt > 5000) fnOfferSave('return');
-    hiddenAt = 0;
-  });
-})();
 
 function fnStartHoldTimer(){
   clearInterval(_fnHoldTimer);
   const el = document.getElementById('fn-hold-clock');
   if(!el) return;
-  const saveMode = fnSaveActive();
   const key = 'neo_hold_' + (FN.id || 'cur');
   let end = 0;
-  if(saveMode){
-    end = fnSaveEnd();
-  } else {
-    try{
-      end = parseInt(sessionStorage.getItem(key) || '0', 10);
-      if(!end || end < Date.now()){
-        end = Date.now() + 15 * 60 * 1000;
-        sessionStorage.setItem(key, String(end));
-      }
-    }catch(e){ end = Date.now() + 15 * 60 * 1000; }
-  }
+  try{
+    end = parseInt(sessionStorage.getItem(key) || '0', 10);
+    if(!end || end < Date.now()){
+      end = Date.now() + 15 * 60 * 1000;
+      sessionStorage.setItem(key, String(end));
+    }
+  }catch(e){ end = Date.now() + 15 * 60 * 1000; }
 
   function tick(){
     const node = document.getElementById('fn-hold-clock');
@@ -8379,11 +8347,6 @@ function fnStartHoldTimer(){
     const m = String(Math.floor(left / 60)).padStart(2, '0');
     const s = String(left % 60).padStart(2, '0');
     node.textContent = m + ':' + s;
-    if(saveMode && left <= 0){
-      /* Скидка закончилась по-настоящему: возвращаем обычные цены. */
-      clearInterval(_fnHoldTimer);
-      if(document.getElementById('fn-fog')) funnelRenderLocked(FN.teaser || '');
-    }
   }
   tick();
   _fnHoldTimer = setInterval(tick, 1000);
@@ -8398,10 +8361,10 @@ function fnPickTier(plan){
   if(btn){
     const ru = FN_RU();
     const price = fnPlanPrice(plan);
-    if(plan === 'plus'){
+    if(plan === 'pro' || plan === 'plus'){
       btn.textContent = ru
-        ? 'Получить полный доступ на месяц · ' + price + ' ₽'
-        : 'Get full access for 1 month · ' + price + ' ₽';
+        ? 'Получить полный VIP-доступ на месяц · ' + price + ' ₽'
+        : 'Get full VIP access for 1 month · ' + price + ' ₽';
     } else {
       btn.textContent = ru
         ? 'Открыть этот расклад целиком · ' + price + ' ₽'
@@ -8414,49 +8377,42 @@ function funnelFogHtml(errText){
   const ru = FN_RU();
   let saved = '';
   try{ saved = localStorage.getItem('neo_email') || ((bridge.webUser && bridge.webUser.email) || ''); }catch(e){}
-  FN_SELECTED_PLAN = 'plus';
-  /* Скидка при уходе активна: вместо «расклад за 199» — тот же расклад дешевле, он же выбран. */
-  const save = fnSaveActive();
-  const twPlan = save ? 'tripwire_save' : 'tripwire';
-  const twPrice = fnPlanPrice(twPlan), twOld = save ? fnPlanPrice('tripwire') : 390;
-  if(save) FN_SELECTED_PLAN = 'tripwire_save';
-  const plusPrice = fnPlanPrice('plus');
-  /* Энергия тарифов — из БД (приходит в ответе /funnel/spread и /funnel/status), а не зашита в вёрстку. */
+  FN_SELECTED_PLAN = 'pro';
+  const twPrice = fnPlanPrice('tripwire'), twOld = 390;
+  const proPrice = fnPlanPrice('pro');
   const pl = FN.plans || {};
   const twEn = (pl.tripwire && pl.tripwire.energy) || 5;
-  const plusEn = pl.plus && pl.plus.energy;
-  const plusChat = ru
-    ? ('Личный таролог в чате на весь месяц' + (plusEn ? ' (до ' + plusEn + ' ответов)' : ''))
-    : ('Personal AI Tarot chat all month' + (plusEn ? ' (' + plusEn + ' answers)' : ''));
+  const proEn = (pl.pro && pl.pro.energy) || 350;
+  const proChat = ru
+    ? ('Личный таролог в чате на весь месяц (до ' + proEn + ' ответов)')
+    : ('Personal AI Tarot chat all month (' + proEn + ' answers)');
 
   return `
     <div class="daily-fog-box fn-fogbox" id="fn-fog">
       <div class="fn-mist" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="daily-fog-card">
-        <span class="daily-fog-badge">${IC.spark} ${esc(save ? (ru ? 'Скидка только для вас' : 'A discount just for you') : (ru ? 'Продолжение расклада готово' : 'Full reading is ready'))}</span>
-        <div class="daily-fog-title">${esc(save ? (ru ? 'Не уходите, не узнав ответа' : 'Don\'t leave without the answer') : (ru ? 'Снимите туман с остальных карт' : 'Read the complete spread'))}</div>
-        <p class="daily-fog-sub" style="margin-bottom:8px">${esc(save
-          ? (ru ? ('Мы придержали для вас цену ' + twPrice + ' ₽ вместо ' + twOld + ' ₽. Это тот же полный расклад и те же 3 дня доступа.') : ('We held a price of ' + twPrice + ' ₽ instead of ' + twOld + ' ₽ for you.'))
-          : (ru ? 'Оракул уже связал все выпавшие карты в единый прогноз. Выберите формат доступа:' : 'All cards for your situation are drawn. Choose your access:'))}</p>
+        <span class="daily-fog-badge">${IC.spark} ${esc(ru ? 'Продолжение расклада готово' : 'Full reading is ready')}</span>
+        <div class="daily-fog-title">${esc(ru ? 'Снимите туман с остальных карт' : 'Read the complete spread')}</div>
+        <p class="daily-fog-sub" style="margin-bottom:8px">${esc(ru ? 'Оракул уже связал все выпавшие карты в единый прогноз. Выберите формат доступа:' : 'All cards for your situation are drawn. Choose your access:')}</p>
 
-        <div class="fn-hold-timer${save ? ' is-save' : ''}">
+        <div class="fn-hold-timer">
           <span class="fn-hold-dot"></span>
-          <span>${esc(save ? (ru ? 'Скидка сгорит через:' : 'Discount ends in:') : (ru ? 'Спеццена к вашему первому раскладу:' : 'Special offer held for:'))} <b id="fn-hold-clock">${save ? (String(FN_SAVE_MINUTES).padStart(2, '0') + ':00') : '15:00'}</b></span>
+          <span>${esc(ru ? 'Спеццена к вашему первому раскладу:' : 'Special offer held for:')} <b id="fn-hold-clock">15:00</b></span>
         </div>
 
         <div class="fn-form">
           <div class="fn-tier-switch">
-            <button type="button" class="fn-tier${save ? ' is-on is-save' : ''}" data-plan="${twPlan}" onclick="fnPickTier('${twPlan}')">
+            <button type="button" class="fn-tier" data-plan="tripwire" onclick="fnPickTier('tripwire')">
               <div>
                 <div class="fn-tier-top">
-                  <span class="fn-tier-badge${save ? ' is-hot' : ''}">${esc(save ? (ru ? 'Скидка только сейчас' : 'Only now') : (ru ? 'Только этот расклад' : 'Single reading'))}</span>
+                  <span class="fn-tier-badge">${esc(ru ? 'Только этот расклад' : 'Single reading')}</span>
                   <span class="fn-tier-radio"></span>
                 </div>
                 <div class="fn-tier-name">${esc(ru ? 'Открыть расклад' : 'Unlock reading')}</div>
                 <ul class="fn-tier-list">
                   <li>${esc(ru ? 'Расшифровка всех выпавших вам карт и совет' : 'Full interpretation of all drawn cards')}</li>
                   <li>${esc(ru ? (twEn + ' личных вопросов тарологу в чате') : (twEn + ' personal questions to the AI Tarot reader'))}</li>
-                  <li>${esc(ru ? '+ 3 дня полного доступа в подарок' : '+ 3 days of full access included')}</li>
+                  <li>${esc(ru ? '+ 3 дня полного VIP-доступа ПРО в подарок' : '+ 3 days of full PRO access included')}</li>
                 </ul>
               </div>
               <div class="fn-tier-pwrap">
@@ -8466,22 +8422,22 @@ function funnelFogHtml(errText){
               </div>
             </button>
 
-            <button type="button" class="fn-tier${save ? '' : ' is-on'}" data-plan="plus" onclick="fnPickTier('plus')">
+            <button type="button" class="fn-tier is-on" data-plan="pro" onclick="fnPickTier('pro')">
               <div>
                 <div class="fn-tier-top">
-                  <span class="fn-tier-badge is-hot">${esc(ru ? 'Выгода −60% · Хит' : 'Save 60% · Best value')}</span>
+                  <span class="fn-tier-badge is-hot">${esc(ru ? 'Выгода −60% · VIP' : 'Save 60% · VIP')}</span>
                   <span class="fn-tier-radio"></span>
                 </div>
-                <div class="fn-tier-name">${esc(ru ? 'Полный доступ на месяц' : 'Full access · 1 month')}</div>
+                <div class="fn-tier-name">${esc(ru ? 'Полный доступ ПРО · 1 мес' : 'Full PRO access · 1 month')}</div>
                 <ul class="fn-tier-list">
                   <li>${esc(ru ? 'Этот расклад + более 30 раскладов на любовь и будущее' : 'This spread + 30+ spreads for love & future')}</li>
-                  <li>${esc(ru ? 'Полный разбор вашей Натальной карты (11 сфер жизни)' : 'Full Natal chart reading (11 life areas)')}</li>
-                  <li>${esc(plusChat)}</li>
+                  <li>${esc(ru ? 'Матрица Судьбы целиком (22 аркана) + Натальная карта' : 'Full Destiny Matrix (22 arcana) + Natal chart')}</li>
+                  <li>${esc(proChat)}</li>
                 </ul>
               </div>
               <div class="fn-tier-pwrap">
-                <span class="fn-tier-old">990 ₽</span>
-                <span class="fn-tier-price">${plusPrice} ₽</span>
+                <span class="fn-tier-old">1190 ₽</span>
+                <span class="fn-tier-price">${proPrice} ₽</span>
                 <span class="fn-tier-per">${esc(ru ? 'за месяц' : '/ month')}</span>
               </div>
             </button>
@@ -8497,9 +8453,7 @@ function funnelFogHtml(errText){
           </div>
 
           <button type="button" class="btn btn-brass btn-wide" id="fn-submit-btn" style="margin-top:4px;min-height:50px;font-size:15.5px" onclick="funnelPay(FN_SELECTED_PLAN)">
-            ${esc(save
-              ? (ru ? ('Открыть этот расклад целиком · ' + twPrice + ' ₽') : ('Unlock this reading · ' + twPrice + ' ₽'))
-              : (ru ? ('Получить полный доступ на месяц · ' + plusPrice + ' ₽') : ('Get full access for 1 month · ' + plusPrice + ' ₽')))}
+            ${esc(ru ? ('Получить полный VIP-доступ на месяц · ' + proPrice + ' ₽') : ('Get full VIP access for 1 month · ' + proPrice + ' ₽'))}
           </button>
 
           <label class="fn-agree"><input type="checkbox" id="fn-agree" checked>
