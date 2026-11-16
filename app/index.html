@@ -5144,6 +5144,12 @@ function watchPayment(onPaid, meta){
       bridge.haptic('ok');
       if(window.neoPurchase) neoPurchase(m.goal || 'purchase_energy', m.price, { kind: m.kind || 'energy', item: m.item || '' }); /* neotaro-goal */
       if(window.neoGoal) neoGoal('purchase'); /* neotaro-goal: общая цель "любая оплата" */
+      try{
+        if(!localStorage.getItem('neo_first_paid_sent')){
+          localStorage.setItem('neo_first_paid_sent', '1');
+          if(window.neoPurchase) neoPurchase('first_purchase', m.price, { kind: m.kind || 'energy', item: m.item || '' });
+        }
+      }catch(e){}
       S.payMeta = null;
       if(onPaid) onPaid();
     }
@@ -5164,6 +5170,12 @@ function watchSubscription(amount, plan, period){
       clearInterval(S.subPoll);
       if(window.neoPurchase) neoPurchase('purchase_sub', amount, { kind: 'subscription', plan: plan || '', period: period || '' }); /* neotaro-goal */
       if(window.neoGoal) neoGoal('purchase'); /* neotaro-goal */
+      try{
+        if(!localStorage.getItem('neo_first_paid_sent')){
+          localStorage.setItem('neo_first_paid_sent', '1');
+          if(window.neoPurchase) neoPurchase('first_purchase', amount, { kind: 'subscription', plan: plan || '', period: period || '' });
+        }
+      }catch(e){}
       hideToast();
       toast(tt('pay_done'));
       bridge.haptic('ok');
@@ -8766,7 +8778,7 @@ function funnelRenderPaid(d){
   FN.full = d.interpretation || '';
   const pl = FN.plans || {};
   const n = typeof d.energy === 'number' ? d.energy
-    : ((pl[d.plan] && pl[d.plan].energy) || (pl.tripwire && pl.tripwire.energy) || 5);
+    : ((pl[d.plan] && pl[d.plan].energy) || (pl.tripwire && pl[tripwire].energy) || 5);
   FN.paidView = true;
   document.getElementById('tb-reading').innerHTML = '<div class="fn-reveal">' + clean(FN.full) + '</div><div id="fn-up" class="fn-up"></div>' + `
     <div class="fn-upsell">
@@ -8780,10 +8792,14 @@ function funnelRenderPaid(d){
   bridge.haptic('ok');
   try{
     const key = 'neo_funnel_goal_' + FN.id;
+    const paidPrice = fnPlanPrice(d.plan || 'tripwire');
     if(window.neoGoal && !localStorage.getItem(key)){
       localStorage.setItem(key, '1');
-      const paidPrice = fnPlanPrice(d.plan || 'tripwire');
       neoGoal('purchase', { kind: 'funnel', item: d.plan || '', order_price: paidPrice });
+    }
+    if(!localStorage.getItem('neo_first_paid_sent')){
+      localStorage.setItem('neo_first_paid_sent', '1');
+      if(window.neoPurchase) neoPurchase('first_purchase', paidPrice, { kind: 'funnel', item: d.plan || '' });
     }
     localStorage.removeItem('neo_funnel');
   }catch(e){}
