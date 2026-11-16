@@ -10584,5 +10584,275 @@ function fnMistWatch(){
 })();
 </script>
 <!-- ==================== /DESKTOP NIGHT ATLAS ==================== -->
+<!-- ==================== NEOTARO UX SESSION RECORDER ==================== -->
+<script id="neo-ux-recorder">
+(function(){
+  if (window.__neoUxActive) return;
+  window.__neoUxActive = true;
+
+  var SID_KEY = 'neo_ux_sid';
+  var T0_KEY  = 'neo_ux_t0';
+  var sid = '';
+  var t0 = Date.now();
+
+  try {
+    sid = sessionStorage.getItem(SID_KEY) || '';
+    var savedT0 = parseInt(sessionStorage.getItem(T0_KEY) || '0', 10);
+    if (!sid || !savedT0 || (Date.now() - savedT0 > 3 * 3600 * 1000)) {
+      sid = 'ux_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 9);
+      t0 = Date.now();
+      sessionStorage.setItem(SID_KEY, sid);
+      sessionStorage.setItem(T0_KEY, String(t0));
+    } else {
+      t0 = savedT0;
+    }
+  } catch(e) {
+    sid = 'ux_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+  }
+
+  var queue = [];
+  var sentCount = 0;
+  var MAX_SEND = 135;
+  var flushTimer = null;
+  var clickHistory = [];
+  var seenFog = false;
+
+  function sec() {
+    return Math.max(0, Math.round((Date.now() - t0) / 1000));
+  }
+
+  function metaInfo() {
+    var utm = {};
+    try { utm = (typeof neoUtm === 'function' ? neoUtm('first') : {}) || {}; } catch(e){}
+    return {
+      did: (typeof neoDeviceId === 'function') ? neoDeviceId() : '',
+      mob: window.innerWidth <= 900,
+      vp: window.innerWidth + 'x' + window.innerHeight,
+      src: utm.utm_source || '',
+      cmp: utm.utm_campaign || '',
+      start: (location.hash || '#home').replace('#', '') || 'home'
+    };
+  }
+
+  function rec(event, detail) {
+    if (sentCount + queue.length >= MAX_SEND) return;
+    queue.push({
+      t: sec(),
+      e: String(event || '').slice(0, 32),
+      d: String(detail == null ? '' : detail).replace(/\s+/g, ' ').trim().slice(0, 150)
+    });
+    if (queue.length >= 8) {
+      flush(false);
+    } else if (!flushTimer) {
+      flushTimer = setTimeout(function(){ flush(false); }, 4000);
+    }
+  }
+  window.neoUxRec = rec;
+
+  function flush(isUnload) {
+    clearTimeout(flushTimer);
+    flushTimer = null;
+    if (!queue.length) return;
+
+    var batch = queue.splice(0, 35);
+    sentCount += batch.length;
+
+    var payload = JSON.stringify({
+      sid: sid,
+      uid: (window.S && S.refCode) || (window.bridge && bridge.userId) || null,
+      spread_id: (window.FN && FN.id) || null,
+      meta: metaInfo(),
+      events: batch
+    });
+
+    var url = (typeof API_URL !== 'undefined' ? API_URL : 'https://api.neotaro.ru/api') + '/ux/track';
+
+    if (isUnload && navigator.sendBeacon) {
+      try {
+        var blob = new Blob([payload], { type: 'application/json' });
+        if (navigator.sendBeacon(url, blob)) return;
+      } catch(e){}
+    }
+
+    try {
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+        keepalive: true
+      }).catch(function(){});
+    } catch(e){}
+  }
+
+  /* 1. Старт сессии */
+  rec('boot', 'hash=' + (location.hash || '#home') + ' guest=' + (typeof isGuest === 'function' && isGuest() ? 1 : 0));
+
+  /* 2. Перехват навигации и ключевых шагов воронки */
+  function wrapFn(name, beforeFn, afterFn) {
+    var orig = window[name];
+    if (typeof orig !== 'function' || orig.__uxWrapped) return;
+    var wrapped = function() {
+      var args = arguments;
+      try { if (beforeFn) beforeFn.apply(this, args); } catch(e){}
+      var res = orig.apply(this, args);
+      if (res && typeof res.then === 'function') {
+        return res.then(function(val){
+          try { if (afterFn) afterFn(val, args); } catch(e){}
+          return val;
+        });
+      }
+      try { if (afterFn) afterFn(res, args); } catch(e){}
+      return res;
+    };
+    wrapped.__uxWrapped = true;
+    window[name] = wrapped;
+  }
+
+  function hookAll() {
+    wrapFn('go', function(v) { rec('view', v); });
+
+    wrapFn('pickSpread', function(id) { rec('quiz_open', id); });
+
+    wrapFn('qzPick', function(k) {
+      var st = (typeof qzStep === 'function') ? qzStep() : null;
+      if (st) rec('quiz_opt', st.id + ':' + k);
+    });
+
+    wrapFn('qzAdvance', function() {
+      var st = (typeof qzStep === 'function') ? qzStep() : null;
+      if (!st) return;
+      if (st.id === '_email') rec('quiz_email', 'ok');
+      else rec('quiz_step', st.id);
+    });
+
+    wrapFn('qzShake', function() {
+      var st = (typeof qzStep === 'function') ? qzStep() : null;
+      rec('quiz_invalid', st ? st.id : '');
+    });
+
+    wrapFn('qzSkip', function() {
+      var st = (typeof qzStep === 'function') ? qzStep() : null;
+      rec('quiz_skip', st ? st.id : '');
+    });
+
+    wrapFn('qzBack', function() {
+      var st = (typeof qzStep === 'function') ? qzStep() : null;
+      rec('quiz_back', st ? st.id : '');
+    });
+
+    wrapFn('funnelDeal', function() {
+      rec('deal_start', (window.S && S.spread && S.spread.id) || '');
+      flush(false);
+    });
+
+    wrapFn('funnelRenderLocked', function(teaser, errText) {
+      seenFog = false;
+      rec('teaser_shown', 'id=' + ((window.FN && FN.id) || '') + (errText ? ' err=' + errText : ''));
+      flush(false);
+    });
+
+    wrapFn('fnPickTier', function(plan) {
+      rec('tier_pick', plan + ':' + (typeof fnPlanPrice === 'function' ? fnPlanPrice(plan) : ''));
+    });
+
+    wrapFn('fnShowError', function(msg) {
+      rec('pay_err', msg);
+      flush(false);
+    });
+
+    wrapFn('funnelPay', function(plan) {
+      var em = document.getElementById('fn-email');
+      var hasEm = !!(em && em.value && em.value.indexOf('@') > 0);
+      rec('pay_click', plan + ' email=' + (hasEm ? 'yes' : 'no'));
+      flush(false);
+    });
+
+    wrapFn('funnelRenderPaid', function(d) {
+      rec('paid_ok', 'id=' + ((window.FN && FN.id) || '') + ' plan=' + ((d && d.plan) || ''));
+      flush(false);
+    });
+
+    wrapFn('openDaily', function() { rec('daily_open', ''); });
+    wrapFn('drawDaily', function() { rec('daily_draw', ''); });
+  }
+
+  /* 3. Отслеживание редиректа в ЮKassa и ошибок генерации */
+  var origApi = window.api;
+  if (typeof origApi === 'function' && !origApi.__uxWrapped) {
+    window.api = async function(ep, method, data, silent) {
+      var tStart = Date.now();
+      var r = await origApi.apply(this, arguments);
+      var ms = Date.now() - tStart;
+      try {
+        if (ep === '/funnel/spread' && (!r || !r.success)) {
+          rec('deal_fail', ((r && r.message) || 'err') + ' ' + Math.round(ms / 1000) + 's');
+          flush(false);
+        } else if (ep === '/funnel/checkout') {
+          if (r && r.success && r.invoice_url) {
+            rec('checkout_redirect', (data && data.plan) || '');
+            flush(true);
+          } else {
+            rec('checkout_fail', (r && r.message) || 'err');
+            flush(false);
+          }
+        }
+      } catch(e){}
+      return r;
+    };
+    window.api.__uxWrapped = true;
+  }
+
+  /* 4. Детектор Rage Click (3+ быстрых клика в одну точку за 900мс) */
+  document.addEventListener('click', function(e) {
+    var now = Date.now();
+    clickHistory.push({ t: now, x: e.clientX, y: e.clientY });
+    clickHistory = clickHistory.filter(function(c){ return now - c.t < 900; });
+    if (clickHistory.length >= 3) {
+      var c0 = clickHistory[0];
+      var close = clickHistory.every(function(c){
+        return Math.abs(c.x - c0.x) < 36 && Math.abs(c.y - c0.y) < 36;
+      });
+      if (close) {
+        clickHistory = [];
+        var el = e.target;
+        var label = (el && (el.id || el.className || el.tagName)) || 'el';
+        var txt = (el && el.innerText) ? el.innerText.slice(0, 28) : '';
+        rec('rage_click', label + (txt ? ':' + txt : ''));
+      }
+    }
+  }, true);
+
+  /* 5. Доскроллил ли пользователь до блока оплаты #fn-fog */
+  setInterval(function() {
+    if (seenFog) return;
+    var fog = document.getElementById('fn-fog');
+    if (!fog) return;
+    var rect = fog.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 60 && rect.bottom > 40) {
+      seenFog = true;
+      rec('paywall_in_view', 'plan=' + (typeof FN_SELECTED_PLAN !== 'undefined' ? FN_SELECTED_PLAN : 'pro'));
+    }
+  }, 1000);
+
+  /* 6. Выгрузка при сворачивании вкладки или уходе со страницы */
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') {
+      rec('tab_hide', (window.S && S.view) || '');
+      flush(true);
+    }
+  });
+  window.addEventListener('pagehide', function() {
+    rec('leave', (window.S && S.view) || '');
+    flush(true);
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', hookAll);
+  } else {
+    hookAll();
+  }
+})();
+</script>
+<!-- ==================== /NEOTARO UX SESSION RECORDER ==================== -->
 </body>
 </html>
