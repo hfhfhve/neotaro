@@ -8672,37 +8672,42 @@ function fnSaveEmailInput(val){
   }
 }
 
-async function funnelResume(){
-  if(FN.resumed) return;
+async function funnelResume(force){
+  if(FN.polling) return;
   const p = new URLSearchParams(location.search);
   const paidId = parseInt(p.get('paid_spread') || '', 10);
   const resumeId = parseInt(p.get('resume_spread') || '', 10);
-  const id = paidId || resumeId;
-  if(!id) return;
-  FN.resumed = true;
   const saved = fnLoad() || {};
+  const id = paidId || resumeId || (force && saved.id ? parseInt(saved.id, 10) : 0);
+  if(!id) return;
+  if(!force && FN.resumed) return;
+  FN.resumed = true;
   FN.id = id;
   FN.k = p.get('k') || (saved.id === id ? saved.k : '');
   FN.q = saved.id === id ? (saved.q || '') : '';
   FN.picked = saved.id === id ? (saved.picked || []) : [];
   FN.type = saved.id === id ? (saved.type || '') : '';
   FN.matrixPts = saved.id === id ? (saved.matrixPts || null) : null;
-  try{ history.replaceState(null, '', location.pathname + '#table'); }catch(e){}
+  if(paidId || resumeId){
+    try{ history.replaceState(null, '', location.pathname + '#table'); }catch(e){}
+  }
 
-  if(resumeId && !paidId){
+  if(!paidId){
     const d = await api('/funnel/status/' + FN.id + '?k=' + encodeURIComponent(FN.k || ''), 'GET', null, true);
     if(d && d.success){
       if(d.email){ try{ localStorage.setItem('neo_email', d.email); }catch(e){} }
       if(d.plans) FN.plans = d.plans;
       if(d.paid){ funnelRenderPaid(d); return; }
-      FN.q = FN.q || fnShortQ(d.question);
-      FN.picked = d.cards || FN.picked;
-      FN.type = d.spread_type || FN.type || '';
-      if(d.matrix_points) FN.matrixPts = d.matrix_points;
-      fnSave();
-      fnShowTable(FN.q, FN.picked, FN.matrixPts);
-      funnelRenderLocked(d.teaser || '');
-      if(window.neoGoal) neoGoal('funnel_reminder_open');
+      if(resumeId){
+        FN.q = FN.q || fnShortQ(d.question);
+        FN.picked = d.cards || FN.picked;
+        FN.type = d.spread_type || FN.type || '';
+        if(d.matrix_points) FN.matrixPts = d.matrix_points;
+        fnSave();
+        fnShowTable(FN.q, FN.picked, FN.matrixPts);
+        funnelRenderLocked(d.teaser || '');
+        if(window.neoGoal) neoGoal('funnel_reminder_open');
+      }
       return;
     }
   }
@@ -8710,6 +8715,17 @@ async function funnelResume(){
   fnShowTable(FN.q, FN.picked, FN.matrixPts);
   funnelPoll(FN.id, FN.k);
 }
+
+window.addEventListener('pageshow', function(){
+  const s = fnLoad();
+  if(s && s.id && !FN.paidView) funnelResume(true);
+});
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'visible'){
+    const s = fnLoad();
+    if(s && s.id && !FN.paidView) funnelResume(true);
+  }
+});
 
 async function funnelPoll(id, k){
   if(FN.polling) return;
@@ -8744,7 +8760,9 @@ function funnelRenderPaid(d){
   FN.type = d.spread_type || (S.spread && S.spread.id) || FN.type || '';
   if(d.matrix_points) FN.matrixPts = d.matrix_points;
   fnShowTable(FN.q, FN.picked, FN.matrixPts);
-  if(typeof d.energy === 'number'){ S.energy = d.energy; try{ paintEnergy(); }catch(e){} }
+  if(typeof d.energy === 'number'){ S.energy = d.energy; S.purchased = true; try{ paintEnergy(); }catch(e){} }
+  if(typeof refreshAccess === 'function'){ try{ refreshAccess(); }catch(e){} }
+  if(typeof loadProfileSub === 'function'){ try{ loadProfileSub(); }catch(e){} }
   FN.full = d.interpretation || '';
   const pl = FN.plans || {};
   const n = typeof d.energy === 'number' ? d.energy
@@ -8758,7 +8776,7 @@ function funnelRenderPaid(d){
       <p class="fn-note" style="margin-top:10px">${esc(ru ? 'Копия разбора уже летит на вашу почту' : 'A copy is on its way to your inbox')}</p>
     </div><div class="fn-lift" id="fn-lift" aria-hidden="true"><i></i></div>`;
   setTimeout(() => { const l = document.getElementById('fn-lift'); if(l) l.remove(); }, 2000);
-  fnActions(true);   /* оплачено — возвращаем «Обсудить» и «Другой расклад» */
+  fnActions(true);
   bridge.haptic('ok');
   try{
     const key = 'neo_funnel_goal_' + FN.id;
@@ -8769,7 +8787,6 @@ function funnelRenderPaid(d){
     }
     localStorage.removeItem('neo_funnel');
   }catch(e){}
-  /* Допродажа сразу после оплаты (к самой допродаже не предлагаем). */
   if(d.plan !== 'upsell') fnLoadUpsell();
 }
 
