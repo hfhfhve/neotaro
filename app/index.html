@@ -9462,6 +9462,10 @@ function fnRenderForm(prefill){
   }
   qzSave();
   qzRender();
+  if(window.neoGoal && S.spread && !S.spread._qOpenSent){
+    S.spread._qOpenSent = true;
+    neoGoal('quiz_open', { spread: S.spread.id });
+  }
 }
 
 function qzFirstOpen(steps){
@@ -9595,7 +9599,14 @@ function qzNext(){
 function qzSkip(){ const st = qzStep(); if(!st) return; QZ.a[st.id] = ''; qzAdvance(); }
 function qzAdvance(){
   const form = qzForm(); if(!form) return;
+  const curStep = form.steps[QZ.i];
   const j = qzNextIdx(form.steps, QZ.i);
+  const nextStep = j !== -1 ? form.steps[j] : null;
+  if(window.neoGoal && curStep && curStep.type !== 'echo' && curStep.id !== '_email'){
+    if((nextStep && nextStep.id === '_email') || !nextStep){
+      neoGoal('quiz_before_email', { spread: (S.spread && S.spread.id) || '', step: curStep.id });
+    }
+  }
   qzBlurInput();
   if(j === -1){ qzSave(); dealSpread(); return; }
   QZ.hist.push(QZ.i); QZ.i = j;
