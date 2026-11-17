@@ -8884,7 +8884,8 @@ async function funnelResume(force){
   const paidId = parseInt(p.get('paid_spread') || '', 10);
   const resumeId = parseInt(p.get('resume_spread') || '', 10);
   const saved = fnLoad() || {};
-  const id = paidId || resumeId || (force && saved.id ? parseInt(saved.id, 10) : 0);
+  const hasSaved = !!(saved && saved.id && saved.k);
+  const id = paidId || resumeId || (hasSaved ? parseInt(saved.id, 10) : 0);
   if(!id) return;
   if(!force && FN.resumed) return;
   FN.resumed = true;
@@ -8894,16 +8895,16 @@ async function funnelResume(force){
   FN.picked = saved.id === id ? (saved.picked || []) : [];
   FN.type = saved.id === id ? (saved.type || '') : '';
   FN.matrixPts = saved.id === id ? (saved.matrixPts || null) : null;
-  if(paidId || resumeId){
-    try{ history.replaceState(null, '', location.pathname + '#table'); }catch(e){}
-  }
 
   if(!paidId){
     const d = await api('/funnel/status/' + FN.id + '?k=' + encodeURIComponent(FN.k || ''), 'GET', null, true);
     if(d && d.success){
       if(d.email){ try{ localStorage.setItem('neo_email', d.email); }catch(e){} }
       if(d.plans) FN.plans = d.plans;
-      if(d.paid){ funnelRenderPaid(d); return; }
+      if(d.paid){
+        funnelRenderPaid(d);
+        return;
+      }
       if(resumeId){
         FN.q = FN.q || fnShortQ(d.question);
         FN.picked = d.cards || FN.picked;
@@ -8966,6 +8967,11 @@ function funnelRenderPaid(d){
   FN.type = d.spread_type || (S.spread && S.spread.id) || FN.type || '';
   if(d.matrix_points) FN.matrixPts = d.matrix_points;
   fnShowTable(FN.q, FN.picked, FN.matrixPts);
+  try{
+    if(FN.id && FN.k){
+      history.replaceState(null, '', location.pathname + '?paid_spread=' + FN.id + '&k=' + encodeURIComponent(FN.k) + '#table');
+    }
+  }catch(e){}
   if(typeof d.energy === 'number'){ S.energy = d.energy; S.purchased = true; try{ paintEnergy(); }catch(e){} }
   if(typeof refreshAccess === 'function'){ try{ refreshAccess(); }catch(e){} }
   if(typeof loadProfileSub === 'function'){ try{ loadProfileSub(); }catch(e){} }
@@ -8979,7 +8985,7 @@ function funnelRenderPaid(d){
       <div class="fn-upsell-t">${esc(ru ? 'Остались вопросы по раскладу?' : 'Questions about your spread?')}</div>
       <p>${esc(ru ? ('У вас на балансе ' + n + ' ⚡ энергии — обсудите расклад с Оракулом') : ('You have ' + n + ' ⚡ energy — discuss the spread with the Oracle'))}</p>
       <button class="btn btn-brass btn-wide" onclick="funnelDiscuss()">${esc(ru ? 'Обсудить с Оракулом →' : 'Discuss with the Oracle →')}</button>
-      <p class="fn-note" style="margin-top:10px">${esc(ru ? 'Копия разбора уже летит на вашу почту' : 'A copy is on its way to your inbox')}</p>
+      <p class="fn-note" style="margin-top:10px">${esc(ru ? 'Расклад сохранён в разделе «Расклады → Мои расклады»' : 'Saved in Spreads → My spreads')}</p>
     </div><div class="fn-lift" id="fn-lift" aria-hidden="true"><i></i></div>`;
   setTimeout(() => { const l = document.getElementById('fn-lift'); if(l) l.remove(); }, 2000);
   fnActions(true);
@@ -10802,20 +10808,23 @@ function fnMistWatch(){
 
   var SID_KEY = 'neo_ux_sid';
   var T0_KEY  = 'neo_ux_t0';
+  var ACT_KEY = 'neo_ux_act';
   var sid = '';
   var t0 = Date.now();
 
   try {
-    sid = sessionStorage.getItem(SID_KEY) || '';
-    var savedT0 = parseInt(sessionStorage.getItem(T0_KEY) || '0', 10);
-    if (!sid || !savedT0 || (Date.now() - savedT0 > 3 * 3600 * 1000)) {
+    sid = localStorage.getItem(SID_KEY) || '';
+    var savedT0 = parseInt(localStorage.getItem(T0_KEY) || '0', 10);
+    var lastAct = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
+    if (!sid || !savedT0 || !lastAct || (Date.now() - lastAct > 30 * 60 * 1000)) {
       sid = 'ux_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 9);
       t0 = Date.now();
-      sessionStorage.setItem(SID_KEY, sid);
-      sessionStorage.setItem(T0_KEY, String(t0));
+      localStorage.setItem(SID_KEY, sid);
+      localStorage.setItem(T0_KEY, String(t0));
     } else {
       t0 = savedT0;
     }
+    localStorage.setItem(ACT_KEY, String(Date.now()));
   } catch(e) {
     sid = 'ux_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
   }
@@ -10845,6 +10854,7 @@ function fnMistWatch(){
   }
 
   function rec(event, detail) {
+    try{ localStorage.setItem(ACT_KEY, String(Date.now())); }catch(e){}
     if (sentCount + queue.length >= MAX_SEND) return;
     queue.push({
       t: sec(),
