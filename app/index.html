@@ -9336,82 +9336,66 @@ function qzCompatEcho(a){
 }
 
 const FUNNEL_FORMS = {
-  /* ---------- ЧТО ОН(А) ЧУВСТВУЕТ ---------- */
+  /* ---------- ЧТО ОН(А) ЧУВСТВУЕТ (было 11 шагов -> стало 5-6 быстрых шагов) ---------- */
   feelings: {
     display: a => `Что ${qzN(a)} чувствует ко мне на самом деле?`,
     steps: [
-      { id:'gender', type:'chips', req:true, label:'О ком расклад', q:'О ком будем делать расклад?', hint:'Карты настроятся на энергию этого человека',
-        opts:[['m','О мужчине'],['f','О женщине']] },
+      { id:'role_pick', type:'chips', req:true, label:'Кем приходится', q:'Кто этот человек для вас сейчас?', hint:'Карты сразу настроятся на вашу связь',
+        opts:[
+          ['partner_m','Мой мужчина / муж'],
+          ['partner_f','Моя женщина / жена'],
+          ['ex_m','Бывший мужчина / муж'],
+          ['ex_f','Бывшая женщина / жена'],
+          ['crush_m','Симпатия (мужчина)'],
+          ['crush_f','Симпатия (женщина)'],
+          ['compl_m','Всё сложно (мужчина)'],
+          ['compl_f','Всё сложно (женщина)']
+        ],
+        after: a => {
+          const p = String(a.role_pick || '').split('_');
+          a.role = p[0] === 'compl' ? 'complicated' : (p[0] || 'partner');
+          a.gender = p[1] === 'f' ? 'f' : 'm';
+        }
+      },
       { id:'name', type:'text', need:true, subject:true, max:40, label:'Имя человека',
         q: a => `Как ${qzG(a,'его','её')} зовут?`, hint:'Имя помогает картам точнее считать связь между вами',
         ph: a => qzG(a,'Например: Андрей','Например: Алина') },
-      { id:'role', type:'chips', req:true, label:'Кем приходится', q: a => `Кто ${qzN(a)} для вас сейчас?`,
-        opts: a => [['partner', qzG(a,'Мой партнёр, муж','Моя партнёрша, жена')],['ex', qzG(a,'Бывший','Бывшая')],['crush','Симпатия — мы не вместе'],['complicated','Всё сложно'],['friend', qzG(a,'Друг','Подруга')]] },
 
-      /* ветка: бывший(ая) */
-      { id:'ex_when', when: a => a.role === 'ex', type:'chips', req:true, label:'Как давно расстались', q:'Как давно вы расстались?',
-        opts:[['lt1m','Меньше месяца назад'],['1to6','1–6 месяцев назад'],['6to12','Полгода – год назад'],['gt1y','Больше года назад']] },
-      { id:'ex_who', when: a => a.role === 'ex', type:'chips', req:true, label:'Кто инициатор расставания', q:'Кто стал инициатором расставания?',
-        opts: a => [['me','Я'],['them', qzN(a)],['both','Решили вместе'],['drift','Никто — просто отдалились']] },
+      /* ветка: бывший(ая) — 2 быстрых тапа */
       { id:'ex_contact', when: a => a.role === 'ex', type:'chips', req:true, label:'Общаются ли сейчас', q:'Вы сейчас общаетесь?',
-        opts:[['none','Нет, полная тишина'],['block','Блок или игнор'],['rare','Иногда пишем друг другу'],['friends','Общаемся как друзья'],['close','Бывает близость']] },
-      { id:'ex_echo', when: a => a.role === 'ex', type:'echo',
-        text: a => `${qzN(a)} может молчать, но молчание — не всегда равнодушие. После расставания люди часто думают о человеке намного больше, чем показывают. Карты покажут, что у ${qzG(a,'него','неё')} внутри на самом деле.` },
+        opts:[['none','Нет, полная тишина / игнор'],['rare','Иногда пишем друг другу'],['friends','Общаемся как друзья'],['close','Бывает близость']] },
       { id:'ex_want', when: a => a.role === 'ex', type:'chips', req:true, label:'Чего хочет клиент', q:'Чего вы хотите сейчас?',
-        opts: a => [['back', `Вернуть ${qzG(a,'его','её')}`],['understand','Понять, что это было'],['letgo','Отпустить и жить дальше'],['unsure','Пока не знаю']] },
+        opts: a => [['back', `Вернуть ${qzG(a,'его','её')}`],['understand','Понять, что это было'],['letgo','Отпустить и жить дальше']] },
 
-      /* ветка: партнёр */
-      { id:'p_long', when: a => a.role === 'partner', type:'chips', req:true, label:'Сколько вместе', q:'Сколько вы вместе?',
-        opts:[['lt6','Меньше полугода'],['6to24','От полугода до 2 лет'],['2to5','2–5 лет'],['gt5','Больше 5 лет']] },
-      { id:'p_worry', when: a => a.role === 'partner', type:'multi', req:true, label:'Что тревожит', q:'Что вас тревожит в последнее время?', hint:'Можно выбрать несколько',
-        opts: a => [['cold', qzG(a,'Он стал холоднее','Она стала холоднее')],['less','Меньше внимания и нежности'],['fights','Частые ссоры'],['other','Подозреваю, что есть кто-то ещё'],['future', qzG(a,'Он не говорит о будущем','Она не говорит о будущем')],['ok','Всё хорошо — хочу понять глубже']] },
-      { id:'p_echo', when: a => a.role === 'partner', type:'echo',
-        text: a => (a.p_worry || []).indexOf('other') !== -1
-          ? 'Подозрение — тяжёлое чувство, и оно редко возникает на пустом месте. Карты не обвиняют — они показывают, что происходит на самом деле. Разберёмся честно.'
-          : `Когда близкий человек меняется, за этим почти всегда стоит то, о чём он молчит. Карты покажут, что сейчас происходит в душе у ${qzN(a)}.` },
-      { id:'p_want', when: a => a.role === 'partner', type:'chips', req:true, label:'Чего ждёт от отношений', q:'Чего вы ждёте от этих отношений?',
-        opts:[['family','Брака, семьи'],['warmth','Больше тепла и внимания'],['clarity','Ясности — куда мы идём'],['keep','Сохранить то, что есть']] },
+      /* ветка: партнёр — 1 быстрый тап */
+      { id:'p_worry', when: a => a.role === 'partner', type:'chips', req:true, label:'Что тревожит', q:'Что беспокоит вас больше всего?',
+        opts: a => [
+          ['cold', qzG(a,'Он стал холоднее','Она стала холоднее')],
+          ['other','Подозреваю, что есть кто-то ещё'],
+          ['future', qzG(a,'Неясность с будущим','Неясность с будущим')],
+          ['fights','Частые ссоры и недопонимание'],
+          ['ok','Просто хочу заглянуть в чувства']
+        ] },
 
-      /* ветка: симпатия */
-      { id:'c_contact', when: a => a.role === 'crush', type:'chips', req:true, label:'Как общаются', q: a => `Как вы общаетесь с ${qzG(a,'ним','ней')}?`,
-        opts:[['text','Только переписка'],['meet','Видимся на работе или учёбе'],['dates','Уже были свидания'],['rare','Почти не общаемся']] },
+      /* ветка: симпатия — 1 быстрый тап */
       { id:'c_signs', when: a => a.role === 'crush', type:'chips', req:true, label:'Есть ли взаимность', q:'Вы чувствуете взаимность?',
-        opts:[['yes','Да, есть знаки'],['hotcold','То тепло, то холодно'],['unclear','Не могу понять'],['no','Скорее нет']] },
-      { id:'c_echo', when: a => a.role === 'crush', type:'echo',
-        text: a => a.c_signs === 'hotcold'
-          ? `«То тепло, то холодно» — один из самых частых сценариев, и у него почти всегда есть конкретная причина. Карты покажут, какая она у ${qzN(a)}.`
-          : `Даже когда человек не делает шагов, его отношение к вам уже сложилось. Карты покажут, что ${qzN(a)} думает о вас на самом деле.` },
-      { id:'c_want', when: a => a.role === 'crush', type:'chips', req:true, label:'Чего хочет клиент', q:'Чего вы хотите?',
-        opts: a => [['step', qzG(a,'Чтобы он сделал первый шаг','Чтобы она сделала первый шаг')],['chance','Понять, есть ли шанс'],['me','Решиться на шаг самой / самому'],['wait','Понять, стоит ли ждать']] },
+        opts:[['yes','Да, есть знаки и интерес'],['hotcold','То тепло, то холодно'],['unclear','Не могу понять'],['no','Пока нет / игнорирует']] },
 
-      /* ветка: всё сложно */
-      { id:'x_what', when: a => a.role === 'complicated', type:'multi', req:true, label:'Что происходит', q:'Что у вас происходит?', hint:'Можно выбрать несколько',
-        opts: a => [['onoff','Сходимся и расходимся'],['taken', qzG(a,'Он несвободен','Она несвободна')],['distance','Нас разделяет расстояние'],['family','Мешают родные или обстоятельства'],['hurt','Обида, которую трудно отпустить'],['status','Непонятный статус']] },
-      { id:'x_long', when: a => a.role === 'complicated', type:'chips', req:true, label:'Сколько длится', q:'Как давно это длится?',
-        opts:[['lt3','Меньше 3 месяцев'],['3to12','3–12 месяцев'],['gt1y','Больше года']] },
-      { id:'x_echo', when: a => a.role === 'complicated', type:'echo',
-        text: a => `В таких историях обоих обычно держит что-то сильнее слов. Карты покажут, что держит ${qzN(a)} — и куда всё идёт.` },
+      /* ветка: всё сложно — 1 быстрый тап */
+      { id:'x_what', when: a => a.role === 'complicated', type:'chips', req:true, label:'Что происходит', q:'Что у вас происходит?',
+        opts: a => [['onoff','Сходимся и расходимся'],['taken', qzG(a,'Он несвободен','Она несвободна')],['distance','Расстояние или пауза'],['status','Непонятный статус']] },
 
-      /* ветка: друг */
-      { id:'f_what', when: a => a.role === 'friend', type:'chips', req:true, label:'Что изменилось', q:'Что изменилось между вами?',
-        opts: a => [['more','Чувствую больше, чем дружбу'],['distance','Мы отдалились'],['conflict','Был конфликт'],['unclear', `Не понимаю, как ${qzG(a,'он','она')} ко мне относится`]] },
-
-      { id:'story', type:'area', opt:true, max:500, label:'Ситуация своими словами',
-        q: a => `Что сейчас происходит между вами? Пара фраз про ${qzN(a)}`,
-        hint:'Своими словами — и разбор будет именно про вас. Можно пропустить.',
-        ph: a => qzG(a,'Например: последние две недели он отвечает коротко и…','Например: последние две недели она отвечает коротко и…') },
-      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Что вы больше всего хотите узнать?', hint:'Выберите или напишите свой вопрос',
+      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Что вы больше всего хотите узнать?', hint:'Нажмите на вариант или напишите свой вопрос',
         sugg: a => {
           const n = qzN(a), he = qzG(a,'он','она');
           if(a.role === 'ex') return [`Думает ли ${n} обо мне?`, `Вернётся ли ${he}?`, 'Есть ли у нас будущее?'];
           if(a.role === 'crush') return [`Нравлюсь ли я ${qzG(a,'ему','ей')}?`, `Сделает ли ${he} первый шаг?`, 'Есть ли у нас шанс?'];
-          if(a.role === 'friend') return [`Что ${n} на самом деле ко мне чувствует?`, 'Может ли дружба стать чем-то большим?', 'Как вернуть прежнюю близость?'];
           return [`Что ${n} на самом деле чувствует ко мне?`, `Что ${he} от меня скрывает?`, 'Куда движутся наши отношения?'];
         } }
     ]
   },
 
-  /* ---------- ПРОШЛОЕ — НАСТОЯЩЕЕ — БУДУЩЕЕ ---------- */
+  /* ---------- ПРОШЛОЕ — НАСТОЯЩЕЕ — БУДУЩЕЕ (было 8+ -> стало 4 быстрых шага) ---------- */
   ppf: {
     display: () => 'Что меня ждёт в ближайшие месяцы?',
     steps: [
@@ -9419,25 +9403,15 @@ const FUNNEL_FORMS = {
         opts:[['love','Любовь и отношения'],['work','Работа и карьера'],['money','Деньги'],['family','Семья'],['self','Я сам(а): состояние, путь']] },
       { id:'l_status', when: a => a.sphere === 'love', type:'chips', req:true, label:'Личная жизнь', q:'Что сейчас в личной жизни?',
         opts:[['rel','Я в отношениях'],['broke','Недавно расстались'],['single','Я один / одна'],['compl','Всё сложно']] },
-      { id:'name', when: a => a.sphere === 'love' && !!a.l_status && a.l_status !== 'single', type:'text', opt:true, subject:true, max:40, label:'Имя человека',
-        q:'Как зовут человека, о котором вы думаете?', hint:'Можно пропустить', ph:'Например: Андрей' },
       { id:'w_now', when: a => a.sphere === 'work', type:'chips', req:true, label:'Ситуация с работой', q:'Что сейчас с работой?',
-        opts:[['ok','Работаю, в целом устраивает'],['leave','Работаю, но хочу уйти'],['search','Ищу работу'],['biz','Своё дело или фриланс']] },
-      { id:'w_pain', when: a => a.sphere === 'work', type:'multi', req:true, label:'Что беспокоит', q:'Что беспокоит больше всего?', hint:'Можно выбрать несколько',
-        opts:[['pay','Мало платят'],['people','Начальство или коллеги'],['burn','Выгорание, нет сил'],['growth','Нет роста'],['fear','Страх перемен']] },
+        opts:[['leave','Работаю, но хочу уйти'],['search','Ищу работу'],['growth','Жду роста или повышения'],['biz','Своё дело или фриланс']] },
       { id:'m_now', when: a => a.sphere === 'money', type:'chips', req:true, label:'Финансовая ситуация', q:'Что сейчас с деньгами?',
-        opts:[['short','Не хватает до зарплаты'],['debt','Есть долги или кредиты'],['stable','Стабильно, но хочется больше'],['loss','Была крупная потеря']] },
-      { id:'m_want', when: a => a.sphere === 'money', type:'chips', req:true, label:'Финансовая цель', q:'Чего вы хотите?',
-        opts:[['out','Выбраться из долгов'],['more','Увеличить доход'],['decide','Принять денежное решение'],['calm','Перестать тревожиться о деньгах']] },
-      { id:'fm_who', when: a => a.sphere === 'family', type:'chips', req:true, label:'О ком вопрос', q:'О ком этот вопрос?',
-        opts:[['parents','Родители'],['kids','Дети'],['spouse','Муж или жена'],['kin','Другие родственники']] },
-      { id:'fm_state', when: a => a.sphere === 'family', type:'chips', req:true, label:'Что происходит в семье', q:'Что происходит?',
+        opts:[['short','Не хватает до зарплаты'],['debt','Есть долги или кредиты'],['more','Хочу увеличить доход'],['decide','Предстоит денежное решение']] },
+      { id:'fm_state', when: a => a.sphere === 'family', type:'chips', req:true, label:'Что происходит в семье', q:'Что происходит в семье?',
         opts:[['conflict','Конфликт или напряжение'],['distance','Отдалились друг от друга'],['worry','Тревожусь за близкого'],['decision','Нужно семейное решение']] },
-      { id:'s_feel', when: a => a.sphere === 'self', type:'multi', req:true, label:'Состояние', q:'Что вы чувствуете последнее время?', hint:'Можно выбрать несколько',
-        opts:[['apathy','Апатия'],['anxiety','Тревога'],['lost','Потерянность'],['change','Хочется перемен'],['rise','Подъём и силы']] },
-      { id:'ppf_echo', type:'echo', text:'Прошлое держит настоящее сильнее, чем кажется. Первая карта покажет, где всё началось, — и почему ситуация развивается именно так.' },
-      { id:'past', type:'area', opt:true, max:400, label:'С чего всё началось', q:'С чего, по-вашему, всё началось?', hint:'Событие или решение, после которого всё изменилось. Можно пропустить.', ph:'Например: год назад я сменил(а) работу, и с тех пор…' },
-      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Главный вопрос к картам', hint:'Выберите или напишите свой',
+      { id:'s_feel', when: a => a.sphere === 'self', type:'chips', req:true, label:'Состояние', q:'Что вы чувствуете последнее время?',
+        opts:[['apathy','Апатия и усталость'],['anxiety','Тревога'],['lost','Потерянность, не знаю куда идти'],['change','Хочется перемен']] },
+      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Главный вопрос к картам', hint:'Нажмите на вариант или напишите свой',
         sugg: a => ({
           love: ['Что ждёт меня в любви в ближайшие месяцы?', 'Встречу ли я своего человека?', 'Есть ли будущее у этих отношений?'],
           work: ['Стоит ли мне менять работу?', 'Что ждёт меня в карьере?', 'Когда придёт рост?'],
@@ -9448,14 +9422,14 @@ const FUNNEL_FORMS = {
     ]
   },
 
-  /* ---------- ДА / НЕТ ---------- */
+  /* ---------- ДА / НЕТ (было 7 -> стало 4 быстрых шага) ---------- */
   yesno: {
     display: () => 'Да или нет?',
     steps: [
       { id:'topic', type:'chips', req:true, label:'Тема вопроса', q:'О чём ваш вопрос?',
         opts:[['love','Отношения'],['work','Работа'],['money','Деньги'],['move','Переезд или поездка'],['choice','Решение или выбор']] },
-      { id:'q', type:'ask', need:true, display:true, max:150, label:'Вопрос (да или нет)', q:'Сформулируйте вопрос так, чтобы на него можно было ответить «да» или «нет»',
-        hint:'Выберите или напишите свой',
+      { id:'q', type:'ask', need:true, display:true, max:150, label:'Вопрос (да или нет)', q:'Выберите или напишите вопрос для ответа «да» или «нет»',
+        hint:'Нажмите на подходящий или напишите свой',
         sugg: a => ({
           love: ['Будем ли мы вместе?', 'Стоит ли мне сделать первый шаг?', 'Есть ли у нас будущее?'],
           work: ['Стоит ли мне менять работу?', 'Получу ли я эту должность?', 'Стоит ли просить повышение?'],
@@ -9463,13 +9437,8 @@ const FUNNEL_FORMS = {
           move: ['Стоит ли мне переезжать?', 'Будет ли поездка удачной?', 'Приживусь ли я на новом месте?'],
           choice: ['Правильное ли это решение?', 'Стоит ли соглашаться?', 'Стоит ли ждать?']
         }[a.topic] || []), ph:'Ваш вопрос…' },
-      { id:'who', when: a => a.topic === 'love', type:'text', opt:true, subject:true, max:40, label:'Имя человека', q:'Как зовут человека, о котором вопрос?', hint:'Можно пропустить', ph:'Например: Максим' },
-      { id:'urgency', type:'chips', req:true, label:'Когда нужно решение', q:'Когда вам нужно решение?',
-        opts:[['now','Сегодня или завтра'],['week','На этой неделе'],['month','В этом месяце'],['later','Не срочно']] },
-      { id:'hope', type:'chips', req:true, label:'На какой ответ надеется', q:'Какой ответ вы надеетесь услышать?', hint:'Карты ответят честно — а это поможет понять, что для вас на самом деле важно',
-        opts:[['yes','«Да»'],['no','«Нет»'],['dunno','Не знаю']] },
-      { id:'yn_echo', type:'echo', text:'Колода уже настроена на ваш вопрос. Осталась одна деталь — и ответ будет не общим, а про вашу ситуацию.' },
-      { id:'why', type:'area', opt:true, max:400, label:'Почему важно сейчас', q:'Почему этот вопрос важен именно сейчас?', hint:'Можно пропустить', ph:'Мне нужно решить до…, потому что…' }
+      { id:'urgency', type:'chips', req:true, label:'Когда нужно решение', q:'Когда вам нужен результат или решение?',
+        opts:[['now','Сегодня или завтра'],['week','На этой неделе'],['month','В этом месяце'],['later','Не срочно']] }
     ]
   },
 
@@ -9478,22 +9447,12 @@ const FUNNEL_FORMS = {
     display: () => 'Как мне наконец отпустить?',
     steps: [
       { id:'what', type:'chips', req:true, label:'Что нужно отпустить', q:'Что вы хотите отпустить?',
-        opts:[['person','Человека'],['hurt','Обиду'],['past','Прошлое или ошибку'],['fear','Страх или тревогу'],['dream','Несбывшуюся мечту']] },
-      { id:'gender', when: a => a.what === 'person', type:'chips', req:true, label:'О ком расклад', q:'Это мужчина или женщина?', opts:[['m','Мужчина'],['f','Женщина']] },
+        opts:[['person','Человека'],['hurt','Обиду'],['past','Прошлое или ошибку'],['fear','Страх или тревогу']] },
       { id:'name', when: a => a.what === 'person', type:'text', need:true, subject:true, max:40, label:'Имя человека',
-        q: a => `Как ${qzG(a,'его','её')} зовут?`, ph: a => qzG(a,'Например: Дмитрий','Например: Анна') },
-      { id:'lg_role', when: a => a.what === 'person', type:'chips', req:true, label:'Кем был(а) для клиента', q: a => `Кем ${qzN(a)} ${qzG(a,'был','была')} для вас?`,
-        opts: a => [['ex', qzG(a,'Бывший','Бывшая')],['unreq','Безответная любовь'],['friend', qzG(a,'Друг','Подруга')],['family','Родственник']] },
-      { id:'lg_desc', when: a => !!a.what && a.what !== 'person', type:'text', need:true, max:120, label:'Что именно',
-        q: a => ({ hurt:'На кого или на что обида?', past:'Что именно из прошлого не отпускает?', fear:'Чего именно вы боитесь?', dream:'О какой мечте речь?' }[a.what] || 'Что именно?'),
-        ph: a => ({ hurt:'Например: на маму за слова в детстве', past:'Например: развод, увольнение, свою ошибку', fear:'Например: страх остаться одной', dream:'Например: переезд к морю' }[a.what] || '') },
+        q:'Как зовут этого человека?', ph:'Например: Дмитрий или Анна' },
       { id:'lg_when', type:'chips', req:true, label:'Как давно', q:'Как давно это держит вас?',
         opts:[['lt3','Меньше 3 месяцев'],['3to12','3–12 месяцев'],['1to3','1–3 года'],['gt3','Дольше 3 лет']] },
-      { id:'hold', type:'multi', req:true, label:'Что держит', q:'Что держит сильнее всего?', hint:'Можно выбрать несколько',
-        opts:[['memories','Воспоминания'],['hope','Надежда, что всё вернётся'],['hurt','Обида'],['guilt','Чувство вины'],['habit','Привычка'],['alone','Страх одиночества']] },
-      { id:'lg_echo', type:'echo', text:'То, что не отпускает, почти всегда держится не за событие, а за что-то внутри нас. Карты покажут, за что именно — и какой шаг освободит.' },
-      { id:'want', type:'area', opt:true, max:300, label:'Что хочет впустить', q:'Что вы хотите впустить в жизнь вместо этого?', hint:'Можно пропустить', ph:'Хочу снова чувствовать…' },
-      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Что вы хотите узнать?', hint:'Выберите или напишите свой',
+      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Что вы хотите узнать?', hint:'Нажмите на вариант или напишите свой',
         sugg:['Как мне наконец освободиться?', 'Почему я не могу отпустить?', 'Что ждёт меня, когда я отпущу?'] }
     ]
   },
@@ -9505,40 +9464,28 @@ const FUNNEL_FORMS = {
       { id:'cf_who', type:'chips', req:true, label:'С кем конфликт', q:'С кем у вас конфликт?',
         opts:[['partner','С партнёром'],['mother','С мамой'],['father','С папой'],['kin','С родственником'],['friend','С другом или подругой'],['work','С коллегой или начальником']],
         after: a => { if(a.cf_who === 'mother') a.gender = 'f'; else if(a.cf_who === 'father') a.gender = 'm'; } },
-      { id:'gender', when: a => !!a.cf_who && a.cf_who !== 'mother' && a.cf_who !== 'father', type:'chips', req:true, label:'Пол человека', q:'Это мужчина или женщина?', opts:[['m','Мужчина'],['f','Женщина']] },
       { id:'name', type:'text', need:true, subject:true, max:40, label:'С кем конфликт? (имя)',
-        q: a => (a.cf_who === 'mother' || a.cf_who === 'father') ? `Как вы ${qzG(a,'его','её')} называете?` : `Как ${qzG(a,'его','её')} зовут?`,
-        ph: a => a.cf_who === 'mother' ? 'Например: мама' : (a.cf_who === 'father' ? 'Например: папа' : qzG(a,'Например: Олег','Например: Ольга')) },
-      { id:'cf_long', type:'chips', req:true, label:'Как давно длится', q:'Как давно длится конфликт?',
-        opts:[['days','Вспыхнул на днях'],['weeks','Несколько недель'],['months','Месяцами'],['years','Годами']] },
+        q:'Как зовут этого человека?', ph:'Например: Олег, мама, Ольга' },
       { id:'cf_now', type:'chips', req:true, label:'Что между ними сейчас', q:'Что между вами сейчас?',
         opts:[['silent','Не разговариваем'],['cold','Холодно и вежливо'],['fight','Постоянно ссоримся'],['pretend','Делаем вид, что всё нормально']] },
-      { id:'cf_fault', type:'chips', req:true, label:'Кто неправ, по мнению клиента', q:'Как вам кажется, кто неправ?',
-        opts: a => [['them', qzN(a)],['me','Я'],['both','Оба'],['dunno','Не знаю']] },
-      { id:'cf_echo', type:'echo', text: a => `За резкими словами почти всегда стоит то, что человек боится сказать прямо. Карты покажут, что на самом деле чувствует ${qzN(a)} — и с чего начать разговор.` },
-      { id:'cf_start', type:'area', opt:true, max:400, label:'С чего началось', q:'Из-за чего всё началось?', hint:'Можно пропустить', ph:'Всё началось, когда…' },
-      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Каким хочет видеть исход', q:'Каким вы хотите видеть исход?', hint:'Выберите или напишите свой',
+      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Каким хочет видеть исход', q:'Каким вы хотите видеть исход?', hint:'Нажмите на вариант или напишите свой',
         sugg:['Помириться и сохранить отношения', 'Чтобы меня наконец поняли', 'Спокойно отдалиться без войны', 'Понять, как себя вести'] }
     ]
   },
 
-  /* ---------- СОВМЕСТИМОСТЬ ПАРЫ ---------- */
+  /* ---------- СОВМЕСТИМОСТЬ ПАРЫ (было 10 шагов -> стало 6 быстрых шагов!) ---------- */
   compat: {
     compat: true,
     display: a => 'Совместимость: вы и ' + qzN(a),
     steps: [
       { id:'role', ck:'relation', type:'chips', req:true, label:'Кто вы друг другу', q:'Кто вы друг другу?',
-        opts:[['partner','Пара'],['married','Супруги'],['crush','Влюблённость'],['ex','Бывшие'],['complicated','Всё сложно']] },
-      { id:'gender', type:'chips', req:true, label:'Партнёр', q:'Ваш партнёр — мужчина или женщина?', opts:[['m','Мужчина'],['f','Женщина']] },
+        opts:[['partner','Пара в отношениях'],['married','Супруги'],['crush','Симпатия / ещё не вместе'],['ex','Бывшие'],['complicated','Всё сложно']] },
       { id:'name', ck:'partner_name', type:'text', need:true, subject:true, max:40, label:'Имя партнёра',
-        q: a => `Как ${qzG(a,'его','её')} зовут?`, ph: a => qzG(a,'Например: Андрей','Например: Алина') },
+        q:'Как зовут партнёра?', ph:'Например: Андрей или Алина' },
       { id:'mydate', ck:'my_date', type:'date', need:true, label:'Дата рождения клиента', q:'Ваша дата рождения', hint:'По ней считаются ваш знак и числа совместимости' },
-      { id:'pdate', ck:'partner_date', type:'date', opt:true, label:'Дата рождения партнёра', q: a => `Когда ${qzG(a,'родился','родилась')} ${qzN(a)}?`,
-        hint:'Не знаете — пропустите, карты всё равно ответят. С датой будет точный процент совместимости.' },
-      { id:'cp_echo', type:'echo', text: a => qzCompatEcho(a) },
-      { id:'myname', ck:'my_name', type:'text', opt:true, max:40, label:'Имя клиента', q:'Как вас зовут?', hint:'Чтобы разбор обращался к вам лично. Можно пропустить.', ph:'Например: Анна' },
-      { id:'story', type:'area', opt:true, max:400, label:'История пары', q:'Как вы познакомились и что происходит сейчас?', hint:'С историей разбор будет про вас, а не про знаки вообще. Можно пропустить.', ph:'Познакомились год назад… Сейчас между нами…' },
-      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Что хочет узнать о паре', q:'Что хотите узнать о вашей паре?', hint:'Выберите или напишите свой',
+      { id:'pdate', ck:'partner_date', type:'date', opt:true, label:'Дата рождения партнёра', q: a => `Когда родился(лась) ${qzN(a)}?`,
+        hint:'Не знаете — пропустите, карты всё равно ответят. С датой будет точный % совместимости.' },
+      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Что хочет узнать о паре', q:'Что хотите узнать о вашей паре?', hint:'Нажмите на вариант или напишите свой вопрос',
         sugg:['Подходим ли мы друг другу?', 'Есть ли у нас будущее?', 'Что мешает нам быть ближе?'] }
     ]
   },
@@ -9553,31 +9500,20 @@ const FUNNEL_FORMS = {
       { id:'gender', type:'chips', req:true, label:'Пол',
         q:'Ваш пол', hint:'Поможет точнее раскрыть энергии любви и самореализации',
         opts:[['f','Женщина'],['m','Мужчина']] },
-      { id:'name', type:'text', opt:true, max:40, label:'Имя',
-        q:'Как вас зовут?', hint:'Чтобы разбор обращался к вам лично. Можно пропустить.',
-        ph:'Например: Анна' },
-      { id:'focus', type:'multi', req:true, label:'Главный фокус',
-        q:'Что сейчас волнует сильнее всего?', hint:'Выберите 1–3 темы для глубокого разбора',
+      { id:'focus', type:'chips', req:true, label:'Главный фокус',
+        q:'Что сейчас волнует сильнее всего?', hint:'Выберите главную тему для глубокого разбора',
         opts:[
           ['money','Деньги и финансовый потолок'],
           ['love','Любовь, отношения и партнёр'],
           ['purpose','Предназначение и в чём мой талант'],
-          ['karma','Кармический хвост и повторяющиеся сценарии'],
+          ['karma','Кармический хвост и повторяющиеся уроки'],
           ['year','Прогноз и главные уроки года']
         ] },
-      { id:'mx_echo', type:'echo',
-        text: a => {
-          if(!a.birth) return 'Дата принята. Сейчас мы соберём ваши 22 аркана и найдём главные точки силы.';
-          const pts = calcGuestMatrixPoints(a.birth);
-          const kt = pts.karmic_tail;
-          return `Матрица собрана. Ваш центр силы — аркан ${pts.center} (${arcName(pts.center)}), денежная линия — ${pts.money} (${arcName(pts.money)}), кармический хвост — ${kt.join('–')}. В них уже видно, где утекает ваша энергия.`;
-        } },
       { id:'q', type:'ask', opt:true, display:true, max:160, label:'Главный вопрос к Матрице',
-        q:'Что вы больше всего хотите понять о себе сейчас?', hint:'Выберите или напишите свой запрос',
+        q:'Что вы больше всего хотите понять о себе сейчас?', hint:'Нажмите на вариант или напишите свой запрос',
         sugg: a => {
-          const f = Array.isArray(a.focus) ? a.focus : [];
-          if(f.indexOf('money') !== -1) return ['Как пробить мой финансовый потолок?', 'Через какое дело ко мне приходят деньги?', 'Почему деньги не задерживаются?'];
-          if(f.indexOf('love') !== -1) return ['Какой партнёр мне подходит по судьбе?', 'Почему в любви повторяется один сценарий?', 'Что мешает гармоничным отношениям?'];
+          if(a.focus === 'money') return ['Как пробить мой финансовый потолок?', 'Через какое дело ко мне приходят деньги?', 'Почему деньги не задерживаются?'];
+          if(a.focus === 'love') return ['Какой партнёр мне подходит по судьбе?', 'Почему в любви повторяется один сценарий?', 'Что мешает гармоничным отношениям?'];
           return ['В чём моё главное предназначение?', 'Какой урок не даёт мне расти?', 'Как вывести главные арканы в плюс?'];
         } }
     ]
@@ -9725,7 +9661,7 @@ function qzRender(){
   const asked = steps.filter(s => s.type !== 'echo' && qzOn(s, a));
   let pos = asked.indexOf(st);
   if(pos < 0) pos = asked.filter(s => steps.indexOf(s) < QZ.i).length;
-  const pct = Math.max(6, Math.round(pos / Math.max(asked.length, 1) * 100));
+  const pct = Math.max(8, Math.round(pos / Math.max(asked.length, 1) * 100));
   const last = qzNextIdx(steps, QZ.i) === -1;
   const nextTx = last ? tt('table_deal') : (st.type === 'echo' ? qzR('Продолжить', 'Continue') : qzR('Далее', 'Next'));
 
@@ -9756,11 +9692,12 @@ function qzRender(){
     } else if(st.type === 'email'){
       html += `<input class="field qz-in" id="qz-in" type="email" inputmode="email" autocomplete="email" maxlength="${st.max || 120}" placeholder="${esc(qzVal(st.ph, a))}" value="${esc(v || qzSavedEmail() || '')}" oninput="qzInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();qzNext()}">`;
     } else {
-      if(st.type === 'ask'){
-        const sg = qzList(st.sugg, a);
-        if(sg.length) html += `<div class="qz-sugg">` + sg.map((s, k) => `<button type="button" class="qz-chip${v === s ? ' on' : ''}" onclick="qzSugg(${k})">${esc(s)}</button>`).join('') + `</div>`;
+      const sg = st.type === 'ask' ? qzList(st.sugg, a) : [];
+      if(sg.length){
+        html += `<div class="qz-opts">` + sg.map((s, k) => `<button type="button" class="qz-opt${v === s ? ' on' : ''}" onclick="qzSugg(${k})">${esc(s)}</button>`).join('') + `</div>`;
       }
-      html += `<input class="field qz-in" id="qz-in" type="text" maxlength="${st.max || 150}" placeholder="${esc(qzVal(st.ph, a))}" value="${esc(v || '')}" oninput="qzInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();qzNext()}">`;
+      const askPh = sg.length ? qzR('Или напишите свой вопрос…', 'Or write your own question…') : qzVal(st.ph, a);
+      html += `<input class="field qz-in" id="qz-in" type="text" maxlength="${st.max || 150}" placeholder="${esc(askPh)}" value="${esc(v || '')}" oninput="qzInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();qzNext()}">`;
     }
     if(st.type !== 'chips' || last){
       html += `<button type="button" class="btn btn-brass btn-wide qz-next" onclick="qzNext()">${esc(nextTx)}</button>`;
@@ -9773,9 +9710,9 @@ function qzRender(){
   box.innerHTML = html;
 
   const inp = document.getElementById('qz-in');
-  if(inp && st.type !== 'date' && !('ontouchstart' in window)){ setTimeout(() => { try{ inp.focus(); }catch(e){} }, 60); }
+  if(inp && st.type !== 'date' && st.type !== 'ask' && !('ontouchstart' in window)){ setTimeout(() => { try{ inp.focus(); }catch(e){} }, 60); }
 }
-
+  
 function qzPick(k){
   const form = qzForm(), st = qzStep();
   if(!form || !st) return;
@@ -9799,10 +9736,16 @@ function qzPick(k){
 }
 function qzInput(v){ const st = qzStep(); if(!st) return; QZ.a[st.id] = v; qzSave(); }
 function qzSugg(k){
-  const st = qzStep(); if(!st) return;
-  const s = qzList(st.sugg, QZ.a)[k]; if(!s) return;
-  QZ.a[st.id] = s; qzSave(); qzRender();
+  const form = qzForm(), st = qzStep();
+  if(!form || !st) return;
+  const s = qzList(st.sugg, QZ.a)[k];
+  if(!s) return;
+  QZ.a[st.id] = s;
+  qzSave();
+  qzRender();
   try{ bridge.haptic(); }catch(e){}
+  const at = QZ.i;
+  setTimeout(() => { if(QZ.i === at) qzAdvance(); }, 220);
 }
 function qzShake(){
   const c = document.querySelector('#tb-form .qz-card');
@@ -9907,6 +9850,7 @@ function fnCollect(form){
   const a = QZ.a, steps = form.steps;
   const details = [];
   let subject = '', display = '';
+  let hasGenderLabel = false;
   for(let idx = 0; idx < steps.length; idx++){
     const st = steps[idx];
     if(st.type === 'echo' || !qzOn(st, a)) continue;
@@ -9925,9 +9869,14 @@ function fnCollect(form){
     }
     const hv = qzHuman(st, a);
     if(!hv) continue;
-    details.push({ label: String(qzVal(st.label, a)), value: hv });
+    const lbl = String(qzVal(st.label, a));
+    if(st.id === 'gender') hasGenderLabel = true;
+    details.push({ label: lbl, value: hv });
     if(st.subject) subject = hv.split(/[,;]/).pop().trim();
     if(st.display) display = hv;
+  }
+  if(!hasGenderLabel && (a.gender === 'm' || a.gender === 'f')){
+    details.push({ label: 'О ком расклад', value: a.gender === 'f' ? 'О женщине' : 'О мужчине' });
   }
   if(!display && typeof form.display === 'function') display = form.display(a);
   let compat = null;
