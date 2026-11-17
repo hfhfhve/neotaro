@@ -5364,11 +5364,11 @@ function watchPayment(onPaid, meta){
       hideToast();
       toast(tt('pay_done'));
       bridge.haptic('ok');
-      if(window.neoPurchase) neoPurchase(m.goal || 'purchase_energy', m.price, { kind: m.kind || 'energy', item: m.item || '' }); /* neotaro-goal */
-      if(window.neoGoal) neoGoal('purchase'); /* neotaro-goal: общая цель "любая оплата" */
+      if(window.neoPurchase) neoPurchase(m.goal || 'purchase_energy', m.price, { kind: m.kind || 'energy', item: m.item || '' });
       try{
         if(!localStorage.getItem('neo_first_paid_sent')){
           localStorage.setItem('neo_first_paid_sent', '1');
+          if(window.neoPurchase) neoPurchase('purchase', m.price, { kind: m.kind || 'energy', item: m.item || '' });
           if(window.neoPurchase) neoPurchase('first_purchase', m.price, { kind: m.kind || 'energy', item: m.item || '' });
         }
       }catch(e){}
@@ -5390,11 +5390,11 @@ function watchSubscription(amount, plan, period){
     const d = await api('/subscription/status', 'GET', {}, true);
     if(d && d.success && d.access && d.access.paid && !wasPaid){
       clearInterval(S.subPoll);
-      if(window.neoPurchase) neoPurchase('purchase_sub', amount, { kind: 'subscription', plan: plan || '', period: period || '' }); /* neotaro-goal */
-      if(window.neoGoal) neoGoal('purchase'); /* neotaro-goal */
+      if(window.neoPurchase) neoPurchase('purchase_sub', amount, { kind: 'subscription', plan: plan || '', period: period || '' });
       try{
         if(!localStorage.getItem('neo_first_paid_sent')){
           localStorage.setItem('neo_first_paid_sent', '1');
+          if(window.neoPurchase) neoPurchase('purchase', amount, { kind: 'subscription', plan: plan || '', period: period || '' });
           if(window.neoPurchase) neoPurchase('first_purchase', amount, { kind: 'subscription', plan: plan || '', period: period || '' });
         }
       }catch(e){}
@@ -5406,7 +5406,6 @@ function watchSubscription(amount, plan, period){
     }
   }, 4000);
 }
-
 /* ---------- загрузка кабинета ---------- */
 function absorbUser(d){
   if(typeof d.energy === 'number') S.energy = d.energy;
@@ -9008,31 +9007,40 @@ function funnelRenderPaid(d){
   const n = typeof d.energy === 'number' ? d.energy
     : ((pl[d.plan] && pl[d.plan].energy) || (pl.tripwire && pl.tripwire.energy) || 5);
   FN.paidView = true;
+
+  const eb = document.getElementById('tb-reading-eyebrow');
+  if(eb) eb.textContent = ru ? 'Полный разбор · Все карты открыты' : 'Full reading · All cards unlocked';
+
   document.getElementById('tb-reading').innerHTML =
-    '<div class="fn-reveal">' + clean(FN.full) + '</div>' +
-    `<div class="fn-upsell" style="margin-top:24px;border-color:rgba(110,158,144,.45)">
-      <div class="eyebrow" style="color:var(--verdigris);margin-bottom:6px">${esc(ru ? '✓ Расклад полностью открыт' : '✓ Spread unlocked')}</div>
-      <div class="fn-upsell-t">${esc(ru ? 'Остались вопросы по раскладу?' : 'Questions about your spread?')}</div>
-      <p>${esc(ru ? ('У вас на балансе ' + n + ' ⚡ энергии — обсудите расклад с Оракулом') : ('You have ' + n + ' ⚡ energy — discuss the spread with the Oracle'))}</p>
-      <button class="btn btn-brass btn-wide" onclick="funnelDiscuss()">${esc(ru ? 'Обсудить с Оракулом →' : 'Discuss with the Oracle →')}</button>
-      <p class="fn-note" style="margin-top:10px">${esc(ru ? 'Копия также отправлена на вашу почту и в «Мои расклады»' : 'Saved in My spreads and sent to email')}</p>
+    `<div class="fn-paid-banner">
+      <div class="fn-paid-banner-ico">✓</div>
+      <div class="fn-paid-banner-txt">
+        <b>${esc(ru ? 'Оплата прошла успешно — ваш расклад полностью открыт!' : 'Payment confirmed — your full reading is unlocked!')}</b>
+        <span>${esc(ru ? 'Ниже открыты все позиции карт, сроки и итоговый совет Оракула' : 'All card positions, timing and advice are shown below')}</span>
+      </div>
     </div>` +
-    '<div id="fn-up" class="fn-up"></div>' +
+    '<div class="fn-reveal">' + clean(FN.full) + '</div>' +
+    `<div class="fn-end-seal">${esc(ru ? '✦ Конец вашего расклада · Все позиции открыты ✦' : '✦ End of your spread · All positions unlocked ✦')}</div>` +
+    `<div class="fn-upsell" style="margin-top:16px;border-color:rgba(110,158,144,.45)">
+      <div class="fn-upsell-t">${esc(ru ? 'Хотите уточнить детали у Оракула?' : 'Want to ask the Oracle a follow-up?')}</div>
+      <p>${esc(ru ? ('По вашему тарифу вам начислено ' + n + ' ⚡ энергии — задайте уточняющий вопрос по этому раскладу в чате') : ('You have ' + n + ' ⚡ energy — ask a follow-up question in chat'))}</p>
+      <button class="btn btn-brass btn-wide" onclick="funnelDiscuss()">${esc(ru ? 'Задать вопрос Оракулу в чате →' : 'Ask the Oracle in chat →')}</button>
+      <p class="fn-note" style="margin-top:10px">${esc(ru ? 'Копия этого разбора также отправлена на вашу почту и сохранена в «Мои расклады»' : 'Saved in My spreads and sent to your email')}</p>
+    </div>` +
     '<div class="fn-lift" id="fn-lift" aria-hidden="true"><i></i></div>';
+
   setTimeout(() => { const l = document.getElementById('fn-lift'); if(l) l.remove(); }, 2000);
   fnActions(true);
   bridge.haptic('ok');
   try{
     const key = 'neo_funnel_goal_' + FN.id;
     const paidPrice = fnPlanPrice(d.plan || 'tripwire');
-    const allowPurchase = (d.track_purchase !== false);
     const allowFirst = (d.track_first_purchase !== false);
-    if(allowPurchase && window.neoGoal && !localStorage.getItem(key)){
-      localStorage.setItem(key, '1');
-      neoGoal('purchase', { kind: 'funnel', item: d.plan || '', order_price: paidPrice });
-    }
-    if(allowFirst && !localStorage.getItem('neo_first_paid_sent')){
+    /* Отправляем цель purchase СТРОГО ОДИН РАЗ в жизни для уникального покупателя! */
+    if(allowFirst && !localStorage.getItem('neo_first_paid_sent') && !localStorage.getItem(key)){
       localStorage.setItem('neo_first_paid_sent', '1');
+      localStorage.setItem(key, '1');
+      if(window.neoPurchase) neoPurchase('purchase', paidPrice, { kind: 'funnel', item: d.plan || '' });
       if(window.neoPurchase) neoPurchase('first_purchase', paidPrice, { kind: 'funnel', item: d.plan || '' });
     }
     localStorage.removeItem('neo_funnel');
@@ -9129,7 +9137,8 @@ function fnUpsellPaid(html){
     const key = 'neo_funnel_goal_' + o.spread_id;
     if(window.neoGoal && !localStorage.getItem(key)){
       localStorage.setItem(key, '1');
-      neoGoal('purchase', { kind: 'upsell', item: o.kind, order_price: o.price });
+      /* Шлём отдельную цель upsell_paid, а НЕ purchase, чтобы Директ не списывал деньги второй раз! */
+      neoGoal('upsell_paid', { kind: 'upsell', item: o.kind, order_price: o.price });
     }
   }catch(e){}
 }
