@@ -8578,7 +8578,7 @@ async function fnResumeLast(){
   if(window.neoGoal) neoGoal('funnel_limit_resume');
 }
 
-let FN_SELECTED_PLAN = 'pro';
+let FN_SELECTED_PLAN = 'tripwire';
 let _fnHoldTimer = null;
 
 /* ---------- цены тарифов воронки (с сервера, с запасными числами) ---------- */
@@ -8588,7 +8588,6 @@ function fnPlanPrice(plan){
   return p || FN_PRICE_FALLBACK[plan] || 199;
 }
 
-/* Отключаем скидку 99 ₽ при сворачивании вкладки — цена всегда 199 ₽ */
 const FN_SAVE_MINUTES = 10;
 function fnSaveKey(){ return 'neo_save_' + (FN.id || ''); }
 function fnSaveEnd(){ return 0; }
@@ -8636,11 +8635,11 @@ function fnPickTier(plan){
     const price = fnPlanPrice(plan);
     if(plan === 'pro' || plan === 'plus'){
       btn.textContent = ru
-        ? 'Получить полный VIP-доступ на месяц · ' + price + ' ₽'
+        ? 'Открыть расклад + VIP-доступ на месяц · ' + price + ' ₽'
         : 'Get full VIP access for 1 month · ' + price + ' ₽';
     } else {
       btn.textContent = ru
-        ? 'Открыть этот расклад целиком · ' + price + ' ₽'
+        ? 'Снять туман и открыть расклад целиком · ' + price + ' ₽'
         : 'Unlock this reading · ' + price + ' ₽';
     }
   }
@@ -8650,7 +8649,7 @@ function funnelFogHtml(errText){
   const ru = FN_RU();
   let saved = '';
   try{ saved = localStorage.getItem('neo_email') || ((bridge.webUser && bridge.webUser.email) || ''); }catch(e){}
-  FN_SELECTED_PLAN = 'pro';
+  FN_SELECTED_PLAN = 'tripwire';
   const twPrice = fnPlanPrice('tripwire'), twOld = 390;
   const proPrice = fnPlanPrice('pro');
   const pl = FN.plans || {};
@@ -8675,10 +8674,30 @@ function funnelFogHtml(errText){
 
         <div class="fn-form">
           <div class="fn-tier-switch">
-            <button type="button" class="fn-tier is-on" data-plan="pro" onclick="fnPickTier('pro')">
+            <button type="button" class="fn-tier is-on" data-plan="tripwire" onclick="fnPickTier('tripwire')">
               <div>
                 <div class="fn-tier-top">
-                  <span class="fn-tier-badge is-hot">${esc(ru ? 'Выгода −60% · VIP' : 'Save 60% · VIP')}</span>
+                  <span class="fn-tier-badge is-hot">${esc(ru ? 'Выбор 85% · Выгода −50%' : 'Most popular · Save 50%')}</span>
+                  <span class="fn-tier-radio"></span>
+                </div>
+                <div class="fn-tier-name">${esc(ru ? 'Открыть этот расклад целиком' : 'Unlock full reading')}</div>
+                <ul class="fn-tier-list">
+                  <li>${esc(ru ? 'Расшифровка всех выпавших карт, сроки и итоговый совет' : 'Full interpretation of all drawn cards')}</li>
+                  <li>${esc(ru ? (twEn + ' личных вопросов тарологу в чате') : (twEn + ' personal questions to the AI Tarot reader'))}</li>
+                  <li>${esc(ru ? '+ 3 дня полного VIP-доступа ПРО в подарок' : '+ 3 days of full PRO access included')}</li>
+                </ul>
+              </div>
+              <div class="fn-tier-pwrap">
+                <span class="fn-tier-old">${twOld} ₽</span>
+                <span class="fn-tier-price">${twPrice} ₽</span>
+                <span class="fn-tier-per">${esc(ru ? 'сейчас' : 'now')}</span>
+              </div>
+            </button>
+
+            <button type="button" class="fn-tier" data-plan="pro" onclick="fnPickTier('pro')">
+              <div>
+                <div class="fn-tier-top">
+                  <span class="fn-tier-badge">${esc(ru ? 'Безлимит на месяц · VIP' : 'Full month · VIP')}</span>
                   <span class="fn-tier-radio"></span>
                 </div>
                 <div class="fn-tier-name">${esc(ru ? 'Полный доступ ПРО · 1 мес' : 'Full PRO access · 1 month')}</div>
@@ -8694,26 +8713,6 @@ function funnelFogHtml(errText){
                 <span class="fn-tier-per">${esc(ru ? 'за месяц' : '/ month')}</span>
               </div>
             </button>
-
-            <button type="button" class="fn-tier" data-plan="tripwire" onclick="fnPickTier('tripwire')">
-              <div>
-                <div class="fn-tier-top">
-                  <span class="fn-tier-badge">${esc(ru ? 'Только этот расклад' : 'Single reading')}</span>
-                  <span class="fn-tier-radio"></span>
-                </div>
-                <div class="fn-tier-name">${esc(ru ? 'Открыть расклад' : 'Unlock reading')}</div>
-                <ul class="fn-tier-list">
-                  <li>${esc(ru ? 'Расшифровка всех выпавших вам карт и совет' : 'Full interpretation of all drawn cards')}</li>
-                  <li>${esc(ru ? (twEn + ' личных вопросов тарологу в чате') : (twEn + ' personal questions to the AI Tarot reader'))}</li>
-                  <li>${esc(ru ? '+ 3 дня полного VIP-доступа ПРО в подарок' : '+ 3 days of full PRO access included')}</li>
-                </ul>
-              </div>
-              <div class="fn-tier-pwrap">
-                <span class="fn-tier-old">${twOld} ₽</span>
-                <span class="fn-tier-price">${twPrice} ₽</span>
-                <span class="fn-tier-per">${esc(ru ? 'разово' : 'once')}</span>
-              </div>
-            </button>
           </div>
 
           <div class="fn-email-wrap" id="fn-email-wrap">
@@ -8726,7 +8725,7 @@ function funnelFogHtml(errText){
           </div>
 
           <button type="button" class="btn btn-brass btn-wide" id="fn-submit-btn" style="margin-top:4px;min-height:50px;font-size:15.5px" onclick="funnelPay(FN_SELECTED_PLAN)">
-            ${esc(ru ? ('Получить полный VIP-доступ на месяц · ' + proPrice + ' ₽') : ('Get full VIP access for 1 month · ' + proPrice + ' ₽'))}
+            ${esc(ru ? ('Снять туман и открыть расклад целиком · ' + twPrice + ' ₽') : ('Unlock this reading · ' + twPrice + ' ₽'))}
           </button>
 
           <label class="fn-agree"><input type="checkbox" id="fn-agree" checked>
@@ -8741,6 +8740,16 @@ function funnelRenderLocked(teaser, errText){
   const out = document.getElementById('tb-reading');
   FN.teaser = teaser || FN.teaser || '';
   out.innerHTML = `<div class="daily-teaser-wrap"><div class="daily-teaser-text">${clean(teaser || '')}</div>${funnelFogHtml(errText)}</div>`;
+  /* Делаем все закрытые блоки .fn-khole кликабельными — клик плавно скроллит к форме оплаты */
+  out.querySelectorAll('.fn-khole').forEach(el => {
+    el.style.cursor = 'pointer';
+    el.onclick = () => {
+      const fog = document.getElementById('fn-fog');
+      if(fog){
+        try{ fog.scrollIntoView({ behavior: 'smooth', block: 'center' }); }catch(e){}
+      }
+    };
+  });
   fnActions(false);
   fnMistWatch();
   fnStartHoldTimer();
