@@ -7306,22 +7306,67 @@ async function renderAstroPlans(force){ return renderShopPlans(force); }
 
 async function astroSubscribe(plan){
   if(requireAuth({ action: 'shop' })) return;
-  /* Явное согласие на автосписания ДО оплаты. Без него любой спор с банком
-     проигран заранее: подтвердить, что человека предупредили, будет нечем. */
   const per = (S.per === 'year') ? tt('per_year') : tt('per_month');
   if(S.recurring && !confirm(tt('sub_recurring_consent').replace('{per}', per))) return;
   toast(tt('wait'));
-  if(window.neoGoal) neoGoal('purchase_start', { kind: 'subscription', plan: plan, period: S.per }); /* neotaro-goal */
+  if(window.neoGoal) neoGoal('purchase_start', { kind: 'subscription', plan: plan, period: S.per });
   const d = await api('/subscription/invoice-rub', 'POST', { plan: plan, period: S.per });
   hideToast();
   if(d && d.success && d.url){
-    bridge.openLink ? bridge.openLink(d.url) : window.open(d.url, '_blank');
-    /* Ставим радар на доступ: подписка раньше вообще не считалась как конверсия. */
-    watchSubscription(d.amount, plan, S.per);
+    try {
+      localStorage.setItem('neo_pending_sub', JSON.stringify({
+        amount: d.amount || 499,
+        plan: plan,
+        period: S.per,
+        ts: Date.now()
+      }));
+    } catch(e){}
+    if(bridge.isWeb){
+      location.href = d.url;
+    } else {
+      bridge.openLink ? bridge.openLink(d.url) : window.open(d.url, '_blank');
+      watchSubscription(d.amount, plan, S.per);
+    }
     return;
   }
   toast(tt('err'));
 }
+
+/* Автоматическая проверка оплаты подписки/магазина после возврата с ЮKassa (?paid_sub=1 или ?paid=1) */
+async function checkPendingSubGoal(){
+  let pend = null;
+  try { pend = JSON.parse(localStorage.getItem('neo_pending_sub') || 'null'); } catch(e){}
+  const hasUrlFlag = /[?&](paid_sub|paid)=1/.test(location.search);
+  if(!pend && !hasUrlFlag) return;
+  if(pend && pend.ts && (Date.now() - pend.ts > 2 * 3600 * 1000)){
+    try { localStorage.removeItem('neo_pending_sub'); } catch(e){}
+    return;
+  }
+  for(let i = 0; i < 12; i++){
+    const d = await api('/subscription/status', 'GET', {}, true);
+    if(d && d.success && d.access && d.access.paid){
+      const amt = (pend && pend.amount) || (d.subscription && d.subscription.next_charge_amount) || 499;
+      const pl = (pend && pend.plan) || d.access.plan || 'pro';
+      const pr = (pend && pend.period) || 'month';
+      try { localStorage.removeItem('neo_pending_sub'); } catch(e){}
+      if(window.neoPurchase) neoPurchase('purchase_sub', amt, { kind: 'subscription', plan: pl, period: pr });
+      try {
+        if(!localStorage.getItem('neo_first_paid_sent')){
+          localStorage.setItem('neo_first_paid_sent', '1');
+          if(window.neoPurchase) neoPurchase('purchase', amt, { kind: 'subscription', plan: pl, period: pr });
+          if(window.neoPurchase) neoPurchase('first_purchase', amt, { kind: 'subscription', plan: pl, period: pr });
+        }
+      } catch(e){}
+      if(typeof window.neoUxRec === 'function') window.neoUxRec('paid_ok', 'sub=' + pl + ' amt=' + amt);
+      toast(tt('pay_done'));
+      if(typeof refreshAccess === 'function') refreshAccess();
+      if(typeof loadProfileSub === 'function') loadProfileSub();
+      break;
+    }
+    await new Promise(r => setTimeout(r, 2500));
+  }
+}
+setTimeout(checkPendingSubGoal, 1800);
 
 function editAstro(){
   document.getElementById('astro-chart').style.display = 'none';
