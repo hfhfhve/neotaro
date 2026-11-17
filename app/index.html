@@ -1950,6 +1950,25 @@ html[data-theme="dawn"] .qz-din{background:#FFF;color:#241F16}
 html[data-theme="dawn"] .qz-dlive{background:rgba(217,174,95,.14);color:#2A1E08}
 html[data-theme="dawn"] .fn-compat-lock{background:rgba(255,255,255,.85)}
 html[data-theme="dawn"] .fn-compat-blur,html[data-theme="dawn"] .fn-compat-ltxt,html[data-theme="dawn"] .fn-compat-arc{color:#5C3D08}
+/* === RETENTION-ОКНО СОХРАНЕНИЯ ПОДПИСКИ === */
+.ret-wrap{animation:qzIn .26s ease both}
+.ret-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:999px;border:1px solid var(--line);background:rgba(217,174,95,.12);font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--brass-pale);margin-bottom:10px}
+.ret-title{font-family:var(--serif);font-size:21px;line-height:1.25;color:var(--brass-bright);margin-bottom:6px}
+.ret-sub{font-size:13.5px;line-height:1.55;color:var(--mist);margin-bottom:14px}
+.ret-perks{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.ret-perk{display:flex;gap:11px;align-items:flex-start;padding:10px 12px;border-radius:11px;border:1px solid var(--line-soft);background:rgba(18,24,41,.65)}
+.ret-pico{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:rgba(217,174,95,.1);color:var(--brass-bright);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none;margin-top:1px}
+.ret-perk b{display:block;font-size:13.5px;color:var(--ivory);line-height:1.3;margin-bottom:2px}
+.ret-perk span{display:block;font-size:12px;color:var(--mist);line-height:1.4}
+.ret-safe{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:11px;border:1px solid rgba(110,158,144,.4);background:rgba(110,158,144,.1);font-size:12.5px;line-height:1.5;color:var(--ivory);margin-bottom:12px}
+.ret-safe i{font-style:normal;font-size:15px;line-height:1.2;flex:none}
+.ret-gift{padding:12px 14px;border-radius:12px;border:1px solid var(--brass);background:radial-gradient(120% 120% at 50% 0%,rgba(217,174,95,.2),rgba(18,24,41,.9));margin-bottom:14px;text-align:center}
+.ret-gift b{display:block;font-family:var(--serif);font-size:16.5px;color:var(--brass-bright);margin-bottom:3px}
+.ret-gift span{display:block;font-size:12.5px;color:var(--ivory);opacity:.9;line-height:1.45}
+html[data-theme="dawn"] .ret-title{color:#4A3208}
+html[data-theme="dawn"] .ret-perk{background:#FFF}
+html[data-theme="dawn"] .ret-gift{background:linear-gradient(160deg,rgba(154,108,28,.15),#FFF)}
+html[data-theme="dawn"] .ret-gift b{color:#5C3D08}
 </style>
 <script>
 /* NEO:SENTRY (неблокирующий старт с перехватом ранних ошибок) */
@@ -4620,8 +4639,6 @@ function renderSubSheet(){
   const cancelled = !!sub.cancel_at_period_end;
 
   let pmHtml = '';
-  /* Блок рисуем и без привязанной карты, когда включён autopay_ui:
-     модераторам ЮКассы нужны скриншоты сценария отвязки ещё ДО разрешения рекуррентов. */
   if(sub.has_payment_method || S.recurring){
     const hasPm = !!sub.has_payment_method;
     const nextStr = sub.next_charge_at
@@ -4638,7 +4655,7 @@ function renderSubSheet(){
       <div class="label" style="margin-top:5px">${nextLine}</div>
       ${sub.failed_charges ? `<div class="label" style="margin-top:5px;opacity:.9">${esc(tt('pm_failed'))}</div>` : ''}
       <label style="display:flex;gap:9px;align-items:center;margin-top:12px;cursor:pointer">
-        <input type="checkbox" ${cancelled || !hasPm ? '' : 'checked'} ${hasPm ? '' : 'disabled'} onchange="toggleAutopay(this.checked)">
+        <input type="checkbox" id="sub-autopay-cb" ${cancelled || !hasPm ? '' : 'checked'} ${hasPm ? '' : 'disabled'} onchange="toggleAutopay(this.checked)">
         <span class="label">${esc(tt('pm_autopay_cb'))}</span>
       </label>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
@@ -4662,33 +4679,165 @@ function renderSubSheet(){
     <div class="label" style="margin-top:14px"><a href="#" onclick="showSubTerms();return false">${esc(tt('sub_terms_btn'))}</a></div>`;
 }
 
-async function cancelSub(){
-  if(!confirm(tt('sub_cancel_confirm'))) return;
-  if(bridge.haptic) bridge.haptic();
-  const d = await api('/subscription/cancel', 'POST');
-  if(d && d.success){ toast(tt('sub_cancel_done')); loadProfileSub(); refreshAccess(); }
-  else toast(tt('err'));
+function openSubRetention(mode){
+  const box = document.getElementById('sub-body');
+  const d = SUB;
+  if(!box || !d || !d.subscription) return;
+  const ru = (typeof lang === 'undefined' || lang === 'ru');
+  const sub = d.subscription;
+  const acc = d.access || {};
+  const isPro = (sub.plan || acc.plan) === 'pro';
+  const monthlyEn = isPro ? 350 : 150;
+  const hasBonus = !!sub.retention_bonus_available;
+  const dateStr = sub.expires_at
+    ? new Date(sub.expires_at).toLocaleDateString(lang || 'ru', { day:'numeric', month:'long' })
+    : '';
+
+  if(typeof window.neoUxRec === 'function') window.neoUxRec('ret_shown', mode + ' bonus=' + (hasBonus ? 1 : 0));
+  if(window.neoGoal) neoGoal('sub_retention_shown', { mode: mode, bonus: hasBonus ? 1 : 0 });
+
+  const perks = isPro ? [
+    ['◈', ru ? 'Матрица Судьбы целиком (22 аркана)' : 'Full Destiny Matrix (22 arcana)', ru ? 'Денежный канал, предназначение, линия любви и кармический хвост' : 'Money channel, purpose, love line & karmic tail'],
+    ['♈', ru ? 'Натальная карта — все 11 глав разбора' : 'Natal chart — all 11 chapters', ru ? 'Личность, сценарии отношений, карьера, кризисы и прогноз на год' : 'Personality, love patterns, career & year ahead'],
+    ['✦', ru ? 'Все 30+ раскладов Таро без замков' : 'All 30+ Tarot spreads unlocked', ru ? 'Любовь, чувства, конфликты, будущее + скидка −30% на пакеты' : 'Love, feelings, future & −30% pack discount'],
+    ['⚡', ru ? (monthlyEn + ' энергии каждый месяц для Оракула') : (monthlyEn + ' energy every month for Oracle'), ru ? 'Личные вопросы тарологу, разбор снов и голосовой ввод' : 'Personal chat with AI Tarot reader & dream book']
+  ] : [
+    ['♈', ru ? 'Натальная карта — все 11 глав разбора' : 'Natal chart — all 11 chapters', ru ? 'Любовь, деньги, карьера и прогноз на год вперёд' : 'Love, money, career & year forecast'],
+    ['✦', ru ? 'Большие расклады Таро без замков' : 'Big Tarot spreads unlocked', ru ? 'Открытый доступ к глубоким раскладам + скидка −20%' : 'Deep spreads & −20% pack discount'],
+    ['⚡', ru ? (monthlyEn + ' энергии каждый месяц для Оракула') : (monthlyEn + ' energy every month'), ru ? 'Личный диалог с Оракулом, память раскладов и сонник' : 'Personal Oracle chat & memory']
+  ];
+
+  const stayBtnHtml = hasBonus
+    ? `<button type="button" class="btn btn-brass btn-wide bnx-cta" id="ret-stay-btn" onclick="claimStayBonus()">
+         ${esc(ru ? 'Оставить доступ и забрать +10 ⚡ в подарок' : 'Keep access & claim +10 ⚡ gift')}
+       </button>`
+    : `<button type="button" class="btn btn-brass btn-wide" id="ret-stay-btn" onclick="keepSubActive()">
+         ${esc(ru ? 'Оставить мой доступ активным' : 'Keep my access active')}
+       </button>`;
+
+  const confirmLbl = mode === 'unbind'
+    ? (ru ? 'Всё равно отвязать карту и отключить продление' : 'Unbind card and stop renewal anyway')
+    : (ru ? 'Всё равно отключить автопродление' : 'Turn off auto-renewal anyway');
+
+  box.innerHTML = `
+    <div class="ret-wrap">
+      <span class="ret-badge">✦ ${esc(ru ? 'Подождите секунду' : 'Wait a moment')}</span>
+      <div class="ret-title">${esc(ru ? 'Отключить VIP-доступ после окончания периода?' : 'Turn off VIP access after this period?')}</div>
+      <p class="ret-sub">${esc(ru
+        ? ('Сейчас ваш доступ оплачен' + (dateStr ? (' до ' + dateStr) : '') + '. Если отключить автопродление, после этой даты закроются:')
+        : ('If you turn off auto-renewal, after ' + (dateStr || 'the current period') + ' you will lose access to:'))}</p>
+
+      <div class="ret-perks">
+        ${perks.map(p => `
+          <div class="ret-perk">
+            <span class="ret-pico">${p[0]}</span>
+            <div><b>${esc(p[1])}</b><span>${esc(p[2])}</span></div>
+          </div>`).join('')}
+      </div>
+
+      <div class="ret-safe">
+        <i>🔔</i>
+        <span>${esc(ru
+          ? 'Никаких внезапных списаний: за 24 часа до продления мы заранее пришлём вам письмо на почту с прямой кнопкой отмены в 1 клик. Спокойно тестируйте все разделы сейчас!'
+          : 'No surprise charges: 24 hours before renewal we send an email reminder with a 1-click cancel link.')}</span>
+      </div>
+
+      ${hasBonus ? `
+      <div class="ret-gift">
+        <b>🎁 ${esc(ru ? '+10 ⚡ энергии на баланс прямо сейчас' : '+10 ⚡ energy right now')}</b>
+        <span>${esc(ru ? 'Останьтесь на пробном периоде, чтобы без спешки протестировать чат с Оракулом и все разделы ПРО' : 'Keep your plan active and get +10 energy immediately')}</span>
+      </div>` : ''}
+
+      <div class="sheet-acts" style="margin-top:12px">
+        ${stayBtnHtml}
+        <button type="button" class="btn btn-quiet btn-wide" id="ret-confirm-btn" onclick="confirmCancelSub('${mode}')">
+          ${esc(confirmLbl)}
+        </button>
+        <button type="button" class="auth-link" style="margin-top:4px;align-self:center" onclick="renderSubSheet()">
+          ${esc(ru ? '← Назад к подписке' : '← Back')}
+        </button>
+      </div>
+    </div>`;
 }
 
-/* Галка "Автопродление" работает в две стороны: снял — отключили,
-   поставил обратно — включили. Без обратного хода люди идут в поддержку. */
+function keepSubActive(){
+  if(bridge.haptic) bridge.haptic('ok');
+  if(typeof window.neoUxRec === 'function') window.neoUxRec('ret_saved', 'no_bonus');
+  if(window.neoGoal) neoGoal('sub_retention_saved', { bonus: 0 });
+  renderSubSheet();
+  closeSheets();
+  toast((typeof lang === 'undefined' || lang === 'ru') ? 'Отлично! Ваш доступ остаётся активным ✨' : 'Your subscription remains active ✨');
+}
+
+async function claimStayBonus(){
+  const btn = document.getElementById('ret-stay-btn');
+  if(btn) btn.disabled = true;
+  if(bridge.haptic) bridge.haptic();
+  const d = await api('/subscription/stay-bonus', 'POST', {}, true);
+  if(d && d.success){
+    S.energy = d.energy;
+    paintEnergy();
+    if(SUB && SUB.subscription) SUB.subscription.retention_bonus_available = false;
+    if(bridge.haptic) bridge.haptic('ok');
+    if(typeof window.neoUxRec === 'function') window.neoUxRec('ret_saved', 'bonus_10');
+    if(window.neoGoal) neoGoal('sub_retention_saved', { bonus: 10 });
+
+    const burst = document.createElement('div');
+    burst.className = 'bnx-burst';
+    burst.textContent = `+${d.bonus_amount || 10} ⚡`;
+    document.body.appendChild(burst);
+    setTimeout(() => burst.remove(), 1200);
+
+    closeSheets();
+    toast((typeof lang === 'undefined' || lang === 'ru')
+      ? 'Начислено +10 ⚡ энергии! Приятного знакомства с ПРО ✨'
+      : '+10 ⚡ energy added! Enjoy PRO ✨');
+    loadProfileSub();
+  } else {
+    keepSubActive();
+  }
+}
+
+async function confirmCancelSub(mode){
+  const btn = document.getElementById('ret-confirm-btn');
+  if(btn) btn.disabled = true;
+  if(bridge.haptic) bridge.haptic();
+  if(typeof window.neoUxRec === 'function') window.neoUxRec('ret_confirmed', mode);
+  if(window.neoGoal) neoGoal('sub_retention_cancelled', { mode: mode });
+
+  const endpoint = mode === 'unbind' ? '/subscription/payment-method/unbind' : '/subscription/cancel';
+  const d = await api(endpoint, 'POST', {}, true);
+  if(d && d.success){
+    toast(tt(mode === 'unbind' ? 'pm_unbind_done' : 'sub_cancel_done'));
+    await loadProfileSub();
+    refreshAccess();
+  } else {
+    if(btn) btn.disabled = false;
+    toast(tt('err'));
+  }
+}
+
+function cancelSub(){
+  if(bridge.haptic) bridge.haptic();
+  openSubRetention('cancel');
+}
+
 async function toggleAutopay(on){
   if(bridge.haptic) bridge.haptic();
-  if(!on){ cancelSub(); return; }
+  if(!on){
+    const cb = document.getElementById('sub-autopay-cb');
+    if(cb) cb.checked = true;
+    openSubRetention('cancel');
+    return;
+  }
   const d = await api('/subscription/resume', 'POST', {}, true);
   if(d && d.success){ toast(tt('pm_resume_done')); loadProfileSub(); refreshAccess(); }
   else { toast(tt('err')); loadProfileSub(); }
 }
 
-/* Отвязка способа оплаты. Именно эта кнопка — условие ЮKassa для
-   включения автоплатежей. Отдельная от cancelSub(): "отменить подписку" и
-   "убрать мою карту" — для человека два разных действия. */
-async function unbindPaymentMethod(){
-  if(!confirm(tt('pm_unbind_confirm'))) return;
+function unbindPaymentMethod(){
   if(bridge.haptic) bridge.haptic();
-  const d = await api('/subscription/payment-method/unbind', 'POST', {}, true);
-  if(d && d.success){ toast(tt('pm_unbind_done')); loadProfileSub(); refreshAccess(); }
-  else toast(tt('err'));
+  openSubRetention('unbind');
 }
 
 /* Условия подписки — оверлей без отдельной страницы и без зависимостей.
