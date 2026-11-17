@@ -2178,16 +2178,44 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
   <p id="gate-status" style="margin-top:14px;margin-bottom:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase"></p>
 </div>
 
-<div class="gate hidden" id="gate-down">
-  <div class="gate-seal">
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(196,112,63,.4)"/>
-      <line x1="32" y1="32" x2="68" y2="68" stroke="rgba(196,112,63,.7)" stroke-width="1.5"/>
-    </svg>
+<div class="gate hidden" id="gate-down" style="background:radial-gradient(ellipse 80% 60% at 50% 35%,rgba(18,24,41,.78),rgba(7,10,20,.88));backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)">
+  <div class="panel panel-pad" style="max-width:460px;width:100%;text-align:center;border-color:var(--line);box-shadow:0 24px 64px rgba(0,0,0,.75)">
+    <div class="gate-seal" style="margin:0 auto 18px;width:84px;height:84px">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(217,174,95,.28)"/>
+        <g class="dial-spin" style="transform-origin:50px 50px">
+          <circle cx="50" cy="50" r="35" fill="none" stroke="rgba(217,174,95,.55)" stroke-dasharray="3 6"/>
+          <circle cx="50" cy="15" r="2.8" fill="#F0DDB0"/>
+        </g>
+        <path d="M50 34l3.5 11 11 3.5-11 3.5L50 63l-3.5-11-11-3.5 11-3.5z" fill="rgba(217,174,95,.85)"/>
+      </svg>
+    </div>
+
+    <div class="eyebrow" style="margin-bottom:8px">NEOTARO · ОБНОВЛЕНИЕ ПОТОКОВ</div>
+    <h2 data-t="down_title" style="font-size:25px;margin-bottom:10px">Сервер временно недоступен</h2>
+    <p data-t="down_text" style="margin:0 auto 16px;font-size:14px;line-height:1.65;color:var(--mist)">
+      Сейчас мы перезапускаем вычислительный узел на сервере. Все ваши расклады, подписка и баланс энергии в полной сохранности.
+    </p>
+
+    <div style="display:inline-flex;align-items:center;gap:9px;padding:8px 15px;border-radius:999px;border:1px solid var(--line-soft);background:rgba(11,15,30,.65);margin-bottom:20px;font-family:var(--mono);font-size:11px;color:var(--brass-pale)">
+      <span class="spin" style="width:12px;height:12px" aria-hidden="true"></span>
+      <span id="down-ping-status">Автопроверка связи через <b id="down-sec">15</b> сек…</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn btn-brass btn-wide" id="down-retry-btn" onclick="window.neoCheckRecovery(true)">
+        Проверить подключение сейчас ↻
+      </button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="https://t.me/neurotarot_supportbot" target="_blank" rel="noopener" class="btn btn-line btn-sm" style="flex:1;text-decoration:none">
+          Написать в поддержку
+        </a>
+        <a href="https://t.me/CosmicAstroTarot" target="_blank" rel="noopener" class="btn btn-quiet btn-sm" style="flex:1;text-decoration:none">
+          Наш Telegram-канал
+        </a>
+      </div>
+    </div>
   </div>
-  <h2 data-t="down_title">Кабинет на обслуживании</h2>
-  <p data-t="down_text">Обновляем расчёты. Обновите страницу через пару минут — все данные на месте.</p>
-  <button class="btn btn-line" onclick="location.reload()" data-t="down_btn">Обновить страницу</button>
 </div>
 
 <!-- ============================ КАРКАС ============================ -->
@@ -11029,5 +11057,147 @@ function fnMistWatch(){
 })();
 </script>
 <!-- ==================== /NEOTARO UX SESSION RECORDER ==================== -->
+<!-- ==================== NEOTARO SMART OUTAGE GUARD ==================== -->
+<script id="neo-outage-guard">
+(function(){
+  var failStreak = 0;
+  var isDownShown = false;
+  var verifyInFlight = false;
+  var countdownTimer = null;
+  var secLeft = 15;
+  var HEALTH_URL = (typeof API_URL !== 'undefined' ? API_URL : 'https://api.neotaro.ru/api').replace(/\/api\/?$/, '') + '/health';
+
+  /* Прямая проверка /health: отвечает ли вообще сервер Timeweb */
+  async function pingServerHealth() {
+    var ctrl = new AbortController();
+    var t = setTimeout(function(){ ctrl.abort(); }, 5500);
+    try {
+      var res = await fetch(HEALTH_URL + '?t=' + Date.now(), {
+        method: 'GET',
+        cache: 'no-store',
+        signal: ctrl.signal
+      });
+      clearTimeout(t);
+      if (!res.ok) return false;
+      var j = await res.json().catch(function(){ return {}; });
+      return j && j.ok !== false && j.db !== false;
+    } catch (e) {
+      clearTimeout(t);
+      return false;
+    }
+  }
+
+  function showOutageScreen() {
+    if (isDownShown) return;
+    isDownShown = true;
+    /* Оставляем #shell видимым или полупрозрачным подложкой, но главное — #neo-sky-canvas с созвездиями остаётся живым! */
+    ['boot','login'].forEach(function(g){
+      var el = document.getElementById('gate-' + g);
+      if (el) el.classList.add('hidden');
+    });
+    var gd = document.getElementById('gate-down');
+    if (gd) gd.classList.remove('hidden');
+    startAutoRecoveryLoop();
+    if (typeof window.neoUxRec === 'function') window.neoUxRec('server_down_shown', '');
+  }
+
+  function hideOutageScreen() {
+    if (!isDownShown) return;
+    isDownShown = false;
+    failStreak = 0;
+    clearInterval(countdownTimer);
+    var gd = document.getElementById('gate-down');
+    if (gd) gd.classList.add('hidden');
+    var sh = document.getElementById('shell');
+    if (sh && sh.style.display === 'none') sh.style.display = 'flex';
+    /* Как только сервер ожил — мягко перезагружаем данные текущего экрана без перезагрузки вкладки */
+    if (typeof window.refreshCurrent === 'function') {
+      try { window.refreshCurrent(); } catch(e){}
+    }
+    if (typeof window.toast === 'function') {
+      window.toast('Связь с сервером восстановлена ✨');
+    }
+  }
+
+  function startAutoRecoveryLoop() {
+    clearInterval(countdownTimer);
+    secLeft = 15;
+    var secNode = document.getElementById('down-sec');
+    if (secNode) secNode.textContent = String(secLeft);
+
+    countdownTimer = setInterval(function(){
+      secLeft--;
+      var sn = document.getElementById('down-sec');
+      if (sn) sn.textContent = String(Math.max(0, secLeft));
+      if (secLeft <= 0) {
+        window.neoCheckRecovery(false);
+      }
+    }, 1000);
+  }
+
+  window.neoCheckRecovery = async function(manual) {
+    var statusNode = document.getElementById('down-ping-status');
+    var btn = document.getElementById('down-retry-btn');
+    if (manual && btn) { btn.disabled = true; btn.textContent = 'Проверяем связь…'; }
+    if (statusNode) statusNode.textContent = 'Проверяем доступность сервера…';
+
+    var alive = await pingServerHealth();
+    if (manual && btn) { btn.disabled = false; btn.textContent = 'Проверить подключение сейчас ↻'; }
+
+    if (alive) {
+      hideOutageScreen();
+    } else {
+      secLeft = 15;
+      if (statusNode) {
+        statusNode.innerHTML = 'Сервер ещё перезапускается · повтор через <b id="down-sec">15</b> сек…';
+      }
+    }
+  };
+
+  /* Перехватываем ответы api(): одиночный таймаут ИИ игнорируем, но при серии сетевых ошибок проверяем /health */
+  var origApi = window.api;
+  if (typeof origApi === 'function' && !origApi.__outageWrapped) {
+    window.api = async function(endpoint, method, data, silent) {
+      var res = await origApi.apply(this, arguments);
+
+      /* Если бэкенд сам прислал maintenance: true */
+      if (res && res.maintenance) {
+        showOutageScreen();
+        return res;
+      }
+
+      /* Если запрос прошёл успешно — сбрасываем счётчик сбоев */
+      if (res && (res.success || res.unauthorized || res.status === 'ok' || res.status === 'pending')) {
+        failStreak = 0;
+        if (isDownShown) hideOutageScreen();
+        return res;
+      }
+
+      /* Если это сетевой отвал (offline: true из api()) */
+      if (res && res.offline) {
+        var isHeavyAi = /\/funnel\/spread|\/tarot\/(daily|spread|synastry)|\/chat\/send|\/astro\/(chart|reading)|\/matrix\/(get|reading)/.test(endpoint || '');
+        /* Тяжёлый ИИ-запрос может просто долго думать, за него даём +1, а за лёгкий системный запрос (/spreads, /calendar, /get-user) сразу проверяем сервер */
+        failStreak += isHeavyAi ? 1 : 2;
+
+        if (failStreak >= 2 && !verifyInFlight && navigator.onLine !== false) {
+          verifyInFlight = true;
+          pingServerHealth().then(function(alive){
+            verifyInFlight = false;
+            if (!alive) {
+              showOutageScreen();
+            } else {
+              /* Сервер жив, значит был разовый глюк конкретного эндпоинта */
+              failStreak = 0;
+            }
+          });
+        }
+      }
+      return res;
+    };
+    window.api.__outageWrapped = true;
+  }
+})();
+</script>
+<!-- ==================== /NEOTARO SMART OUTAGE GUARD ==================== -->
 </body>
 </html>
