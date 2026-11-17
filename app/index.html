@@ -1919,6 +1919,37 @@ html[data-theme="dawn"] .bnx-cell{background:#FFFFFF}
 html[data-theme="dawn"] .bnx-cell.is-current{background:radial-gradient(120% 120% at 50% 0%,rgba(154,108,28,.18),#FFFFFF)}
 html[data-theme="dawn"] .bnx-cell.is-grand{background:linear-gradient(135deg,rgba(154,108,28,.14),#FFFFFF)}
 html[data-theme="dawn"] .bnx-burst{background:#FFFFFF;color:#5C3D08}
+/* === СОВМЕСТИМОСТЬ 2.0 + УДОБНЫЙ ВВОД ДАТ + ЭКРАН ОПЛАТЫ === */
+.fn-compat.is-locked{cursor:pointer;transition:border-color .2s,transform .15s}
+.fn-compat.is-locked:hover{border-color:#D9AE5F;transform:translateY(-1px)}
+.fn-compat-arc{font-size:13px;color:var(--brass-pale,#F2D49A);margin-top:2px}
+.fn-compat-arc b{color:var(--ivory,#F2EDE0);font-weight:600}
+.fn-compat-lock{display:flex;align-items:center;gap:10px;margin-top:8px;padding:9px 14px;border-radius:12px;background:rgba(11,15,30,.65);border:1px dashed rgba(217,174,95,.45)}
+.fn-compat-blur{font-family:var(--serif);font-size:26px;font-weight:700;color:#F6DDA6;filter:blur(6px);user-select:none;opacity:.75}
+.fn-compat-ltxt{font-size:12.5px;line-height:1.35;color:var(--brass-pale,#F2D49A);text-align:left}
+.fn-compat-grid{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(217,174,95,.2);text-align:left}
+@media(max-width:480px){.fn-compat-grid{grid-template-columns:1fr}}
+.fn-compat-rt{display:flex;justify-content:space-between;font-size:12px;color:var(--ivory);margin-bottom:4px}
+.fn-compat-rt b{font-family:var(--mono);color:var(--brass-bright)}
+.fn-compat-bar{height:4px;border-radius:4px;background:rgba(217,174,95,.15);overflow:hidden}
+.fn-compat-bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#B8873A,#F6DDA6)}
+.qz-dblock{margin-top:14px;text-align:left}
+.qz-dlbl{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-pale);margin-bottom:7px}
+.qz-drow{display:grid;grid-template-columns:1fr 1fr 1.45fr;gap:8px}
+.qz-din{text-align:center;font-family:var(--mono);font-size:18px;padding:13px 8px;border-radius:12px;border:1px solid var(--line);background:rgba(7,10,20,.72);color:var(--ivory)}
+.qz-din:focus{border-color:var(--brass);box-shadow:0 0 0 2px rgba(217,174,95,.18)}
+.qz-dlive{margin-top:12px;padding:11px 14px;border-radius:12px;border:1px solid rgba(217,174,95,.38);background:linear-gradient(135deg,rgba(217,174,95,.13),rgba(18,24,41,.7));font-size:13.5px;line-height:1.45;color:var(--ivory);display:none}
+.qz-dlive.is-on{display:block;animation:qzIn .25s ease both}
+.qz-dlive b{color:var(--brass-bright)}
+.fn-paid-banner{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding:13px 16px;border-radius:13px;border:1px solid rgba(110,158,144,.45);background:rgba(110,158,144,.12)}
+.fn-paid-banner-ico{width:28px;height:28px;border-radius:50%;background:rgba(110,158,144,.25);color:#9BD48A;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.fn-paid-banner-txt b{display:block;font-size:14.5px;color:var(--ivory);margin-bottom:2px}
+.fn-paid-banner-txt span{display:block;font-size:12.5px;color:var(--mist)}
+.fn-end-seal{text-align:center;margin:20px 0 6px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);opacity:.8}
+html[data-theme="dawn"] .qz-din{background:#FFF;color:#241F16}
+html[data-theme="dawn"] .qz-dlive{background:rgba(217,174,95,.14);color:#2A1E08}
+html[data-theme="dawn"] .fn-compat-lock{background:rgba(255,255,255,.85)}
+html[data-theme="dawn"] .fn-compat-blur,html[data-theme="dawn"] .fn-compat-ltxt,html[data-theme="dawn"] .fn-compat-arc{color:#5C3D08}
 </style>
 <script>
 /* NEO:SENTRY (неблокирующий старт с перехватом ранних ошибок) */
@@ -8479,6 +8510,7 @@ function startSpreadRitual(cardsCount, subjectName){
   const barEl = document.getElementById('tb-ritual-fill');
   const logEl = document.getElementById('tb-ritual-log');
   const n = Math.max(1, Math.min(cardsCount || 3, 5));
+  const isCompat = !!(S.spread && S.spread.id === 'compat');
 
   if(stage){
     let html = '';
@@ -8494,7 +8526,12 @@ function startSpreadRitual(cardsCount, subjectName){
   if(barEl) barEl.style.width = '10%';
 
   const who = subjectName ? ('«' + subjectName + '»') : 'вашу ситуацию';
-  const steps = [
+  const steps = isCompat ? [
+    { t: 'Сверяем даты рождения и стихии пары…', s: 'Расчёт совместимости с ' + who, p: 20, card: 0, log: '✦ Знаки зодиака и общий Аркан союза рассчитаны' },
+    { t: 'Выкладываем 1-й аркан: притяжение пары…', s: 'Считываем химию и точку встречи', p: 45, card: 0, log: '✦ Позиция притяжения открыта' },
+    { t: 'Считываем скрытые чувства и угрозу союзу…', s: 'Связываем числа дат с 4 картами Таро', p: 72, card: 2, log: '✦ Выявлена точка напряжения в паре' },
+    { t: 'Формируем индекс по 4 сферам и итог…', s: 'Почти готово · собираем прогноз пары', p: 92, card: n - 1, log: '✦ Итоговый индекс совместимости готов' }
+  ] : [
     { t: 'Перемешиваем 78 арканов…', s: 'Настройка на ' + who, p: 18, card: 0, log: '✦ Колода настроена на ваш вопрос' },
     { t: 'Выкладываем 1-й аркан на стол…', s: 'Считываем скрытый корень ситуации', p: 42, card: 0, log: '✦ Первая позиция открыта' },
     { t: n > 1 ? 'Выкладываем следующие арканы…' : 'Читаем символику аркана…', s: 'Связываем карты с вашими деталями', p: 68, card: Math.min(1, n-1), log: n > 1 ? '✦ Позиции связаны между собой' : '✦ Архетип карты расшифрован' },
@@ -8523,8 +8560,6 @@ function startSpreadRitual(cardsCount, subjectName){
   }
   tick();
   clearInterval(_ritualTimer);
-  /* Полный разбор пишется целиком и иногда идёт 20–40 секунд. Чтобы экран не «завис»
-     на 96%, после основных шагов показываем, что именно сейчас делает Оракул. */
   const waitLines = [
     ['Сверяем позиции между собой…', 'Каждая карта читается в связке с остальными'],
     ['Ищем точные сроки…', 'Масти и арканы подсказывают, когда всё сдвинется'],
@@ -8755,17 +8790,28 @@ function funnelFogHtml(errText){
   const pl = FN.plans || {};
   const twEn = (pl.tripwire && pl.tripwire.energy) || 5;
   const proEn = (pl.pro && pl.pro.energy) || 350;
-  const proChat = ru
-    ? ('Личный таролог в чате на весь месяц (до ' + proEn + ' ответов)')
-    : ('Personal AI Tarot chat all month (' + proEn + ' answers)');
+  const isCompat = !!((S.spread && S.spread.id === 'compat') || FN.type === 'compat');
+
+  const badgeTx = isCompat
+    ? (ru ? 'Расчёт вашей пары готов' : 'Couple reading is ready')
+    : (ru ? 'Продолжение расклада готово' : 'Full reading is ready');
+  const titleTx = isCompat
+    ? (ru ? 'Откройте точный % совместимости и все 4 карты союза' : 'Unlock exact % compatibility & all 4 cards')
+    : (ru ? 'Снимите туман с остальных карт' : 'Read the complete spread');
+  const twItem1 = isCompat
+    ? (ru ? 'Точный % совместимости по 4 сферам (любовь, страсть, быт, карма)' : 'Exact % across 4 spheres (love, passion, life, karma)')
+    : (ru ? 'Расшифровка всех выпавших карт, сроки и итоговый совет' : 'Full interpretation of all drawn cards');
+  const twItem2 = isCompat
+    ? (ru ? ('Все 4 карты пары + ' + twEn + ' личных вопросов тарологу в чате') : ('All 4 cards + ' + twEn + ' chat questions'))
+    : (ru ? (twEn + ' личных вопросов тарологу в чате') : (twEn + ' personal questions to the AI Tarot reader'));
 
   return `
     <div class="daily-fog-box fn-fogbox" id="fn-fog">
       <div class="fn-mist" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="daily-fog-card">
-        <span class="daily-fog-badge">${IC.spark} ${esc(ru ? 'Продолжение расклада готово' : 'Full reading is ready')}</span>
-        <div class="daily-fog-title">${esc(ru ? 'Снимите туман с остальных карт' : 'Read the complete spread')}</div>
-        <p class="daily-fog-sub" style="margin-bottom:8px">${esc(ru ? 'Оракул уже связал все выпавшие карты в единый прогноз. Выберите формат доступа:' : 'All cards for your situation are drawn. Choose your access:')}</p>
+        <span class="daily-fog-badge">${IC.spark} ${esc(badgeTx)}</span>
+        <div class="daily-fog-title">${esc(titleTx)}</div>
+        <p class="daily-fog-sub" style="margin-bottom:8px">${esc(ru ? 'Оракул уже связал ваши данные и все выпавшие карты в единый прогноз. Выберите формат доступа:' : 'All cards for your situation are drawn. Choose your access:')}</p>
 
         <div class="fn-hold-timer">
           <span class="fn-hold-dot"></span>
@@ -8780,10 +8826,10 @@ function funnelFogHtml(errText){
                   <span class="fn-tier-badge is-hot">${esc(ru ? 'Выбор 85% · Выгода −50%' : 'Most popular · Save 50%')}</span>
                   <span class="fn-tier-radio"></span>
                 </div>
-                <div class="fn-tier-name">${esc(ru ? 'Открыть этот расклад целиком' : 'Unlock full reading')}</div>
+                <div class="fn-tier-name">${esc(isCompat ? (ru ? 'Открыть совместимость целиком' : 'Unlock full compatibility') : (ru ? 'Открыть этот расклад целиком' : 'Unlock full reading'))}</div>
                 <ul class="fn-tier-list">
-                  <li>${esc(ru ? 'Расшифровка всех выпавших карт, сроки и итоговый совет' : 'Full interpretation of all drawn cards')}</li>
-                  <li>${esc(ru ? (twEn + ' личных вопросов тарологу в чате') : (twEn + ' personal questions to the AI Tarot reader'))}</li>
+                  <li>${esc(twItem1)}</li>
+                  <li>${esc(twItem2)}</li>
                   <li>${esc(ru ? '+ 3 дня полного VIP-доступа ПРО в подарок' : '+ 3 days of full PRO access included')}</li>
                 </ul>
               </div>
@@ -8804,7 +8850,7 @@ function funnelFogHtml(errText){
                 <ul class="fn-tier-list">
                   <li>${esc(ru ? 'Этот расклад + более 30 раскладов на любовь и будущее' : 'This spread + 30+ spreads for love & future')}</li>
                   <li>${esc(ru ? 'Матрица Судьбы целиком (22 аркана) + Натальная карта' : 'Full Destiny Matrix (22 arcana) + Natal chart')}</li>
-                  <li>${esc(proChat)}</li>
+                  <li>${esc(ru ? ('Личный таролог в чате на весь месяц (до ' + proEn + ' ответов)') : ('Personal AI Tarot chat all month (' + proEn + ' answers)'))}</li>
                 </ul>
               </div>
               <div class="fn-tier-pwrap">
@@ -9033,7 +9079,6 @@ async function funnelPoll(id, k){
 function funnelRenderPaid(d){
   const ru = FN_RU();
 
-  /* Если сервер прислал токен владельца оплаченного расклада — сразу авторизуем его в кабинете! */
   if(d && d.neotaro_token){
     try{
       localStorage.setItem('neotaro_token', d.neotaro_token);
@@ -9067,7 +9112,7 @@ function funnelRenderPaid(d){
   FN.full = d.interpretation || '';
   const pl = FN.plans || {};
   const n = typeof d.energy === 'number' ? d.energy
-    : ((pl[d.plan] && pl[d.plan].energy) || (pl.tripwire && pl.tripwire.energy) || 5);
+    : ((pl[d.plan] && pl.plan && pl[d.plan].energy) || (pl.tripwire && pl.tripwire.energy) || 5);
   FN.paidView = true;
 
   const eb = document.getElementById('tb-reading-eyebrow');
@@ -9078,11 +9123,12 @@ function funnelRenderPaid(d){
       <div class="fn-paid-banner-ico">✓</div>
       <div class="fn-paid-banner-txt">
         <b>${esc(ru ? 'Оплата прошла успешно — ваш расклад полностью открыт!' : 'Payment confirmed — your full reading is unlocked!')}</b>
-        <span>${esc(ru ? 'Ниже открыты все позиции карт, сроки и итоговый совет Оракула' : 'All card positions, timing and advice are shown below')}</span>
+        <span>${esc(ru ? 'Ниже открыты все позиции, расчёты, сроки и совет Оракула' : 'All positions, timing and advice are shown below')}</span>
       </div>
     </div>` +
     '<div class="fn-reveal">' + clean(FN.full) + '</div>' +
     `<div class="fn-end-seal">${esc(ru ? '✦ Конец вашего расклада · Все позиции открыты ✦' : '✦ End of your spread · All positions unlocked ✦')}</div>` +
+    '<div class="fn-up" id="fn-up"></div>' +
     `<div class="fn-upsell" style="margin-top:16px;border-color:rgba(110,158,144,.45)">
       <div class="fn-upsell-t">${esc(ru ? 'Хотите уточнить детали у Оракула?' : 'Want to ask the Oracle a follow-up?')}</div>
       <p>${esc(ru ? ('По вашему тарифу вам начислено ' + n + ' ⚡ энергии — задайте уточняющий вопрос по этому раскладу в чате') : ('You have ' + n + ' ⚡ energy — ask a follow-up question in chat'))}</p>
@@ -9578,50 +9624,68 @@ const FUNNEL_FORMS = {
   },
 
   /* ---------- СОВМЕСТИМОСТЬ ПАРЫ (было 10 шагов -> стало 6 быстрых шагов!) ---------- */
+  /* ---------- СОВМЕСТИМОСТЬ ПАРЫ 2.0 (даты сразу на 1-м экране + боль пары) ---------- */
   compat: {
     compat: true,
+    ver: 3,
     display: a => 'Совместимость: вы и ' + qzN(a),
     steps: [
-      { id:'role', ck:'relation', type:'chips', req:true, label:'Кто вы друг другу', q:'Кто вы друг другу?',
-        opts:[['partner','Пара в отношениях'],['married','Супруги'],['crush','Симпатия / ещё не вместе'],['ex','Бывшие'],['complicated','Всё сложно']] },
+      { id:'dates', type:'pair_dates', label:'Даты рождения',
+        q:'Проверим совместимость вашей пары',
+        hint:'Введите даты рождения — мы рассчитаем ваш общий Аркан союза, резонанс стихий и разложим 4 карты Таро' },
+      { id:'role_pick', type:'chips', req:true, label:'Кто вы друг другу',
+        q:'Кто этот человек для вас сейчас?',
+        hint:'Чтобы карты точно считали контекст вашей связи',
+        opts:[
+          ['partner_m','Мой мужчина / муж'],
+          ['partner_f','Моя женщина / жена'],
+          ['crush_m','Мужчина, который нравится'],
+          ['crush_f','Женщина, которая нравится'],
+          ['ex_m','Бывший мужчина / на паузе'],
+          ['ex_f','Бывшая женщина / на паузе'],
+          ['compl_m','Всё сложно (мужчина)'],
+          ['compl_f','Всё сложно (женщина)']
+        ],
+        after: a => {
+          const p = String(a.role_pick || '').split('_');
+          a.role = p[0] === 'compl' ? 'complicated' : (p[0] || 'partner');
+          a.gender = p[1] === 'f' ? 'f' : 'm';
+        }
+      },
       { id:'name', ck:'partner_name', type:'text', need:true, subject:true, max:40, label:'Имя партнёра',
-        q:'Как зовут партнёра?', ph:'Например: Андрей или Алина' },
-      { id:'mydate', ck:'my_date', type:'date', need:true, label:'Дата рождения клиента', q:'Ваша дата рождения', hint:'По ней считаются ваш знак и числа совместимости' },
-      { id:'pdate', ck:'partner_date', type:'date', opt:true, label:'Дата рождения партнёра', q: a => `Когда родился(лась) ${qzN(a)}?`,
-        hint:'Не знаете — пропустите, карты всё равно ответят. С датой будет точный % совместимости.' },
-      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Что хочет узнать о паре', q:'Что хотите узнать о вашей паре?', hint:'Нажмите на вариант или напишите свой вопрос',
-        sugg:['Подходим ли мы друг другу?', 'Есть ли у нас будущее?', 'Что мешает нам быть ближе?'] }
+        q: a => `Как ${qzG(a,'его','её')} зовут?`,
+        hint:'Имя нужно для персонального расклада пары',
+        ph: a => qzG(a,'Например: Андрей','Например: Алина') },
+      { id:'pain', type:'chips', req:true, label:'Что хочет узнать о паре',
+        q:'Что волнует вас сильнее всего в этой связи?',
+        hint:'На этом карты сделают главный акцент в разборе',
+        opts: a => {
+          const he = qzG(a,'он','она');
+          if(a.role === 'ex') return [
+            ['back', `Сойдёмся ли мы снова или это точка`],
+            ['think', `Думает ли ${he} обо мне и почему не сложилось`],
+            ['karma', 'Кармическая ли это связь и почему так тянет']
+          ];
+          if(a.role === 'crush') return [
+            ['future', 'Перерастёт ли симпатия в серьёзные отношения'],
+            ['feel', `Что ${he} на самом деле чувствует ко мне`],
+            ['match', 'Подходим ли мы друг другу для жизни']
+          ];
+          if(a.role === 'complicated') return [
+            ['end', 'Чем закончатся эти качели — будем ли мы вместе'],
+            ['hide', `Что ${he} на самом деле решил(а) насчёт меня`],
+            ['hold', 'Что держит нас друг возле друга и где выход']
+          ];
+          return [
+            ['fate', 'По судьбе ли мы друг другу и к чему идёт союз'],
+            ['cold', 'Стали отдаляться: ссоры, холод и недопонимание'],
+            ['secret', `Истинные чувства и не скрывает ли ${he} что-то`],
+            ['stay', 'Есть ли будущее у этих отношений']
+          ];
+        }
+      }
     ]
   },
-
-  /* ---------- МАТРИЦА СУДЬБЫ ---------- */
-  matrix: {
-    display: a => 'Матрица Судьбы по дате ' + (a.birth ? formatDate(a.birth) : ''),
-    steps: [
-      { id:'birth', type:'date', need:true, label:'Дата рождения',
-        q:'Когда вы родились?',
-        hint:'Из цифр вашей даты собирается октаграмма из 22 арканов судьбы' },
-      { id:'gender', type:'chips', req:true, label:'Пол',
-        q:'Ваш пол', hint:'Поможет точнее раскрыть энергии любви и самореализации',
-        opts:[['f','Женщина'],['m','Мужчина']] },
-      { id:'focus', type:'chips', req:true, label:'Главный фокус',
-        q:'Что сейчас волнует сильнее всего?', hint:'Выберите главную тему для глубокого разбора',
-        opts:[
-          ['money','Деньги и финансовый потолок'],
-          ['love','Любовь, отношения и партнёр'],
-          ['purpose','Предназначение и в чём мой талант'],
-          ['karma','Кармический хвост и повторяющиеся уроки'],
-          ['year','Прогноз и главные уроки года']
-        ] },
-      { id:'q', type:'ask', opt:true, display:true, max:160, label:'Главный вопрос к Матрице',
-        q:'Что вы больше всего хотите понять о себе сейчас?', hint:'Нажмите на вариант или напишите свой запрос',
-        sugg: a => {
-          if(a.focus === 'money') return ['Как пробить мой финансовый потолок?', 'Через какое дело ко мне приходят деньги?', 'Почему деньги не задерживаются?'];
-          if(a.focus === 'love') return ['Какой партнёр мне подходит по судьбе?', 'Почему в любви повторяется один сценарий?', 'Что мешает гармоничным отношениям?'];
-          return ['В чём моё главное предназначение?', 'Какой урок не даёт мне расти?', 'Как вывести главные арканы в плюс?'];
-        } }
-    ]
-  }
 };
 
 function fnFormKey(sp){
@@ -9674,6 +9738,120 @@ function fnDraftClear(id){ try{ localStorage.removeItem('neo_form_' + id); }catc
 
 /* ---------- движок квиза ---------- */
 const QZ = { a: {}, i: -1, hist: [] };
+const QZ_MX_ARC = ['','Маг','Верховная Жрица','Императрица','Император','Иерофант','Влюблённые','Колесница','Сила','Отшельник','Колесо Фортуны','Справедливость','Повешенный','Смерть','Умеренность','Дьявол','Башня','Звезда','Луна','Солнце','Суд','Мир'];
+const QZ_EL_RU = { fire:'Огонь', earth:'Земля', air:'Воздух', water:'Вода' };
+
+function qzRedArc(n){ while(n > 22){ n = String(n).split('').reduce((s, d) => s + (+d), 0); } return n > 0 ? n : 22; }
+function qzIsoOk(v){
+  const m = /^(19[3-9][0-9]|20[0-2][0-9])-(\d{2})-(\d{2})$/.exec(v || '');
+  if(!m) return false;
+  if(!validDate(+m[1], +m[2], +m[3])) return false;
+  return v <= new Date().toISOString().slice(0, 10);
+}
+function qzGetDp(key){
+  const raw = QZ.a['_dp_' + key];
+  if(raw && typeof raw === 'object') return { d: raw.d || '', m: raw.m || '', y: raw.y || '' };
+  const iso = QZ.a[key] || '';
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  return m ? { y: m[1], m: m[2], d: m[3] } : { d: '', m: '', y: '' };
+}
+function qzDateRowHtml(key, lbl, nextKey){
+  const p = qzGetDp(key);
+  return `<div class="qz-dblock">` +
+    (lbl ? `<span class="qz-dlbl">${esc(lbl)}</span>` : '') +
+    `<div class="qz-drow">
+      <input class="qz-din" id="qzd-${key}-d" type="tel" inputmode="numeric" maxlength="2" placeholder="ДД" value="${esc(p.d)}" oninput="qzDateIn('${key}','d',this,'${nextKey||''}')" onkeydown="qzDateBack('${key}','d',event,this)">
+      <input class="qz-din" id="qzd-${key}-m" type="tel" inputmode="numeric" maxlength="2" placeholder="ММ" value="${esc(p.m)}" oninput="qzDateIn('${key}','m',this,'${nextKey||''}')" onkeydown="qzDateBack('${key}','m',event,this)">
+      <input class="qz-din" id="qzd-${key}-y" type="tel" inputmode="numeric" maxlength="4" placeholder="ГГГГ" value="${esc(p.y)}" oninput="qzDateIn('${key}','y',this,'${nextKey||''}')" onkeydown="qzDateBack('${key}','y',event,this)">
+    </div></div>`;
+}
+function qzBuildLiveText(st){
+  if(!st) return '';
+  if(st.type === 'date'){
+    const iso = QZ.a[st.id];
+    if(!qzIsoOk(iso)) return '';
+    const sg = qzSign(iso), pts = calcGuestMatrixPoints(iso);
+    return `✦ Ваш знак: <b>${esc(sg ? sg.name : '')}</b> (${esc(sg ? QZ_EL_RU[sg.el] : '')}) · Центр Матрицы: <b>${pts.center} — ${esc(QZ_MX_ARC[pts.center] || '')}</b>`;
+  }
+  if(st.type === 'pair_dates'){
+    const d1 = QZ.a.mydate, d2 = QZ.a.pdate;
+    const ok1 = qzIsoOk(d1), ok2 = qzIsoOk(d2);
+    if(!ok1 && !ok2) return '';
+    if(ok1 && !ok2){
+      const s1 = qzSign(d1), p1 = calcGuestMatrixPoints(d1);
+      return `✦ Вы: <b>${esc(s1 ? s1.name : '')}</b> · Личный аркан: <b>${p1.center} (${esc(QZ_MX_ARC[p1.center] || '')})</b>. Введите дату партнёра для расчёта резонанса пары.`;
+    }
+    if(ok1 && ok2){
+      const s1 = qzSign(d1), s2 = qzSign(d2);
+      const p1 = calcGuestMatrixPoints(d1), p2 = calcGuestMatrixPoints(d2);
+      const uArc = qzRedArc(p1.center + p2.center);
+      return `✦ <b>${esc(s1 ? s1.name : '')}</b> + <b>${esc(s2 ? s2.name : '')}</b> · Общий Аркан союза: <b>${uArc} — ${esc(QZ_MX_ARC[uArc] || '')}</b>`;
+    }
+  }
+  return '';
+}
+function qzUpdateLive(){
+  const el = document.getElementById('qz-dlive');
+  if(!el) return;
+  const txt = qzBuildLiveText(qzStep());
+  el.innerHTML = txt;
+  el.classList.toggle('is-on', !!txt);
+}
+function qzDateIn(key, part, el, nextKey){
+  let digits = String(el.value || '').replace(/\D/g, '');
+  const dp = qzGetDp(key);
+  if(part === 'd' && digits.length >= 6){
+    dp.d = digits.slice(0, 2); dp.m = digits.slice(2, 4); dp.y = digits.slice(4, 8);
+    const md = document.getElementById('qzd-' + key + '-m'), yd = document.getElementById('qzd-' + key + '-y');
+    el.value = dp.d; if(md) md.value = dp.m; if(yd) yd.value = dp.y;
+  } else {
+    const lim = part === 'y' ? 4 : 2;
+    digits = digits.slice(0, lim);
+    el.value = digits;
+    dp[part] = digits;
+  }
+  QZ.a['_dp_' + key] = dp;
+  if(key === 'pdate' && (dp.d || dp.m || dp.y)) QZ.a._pdate_skip = 0;
+
+  if(dp.d.length === 2 && dp.m.length === 2 && dp.y.length === 4){
+    const iso = `${dp.y}-${pad(dp.m)}-${pad(dp.d)}`;
+    QZ.a[key] = qzIsoOk(iso) ? iso : '';
+  } else {
+    QZ.a[key] = '';
+  }
+  qzSave();
+  qzUpdateLive();
+
+  if(part === 'd' && dp.d.length === 2){
+    const mEl = document.getElementById('qzd-' + key + '-m'); if(mEl) mEl.focus();
+  } else if(part === 'm' && dp.m.length === 2){
+    const yEl = document.getElementById('qzd-' + key + '-y'); if(yEl) yEl.focus();
+  } else if(part === 'y' && dp.y.length === 4 && QZ.a[key] && nextKey){
+    const nEl = document.getElementById('qzd-' + nextKey + '-d');
+    if(nEl && !nEl.value) nEl.focus();
+  }
+}
+function qzDateBack(key, part, e, el){
+  if(e.key === 'Backspace' && !el.value){
+    const prev = part === 'y' ? 'm' : (part === 'm' ? 'd' : null);
+    if(prev){ const pEl = document.getElementById('qzd-' + key + '-' + prev); if(pEl) pEl.focus(); }
+  } else if(e.key === 'Enter'){
+    e.preventDefault(); qzNext();
+  }
+}
+function qzSkipPdate(){
+  if(!qzIsoOk(QZ.a.mydate)){
+    qzShake();
+    toast(qzR('Сначала укажите вашу дату рождения', 'Enter your birth date first'));
+    const dEl = document.getElementById('qzd-mydate-d'); if(dEl) dEl.focus();
+    return;
+  }
+  QZ.a.pdate = '';
+  QZ.a._dp_pdate = { d: '', m: '', y: '' };
+  QZ.a._pdate_skip = 1;
+  qzSave();
+  qzAdvance();
+}
 
 function qzForm(){ return fnFormFor(S.spread); }
 function qzVal(x, a){ return typeof x === 'function' ? x(a) : fnL(x); }
@@ -9687,6 +9865,11 @@ function qzNextIdx(steps, from){
   return -1;
 }
 function qzHuman(st, a){
+  if(st.type === 'pair_dates'){
+    if(!qzIsoOk(a.mydate)) return '';
+    if(!qzIsoOk(a.pdate) && !a._pdate_skip) return '';
+    return a.mydate + (qzIsoOk(a.pdate) ? (' / ' + a.pdate) : '');
+  }
   const v = a[st.id];
   if(v == null || v === '' || (Array.isArray(v) && !v.length)) return '';
   if(st.type === 'chips'){ const o = qzOpts(st, a).find(o => o.v === v); return o ? o.l : String(v); }
@@ -9702,15 +9885,24 @@ function qzValid(st, a){
     const em = String(a[st.id] || '').trim().toLowerCase();
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em);
   }
+  if(st.type === 'pair_dates'){
+    if(!qzIsoOk(a.mydate)) return false;
+    if(a._pdate_skip) return true;
+    return qzIsoOk(a.pdate);
+  }
   if(st.type === 'date'){
     const v = a[st.id] || '';
     if(!v) return !st.need;
-    return /^(19[2-9][0-9]|20[0-9][0-9])-[0-9][0-9]-[0-9][0-9]$/.test(v) && v <= new Date().toISOString().slice(0, 10);
+    return qzIsoOk(v);
   }
   if(st.req || st.need) return qzHuman(st, a) !== '';
   return true;
 }
-function qzSave(){ if(S.spread) fnDraftSave(S.spread.id, { v: 2, a: QZ.a, i: QZ.i, hist: QZ.hist }); }
+function qzSave(){
+  if(!S.spread) return;
+  const f = qzForm();
+  fnDraftSave(S.spread.id, { v: (f && f.ver) || 2, a: QZ.a, i: QZ.i, hist: QZ.hist });
+}
 function qzStep(){ const f = qzForm(); return f ? f.steps[QZ.i] : null; }
 
 function fnRenderForm(prefill){
@@ -9723,7 +9915,8 @@ function fnRenderForm(prefill){
   free.style.display = 'none';
   if(deal) deal.style.display = 'none';
   const d = fnDraftLoad(S.spread.id);
-  const ok = d && d.v === 2 && d.a && typeof d.a === 'object';
+  const needVer = form.ver || 2;
+  const ok = d && d.v === needVer && d.a && typeof d.a === 'object';
   QZ.a = ok ? d.a : {};
   QZ.hist = ok && Array.isArray(d.hist) ? d.hist.filter(n => typeof n === 'number') : [];
   QZ.i = ok && typeof d.i === 'number' ? d.i : -1;
@@ -9789,10 +9982,17 @@ function qzRender(){
         const on = st.type === 'multi' ? (Array.isArray(v) && v.indexOf(o.v) !== -1) : v === o.v;
         return `<button type="button" class="qz-opt${on ? ' on' : ''}" onclick="qzPick(${k})">${esc(o.l)}</button>`;
       }).join('') + `</div>`;
+    } else if(st.type === 'pair_dates'){
+      html += qzDateRowHtml('mydate', qzR('Ваша дата рождения', 'Your birth date'), 'pdate');
+      html += qzDateRowHtml('pdate', qzR('Дата рождения партнёра', 'Partner’s birth date'), '');
+      const liveTx = qzBuildLiveText(st);
+      html += `<div class="qz-dlive${liveTx ? ' is-on' : ''}" id="qz-dlive">${liveTx}</div>`;
+    } else if(st.type === 'date'){
+      html += qzDateRowHtml(st.id, '', '');
+      const liveTx = qzBuildLiveText(st);
+      html += `<div class="qz-dlive${liveTx ? ' is-on' : ''}" id="qz-dlive">${liveTx}</div>`;
     } else if(st.type === 'area'){
       html += `<textarea class="field qz-in" id="qz-in" rows="4" maxlength="${st.max || 500}" placeholder="${esc(qzVal(st.ph, a))}" oninput="qzInput(this.value)">${esc(v || '')}</textarea>`;
-    } else if(st.type === 'date'){
-      html += `<input class="field qz-in fnq-date" id="qz-in" type="date" min="1920-01-01" max="${new Date().toISOString().slice(0, 10)}" value="${esc(v || '')}" oninput="qzInput(this.value)" onchange="qzInput(this.value)">`;
     } else if(st.type === 'email'){
       html += `<input class="field qz-in" id="qz-in" type="email" inputmode="email" autocomplete="email" maxlength="${st.max || 120}" placeholder="${esc(qzVal(st.ph, a))}" value="${esc(v || qzSavedEmail() || '')}" oninput="qzInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();qzNext()}">`;
     } else {
@@ -9804,9 +10004,11 @@ function qzRender(){
       html += `<input class="field qz-in" id="qz-in" type="text" maxlength="${st.max || 150}" placeholder="${esc(askPh)}" value="${esc(v || '')}" oninput="qzInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();qzNext()}">`;
     }
     if(st.type !== 'chips' || last){
-      html += `<button type="button" class="btn btn-brass btn-wide qz-next" onclick="qzNext()">${esc(nextTx)}</button>`;
+      html += `<button type="button" class="btn btn-brass btn-wide qz-next" onclick="qzNext()">${esc(st.type === 'pair_dates' ? qzR('Продолжить расчёт →', 'Continue →') : nextTx)}</button>`;
     }
-    if(st.opt && st.type !== 'chips'){
+    if(st.type === 'pair_dates'){
+      html += `<button type="button" class="qz-skip" onclick="qzSkipPdate()">${esc(qzR('Не знаю точную дату партнёра', 'I don’t know partner’s exact date'))}</button>`;
+    } else if(st.opt && st.type !== 'chips'){
       html += `<button type="button" class="qz-skip" onclick="qzSkip()">${esc(last ? qzR('Разложить без этого', 'Skip and deal') : qzR('Пропустить', 'Skip'))}</button>`;
     }
   }
@@ -9814,9 +10016,9 @@ function qzRender(){
   box.innerHTML = html;
 
   const inp = document.getElementById('qz-in');
-  if(inp && st.type !== 'date' && st.type !== 'ask' && !('ontouchstart' in window)){ setTimeout(() => { try{ inp.focus(); }catch(e){} }, 60); }
+  if(inp && st.type !== 'ask' && !('ontouchstart' in window)){ setTimeout(() => { try{ inp.focus(); }catch(e){} }, 60); }
 }
-  
+
 function qzPick(k){
   const form = qzForm(), st = qzStep();
   if(!form || !st) return;
@@ -9863,9 +10065,12 @@ function qzNext(){
   }
   if(!qzValid(st, QZ.a)){
     qzShake();
-    const msg = st.type === 'email'
-      ? qzR('Введите корректный email, чтобы мы сохранили ваш расклад', 'Enter a valid email to save your reading')
-      : (st.type === 'date' ? qzR('Укажите дату', 'Enter the date') : qzR('Ответьте, чтобы продолжить', 'Answer to continue'));
+    let msg = qzR('Ответьте, чтобы продолжить', 'Answer to continue');
+    if(st.type === 'email') msg = qzR('Введите корректный email, чтобы мы сохранили ваш расклад', 'Enter a valid email to save your reading');
+    else if(st.type === 'date') msg = qzR('Проверьте дату рождения (день, месяц и 4 цифры года)', 'Check the birth date');
+    else if(st.type === 'pair_dates') msg = !qzIsoOk(QZ.a.mydate)
+      ? qzR('Проверьте вашу дату рождения (ДД, ММ и 4 цифры года)', 'Check your birth date')
+      : qzR('Проверьте дату партнёра (или нажмите «Не знаю точную дату» ниже)', 'Check partner’s birth date');
     toast(msg);
     return;
   }
@@ -9963,12 +10168,17 @@ function fnCollect(form){
       qzSave(); qzRender(); qzShake();
       toast(st.type === 'email'
         ? qzR('Введите корректный email, чтобы мы сохранили ваш расклад', 'Enter a valid email to save your reading')
-        : qzR('Ответьте на этот вопрос', 'Please answer this question'));
+        : qzR('Проверьте ответы на этом шаге', 'Please answer this question'));
       return { ok: false };
     }
     if(st.id === '_email'){
       const cleanEm = String(a._email || '').trim().toLowerCase();
       if(cleanEm){ try{ localStorage.setItem('neo_email', cleanEm); }catch(e){} }
+      continue;
+    }
+    if(st.type === 'pair_dates'){
+      if(qzIsoOk(a.mydate)) details.push({ label: 'Дата рождения клиента', value: formatDate(a.mydate) });
+      if(qzIsoOk(a.pdate)) details.push({ label: 'Дата рождения партнёра', value: formatDate(a.pdate) });
       continue;
     }
     const hv = qzHuman(st, a);
@@ -9985,12 +10195,12 @@ function fnCollect(form){
   if(!display && typeof form.display === 'function') display = form.display(a);
   let compat = null;
   if(form.compat){
-    compat = {};
-    steps.forEach(st => {
-      if(!st.ck || !qzOn(st, a)) return;
-      const v = a[st.id];
-      compat[st.ck] = v == null ? '' : String(v).trim();
-    });
+    compat = {
+      relation: String(a.role || 'partner').trim(),
+      partner_name: String(a.name || '').trim(),
+      my_date: qzIsoOk(a.mydate) ? a.mydate : '',
+      partner_date: (!a._pdate_skip && qzIsoOk(a.pdate)) ? a.pdate : ''
+    };
   }
   const question = details.map(x => x.label + ': ' + x.value).join('\n');
   return { ok: true, details, subject, display: display || (details[0] && details[0].value) || '', question, compat };
