@@ -2112,67 +2112,33 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
     </svg>
   </div>
   <h2 id="auth-title" data-t="gate_title">Вход в кабинет</h2>
-  <p id="auth-lead" data-t="gate_text">Войдите через Telegram или по почте — всё сохраняется в одном кабинете.</p>
+  <p id="auth-lead" data-t="gate_text">Введите почту, которую указывали при раскладе, или войдите через Telegram — мы пришлём код без пароля.</p>
 
   <div class="auth-box">
     <div id="auth-social">
-      <button class="btn btn-brass" id="gate-btn" onclick="gateWebLogin()" data-t="gate_btn">Подтвердить в Telegram</button>
-      <div class="auth-or"><span data-t="auth_or">или по почте</span></div>
+      <button class="btn btn-brass btn-wide" id="gate-btn" onclick="gateWebLogin()" data-t="gate_btn">Войти через Telegram</button>
+      <div class="auth-or"><span data-t="auth_or">или по почте (без пароля)</span></div>
     </div>
 
     <form class="auth-form is-on" id="auth-login" onsubmit="return authLogin(event)" novalidate>
-      <input class="auth-in" id="li-email" type="email" autocomplete="email" data-ph="auth_ph_email" placeholder="Почта">
-      <input class="auth-in" id="li-pass" type="password" autocomplete="current-password" data-ph="auth_ph_pass" placeholder="Пароль">
-      <button class="btn btn-brass" type="submit" data-t="auth_login_btn">Войти</button>
-      <div class="auth-links">
-        <button type="button" class="auth-link" onclick="authScreen('forgot')" data-t="auth_forgot">Забыли пароль?</button>
-        <button type="button" class="auth-link" onclick="authScreen('register')" data-t="auth_to_reg">Создать аккаунт</button>
-      </div>
-    </form>
-
-    <form class="auth-form" id="auth-register" onsubmit="return authRegister(event)" novalidate>
-      <input class="auth-in" id="rg-name" type="text" autocomplete="nickname" maxlength="60" data-ph="auth_ph_name" placeholder="Имя">
-      <input class="auth-in" id="rg-email" type="email" autocomplete="email" data-ph="auth_ph_email" placeholder="Почта">
-      <input class="auth-in" id="rg-pass" type="password" autocomplete="new-password" data-ph="auth_ph_pass_new" placeholder="Пароль">
-      <input class="auth-in" id="rg-pass2" type="password" autocomplete="new-password" data-ph="auth_ph_pass2" placeholder="Повторите пароль">
-      <button class="btn btn-brass" type="submit" data-t="auth_reg_btn">Создать аккаунт</button>
-      <div class="auth-links">
-        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_to_login">У меня уже есть аккаунт</button>
-      </div>
+      <input class="auth-in" id="li-email" type="email" inputmode="email" autocomplete="email" data-ph="auth_ph_email" placeholder="Ваш Email">
+      <button class="btn btn-brass btn-wide" type="submit">Получить код на почту →</button>
     </form>
 
     <form class="auth-form" id="auth-verify" onsubmit="return authVerify(event)" novalidate>
       <p class="auth-note" id="auth-verify-note"></p>
       <input class="auth-in auth-code" id="vf-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000">
-      <button class="btn btn-brass" type="submit" data-t="auth_verify_btn">Подтвердить</button>
+      <button class="btn btn-brass btn-wide" type="submit" data-t="auth_verify_btn">Войти в кабинет</button>
       <div class="auth-links">
         <button type="button" class="auth-link" id="auth-resend" onclick="authResend()" data-t="auth_resend">Отправить код заново</button>
-        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_back">Назад</button>
-      </div>
-    </form>
-
-    <form class="auth-form" id="auth-forgot" onsubmit="return authForgot(event)" novalidate>
-      <p class="auth-note" data-t="auth_forgot_note">Пришлём код на почту — по нему зададите новый пароль.</p>
-      <input class="auth-in" id="fg-email" type="email" autocomplete="email" data-ph="auth_ph_email" placeholder="Почта">
-      <button class="btn btn-brass" type="submit" data-t="auth_forgot_btn">Прислать код</button>
-      <div class="auth-links">
-        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_back">Назад</button>
-      </div>
-    </form>
-
-    <form class="auth-form" id="auth-reset" onsubmit="return authReset(event)" novalidate>
-      <p class="auth-note" id="auth-reset-note"></p>
-      <input class="auth-in auth-code" id="rs-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000">
-      <input class="auth-in" id="rs-pass" type="password" autocomplete="new-password" data-ph="auth_ph_pass_new" placeholder="Новый пароль">
-      <input class="auth-in" id="rs-pass2" type="password" autocomplete="new-password" data-ph="auth_ph_pass2" placeholder="Повторите пароль">
-      <button class="btn btn-brass" type="submit" data-t="auth_reset_btn">Сохранить пароль</button>
-      <div class="auth-links">
-        <button type="button" class="auth-link" id="auth-resend-2" onclick="authResend('reset')" data-t="auth_resend">Отправить код заново</button>
-        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_back">Назад</button>
+        <button type="button" class="auth-link" onclick="authScreen('login')" data-t="auth_back">Изменить почту</button>
       </div>
     </form>
 
     <p class="auth-msg" id="auth-msg"></p>
+    <div class="auth-links" style="margin-top:14px">
+      <button type="button" class="auth-link" onclick="closeLoginGate()">Вернуться в кабинет</button>
+    </div>
   </div>
 
   <p id="gate-status" style="margin-top:14px;margin-bottom:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase"></p>
@@ -4350,32 +4316,29 @@ const AUTH_REDIRECT_URL = '/login/';
 let _bouncing = false;
 
 function bounceToAuth(){
-  if(_bouncing) return;
-  /* Если мы УЖЕ находимся на /login/ — никуда не редиректим, а просто показываем встроенное окно входа #gate-login! */
-  if(location.pathname.indexOf('/login') === 0){
-    ['boot','down'].forEach(g => document.getElementById('gate-' + g).classList.add('hidden'));
-    document.getElementById('gate-login').classList.remove('hidden');
-    document.getElementById('shell').style.display = 'none';
-    return;
-  }
-  _bouncing = true;
   try {
     localStorage.removeItem('neotaro_token');
     localStorage.removeItem('neotaro_user');
   } catch(e){}
-  var next = '';
+  bridge.token = null;
+  bridge.webUser = null;
+  ['boot','down'].forEach(g => document.getElementById('gate-' + g).classList.add('hidden'));
+  document.getElementById('gate-login').classList.remove('hidden');
+  document.getElementById('shell').style.display = 'none';
+  authScreen('login');
   try {
-    next = '?next=' + encodeURIComponent(location.pathname + location.search + location.hash);
-    var _ref = bridge.startParam;
-    if(_ref) next += '&ref=' + encodeURIComponent(_ref);
+    const savedEm = localStorage.getItem('neo_email') || '';
+    const inp = document.getElementById('li-email');
+    if(inp && savedEm && !inp.value) inp.value = savedEm;
   } catch(e){}
-  location.replace(AUTH_REDIRECT_URL + next);
+}
+
+function closeLoginGate(){
+  document.getElementById('gate-login').classList.add('hidden');
+  document.getElementById('shell').style.display = 'flex';
 }
 
 function showGate(which){
-  /* Веб-гостя больше не держим во внутреннем экране входа, а уводим на /login/.
-     В Telegram и VK редиректить нельзя: там авторизация идёт по initData,
-     токена в localStorage нет и быть не должно — иначе выкинем своих же юзеров. */
   if(which === 'login' && bridge.isWeb){ bounceToAuth(); return; }
   ['boot','login','down'].forEach(g => document.getElementById('gate-' + g).classList.add('hidden'));
   if(which) document.getElementById('gate-' + which).classList.remove('hidden');
@@ -5144,19 +5107,17 @@ async function gateWebLogin(){
 }
 /* ---------- вход и регистрация по почте ---------- */
 // Пароль всегда придумывает человек, а почтой приходит только одноразовый код.
-const AUTH = { screen:'login', email:'', purpose:'verify', timer:null, left:0 };
+/* ---------- вход и регистрация по почте (БЕЗ ПАРОЛЯ, по 6-значному коду) ---------- */
+const AUTH = { screen:'login', email:'', purpose:'login', timer:null, left:0 };
 
 const AUTH_TITLES = {
-  login:   { t:'gate_title',       lead:'gate_text' },
-  register:{ t:'auth_title_reg',   lead:'auth_lead_reg' },
-  verify:  { t:'auth_title_code',  lead:null },
-  forgot:  { t:'auth_title_forgot',lead:null },
-  reset:   { t:'auth_title_code',  lead:null }
+  login:  { t:'gate_title',      lead:'gate_text' },
+  verify: { t:'auth_title_code', lead:null }
 };
 
 function authScreen(name){
   AUTH.screen = name;
-  ['login','register','verify','forgot','reset'].forEach(s => {
+  ['login','verify'].forEach(s => {
     const el = document.getElementById('auth-' + s);
     if(el) el.classList.toggle('is-on', s === name);
   });
@@ -5167,8 +5128,8 @@ function authScreen(name){
   const lead = document.getElementById('auth-lead');
   if(title){ title.dataset.t = head.t; title.textContent = tt(head.t); }
   if(lead){
-    if(head.lead){ lead.dataset.t = head.lead; lead.textContent = tt(head.lead); lead.style.display = ''; }
-    else { lead.textContent = ''; lead.style.display = 'none'; }
+    if(head.lead){ lead.style.display = ''; }
+    else { lead.style.display = 'none'; }
   }
   authMsg('');
 }
@@ -5180,7 +5141,6 @@ function authMsg(text, ok){
   el.classList.toggle('ok', !!ok);
 }
 
-// Ошибки с бэка приходят короткими кодами — текст живёт только на фронте.
 function authErr(code){
   const key = 'e_' + (code || 'err');
   const text = tt(key);
@@ -5194,8 +5154,11 @@ function authBusy(form, on){
 
 function authEnter(res){
   if(!res || !res.token) return;
-  localStorage.setItem('neotaro_token', res.token);
-  if(res.user) localStorage.setItem('neotaro_user', JSON.stringify(res.user));
+  try {
+    localStorage.setItem('neotaro_token', res.token);
+    if(res.user) localStorage.setItem('neotaro_user', JSON.stringify(res.user));
+    if(AUTH.email) localStorage.setItem('neo_email', AUTH.email);
+  } catch(e){}
   bridge.token = res.token;
   bridge.webUser = res.user || null;
   boot();
@@ -5205,12 +5168,10 @@ function authCooldown(sec){
   clearInterval(AUTH.timer);
   AUTH.left = sec || 60;
   const paint = () => {
-    ['auth-resend','auth-resend-2'].forEach(id => {
-      const b = document.getElementById(id);
-      if(!b) return;
-      if(AUTH.left > 0){ b.disabled = true; b.textContent = tt('auth_resend_in').replace('{sec}', AUTH.left); }
-      else { b.disabled = false; b.textContent = tt('auth_resend'); }
-    });
+    const b = document.getElementById('auth-resend');
+    if(!b) return;
+    if(AUTH.left > 0){ b.disabled = true; b.textContent = tt('auth_resend_in').replace('{sec}', AUTH.left); }
+    else { b.disabled = false; b.textContent = tt('auth_resend'); }
   };
   paint();
   AUTH.timer = setInterval(() => {
@@ -5220,13 +5181,12 @@ function authCooldown(sec){
   }, 1000);
 }
 
-function authGoCode(email, purpose, res){
+function authGoCode(email, res){
   AUTH.email = email;
-  AUTH.purpose = purpose;
-  authScreen(purpose === 'reset' ? 'reset' : 'verify');
-  const note = document.getElementById(purpose === 'reset' ? 'auth-reset-note' : 'auth-verify-note');
+  authScreen('verify');
+  const note = document.getElementById('auth-verify-note');
   if(note) note.textContent = tt('auth_code_note').replace('{email}', email);
-  const input = document.getElementById(purpose === 'reset' ? 'rs-code' : 'vf-code');
+  const input = document.getElementById('vf-code');
   if(input){ input.value = ''; setTimeout(() => input.focus(), 60); }
   authCooldown((res && res.resend_after) || 60);
 }
@@ -5234,38 +5194,21 @@ function authGoCode(email, purpose, res){
 async function authLogin(e){
   e.preventDefault();
   const form = e.target;
-  const email = (document.getElementById('li-email').value || '').trim();
-  const pass = document.getElementById('li-pass').value || '';
-  if(!email || !pass){ authErr('invalid_credentials'); return false; }
+  const email = (document.getElementById('li-email').value || '').trim().toLowerCase();
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+    authErr('email_invalid');
+    return false;
+  }
   authBusy(form, true);
   authMsg(tt('wait'), true);
-  const res = await api('/auth/login', 'POST', { email, password: pass }, true);
+  const res = await api('/auth/email/start', 'POST', { email, lang }, true);
   authBusy(form, false);
-  if(res && res.success){ if(window.neoGoal) neoGoal('signin', { method: 'email' }); /* neotaro-goal */ authEnter(res); return false; }
-  if(res && res.message === 'email_not_verified'){
-    // Пароль верный, но почта не подтверждена — сервер уже отправил код.
-    authGoCode(email, 'verify', res);
+  if(res && res.success){
+    authGoCode(email, res);
     return false;
   }
   authErr(res && res.message);
-  return false;
-}
-
-async function authRegister(e){
-  e.preventDefault();
-  const form = e.target;
-  const name = (document.getElementById('rg-name').value || '').trim();
-  const email = (document.getElementById('rg-email').value || '').trim();
-  const pass = document.getElementById('rg-pass').value || '';
-  const pass2 = document.getElementById('rg-pass2').value || '';
-  if(pass !== pass2){ authErr('password_mismatch'); return false; }
-  if(pass.length < 8){ authErr('password_short'); return false; }
-  authBusy(form, true);
-  authMsg(tt('wait'), true);
-  const res = await api('/auth/register', 'POST', { name, email, password: pass, password2: pass2, lang }, true);
-  authBusy(form, false);
-  if(res && res.success){ if(window.neoGoal) neoGoal('register', { method: 'email' }); /* neotaro-goal */ authGoCode(email, 'verify', res); return false; }
-  authErr(res && res.message);
+  if(res && res.retry_after) authCooldown(res.retry_after);
   return false;
 }
 
@@ -5276,43 +5219,11 @@ async function authVerify(e){
   if(code.length !== 6){ authErr('code_invalid'); return false; }
   authBusy(form, true);
   authMsg(tt('wait'), true);
-  const res = await api('/auth/verify', 'POST', { email: AUTH.email, code }, true);
-  authBusy(form, false);
-  if(res && res.success){ if(window.neoGoal) neoGoal('verify_email'); /* neotaro-goal */ clearInterval(AUTH.timer); authEnter(res); return false; }
-  authErr(res && res.message);
-  return false;
-}
-
-async function authForgot(e){
-  e.preventDefault();
-  const form = e.target;
-  const email = (document.getElementById('fg-email').value || '').trim();
-  if(!email){ authErr('email_invalid'); return false; }
-  authBusy(form, true);
-  authMsg(tt('wait'), true);
-  const res = await api('/auth/password/forgot', 'POST', { email, lang }, true);
-  authBusy(form, false);
-  if(res && res.success){ authGoCode(email, 'reset', res); return false; }
-  authErr(res && res.message);
-  return false;
-}
-
-async function authReset(e){
-  e.preventDefault();
-  const form = e.target;
-  const code = (document.getElementById('rs-code').value || '').replace(/\D/g, '');
-  const pass = document.getElementById('rs-pass').value || '';
-  const pass2 = document.getElementById('rs-pass2').value || '';
-  if(code.length !== 6){ authErr('code_invalid'); return false; }
-  if(pass !== pass2){ authErr('password_mismatch'); return false; }
-  if(pass.length < 8){ authErr('password_short'); return false; }
-  authBusy(form, true);
-  authMsg(tt('wait'), true);
-  const res = await api('/auth/password/reset', 'POST', { email: AUTH.email, code, password: pass, password2: pass2 }, true);
+  const res = await api('/auth/email/code', 'POST', { email: AUTH.email, code, lang }, true);
   authBusy(form, false);
   if(res && res.success){
+    if(window.neoGoal) neoGoal(res.is_new ? 'register' : 'signin', { method: 'email_code' });
     clearInterval(AUTH.timer);
-    authMsg(tt('auth_ok_reset'), true);
     authEnter(res);
     return false;
   }
@@ -5320,12 +5231,10 @@ async function authReset(e){
   return false;
 }
 
-async function authResend(purpose){
-  const kind = purpose || AUTH.purpose || 'verify';
+async function authResend(){
   if(!AUTH.email) return;
   authMsg(tt('wait'), true);
-  const path = kind === 'reset' ? '/auth/password/forgot' : '/auth/resend';
-  const res = await api(path, 'POST', { email: AUTH.email, lang, purpose: kind }, true);
+  const res = await api('/auth/email/start', 'POST', { email: AUTH.email, lang }, true);
   if(res && res.success){
     authMsg(tt('auth_ok_sent'), true);
     authCooldown(res.resend_after || 60);
@@ -5442,6 +5351,22 @@ function absorbUser(d){
 async function boot(){
   await bridge.ready();
 
+  /* 1. ПЕРЕХВАТ ТОКЕНА АВТО-ВХОДА ИЗ ПИСЬМА (?auth_token=...) И СТАРЫХ ССЫЛОК (#/profile/subscription) */
+  try {
+    const q = new URLSearchParams(location.search);
+    const urlToken = q.get('auth_token');
+    if (urlToken) {
+      localStorage.setItem('neotaro_token', urlToken);
+      bridge.token = urlToken;
+      q.delete('auth_token');
+      const cleanSearch = q.toString() ? ('?' + q.toString()) : '';
+      history.replaceState(null, '', location.pathname + cleanSearch + location.hash);
+    }
+    if (location.hash === '#/profile/subscription' || location.hash === '#profile/subscription') {
+      history.replaceState(null, '', location.pathname + location.search + '#subscription');
+    }
+  } catch(e){}
+
   // ЕСЛИ ЭТО ГОСТЬ В БРАУЗЕРЕ — ОТКРЫВАЕМ КАБИНЕТ СРАЗУ БЕЗ РЕДИРЕКТА!
   if(bridge.isWeb && !bridge.token){
     lang = guestLang();
@@ -5454,14 +5379,18 @@ async function boot(){
     paintDaily();
     paintEnergy();
     var _gh = (location.hash || '').replace('#','');
-    if(!fnDeepLink(_gh)) go(_gh && document.getElementById('v-' + _gh) ? _gh : 'home');
+    if(_gh === 'subscription'){
+      go('profile');
+      requireAuth({ action: 'sub' });
+    } else if(!fnDeepLink(_gh)){
+      go(_gh && document.getElementById('v-' + _gh) ? _gh : 'home');
+    }
     loadCalendar();
     loadProfileSub();
-    /* Тарифы отдают guest_access: без него у гостя нет замков на премиум-раскладах. */
     renderShopPlans().then(() => { if(S.view === 'spreads') renderSpreads(); }).catch(() => {});
     renderSpreads();
-    /* Гость пришёл с лендинга по «Дочитать разбор» — сразу открываем разбор. */
     showYnReading();
+    funnelResume();
     return;
   }
 
@@ -5496,7 +5425,12 @@ async function boot(){
   loadProfileSub();
   paintDaily();
   var _h = (location.hash || '').replace('#','');
-  if(!fnDeepLink(_h)) go(_h && document.getElementById('v-' + _h) ? _h : 'home');
+  if(_h === 'subscription'){
+    go('profile');
+    setTimeout(() => openSheet('sub'), 350);
+  } else if(!fnDeepLink(_h)){
+    go(_h && document.getElementById('v-' + _h) ? _h : 'home');
+  }
   loadCalendar();
   loadBonusBanner();
   renderSpreads();
@@ -8989,6 +8923,25 @@ async function funnelPoll(id, k){
 
 function funnelRenderPaid(d){
   const ru = FN_RU();
+
+  /* Если сервер прислал токен владельца оплаченного расклада — сразу авторизуем его в кабинете! */
+  if(d && d.neotaro_token){
+    try{
+      localStorage.setItem('neotaro_token', d.neotaro_token);
+      if(d.user) localStorage.setItem('neotaro_user', JSON.stringify(d.user));
+      if(d.email) localStorage.setItem('neo_email', d.email);
+    }catch(e){}
+    bridge.token = d.neotaro_token;
+    if(d.user) bridge.webUser = d.user;
+    ['pf-logout','pf-logout-2'].forEach(function(id){
+      const r = document.getElementById(id);
+      if(r && bridge.isWeb) r.style.display = 'flex';
+    });
+    api('/get-user', 'POST', { start_param: null }, true).then(u => {
+      if(u && u.success){ absorbUser(u); paintProfile(); loadProfileSub(); }
+    }).catch(() => {});
+  }
+
   if(d.cards && d.cards.length){ FN.picked = d.cards; }
   if(d.question && !FN.q){ FN.q = fnShortQ(d.question); }
   FN.type = d.spread_type || (S.spread && S.spread.id) || FN.type || '';
@@ -9036,7 +8989,6 @@ function funnelRenderPaid(d){
     const key = 'neo_funnel_goal_' + FN.id;
     const paidPrice = fnPlanPrice(d.plan || 'tripwire');
     const allowFirst = (d.track_first_purchase !== false);
-    /* Отправляем цель purchase СТРОГО ОДИН РАЗ в жизни для уникального покупателя! */
     if(allowFirst && !localStorage.getItem('neo_first_paid_sent') && !localStorage.getItem(key)){
       localStorage.setItem('neo_first_paid_sent', '1');
       localStorage.setItem(key, '1');
