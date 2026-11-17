@@ -195,10 +195,6 @@
     "logo": "https://neotaro.ru/apple-touch-icon.png"
   }
   </script>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <!-- Был cdn.tailwindcss.com — полмегабайта компилятора, который грузился
-       до отрисовки ради четырёх классов. Всё остальное оформление и так своё,
-       в теге <style> ниже. Заменён на четыре строчки CSS. -->
   <style>
     .bg-space-900{background:#0B0F1E}
     .min-h-screen{min-height:100vh}
@@ -1924,9 +1920,8 @@ html[data-theme="dawn"] .bnx-cell.is-current{background:radial-gradient(120% 120
 html[data-theme="dawn"] .bnx-cell.is-grand{background:linear-gradient(135deg,rgba(154,108,28,.14),#FFFFFF)}
 html[data-theme="dawn"] .bnx-burst{background:#FFFFFF;color:#5C3D08}
 </style>
-<script src="https://browser.sentry-cdn.com/8.47.0/bundle.min.js" crossorigin="anonymous"></script>
 <script>
-/* NEO:SENTRY */
+/* NEO:SENTRY (неблокирующий старт с перехватом ранних ошибок) */
 (function(){
   if (/Android.*wv\)|; wv\)/i.test(navigator.userAgent || '') && !window.mraidbridge) {
     window.mraidbridge = {
@@ -1937,46 +1932,106 @@ html[data-theme="dawn"] .bnx-burst{background:#FFFFFF;color:#5C3D08}
       nativeCallComplete: function(){}
     };
   }
-  if(!window.Sentry) return;
-  var STATIC_DSN = "https://ab1fbcfb979d73619d2c9255eaca13f8@o4511189625274368.ingest.de.sentry.io/4511514128810064"; 
 
+  var STATIC_DSN = "https://ab1fbcfb979d73619d2c9255eaca13f8@o4511189625274368.ingest.de.sentry.io/4511514128810064";
+  var CDN_URL = "https://browser.sentry-cdn.com/8.47.0/bundle.min.js";
   var IGN = [
     'ResizeObserver loop',
     'Error invoking post: Method not found',
     /fireChangeEvent|notifyReadyEvent|notifyErrorEvent|notifySizeChangeEvent|nativeCallComplete|mraidbridge/i
   ];
-  function boot(dsn){
-    if(!dsn || dsn.indexOf('http') !== 0 || window.__sentryBooted) return;
+
+  var queue = [];
+  var pendingUser = null;
+
+  function onEarlyError(e) {
+    if (!e) return;
+    var err = e.error || (e.message && e.message !== 'Script error.'
+      ? new Error(e.message + ' (' + (e.filename || '') + ':' + (e.lineno || 0) + ')')
+      : null);
+    if (err && queue.length < 20) queue.push({ kind: 'ex', val: err });
+  }
+
+  function onEarlyRejection(e) {
+    if (e && e.reason && queue.length < 20) {
+      queue.push({ kind: 'ex', val: e.reason });
+    }
+  }
+
+  window.addEventListener('error', onEarlyError);
+  window.addEventListener('unhandledrejection', onEarlyRejection);
+
+  if (!window.Sentry) {
+    window.Sentry = {
+      __isStub: true,
+      captureException: function(err, ctx){ if (queue.length < 20) queue.push({ kind: 'ex', val: err, ctx: ctx }); },
+      captureMessage: function(msg, ctx){ if (queue.length < 20) queue.push({ kind: 'msg', val: msg, ctx: ctx }); },
+      setUser: function(u){ pendingUser = u; }
+    };
+  }
+
+  function stopEarlyListeners() {
+    window.removeEventListener('error', onEarlyError);
+    window.removeEventListener('unhandledrejection', onEarlyRejection);
+  }
+
+  function boot(dsn) {
+    if (!dsn || dsn.indexOf('http') !== 0 || window.__sentryBooted) return;
+    if (!window.Sentry || typeof window.Sentry.init !== 'function') return;
     window.__sentryBooted = true;
-    try{
+    stopEarlyListeners();
+    try {
       Sentry.init({
         dsn: dsn,
         environment: location.hostname,
         tracesSampleRate: 0.2,
         ignoreErrors: IGN,
         beforeSend: function(event){
-          try{
+          try {
             var val = event.exception && event.exception.values && event.exception.values[0] && event.exception.values[0].value || '';
-            if(/mraidbridge|fireChangeEvent|notifyReadyEvent/i.test(val)) return null;
-          }catch(e){}
+            if (/mraidbridge|fireChangeEvent|notifyReadyEvent/i.test(val)) return null;
+          } catch(e){}
           return event;
         }
       });
-      var u = null;
-      try{ u = JSON.parse(localStorage.getItem('neotaro_user') || 'null'); }catch(e){}
-      if(u) Sentry.setUser({ id: String(u.id || u.user_id || ''), email: u.email || undefined, username: u.name || undefined });
-    }catch(e){}
+
+      var u = pendingUser;
+      if (!u) {
+        var stored = null;
+        try { stored = JSON.parse(localStorage.getItem('neotaro_user') || 'null'); } catch(e){}
+        if (stored) u = { id: String(stored.id || stored.user_id || ''), email: stored.email || undefined, username: stored.name || undefined };
+      }
+      if (u) Sentry.setUser(u);
+
+      for (var i = 0; i < queue.length; i++) {
+        var item = queue[i];
+        if (item.kind === 'msg') Sentry.captureMessage(item.val, item.ctx);
+        else Sentry.captureException(item.val, item.ctx);
+      }
+      queue.length = 0;
+    } catch(e){}
   }
 
-  if(STATIC_DSN && STATIC_DSN.indexOf('http') === 0){
-    boot(STATIC_DSN);
-  } else {
-    var API = (window.API_URL || 'https://api.neotaro.ru/api');
-    fetch(API.replace(/\/api\/?$/, '') + '/api/public/sentry')
-      .then(function(r){ return r.json(); })
-      .then(function(j){ boot(j && j.dsn); })
-      .catch(function(){});
-  }
+  var s = document.createElement('script');
+  s.src = CDN_URL;
+  s.crossOrigin = 'anonymous';
+  s.async = true;
+  s.onload = function() {
+    if (STATIC_DSN && STATIC_DSN.indexOf('http') === 0) {
+      boot(STATIC_DSN);
+    } else {
+      var API = (window.API_URL || 'https://api.neotaro.ru/api');
+      fetch(API.replace(/\/api\/?$/, '') + '/api/public/sentry')
+        .then(function(r){ return r.json(); })
+        .then(function(j){ boot(j && j.dsn); })
+        .catch(function(){});
+    }
+  };
+  s.onerror = function() {
+    stopEarlyListeners();
+    queue.length = 0;
+  };
+  document.head.appendChild(s);
 })();
 </script>
 <style id="neo-home-v2">
