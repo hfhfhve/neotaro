@@ -1517,7 +1517,44 @@ html[data-theme="dawn"] .fn-khole-warn{color:#8A3A1E}
 /* === NEOTARO: допродажа после оплаты === */
 .fn-up{margin-top:22px}
 .fn-up:empty{display:none}
-.fn-up-wait{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 8px;color:var(--mist);font-size:13.5px;text-align:center}
+
+/* Оплаченный разбор и дальнейшие действия */
+.fn-reading-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.fn-reading-head h1,.fn-follow-title{margin:0;font-family:var(--serif);font-size:clamp(21px,4vw,28px);font-weight:400;line-height:1.22;color:var(--ivory);outline:0}
+.fn-reading-state{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--mist);white-space:nowrap}
+.fn-reading-state::before{content:"✓";color:var(--brass)}
+.fn-after{margin-top:28px;padding-top:18px;border-top:1px solid var(--line)}
+.fn-after:not(:has(.fn-cont:not(:empty), .fn-up:not(:empty))),.fn-after[hidden],#ho-open[hidden],#tb-reading-label[hidden],#tb-parent-reading[hidden],#tb-paid-heading[hidden],#tb-preview-head[hidden]{display:none}
+.fn-after-kicker{margin:0 0 12px;font-size:12px;color:var(--mist)}
+.fn-after .fn-up-card{animation:none;border-color:var(--line)}
+.fn-after .fn-up{margin-top:14px}
+.fn-after .fn-up-title{font-weight:400;overflow-wrap:anywhere}
+.fn-after .fn-up-note{text-align:left}
+.fn-after .fn-up-cards img{width:clamp(37px,11vw,62px)}
+.fn-up-preview{margin:10px 0 13px;color:var(--mist)}
+.fn-up-preview summary,.fn-cont-form summary{cursor:pointer}
+.fn-up-preview summary{width:fit-content;max-width:100%;padding:7px 0;font-size:13px;color:var(--brass-pale)}
+.fn-up-preview .reading{margin:8px 0}
+.fn-cont:empty{display:none}
+.fn-cont{padding:14px 16px;background:rgba(110,158,144,.10);border:1px solid var(--line);border-radius:14px}
+.fn-cont-form summary{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;min-height:38px}
+.fn-cont-form summary::-webkit-details-marker{display:none}
+.fn-cont-form summary::after{content:"";width:8px;height:8px;margin-right:5px;flex:none;border:solid var(--brass);border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.fn-cont-form[open] summary::after{transform:rotate(225deg)}
+.fn-cont-form strong,.fn-follow-title{font-size:20px;font-family:var(--serif);font-weight:400;color:var(--ivory);display:block}
+.fn-cont-form small,.fn-cont-context,.fn-cont-hint{display:block;color:var(--mist);font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+.fn-cont-form small{margin:4px 0 0}
+.fn-cont-form form{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.fn-cont-form label{display:block;font-size:14px;color:var(--ivory);font-weight:600}
+.fn-cont-hint,.fn-cont-context{margin:5px 0 10px}
+.fn-cont-form textarea{width:100%;box-sizing:border-box;min-height:90px;resize:vertical;font-size:16px}
+.fn-cont-form .btn,.fn-cont>.btn{min-height:44px;margin-top:8px}
+.fn-cont-error{margin:7px 0 0;color:#f3ae9e;font-size:13px;line-height:1.45}
+.fn-cont-error:empty{margin:0}
+.fn-cont-status{display:flex;gap:9px;align-items:center;font-size:13px;color:var(--mist);margin:8px 0 4px}
+.fn-after .fn-note-left{text-align:left}
+html[data-theme="dawn"] .fn-cont-error{color:#8A3A1E}
+.fn-cont-form summary:focus-visible,.fn-up-preview summary:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px}
 .fn-up-card{padding:18px 16px 16px;border-radius:16px;border:1px solid rgba(217,174,95,.55);background:linear-gradient(160deg,rgba(217,174,95,.13),rgba(18,24,41,.94));animation:qzIn .35s ease both}
 .fn-up-card.is-open{border-color:rgba(217,174,95,.35)}
 .fn-up-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-bright);margin-bottom:6px}
@@ -1941,11 +1978,6 @@ html[data-theme="dawn"] .bnx-burst{background:#FFFFFF;color:#5C3D08}
 .qz-dlive{margin-top:12px;padding:11px 14px;border-radius:12px;border:1px solid rgba(217,174,95,.38);background:linear-gradient(135deg,rgba(217,174,95,.13),rgba(18,24,41,.7));font-size:13.5px;line-height:1.45;color:var(--ivory);display:none}
 .qz-dlive.is-on{display:block;animation:qzIn .25s ease both}
 .qz-dlive b{color:var(--brass-bright)}
-.fn-paid-banner{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding:13px 16px;border-radius:13px;border:1px solid rgba(110,158,144,.45);background:rgba(110,158,144,.12)}
-.fn-paid-banner-ico{width:28px;height:28px;border-radius:50%;background:rgba(110,158,144,.25);color:#9BD48A;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
-.fn-paid-banner-txt b{display:block;font-size:14.5px;color:var(--ivory);margin-bottom:2px}
-.fn-paid-banner-txt span{display:block;font-size:12.5px;color:var(--mist)}
-.fn-end-seal{text-align:center;margin:20px 0 6px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);opacity:.8}
 html[data-theme="dawn"] .qz-din{background:#FFF;color:#241F16}
 html[data-theme="dawn"] .qz-dlive{background:rgba(217,174,95,.14);color:#2A1E08}
 html[data-theme="dawn"] .fn-compat-lock{background:rgba(255,255,255,.85)}
@@ -2458,9 +2490,11 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
         <section class="view" id="v-table">
           <button class="btn btn-quiet btn-sm" onclick="tbBack()" style="margin-bottom:24px" data-t="back">← Назад</button>
           <div class="ritual">
-            <div class="eyebrow" style="margin-bottom:12px"><span id="tb-cards">—</span> · <span id="tb-price">—</span></div>
-            <h1 class="h1" id="tb-name">—</h1>
-            <p class="sub" id="tb-desc" style="margin-top:12px"></p>
+            <div id="tb-preview-head">
+              <div class="eyebrow" style="margin-bottom:12px"><span id="tb-cards">—</span> · <span id="tb-price">—</span></div>
+              <h1 class="h1" id="tb-name">—</h1>
+              <p class="sub" id="tb-desc" style="margin-top:12px"></p>
+            </div>
 
             <div id="tb-ask" style="margin-top:28px">
               <div id="tb-form"></div>
@@ -2484,16 +2518,26 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
             </div>
 
             <div id="tb-result" style="display:none">
+              <div class="fn-reading-head" id="tb-paid-heading" hidden>
+                <h1 id="fn-reading-title" tabindex="-1"></h1>
+                <span class="fn-reading-state" id="fn-reading-state"></span>
+              </div>
               <p class="sub" id="tb-qshow" style="font-style:italic;color:var(--brass-pale)"></p>
               <div class="spread-out" id="tb-cards-out"></div>
               <div class="panel panel-pad">
-                <div class="orn"><span class="eyebrow" data-t="table_reading">Разбор</span></div>
+                <div class="orn" id="tb-reading-label"><span class="eyebrow" data-t="table_reading">Разбор</span></div>
                 <div class="reading" id="tb-reading" style="position:relative"></div>
               </div>
+              <section class="fn-after" id="fn-after" aria-labelledby="fn-after-label" hidden>
+                <h2 class="fn-after-kicker" id="fn-after-label"></h2>
+                <div class="fn-cont" id="fn-cont"></div>
+                <div class="fn-up" id="fn-up"></div>
+              </section>
               <!-- Кнопки скрыты, пока пробный расклад не оплачен (см. fnActions) -->
               <div id="tb-actions" style="display:none;gap:10px;flex-wrap:wrap;margin-top:18px">
                 <button class="btn btn-line" onclick="tbDiscuss()" data-t="table_discuss">Обсудить с оракулом</button>
                 <button class="btn btn-quiet" onclick="go('spreads')" data-t="table_again">Другой расклад</button>
+                <button type="button" class="btn btn-quiet" id="tb-parent-reading" hidden></button>
               </div>
             </div>
           </div>
@@ -3204,6 +3248,7 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
   <div class="sheet-grip"></div>
   <h3 id="ho-name">—</h3>
   <p class="sheet-sub" id="ho-q"></p>
+  <button type="button" class="btn btn-line btn-wide" id="ho-open" hidden></button>
   <div class="spread-out" id="ho-cards"></div>
   <div class="reading" id="ho-text"></div>
   <div style="display:flex;gap:8px;margin-top:16px">
@@ -5211,7 +5256,17 @@ function go(view, fromPop){
   else if(BACKABLE.indexOf(view) === -1) BACK_TO = null;
   const vb = document.getElementById('vback');
   if(vb) vb.classList.toggle('is-on', !!BACK_TO);
-  if(!fromPop){ try{ if(!history.state || history.state.v !== view) history.pushState({ v: view }, '', '#' + view); }catch(e){} }
+  if(!fromPop && (!history.state || history.state.v !== view)){
+    try{
+      const url = new URL(location.href);
+      if(prevView === 'table' && view !== 'table' && url.searchParams.has('paid_spread')){
+        url.searchParams.delete('paid_spread');
+        url.searchParams.delete('k');
+      }
+      url.hash = view;
+      history.pushState({ v: view }, '', url.pathname + url.search + url.hash);
+    }catch(e){}
+  }
   if(window.neoHit) neoHit('/app/#' + view, { title: 'app: ' + view }); /* neotaro-goal */
   if(LOADERS[view]) LOADERS[view]();
   bridge.haptic();
@@ -5222,6 +5277,11 @@ window.addEventListener('popstate', function(e){
   let v = (e.state && e.state.v) || (location.hash || '').replace('#','') || 'home';
   if(v === 'subscription') v = 'profile';
   if(!document.getElementById('v-' + v)){ if(fnDeepLink(v)) return; v = 'home'; }
+  const reading = new URLSearchParams(location.search).get('paid_spread');
+  if(v === 'table' && reading && Number(reading) !== FN.id){
+    funnelResume(true, true);
+    return;
+  }
   go(v, true);
 });
 
@@ -6155,6 +6215,7 @@ async function paySpreadRub(){
 /* Название расклада: бэкенд в истории отдаёт только spread_type (например three_cards),
    а человеческое имя лежит в справочнике S.spreads. Подставляем его. */
 function histName(h){
+  if(h.reading_kind === 'followup') return FN_RU() ? 'Продолжение истории' : 'Follow-up reading';
   const s = (S.spreads || []).find(x => x.id === h.spread_type);
   return (s && s.name) || h.spread_name || h.spread_type || '';
 }
@@ -6208,6 +6269,10 @@ function openHistory(i){
   openSheet('histone');
   document.getElementById('ho-name').textContent = histName(h);
   document.getElementById('ho-q').textContent = h.question ? '«' + h.question + '»' : '';
+  const open = document.getElementById('ho-open');
+  open.hidden = !h.funnel_reading;
+  open.textContent = FN_RU() ? 'Открыть расклад' : 'Open reading';
+  open.onclick = () => fnOpenPaidReading(h.id);
   document.getElementById('ho-cards').innerHTML = histCards(h);
   document.getElementById('ho-text').innerHTML = clean(h.interpretation || '');
 }
@@ -9149,7 +9214,7 @@ function fnPaymentNotice(teaser, message, checking){
   fnActions(false);
 }
 
-async function funnelResume(manual){
+async function funnelResume(manual, fromHistory = false){
   if(FN.polling) return;
   const p = new URLSearchParams(location.search);
   const paidId = parseInt(p.get('paid_spread') || '', 10);
@@ -9163,8 +9228,9 @@ async function funnelResume(manual){
     id, k: p.get('k') || (same ? saved.k : ''),
     q: same ? saved.q : '', picked: same ? saved.picked || [] : [],
     type: same ? saved.type : '', matrixPts: same ? saved.matrixPts : null,
-    paymentPending: !!paidId || (same && !!saved.paymentPending),
-    teaser: '', paidView: false
+    paymentPending: (!fromHistory && !!paidId) || (same && !!saved.paymentPending),
+    focusPaidReading: !!paidId,
+    teaser: '', paidView: false, continuation: null, up: null
   });
   fnShowTable(FN.q, FN.picked, FN.matrixPts);
   await funnelPoll(FN.paymentPending);
@@ -9192,6 +9258,7 @@ async function funnelPoll(waitForPayment = true){
   }finally{
     FN.polling = false;
   }
+  if(FN.id !== id || S.view !== 'table') return;
   if(data && data.success){
     FN.q = FN.q || fnShortQ(data.question);
     FN.picked = data.cards || FN.picked;
@@ -9210,6 +9277,16 @@ async function funnelPoll(waitForPayment = true){
     fnShowTable(FN.q, FN.picked, FN.matrixPts);
     if(!FN.paymentPending){
       fnClearPaymentReturn();
+      if(data.reading_kind && data.reading_kind !== 'reading' && data.parent_id){
+        if(!isGuest()){
+          fnOpenPaidReading(data.parent_id);
+        }else{
+          document.getElementById('tb-reading').innerHTML = '<p role="status">' + esc(ru
+            ? 'Дополнительный расклад пока не оплачен. Войдите в профиль, чтобы вернуться к основному раскладу.'
+            : 'This extra reading is not paid yet. Sign in to return to the original reading.') + '</p>';
+        }
+        return;
+      }
       funnelRenderLocked(FN.teaser, data.canceled
         ? (ru ? 'Оплата отменена. Можно попробовать ещё раз.' : 'Payment was canceled. You can try again.')
         : '');
@@ -9250,46 +9327,59 @@ function funnelRenderPaid(d){
 
   if(d.cards && d.cards.length){ FN.picked = d.cards; }
   if(d.question && !FN.q){ FN.q = fnShortQ(d.question); }
-  FN.type = d.spread_type || (S.spread && S.spread.id) || FN.type || '';
+  FN.type = d.spread_type || FN.type || '';
+  FN.kind = d.reading_kind || (d.plan === 'upsell' ? 'addon' : 'reading');
+  FN.paymentPending = false;
   if(d.matrix_points) FN.matrixPts = d.matrix_points;
   fnShowTable(FN.q, FN.picked, FN.matrixPts);
   try{
-    if(FN.id && FN.k){
-      history.replaceState(null, '', location.pathname + '?paid_spread=' + FN.id + '&k=' + encodeURIComponent(FN.k) + '#table');
+    if(FN.id){
+      const url = new URL(location.href);
+      url.searchParams.set('paid_spread', FN.id);
+      url.searchParams.delete('resume_spread');
+      if(FN.k) url.searchParams.set('k', FN.k); else url.searchParams.delete('k');
+      url.hash = 'table';
+      history.replaceState({ v:'table' }, '', url.pathname + url.search + url.hash);
     }
   }catch(e){}
   if(typeof d.energy === 'number'){ S.energy = d.energy; S.purchased = true; try{ paintEnergy(); }catch(e){} }
   if(typeof refreshAccess === 'function'){ try{ refreshAccess(); }catch(e){} }
   if(typeof loadProfileSub === 'function'){ try{ loadProfileSub(); }catch(e){} }
   FN.full = d.interpretation || '';
-  const pl = FN.plans || {};
-  const n = typeof d.energy === 'number' ? d.energy
-    : ((pl[d.plan] && pl.plan && pl[d.plan].energy) || (pl.tripwire && pl.tripwire.energy) || 5);
   FN.paidView = true;
+  FN.up = null;
+  const title = FN.kind === 'followup' ? (ru ? 'Продолжение вашей истории' : 'Your follow-up reading')
+    : FN.kind === 'addon' ? (ru ? 'Ваш дополнительный расклад' : 'Your additional reading')
+    : (ru ? 'Ваш расклад' : 'Your reading');
+  document.getElementById('tb-preview-head').hidden = true;
+  document.getElementById('tb-paid-heading').hidden = false;
+  document.getElementById('fn-reading-title').textContent = title;
+  document.getElementById('fn-reading-state').textContent = ru ? 'Полный разбор открыт' : 'Full reading unlocked';
+  document.getElementById('tb-reading-label').hidden = true;
+  document.getElementById('tb-reading').innerHTML = '<div class="fn-reveal">' + clean(FN.full) + '</div>';
+  const parentId = Number(d.parent_id);
+  const back = document.getElementById('tb-parent-reading');
+  back.hidden = !parentId;
+  if(parentId){
+    back.textContent = ru ? 'К предыдущему раскладу' : 'Previous reading';
+    back.onclick = () => fnOpenPaidReading(parentId);
+  }
 
-  const eb = document.getElementById('tb-reading-eyebrow');
-  if(eb) eb.textContent = ru ? 'Полный разбор · Все карты открыты' : 'Full reading · All cards unlocked';
+  const after = document.getElementById('fn-after');
+  document.getElementById('fn-after-label').textContent = ru ? 'Дальше по вашей ситуации' : 'Continue exploring';
+  const continuation = document.getElementById('fn-cont');
+  continuation.innerHTML = '';
+  document.getElementById('fn-up').innerHTML = '';
+  after.hidden = FN.kind === 'addon';
+  FN.continuation = { id: FN.id, question: FN.q, date: d.paid_at };
+  if(FN.kind !== 'addon' && FN.type !== 'matrix' && !isGuest()) fnRefreshContinuation(FN.continuation);
 
-  document.getElementById('tb-reading').innerHTML =
-    `<div class="fn-paid-banner">
-      <div class="fn-paid-banner-ico">✓</div>
-      <div class="fn-paid-banner-txt">
-        <b>${esc(ru ? 'Оплата прошла успешно — ваш расклад полностью открыт!' : 'Payment confirmed — your full reading is unlocked!')}</b>
-        <span>${esc(ru ? 'Ниже открыты все позиции, расчёты, сроки и совет Оракула' : 'All positions, timing and advice are shown below')}</span>
-      </div>
-    </div>` +
-    '<div class="fn-reveal">' + clean(FN.full) + '</div>' +
-    `<div class="fn-end-seal">${esc(ru ? '✦ Конец вашего расклада · Все позиции открыты ✦' : '✦ End of your spread · All positions unlocked ✦')}</div>` +
-    '<div class="fn-up" id="fn-up"></div>' +
-    `<div class="fn-upsell" style="margin-top:16px;border-color:rgba(110,158,144,.45)">
-      <div class="fn-upsell-t">${esc(ru ? 'Хотите уточнить детали у Оракула?' : 'Want to ask the Oracle a follow-up?')}</div>
-      <p>${esc(ru ? ('По вашему тарифу вам начислено ' + n + ' ⚡ энергии — задайте уточняющий вопрос по этому раскладу в чате') : ('You have ' + n + ' ⚡ energy — ask a follow-up question in chat'))}</p>
-      <button class="btn btn-brass btn-wide" onclick="funnelDiscuss()">${esc(ru ? 'Задать вопрос Оракулу в чате →' : 'Ask the Oracle in chat →')}</button>
-      <p class="fn-note" style="margin-top:10px">${esc(ru ? 'Копия этого разбора также отправлена на вашу почту и сохранена в «Мои расклады»' : 'Saved in My spreads and sent to your email')}</p>
-    </div>` +
-    '<div class="fn-lift" id="fn-lift" aria-hidden="true"><i></i></div>';
-
-  setTimeout(() => { const l = document.getElementById('fn-lift'); if(l) l.remove(); }, 2000);
+  if(FN.focusPaidReading){
+    FN.focusPaidReading = false;
+    const view = document.getElementById('v-table');
+    view.scrollIntoView({ block:'start', behavior:'instant' });
+    document.getElementById('fn-reading-title').focus({preventScroll:true});
+  }
   fnActions(true);
   bridge.haptic('ok');
   try{
@@ -9304,7 +9394,207 @@ function funnelRenderPaid(d){
     }
     if(Number(fnLoad()?.id) === Number(FN.id)) localStorage.removeItem('neo_funnel');
   }catch(e){}
-  if(d.plan !== 'upsell') fnLoadUpsell();
+  if(FN.kind === 'reading') fnLoadUpsell();
+}
+
+
+function fnOpenPaidReading(id){
+  closeSheets();
+  const url = new URL(location.href);
+  url.searchParams.set('paid_spread', id);
+  url.searchParams.delete('k');
+  url.searchParams.delete('resume_spread');
+  url.hash = 'table';
+  history.pushState({ v: 'table' }, '', url.pathname + url.search + url.hash);
+  funnelResume(true, true);
+}
+
+function fnContinuationCurrent(ctx){
+  return FN.continuation === ctx && S.view === 'table' && FN.paidView;
+}
+
+function fnContinuationText(value){
+  return FN_RU() ? value[0] : value[1];
+}
+
+function fnContinuationError(code){
+  const messages = {
+    busy: ['Другой разбор ещё готовится. Попробуйте через минуту.', 'Another reading is in progress. Try again shortly.'],
+    terms_changed: ['Условия доступа обновились. Проверьте их перед продолжением.', 'Access has changed. Check the new terms before continuing.'],
+    email_required: ['Для покупки нужен email в профиле, чтобы получить копию и чек.', 'Add an email in your profile to receive the reading and receipt.'],
+    generation_failed: ['Не удалось подготовить разбор. Попробуйте ещё раз.', 'The reading could not be prepared. Please try again.'],
+    unavailable: ['Исходный расклад больше недоступен.', 'The original reading is no longer available.']
+  };
+  return fnContinuationText(messages[code] || ['Не удалось завершить действие. Попробуйте ещё раз.', 'Something went wrong. Please try again.']);
+}
+
+function fnRenderContinuation(ctx){
+  const box = document.getElementById('fn-cont');
+  if(!box || !fnContinuationCurrent(ctx)) return;
+  const state = ctx.state || {};
+  if(!state.available){ box.innerHTML = ''; return; }
+  const text = fnContinuationText;
+  const result = state.result;
+  const heading = result
+    ? text(['Продолжение вашей истории', 'Your follow-up reading'])
+    : text(['Продолжить эту историю', 'Continue this story']);
+  const date = ctx.date ? new Date(ctx.date).toLocaleDateString(lang || 'ru', { day:'numeric', month:'long' }) : '';
+  const prior = ctx.question ? '«' + ctx.question + '»' : '';
+  const note = [date, prior].filter(Boolean).join(' · ');
+  const error = '<p class="fn-cont-error" id="fn-cont-error" role="status">' + esc(ctx.error || '') + '</p>';
+  const meta = note ? '<p class="fn-cont-context">' + esc(note) + '</p>' : '';
+  const header = '<h3 class="fn-follow-title" id="fn-cont-title" tabindex="-1">' + esc(heading) + '</h3>';
+  if(state.pending){
+    box.innerHTML = header + '<p class="fn-cont-status" role="status"><span class="spin"></span>' +
+      esc(text(['Сопоставляем новое событие с вашим раскладом…', 'Connecting your update with the original reading…'])) + '</p>';
+    return;
+  }
+  if(result){
+    const action = result.paid
+      ? '<button type="button" class="btn btn-line" onclick="fnOpenPaidReading(FN.continuation.state.result.id)">' +
+        esc(text(['Открыть продолжение', 'Open follow-up'])) + '</button>'
+      : (result.payment_pending
+        ? '<button type="button" class="btn btn-line" onclick="fnRefreshContinuation()">' + esc(text(['Проверить оплату', 'Check payment'])) + '</button>'
+        : '<button type="button" class="btn btn-line" id="fn-cont-buy" onclick="fnContinuationCheckout()">' +
+          esc(text(['Открыть за ', 'Unlock for ']) + result.price + ' ₽') + '</button>');
+    box.innerHTML = header +
+      '<p class="fn-cont-context">' + esc(result.update_text || '') + '</p>' +
+      (result.paid ? '' : '<details class="fn-up-preview"><summary>' + esc(text(['Посмотреть первую карту', 'Preview the first card'])) +
+        '</summary><div class="reading">' + clean(result.preview || '') + '</div></details>') +
+      error + action +
+      (result.paid ? '' : '<p class="fn-up-note fn-note-left">' + esc(text(['Разовая покупка.', 'One-time purchase.'])) +
+        ' <a href="/oferta/" target="_blank" rel="noopener">' + esc(text(['Условия покупки', 'Purchase terms'])) + '</a></p>');
+    return;
+  }
+  const terms = state.terms;
+  if(!terms){ box.innerHTML = ''; return; }
+  const plan = terms.mode === 'trial'
+    ? text(['Один разбор включён в пробный ПРО', 'One reading included in your PRO trial'])
+    : terms.mode === 'energy'
+      ? text(['В ПРО · ', 'With PRO · ']) + terms.cost + ' ⚡'
+      : text(['Разовый разбор · ', 'One-time reading · ']) + terms.price + ' ₽';
+  const cta = terms.mode === 'purchase' ? text(['Подготовить разбор', 'Prepare the reading'])
+    : text(['Получить разбор', 'Get my reading']) + (terms.mode === 'energy' ? ' · ' + terms.cost + ' ⚡' : '');
+  box.innerHTML = '<details class="fn-cont-form"' + (ctx.open ? ' open' : '') + '><summary>' +
+    '<span><strong>' + esc(heading) + '</strong><small>' + esc(plan) + '</small></span></summary>' +
+    '<form onsubmit="fnSubmitContinuation(event)">' + meta +
+      '<label for="fn-cont-update">' + esc(text(['Что произошло после расклада?', 'What happened after your reading?'])) + '</label>' +
+      '<p class="fn-cont-hint" id="fn-cont-hint">' + esc(text(['Расскажите, что изменилось, или опишите решение, которое теперь обдумываете.', 'Tell us what changed or describe the decision you are considering.'])) + '</p>' +
+      '<textarea class="field" id="fn-cont-update" rows="3" maxlength="500" required aria-describedby="fn-cont-hint fn-cont-error">' + esc(ctx.draft || '') + '</textarea>' +
+      error + '<button type="submit" class="btn btn-line" id="fn-cont-submit">' + esc(cta) + '</button>' +
+      (terms.mode === 'purchase' ? '<p class="fn-up-note fn-note-left">' + esc(text(['Оплата только после просмотра первой карты.', 'You can preview the first card before paying.'])) + '</p>' : '') +
+    '</form></details>';
+}
+
+async function fnRefreshContinuation(ctx = FN.continuation){
+  if(!ctx || ctx.refreshing || !fnContinuationCurrent(ctx)) return;
+  ctx.refreshing = true;
+  const wasPending = !!ctx.state?.pending;
+  try{
+    for(let i = 0; i < 25 && fnContinuationCurrent(ctx); i++){
+      const data = await api('/funnel/continuation/' + ctx.id, 'GET', null, true);
+      if(!fnContinuationCurrent(ctx)) return;
+      if(data && typeof data.available === 'boolean'){
+        ctx.state = data;
+        if(data.message) ctx.error = fnContinuationError(data.message);
+        if(typeof data.energy === 'number'){ S.energy = data.energy; paintEnergy(); }
+        if(data.pending && i > 0 && i < 24){
+          await new Promise(resolve => setTimeout(resolve, 2200));
+          continue;
+        }
+        if(i === 24 && data.pending){
+          const box = document.getElementById('fn-cont');
+          if(box) box.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-line" onclick="fnRefreshContinuation()">' + esc(fnContinuationText(['Проверить готовность', 'Check availability'])) + '</button>');
+          return;
+        }
+        fnRenderContinuation(ctx);
+        if(wasPending && data.result){
+          document.getElementById('fn-cont-title')?.focus({preventScroll:true});
+          if(window.neoGoal) neoGoal('continuation_ready', { paid: data.result.paid ? 1 : 0 });
+        }
+        if(!data.pending) return;
+      }else{
+        if(ctx.state?.pending){
+          const box = document.getElementById('fn-cont');
+          if(box && !box.querySelector('button')) box.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-line" onclick="fnRefreshContinuation()">' + esc(fnContinuationText(['Проверить готовность', 'Check availability'])) + '</button>');
+        }else if(ctx.state?.result?.payment_pending){
+          ctx.error = fnContinuationError();
+          fnRenderContinuation(ctx);
+        }
+        return;
+      }
+      await new Promise(resolve => setTimeout(resolve, 2200));
+    }
+  }finally{
+    ctx.refreshing = false;
+  }
+}
+
+async function fnSubmitContinuation(event){
+  event.preventDefault();
+  const ctx = FN.continuation;
+  const mode = ctx?.state?.terms?.mode;
+  if(!ctx || ctx.busy || !mode || !fnContinuationCurrent(ctx)) return;
+  const field = document.getElementById('fn-cont-update');
+  const draft = field?.value.trim();
+  if(!draft){
+    field?.setCustomValidity(fnContinuationText(['Добавьте, что изменилось или что хотите решить.', 'Add what changed or what you want to decide.']));
+    field?.reportValidity();
+    if(field) field.oninput = () => field.setCustomValidity('');
+    return;
+  }
+  ctx.draft = draft;
+  ctx.open = true;
+  ctx.error = '';
+  ctx.busy = true;
+  document.getElementById('fn-cont-submit').disabled = true;
+  if(window.neoGoal) neoGoal('continuation_start', { mode });
+  const data = await api('/funnel/continuation', 'POST', { spread_id: ctx.id, update_text: draft, mode, lang: lang || 'ru' }, true);
+  ctx.busy = false;
+  if(!fnContinuationCurrent(ctx)) return;
+  if(data?.success){
+    ctx.state = data;
+    fnRenderContinuation(ctx);
+    if(data.pending) await fnRefreshContinuation(ctx);
+  }else{
+    if(data?.terms) ctx.state.terms = data.terms;
+    ctx.error = fnContinuationError(data?.message);
+    fnRenderContinuation(ctx);
+    document.getElementById('fn-cont-update')?.focus({preventScroll:true});
+  }
+}
+
+async function fnContinuationCheckout(){
+  const ctx = FN.continuation;
+  const result = ctx?.state?.result;
+  if(!result || result.paid || result.payment_pending || ctx.busy || !fnContinuationCurrent(ctx)) return;
+  ctx.busy = true;
+  ctx.error = '';
+  const button = document.getElementById('fn-cont-buy');
+  if(button){
+    button.disabled = true;
+    button.textContent = fnContinuationText(['Открываем оплату…', 'Opening checkout…']);
+  }
+  const data = await api('/funnel/checkout', 'POST', {
+    spread_id: result.id, view_key: result.view_key, email: result.email, plan: 'upsell', agree: true, utm: fnUtm()
+  }, true);
+  ctx.busy = false;
+  if(!fnContinuationCurrent(ctx)) return;
+  if(data?.invoice_url){
+    if(bridge.isWeb){
+      location.href = data.invoice_url;
+      return;
+    }
+    bridge.openLink(data.invoice_url);
+  }
+  if(data?.invoice_url || data?.already_paid || data?.message === 'payment_pending'){
+    result.payment_pending = true;
+    fnRenderContinuation(ctx);
+    await fnRefreshContinuation(ctx);
+  }else{
+    ctx.error = fnContinuationError(data?.message);
+    fnRenderContinuation(ctx);
+  }
 }
 
 /* ============================================================
@@ -9329,11 +9619,10 @@ function fnUpTitles(o){
 
 async function fnLoadUpsell(){
   const box = document.getElementById('fn-up');
-  if(!box || !FN.id || !FN.k) return;
+  if(!box || !FN.id || (!FN.k && isGuest())) return;
   const baseId = FN.id;
-  box.innerHTML = `<div class="fn-up-wait"><span class="spin"></span>${esc('Оракул смотрит, что ещё карты говорят о вашей ситуации…')}</div>`;
   const res = await api('/funnel/upsell/offer', 'POST', { spread_id: FN.id, view_key: FN.k }, true);
-  if(FN.id !== baseId) return;                       /* человек уже ушёл к другому раскладу */
+  if(FN.id !== baseId || S.view !== 'table' || !FN.paidView) return;
   const cur = document.getElementById('fn-up');
   const o = res && res.success && res.offer;
   if(!cur) return;
@@ -9350,8 +9639,8 @@ function fnRenderUpsell(errText){
   const T = fnUpTitles(o);
   if(o.mode === 'energy'){
     box.innerHTML = `<div class="fn-up-card">
-      <div class="fn-up-eyebrow">${esc('Следующий шаг')}</div>
-      <div class="fn-up-title">${esc(T.t)}</div>
+      <div class="fn-up-eyebrow">${esc('Дополнительный расклад')}</div>
+      <h3 class="fn-up-title">${esc(T.t)}</h3>
       <p class="fn-up-sub">${esc(T.s)}</p>
       <button type="button" class="btn btn-brass btn-wide" onclick="fnUpsellEnergy()">${esc('Сделать расклад · ' + o.cost + ' ⚡')}</button>
       <p class="fn-up-note">${esc('Энергия спишется из вашей подписки — доплачивать ничего не нужно.')}</p>
@@ -9360,37 +9649,37 @@ function fnRenderUpsell(errText){
   }
   if(o.paid){
     box.innerHTML = `<div class="fn-up-card is-open">
-      <div class="fn-up-eyebrow">${esc('Открыто · копия уже на почте')}</div>
-      <div class="fn-up-title">${esc(T.t)}</div>
-      <div class="spread-out fn-up-cards">${(o.cards || []).map(id => `<img src="${CARD_IMG(id)}" alt="">`).join('')}</div>
-      <div class="reading fn-reveal">${clean(o.interpretation || '')}</div>
+      <div class="fn-up-eyebrow">Купленный дополнительный расклад</div>
+      <h3 class="fn-up-title">${esc(T.t)}</h3>
+      <button type="button" class="btn btn-line" onclick="fnOpenPaidReading(FN.up.spread_id)">Открыть дополнительный расклад</button>
     </div>`;
     return;
   }
-  const btn = o.one_click
-    ? ('Открыть за ' + o.price + ' ₽' + (o.card ? ' · ' + o.card : ''))
-    : ('Открыть за ' + o.price + ' ₽');
+  const btn = 'Открыть за ' + o.price + ' ₽';
   const note = o.one_click
-    ? 'Спишем с карты, которой вы только что оплатили, — вводить ничего не нужно. Разовая покупка, без подписки.'
+    ? 'Разовая покупка' + (o.card ? ' · ' + o.card : ' с сохранённой карты') + '. Без подписки.'
     : 'Разовая покупка, без подписки. Копия расклада придёт на почту.';
   box.innerHTML = `<div class="fn-up-card" id="fn-up-card">
-    <div class="fn-up-eyebrow">${esc('Карты уже легли · только для вас')}</div>
-    <div class="fn-up-title">${esc(T.t)}</div>
+    <div class="fn-up-eyebrow">Дополнительный расклад</div>
+    <h3 class="fn-up-title">${esc(T.t)}</h3>
     <p class="fn-up-sub">${esc(T.s)}</p>
-    <div class="spread-out fn-up-cards">${(o.cards || []).map(id => `<img src="${CARD_IMG(id)}" alt="">`).join('')}</div>
-    <div class="daily-teaser-text fn-up-teaser">${clean(o.teaser || '')}</div>
-    <div class="fn-err-top${errText ? ' is-on' : ''}" id="fn-up-err">${esc(errText || '')}</div>
-    <button type="button" class="btn btn-brass btn-wide" id="fn-up-btn" style="min-height:50px" onclick="fnBuyUpsell()">${esc(btn)}</button>
+    <details class="fn-up-preview"><summary>Посмотреть карты и отрывок</summary>
+      <div class="spread-out fn-up-cards">${(o.cards || []).map(id => `<img src="${CARD_IMG(id)}" alt="">`).join('')}</div>
+      <div class="daily-teaser-text fn-up-teaser">${clean(o.teaser || '')}</div>
+    </details>
+    <div role="status" class="fn-err-top${errText ? ' is-on' : ''}" id="fn-up-err">${esc(errText || '')}</div>
+    <button type="button" class="btn btn-line btn-wide" id="fn-up-btn" style="min-height:44px" onclick="fnBuyUpsell()">
+      ${esc(o.payment_pending ? 'Проверить оплату' : btn)}
+    </button>
     <p class="fn-up-note">${esc(note)} Нажимая кнопку, вы принимаете <a href="/oferta/" target="_blank" rel="noopener">оферту</a>.</p>
   </div>`;
 }
 
-function fnUpsellPaid(html){
-  const o = FN.up;
+function fnUpsellPaid(o){
   if(!o) return;
   o.paid = true;
-  o.interpretation = html || '';
-  fnRenderUpsell();
+  o.payment_pending = false;
+  if(S.view === 'table' && FN.up === o) fnRenderUpsell();
   try{ bridge.haptic('ok'); }catch(e){}
   try{
     const key = 'neo_funnel_goal_' + o.spread_id;
@@ -9406,6 +9695,15 @@ async function fnBuyUpsell(){
   const o = FN.up;
   if(!o || o.paid || o.busy) return;
   o.busy = true;
+  if(o.payment_pending){
+    const status = await api('/funnel/status/' + o.spread_id + '?k=' + encodeURIComponent(o.view_key), 'GET', null, true);
+    o.busy = false;
+    if(FN.up !== o || S.view !== 'table') return;
+    if(status?.paid){ fnUpsellPaid(o); return; }
+    if(status?.canceled || status?.payment_pending === false) o.payment_pending = false;
+    fnRenderUpsell(o.payment_pending ? 'Ждём подтверждения оплаты.' : 'Оплата отменена. Можно попробовать ещё раз.');
+    return;
+  }
   const btn = document.getElementById('fn-up-btn');
   const label = btn ? btn.textContent : '';
   const fail = (msg) => {
@@ -9420,16 +9718,23 @@ async function fnBuyUpsell(){
   /* 1) В 1 клик по сохранённой карте */
   if(o.one_click){
     const r = await api('/funnel/upsell/buy', 'POST', { spread_id: o.spread_id, view_key: o.view_key }, true);
-    if(r && r.success && r.paid){ o.busy = false; fnUpsellPaid(r.interpretation); return; }
+    if(r && r.success && r.paid){ o.busy = false; fnUpsellPaid(o); return; }
     if(r && r.success && r.pending){
+      o.payment_pending = true;
       for(let i = 0; i < 24; i++){
         await new Promise(res => setTimeout(res, 2500));
         const s = await api('/funnel/status/' + o.spread_id + '?k=' + encodeURIComponent(o.view_key), 'GET', null, true);
-        if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(s.interpretation); return; }
-        if(s && s.success && s.canceled) break;
+        if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(o); return; }
+        if(FN.up !== o || S.view !== 'table'){ o.busy = false; return; }
+        if(s?.canceled){ o.payment_pending = false; break; }
+      }
+      if(o.payment_pending){
+        o.busy = false;
+        fnRenderUpsell('Ждём подтверждения оплаты.');
+        return;
       }
     }
-    /* иначе — обычная оплата ниже */
+    /* Если банк отменил платёж, можно повторить его через кассу. */
   }
 
   /* 2) Обычная оплата через ЮKassa */
@@ -9439,12 +9744,21 @@ async function fnBuyUpsell(){
   const d = await api('/funnel/checkout', 'POST', { spread_id: o.spread_id, view_key: o.view_key, email: email, plan: 'upsell', agree: true, utm: fnUtm() }, true);
   if(d && d.success && d.already_paid){
     const s = await api('/funnel/status/' + o.spread_id + '?k=' + encodeURIComponent(o.view_key), 'GET', null, true);
-    if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(s.interpretation); return; }
+    if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(o); return; }
+  }
+  if(d?.message === 'payment_pending' || d?.already_paid){
+    o.payment_pending = true;
+    o.busy = false;
+    if(FN.up === o && S.view === 'table') fnRenderUpsell('Ждём подтверждения оплаты.');
+    return;
   }
   if(!(d && d.success && d.invoice_url)){ fail('Не удалось создать оплату, попробуйте ещё раз'); return; }
   if(bridge.isWeb){
     /* После оплаты ЮKassa вернёт на ?paid_spread=<этот расклад> — он откроется целиком. */
     FN.id = o.spread_id; FN.k = o.view_key; FN.q = fnUpTitles(o).t; FN.picked = o.cards || [];
+    FN.type = o.kind;
+    FN.matrixPts = null;
+    FN.paymentPending = true;
     fnSave();
     location.href = d.invoice_url;
     return;
@@ -9454,7 +9768,7 @@ async function fnBuyUpsell(){
   for(let i = 0; i < 72; i++){
     await new Promise(res => setTimeout(res, 2500));
     const s = await api('/funnel/status/' + o.spread_id + '?k=' + encodeURIComponent(o.view_key), 'GET', null, true);
-    if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(s.interpretation); return; }
+    if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(o); return; }
     if(s && s.success && s.canceled) break;
   }
   fail('Оплата не подтвердилась. Если вы оплатили — расклад придёт на почту.');
@@ -10334,6 +10648,13 @@ function fnCollect(form){
 function fnActions(show){
   const a = document.getElementById('tb-actions');
   if(a) a.style.display = show ? 'flex' : 'none';
+  if(!show){
+    document.getElementById('fn-after').hidden = true;
+    document.getElementById('tb-parent-reading').hidden = true;
+    document.getElementById('tb-reading-label').hidden = false;
+    document.getElementById('tb-paid-heading').hidden = true;
+    document.getElementById('tb-preview-head').hidden = false;
+  }
 }
 function tbDiscuss(){ if(FN.paidView) return funnelDiscuss(); discussSpread(); }
 
