@@ -4,8 +4,46 @@
   <meta charset="UTF-8">
   <meta name="yandex-verification" content="4829483e1c30ff58" />
   <meta name="theme-color" content="#000000" id="meta-theme-color">
+  <script>
+  /* Тестовый режим изолирует данные вкладки до инициализации кабинета и счётчиков. */
+  const NEO_QA = (() => {
+    let session = null;
+    let token = '';
+    let previous = '';
+    let hasEntry = false;
+    const fragment = new URLSearchParams(location.hash.slice(1));
+    try { session = window.sessionStorage; } catch(e){}
+    try { previous = session?.getItem('neo_qa_link') || ''; } catch(e){}
+    if(fragment.has('qa')){
+      hasEntry = true;
+      token = fragment.get('qa') || 'invalid';
+      try { session?.setItem('neo_qa_link', token); } catch(e){}
+      history.replaceState(null, '', location.pathname + '#home');
+    }else{
+      token = previous;
+    }
+    if(!token) return null;
+    const prefix = 'neo_qa_run:';
+    const storage = {
+      getItem: key => session?.getItem(prefix + key) ?? null,
+      setItem: (key, value) => session?.setItem(prefix + key, value),
+      removeItem: key => session?.removeItem(prefix + key),
+    };
+    function reset(){
+      if(!session) return;
+      for(let i = session.length - 1; i >= 0; i--){
+        const key = session.key(i);
+        if(key?.startsWith(prefix)) session.removeItem(key);
+      }
+    }
+    if(hasEntry && token !== previous) reset();
+    return { token, storage, persistent: !!session, reset, exit: () => session?.removeItem('neo_qa_link') };
+  })();
+  const localStorage = NEO_QA ? NEO_QA.storage : window.localStorage;
+  const sessionStorage = NEO_QA ? NEO_QA.storage : window.sessionStorage;
+  </script>
   <script type="text/javascript">
-      (function(c,l,a,r,i,t,y){
+      if(!NEO_QA) (function(c,l,a,r,i,t,y){
           c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
           t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
           y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
@@ -38,6 +76,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <!-- neotaro-metrika -->
 <script type="text/javascript">
+   if(!NEO_QA){
    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
    m[i].l=1*new Date();
    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
@@ -155,6 +194,7 @@
 
      return function(which){ return get(which === 'last' ? K_LAST : K_FIRST) || {}; };
    })();
+   }
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/111297297" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /neotaro-metrika -->
@@ -1518,6 +1558,25 @@ html[data-theme="dawn"] .fn-khole-warn{color:#8A3A1E}
 .fn-up{margin-top:22px}
 .fn-up:empty{display:none}
 
+
+.qa-tools[hidden],.qa-tools button[hidden]{display:none}
+.qa-tools{position:fixed;z-index:12000;bottom:max(12px,env(safe-area-inset-bottom));left:50%;
+  transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:5px 12px;padding:6px 12px;
+  border:1px solid var(--line);border-radius:14px;background:#171c28;color:#f2ede0;font-size:12px;
+  box-shadow:0 8px 24px #0006}
+.qa-tools.is-inline{position:static;transform:none;width:auto;max-width:none;flex-shrink:0;padding:0 12px;
+  border-width:0 0 1px;border-radius:0;box-shadow:none}
+.qa-tools button{color:inherit;background:transparent;border:0;cursor:pointer;text-decoration:underline;padding:6px 3px;min-height:36px}
+.qa-tools #qa-tools-message{max-width:36ch}
+.qa-payment{width:min(420px,calc(100% - 32px));max-width:none;box-sizing:border-box;margin:auto;
+  border:1px solid var(--line);border-radius:18px;padding:22px;color:var(--ivory);background:#10141f}
+.qa-payment::backdrop{background:rgba(4,6,12,.74)}
+.qa-payment h2{font:400 25px/1.2 var(--serif);margin:0 0 8px}
+.qa-payment p{margin:0 0 14px;color:var(--mist);font-size:14px}
+.qa-payment .btn{min-height:44px}
+html[data-theme="dawn"] .qa-payment{background:#fdf9f0}
+
 /* Оплаченный разбор и дальнейшие действия */
 .fn-reading-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
 .fn-reading-head h1,.fn-follow-title{margin:0;font-family:var(--serif);font-size:clamp(21px,4vw,28px);font-weight:400;line-height:1.22;color:var(--ivory);outline:0}
@@ -2043,6 +2102,7 @@ html[data-theme="dawn"] .ret-gift b{color:#5C3D08}
   window.addEventListener('error', onEarlyError);
   window.addEventListener('unhandledrejection', onEarlyRejection);
 
+  if(NEO_QA) return;
   if (!window.Sentry) {
     window.Sentry = {
       __isStub: true,
@@ -2222,6 +2282,22 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
 </style>
 </head>
 <body class="bg-space-900 min-h-screen">
+  <aside class="qa-tools" id="qa-tools" aria-label="Тестовый режим" hidden>
+    <span id="qa-tools-message" role="status"></span>
+    <button type="button" id="qa-new" onclick="qaRestart()" hidden>Новый прогон</button>
+    <button type="button" id="qa-resolve" hidden>Завершить платёж</button>
+    <button type="button" onclick="qaRestart(true)">Выйти</button>
+  </aside>
+  <dialog id="qa-payment" class="qa-payment" aria-labelledby="qa-payment-title">
+    <h2 id="qa-payment-title">Тестовая оплата</h2>
+    <p id="qa-payment-description"></p>
+    <p>Выберите ответ кассы. Списаний не будет.</p>
+    <div class="stack">
+      <button class="btn btn-brass btn-wide" type="button" data-qa-result="paid">Успех</button>
+      <button class="btn btn-line btn-wide" type="button" data-qa-result="pending">В ожидании</button>
+      <button class="btn btn-quiet btn-wide" type="button" data-qa-result="canceled">Отмена</button>
+    </div>
+  </dialog>
 <!-- ==================== КАБИНЕТ (NIGHT ATLAS) ==================== -->
 <div class="gate" id="gate-boot">
   <div class="gate-seal">
@@ -4197,6 +4273,7 @@ function ynUnlock(){
 
 function requireAuth(intent){
   if(!isGuest()) return false;
+  if(NEO_QA){ toast('Вход недоступен в тестовом режиме'); return true; }
   try {
     if(intent){
       intent.ts = Date.now();
@@ -4210,6 +4287,7 @@ function requireAuth(intent){
 }
 
 async function api(endpoint, method = 'POST', data = {}, silent = false){
+  if(NEO_QA) return qaApi(endpoint, method, data);
   const isHeavy = /\/funnel\/(spread|checkout|upsell)|\/tarot\/(daily|spread|synastry)|\/free\/(daily|yesno)|\/chat\/send|\/astro\/(chart|reading)|\/matrix\/(get|reading|compat)|\/stt\//.test(endpoint);
   const timeoutMs = isHeavy ? 45000 : 18000;
   const maxAttempts = isHeavy ? 2 : 3;
@@ -5643,7 +5721,265 @@ function absorbUser(d){
   }catch(e){}
 }
 
+
+/* Детерминированный провайдер для ручной проверки настоящих экранов воронки. */
+const QA_EMAIL = 'qa@example.invalid';
+const QA_STATE_KEY = 'checkout-fixtures';
+
+function qaState(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(QA_STATE_KEY));
+    if(saved && Array.isArray(saved.readings)) return saved;
+  }catch(e){}
+  return { readings: [], trialUsed: false };
+}
+
+function qaStore(state){
+  localStorage.setItem(QA_STATE_KEY, JSON.stringify(state));
+}
+
+function qaNavigate(params = {}){
+  const query = new URLSearchParams(params).toString();
+  location.replace(location.pathname + (query ? '?' + query : '') + (query ? '#table' : '#home'));
+}
+
+function qaRestart(exit = false){
+  NEO_QA.reset();
+  if(exit) NEO_QA.exit();
+  history.replaceState(null, '', location.pathname + '#home');
+  location.reload();
+}
+
+function qaResumePayment(reading){
+  qaNavigate({ paid_spread: reading.id, k: reading.key });
+}
+
+function qaCheckoutPage(state, reading){
+  const dialog = document.getElementById('qa-payment');
+  const title = reading.kind === 'reading' ? 'Основной расклад'
+    : reading.kind === 'addon' ? 'Дополнительный расклад' : 'Продолжение истории';
+  document.getElementById('qa-payment-description').textContent =
+    title + ' · ' + NEO_QA.data.plans[reading.plan].price + ' ₽';
+  for(const button of dialog.querySelectorAll('[data-qa-result]')){
+    button.onclick = () => {
+      reading.payment = button.dataset.qaResult;
+      if(reading.payment === 'paid') reading.paidAt = new Date().toISOString();
+      qaStore(state);
+      qaResumePayment(reading);
+    };
+  }
+  dialog.addEventListener('cancel', event => {
+    event.preventDefault();
+    dialog.querySelector('[data-qa-result="canceled"]').click();
+  }, { once:true });
+  dialog.showModal();
+}
+
+async function qaBoot(){
+  const panel = document.getElementById('qa-tools');
+  const message = document.getElementById('qa-tools-message');
+  panel.hidden = false;
+  const status = document.getElementById('boot-status');
+  status.textContent = 'Проверяем тестовую ссылку…';
+  const fail = text => {
+    status.textContent = text;
+    document.querySelector('#gate-boot .spin').hidden = true;
+    return false;
+  };
+  try{
+    if(!NEO_QA.persistent) throw new Error('storage');
+    const response = await fetch(API_URL + '/qa/session', {
+      method:'POST', headers:{'Content-Type':'application/json'}, credentials:'omit',
+      cache:'no-store', redirect:'error', signal:AbortSignal.timeout(10000),
+      body:JSON.stringify({token:NEO_QA.token, lang:guestLang()})
+    });
+    if(response.status === 403){
+      return fail('Ссылка недействительна или истекла. Получите новую ссылку.');
+    }
+    const data = await response.json();
+    if(!response.ok || !data.success || !data.expires_at) throw new Error('validation');
+    NEO_QA.data = data;
+    message.textContent = 'Тестовый режим · 0 ₽';
+    document.getElementById('qa-new').hidden = false;
+    const invoice = new URLSearchParams(location.search).get('qa_invoice');
+    const state = qaState();
+    if(invoice){
+      const reading = state.readings.find(row => String(row.id) === invoice);
+      if(reading?.plan && reading.payment !== 'paid' && NEO_QA.data.plans[reading.plan]){
+        qaCheckoutPage(state, reading);
+      }else if(reading?.payment === 'paid'){
+        qaResumePayment(reading);
+      }else{
+        return fail('Тестовая оплата недоступна. Начните новый прогон.');
+      }
+      return false;
+    }
+    document.getElementById('scroll').before(panel);
+    panel.classList.add('is-inline');
+    const pending = state.readings.find(row => row.payment === 'pending');
+    const resolve = document.getElementById('qa-resolve');
+    resolve.hidden = !pending;
+    if(pending){
+      resolve.onclick = () => qaNavigate({ qa_invoice: pending.id });
+    }
+    return true;
+  }catch(e){
+    return fail('Не удалось открыть тестовый режим. Проверьте ссылку или обновите страницу.');
+  }
+}
+
+function qaReading(state, options){
+  const reading = {
+    id: Date.now() + state.readings.length,
+    key: crypto.randomUUID(),
+    payment: 'new',
+    cards: [18, 2, 11],
+    ...options,
+  };
+  state.readings.push(reading);
+  qaStore(state);
+  return reading;
+}
+
+function qaFixtureStatus(reading, plans, state){
+  const paid = reading.payment === 'paid';
+  return {
+    success:true, paid, canceled:reading.payment === 'canceled', payment_pending:reading.payment === 'pending',
+    reading_kind:reading.kind, parent_id:reading.parentId, spread_type:reading.type,
+    plan:reading.plan, paid_at:reading.paidAt, cards:reading.cards, question:reading.question,
+    teaser:reading.preview, plans, track_first_purchase:false, track_purchase:false,
+    ...(paid ? {
+      interpretation:reading.full, energy:qaEnergy(state),
+      neotaro_token:'qa-local-only', email:QA_EMAIL,
+      user:{id:-1, first_name:'Тестовый гость', email:QA_EMAIL}
+    } : {}),
+  };
+}
+
+function qaPlan(state){
+  return state.readings.find(row => row.kind === 'reading' && row.payment === 'paid')?.plan || '';
+}
+
+function qaEnergy(state){
+  const plan = qaPlan(state);
+  return plan ? (NEO_QA.data.plans[plan]?.energy || 0) : 0;
+}
+
+function qaContinuationTerms(state){
+  const plan = qaPlan(state);
+  if((plan === 'tripwire' || plan === 'tripwire_save') && !state.trialUsed) return { mode:'trial' };
+  if(plan === 'pro') return { mode:'energy', cost:7 };
+  return { mode:'purchase', price:NEO_QA.data.plans.upsell.price };
+}
+
+function qaContinuationResult(reading){
+  const paid = reading.payment === 'paid';
+  return {
+    success:true, available:true, result:{
+      id:reading.id, paid, cards:reading.cards, update_text:reading.question,
+      ...(paid ? {interpretation:reading.full} : {
+        preview:reading.preview, view_key:reading.key, email:QA_EMAIL,
+        price:NEO_QA.data.plans.upsell.price, payment_pending:reading.payment === 'pending',
+      })
+    }
+  };
+}
+
+function qaApi(endpoint, method, data){
+  const unavailable = { success:false, message:'qa_unsupported' };
+  if(!NEO_QA.data || Date.now() >= NEO_QA.data.expires_at * 1000) return unavailable;
+  const route = endpoint.split('?')[0];
+  const {spreads, plans} = NEO_QA.data;
+  const state = qaState();
+  const find = id => state.readings.find(row => row.id === Number(id));
+  const preview = '<p><b>Первая карта · Луна</b><br>Сначала стоит уточнить, в чём у вас расходятся ожидания. Это пример текста для проверки экрана.</p>';
+  const full = preview + '<p><b>Вторая карта · Верховная Жрица</b><br>Отделите то, что уже известно, от своих предположений. Запишите один факт, который вы можете уточнить.</p>' +
+    '<p><b>Третья карта · Справедливость</b><br>Начните с конкретного вопроса и дайте собеседнику время ответить.</p>';
+  if(route === '/spreads' && method === 'GET') return { success:true, spreads };
+  if(route === '/get-user') return {
+    success:true, first_name:'Тестовый гость', energy:qaEnergy(state), has_purchased:!!qaPlan(state), language_code:guestLang()
+  };
+  if(route === '/subscription/status'){
+    const plan = qaPlan(state);
+    return { success:true, plan:plan === 'plus' ? 'plus' : plan ? 'pro' : 'free' };
+  }
+  if(route === '/funnel/spread' && method === 'POST'){
+    const type = data.spread_type;
+    if(!spreads.some(spread => spread.id === type)) return unavailable;
+    const reading = qaReading(state, {
+      kind:'reading', type, question:String(data.question || '').slice(0,2000),
+      subject:String(data.subject_name || '').trim().slice(0,40),
+      cards:Array.isArray(data.cards) && data.cards.length ? data.cards : [18,2,11],
+      preview, full
+    });
+    return { success:true, spread_id:reading.id, view_key:reading.key, cards:reading.cards, teaser:preview, plans };
+  }
+  if(route === '/funnel/checkout' && method === 'POST'){
+    const reading = find(data.spread_id);
+    if(!reading || reading.key !== data.view_key) return { success:false, message:'not_found' };
+    if(reading.payment === 'paid') return { success:true, already_paid:true };
+    if(reading.payment === 'pending') return { success:false, message:'payment_pending' };
+    if(!Object.hasOwn(plans,data.plan) || (reading.kind === 'reading') === (data.plan === 'upsell')) return unavailable;
+    if(!data.agree) return { success:false, message:'need_agree' };
+    reading.plan = data.plan;
+    qaStore(state);
+    return { success:true, invoice_url:location.pathname + '?qa_invoice=' + reading.id };
+  }
+  if(route.startsWith('/funnel/status/') && method === 'GET'){
+    const reading = find(route.split('/').at(-1));
+    const key = new URLSearchParams(endpoint.split('?')[1]).get('k');
+    if(!reading || (reading.key !== key && !(bridge.token && reading.payment === 'paid'))) return { success:false, message:'not_found' };
+    return qaFixtureStatus(reading, plans, state);
+  }
+  if(route === '/funnel/upsell/offer' && method === 'POST'){
+    const base = find(data.spread_id);
+    if(!base || base.payment !== 'paid' || base.kind !== 'reading' ||
+       (!base.subject && !['compat','feelings','conflict'].includes(base.type))) return { success:true, offer:null };
+    const kind = base.type === 'compat' ? 'feelings' : 'compat';
+    const name = base.subject || 'Александр';
+    if(base.plan === 'pro' || base.plan === 'plus'){
+      return { success:true, offer:{ mode:'energy', kind, name, cost:kind === 'compat' ? 7 : 4 } };
+    }
+    const addOn = state.readings.find(row => row.parentId === base.id && row.kind === 'addon') || qaReading(state, {
+      kind:'addon', type:kind, parentId:base.id, preview, full, question:kind === 'compat' ? 'Совместимость: ' + name : 'Что чувствует ' + name
+    });
+    return { success:true, offer:{
+      mode:'buy', kind, name, spread_id:addOn.id, view_key:addOn.key, price:plans.upsell.price,
+      email:QA_EMAIL, one_click:false, paid:addOn.payment === 'paid', payment_pending:addOn.payment === 'pending',
+      teaser:preview, cards:addOn.cards
+    } };
+  }
+  if(route.startsWith('/funnel/continuation/') && method === 'GET'){
+    const base = find(route.split('/').at(-1));
+    if(!base || base.payment !== 'paid' || base.type === 'matrix') return { success:true, available:false };
+    const next = state.readings.find(row => row.parentId === base.id && row.kind === 'followup');
+    return next ? qaContinuationResult(next) : { success:true, available:true, terms:qaContinuationTerms(state) };
+  }
+  if(route === '/funnel/continuation' && method === 'POST'){
+    const base = find(data.spread_id);
+    if(!base || base.payment !== 'paid') return unavailable;
+    const existing = state.readings.find(row => row.parentId === base.id && row.kind === 'followup');
+    if(existing) return qaContinuationResult(existing);
+    const terms = qaContinuationTerms(state);
+    if(data.mode !== terms.mode) return { success:false, message:'terms_changed', terms };
+    const paid = terms.mode !== 'purchase';
+    if(terms.mode === 'trial') state.trialUsed = true;
+    return qaContinuationResult(qaReading(state, {
+      kind:'followup', type:'followup', parentId:base.id, question:String(data.update_text || '').slice(0,500),
+      payment:paid ? 'paid' : 'new', paidAt:paid ? new Date().toISOString() : null, preview, full
+    }));
+  }
+  if(route === '/tarot/history' && method === 'GET'){
+    return { success:true, has_more:false, spreads:state.readings.filter(row => row.payment === 'paid').reverse().map(row => ({
+      id:row.id, spread_type:row.type, reading_kind:row.kind, funnel_reading:true, question:row.question,
+      cards:row.cards, interpretation:row.full, created_at:row.paidAt
+    })) };
+  }
+  return unavailable;
+}
+
 async function boot(){
+  if(NEO_QA && !await qaBoot()) return;
   await bridge.ready();
 
   /* 1. ПЕРЕХВАТ ТОКЕНА АВТО-ВХОДА ИЗ ПИСЬМА (?auth_token=...) И СТАРЫХ ССЫЛОК (#/profile/subscription) */
@@ -8038,6 +8374,7 @@ function vSwipes(lock){
 
 /* multipart-аналог api(): Content-Type убираем, чтобы браузер сам поставил boundary */
 async function apiUpload(endpoint, blob, filename, fields){
+  if(NEO_QA) return { success:false, message:'qa_unsupported' };
   const h = bridge.headers();
   delete h['Content-Type'];
   const fd = new FormData();
@@ -8390,7 +8727,7 @@ async function pwaInstall(){
 
 /* --- service worker --- */
 (function(){
-  if(!('serviceWorker' in navigator)) return;
+  if(NEO_QA || !('serviceWorker' in navigator)) return;
   const hadController = !!navigator.serviceWorker.controller;
 
   window.addEventListener('load', function(){
@@ -8987,8 +9324,8 @@ function fnPickTier(plan){
 
 function funnelFogHtml(errText){
   const ru = FN_RU();
-  let saved = '';
-  try{ saved = localStorage.getItem('neo_email') || ((bridge.webUser && bridge.webUser.email) || ''); }catch(e){}
+  let saved = NEO_QA ? QA_EMAIL : '';
+  try{ saved = localStorage.getItem('neo_email') || bridge.webUser?.email || saved; }catch(e){}
   FN_SELECTED_PLAN = 'tripwire';
   const twPrice = fnPlanPrice('tripwire'), twOld = 390;
   const proPrice = fnPlanPrice('pro');
@@ -9233,10 +9570,10 @@ async function funnelResume(manual, fromHistory = false){
     teaser: '', paidView: false, continuation: null, up: null
   });
   fnShowTable(FN.q, FN.picked, FN.matrixPts);
-  await funnelPoll(FN.paymentPending);
+  await funnelPoll(FN.paymentPending && !NEO_QA);
 }
 
-async function funnelPoll(waitForPayment = true){
+async function funnelPoll(waitForPayment = !NEO_QA){
   if(FN.polling || !FN.id) return;
   FN.polling = true;
   const id = FN.id;
@@ -11510,7 +11847,7 @@ function fnMistWatch(){
 <!-- ==================== NEOTARO UX SESSION RECORDER ==================== -->
 <script id="neo-ux-recorder">
 (function(){
-  if (window.__neoUxActive) return;
+  if (NEO_QA || window.__neoUxActive) return;
   window.__neoUxActive = true;
 
   var SID_KEY = 'neo_ux_sid';
@@ -11783,6 +12120,7 @@ function fnMistWatch(){
 <!-- ==================== NEOTARO SMART OUTAGE GUARD ==================== -->
 <script id="neo-outage-guard">
 (function(){
+  if(NEO_QA) return;
   var failStreak = 0;
   var isDownShown = false;
   var verifyInFlight = false;
