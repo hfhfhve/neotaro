@@ -897,7 +897,7 @@ body.nav-open{overflow:hidden}
             <tr><th>Учёт вашей истории и имён</th><td class="no">Нет, один шаблон на всех</td><td>Да</td><td class="us">Да, разбор строго по вашей анкете</td></tr>
             <tr><th>Связка всех карт расклада</th><td class="no">Отдельные справки по картам</td><td>Зависит от мастера</td><td class="us">Глубокий синтез всех позиций</td></tr>
             <tr><th>Скорость ответа</th><td>Сразу</td><td class="no">Ждать от 2 часов до 3 дней</td><td class="us">Готово за 1 минуту в любое время</td></tr>
-            <tr><th>Уточняющие вопросы по раскладу</th><td class="no">Нельзя</td><td class="no">Доплата за каждый вопрос</td><td class="us">Сразу в чате с Оракулом (+3 ⚡ в подарок)</td></tr>
+            <tr><th>Уточняющие вопросы по раскладу</th><td class="no">Нельзя</td><td class="no">Доплата за каждый вопрос</td><td class="us">Сразу в чате с Оракулом (5 ⚡ с полным разбором)</td></tr>
             <tr><th>Копия разбора на почту</th><td class="no">Нет</td><td class="no">Теряется в переписке</td><td class="us">Сохраняется в письме и в кабинете</td></tr>
             <tr><th>Стоимость расклада</th><td>Общие фразы</td><td class="no">1 500 — 5 000 ₽</td><td class="us">Полный личный разбор от 199 ₽</td></tr>
           </tbody>
@@ -965,7 +965,7 @@ body.nav-open{overflow:hidden}
       <div class="faq r" style="--i:2">
         <details><summary>Нужно ли регистрироваться, чтобы сделать расклад?</summary><p class="a">Нет. Вы сразу выбираете расклад, заполняете анкету вашей ситуации и получаете начало разбора без регистрации и паролей. При открытии полного разбора вы просто указываете почту — туда автоматически придёт полная копия вашего расклада.</p></details>
         <details><summary>Зачем в раскладе анкета с именами и деталями?</summary><p class="a">Одна и та же карта Таро значит совершенно разное для супругов в ссоре и для людей, которые только познакомились. Имена, статус отношений и ваша предыстория позволяют Оракулу дать разбор именно вашей ситуации, а не общую вырезку из учебника.</p></details>
-        <details><summary>Как быстро я получу полный разбор и как его оплатить?</summary><p class="a">Карты раскладываются и читаются за 1 минуту. Вы сразу видите выпавшие арканы и первую часть толкования, а полный разбор всех позиций (99 ₽ + 3 бонусные энергии для вопросов Оракулу, либо подписка ПЛЮС) открывается мгновенно после оплаты картой или через СБП.</p></details>
+    <details><summary>Как быстро я получу полный разбор и как его оплатить?</summary><p class="a">Выпавшие карты и начало толкования доступны бесплатно. Полный разбор с 5 энергиями для чата стоит от 199 ₽. Также можно выбрать доступ ПРО на месяц. Цена и условия выбранного варианта указаны перед оплатой. Оплата проходит через ЮKassa — доступ откроется после её подтверждения.</p></details>
         <details><summary>Можно ли задать уточняющие вопросы после расклада?</summary><p class="a">Да! К открытому раскладу вы получаете бонусную энергию и можете сразу перейти в чат с Оракулом. Он уже видит ваш расклад, помнит все имена и ответит на любые уточнения.</p></details>
         <details><summary>Придёт ли расклад мне на почту?</summary><p class="a">Да, сразу после оплаты мы отправляем полный текст вашего разбора и прямую ссылку на него на указанный вами email, чтобы вы могли перечитать его в любой момент.</p></details>
         <details><summary>Это заменяет консультацию специалиста?</summary><p class="a">Нет. NEOTARO — аналитический, рефлексивный и развлекательный инструмент. Карты помогают взглянуть на ситуацию со стороны, но не ставят медицинских диагнозов и не заменяют врача, психотерапевта или юриста.</p></details>
@@ -1233,16 +1233,19 @@ $$('a[href^="/login/"], a[href*="/app/"]').forEach(function(a){
   });
 });
 
-/* ── Умный роутер вопроса с первого экрана прямо в анкету расклада в /app/ ──
-   Сохраняет вопрос в черновик анкеты (neo_form_<id>), который /app/ читает при открытии! */
+/* Выбираем рекомендуемый расклад и передаём вопрос в пределах вкладки. */
 function detectSpreadByQuestion(text){
   var s = String(text || '').toLowerCase();
-  if(/совместим|подходим|пара|по дате/.test(s)) return { hash:'compat', id:'compat', field:'q' };
-  if(/чувств|любит|думает|мысли|скучает|молчит|вернется|вернётся|измен|отношени/.test(s)) return { hash:'feelings', id:'feelings', field:'want' };
-  if(/ссор|конфликт|помирим|обид/.test(s)) return { hash:'conflict', id:'conflict_resolution', field:'goal' };
-  if(/отпуст|забыть|бывш/.test(s)) return { hash:'let-go', id:'let_go', field:'q' };
-  if(/^(стоит ли|получится ли|будет ли|да или нет|напишет ли|позвонит ли|сдам ли|куплю ли|перееду ли)/.test(s)) return { hash:'yes-no', id:'one-card', field:'q' };
-  return { hash:'past-present', id:'past-present', field:'q' };
+  if(/совместим|подходим ли|подходим друг другу|по дат[еа]/.test(s)) return { hash:'compat', id:'compat' };
+  if(/ссор|конфликт|помири|поссор|поругал|обид/.test(s)) return { hash:'conflict', id:'conflict_resolution' };
+  if(/отпуст|забыть|пережить расставан/.test(s)) return { hash:'let-go', id:'let_go' };
+  if(/чувств|любит|думает|мысли|скучает|молчит|верн[её]тся|измен|отношени/.test(s)) return { hash:'feelings', id:'feelings' };
+  if(/(^|\s)ли(?=\s|[?.,!]|$)|да или нет/.test(s)) return { hash:'yes-no', id:'one-card' };
+  return { hash:'past-present', id:'past-present' };
+}
+
+function handOffQuestion(id, question){
+  try{ sessionStorage.setItem('neo_start_question', JSON.stringify({ id: id, question: question })); }catch(e){}
 }
 
 (function(){
@@ -1263,12 +1266,7 @@ function detectSpreadByQuestion(text){
     }
     showErr('');
     var route = detectSpreadByQuestion(t);
-    try{
-      var draftKey = 'neo_form_' + route.id;
-      var cur = JSON.parse(localStorage.getItem(draftKey) || '{}') || {};
-      cur[route.field] = t.slice(0, 280);
-      localStorage.setItem(draftKey, JSON.stringify(cur));
-    }catch(err){}
+    handOffQuestion(route.id, t);
     ym('hero_ask_submit', { target_spread: route.hash });
     location.href = buildAppUrl('#' + route.hash);
   });
@@ -1363,6 +1361,7 @@ if(go) go.addEventListener('click',function(){
       if(m==='limit'){
         setNote('Бесплатные быстрые вопросы на сегодня закончились — переходим к полному раскладу…',true);
         ym('yesno_limit');
+          handOffQuestion('one-card', text);
         setTimeout(function(){ location.href = buildAppUrl('#yes-no'); }, 900);
       }
       else if(m==='bad_question'){ setNote('Переформулируйте вопрос — колода его не поняла.',true); }

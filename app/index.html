@@ -5677,7 +5677,7 @@ async function boot(){
   showYnReading();
   funnelResume();
 }
-document.addEventListener('DOMContentLoaded', () => { drawTicks(); applyStrings(); boot(); setTimeout(funnelResume, 2500); });
+document.addEventListener('DOMContentLoaded', () => { drawTicks(); applyStrings(); boot(); });
 </script>
 
 <script>
@@ -6019,7 +6019,11 @@ async function renderSpreads(){
       </button>`;
     });
   });
-  box.innerHTML = pendingQHtml() + html;
+  const saved = fnLoad();
+  const resume = saved && saved.id && saved.k
+    ? `<button type="button" class="btn btn-brass btn-wide" onclick="fnResumeLast()">${esc(FN_RU() ? 'Продолжить последний расклад' : 'Continue your last reading')}</button>`
+    : '';
+  box.innerHTML = resume + pendingQHtml() + html;
 }
 function lockedSpread(){ toast(tt('premium_note')); go('shop'); }
 function pickSpread(id){
@@ -6032,8 +6036,9 @@ function pickSpread(id){
   document.getElementById('tb-price').textContent = isGuest()
     ? (lang === 'ru' ? 'личный расклад' : 'personal reading')
     : (s.price === 0 ? tt('free') : (s.price + ' ' + energyWord(s.price)));
-  document.getElementById('tb-q').value = S.pendingQ || '';
-  fnRenderForm(S.pendingQ || '');
+  const question = fnStartQuestion(id) || S.pendingQ || '';
+  document.getElementById('tb-q').value = question;
+  fnRenderForm(question);
   S.pendingQ = '';
   const hq = document.getElementById('hm-q'); if(hq) hq.value = '';
   document.querySelectorAll('#v-home .hm-chip').forEach(b => b.classList.remove('is-on'));
@@ -8571,7 +8576,7 @@ const FN = { id: null, k: null, q: '', picked: [], type: '', matrixPts: null, po
 const FN_RU = () => (typeof lang === 'undefined' || lang === 'ru');
 
 function fnSave(){
-  try{ localStorage.setItem('neo_funnel', JSON.stringify({ id: FN.id, k: FN.k, q: FN.q, picked: FN.picked, type: FN.type || (S.spread && S.spread.id), matrixPts: FN.matrixPts })); }catch(e){}
+  try{ localStorage.setItem('neo_funnel', JSON.stringify({ id: FN.id, k: FN.k, q: FN.q, picked: FN.picked, type: FN.type || (S.spread && S.spread.id), matrixPts: FN.matrixPts, paymentPending: !!FN.paymentPending })); }catch(e){}
 }
 function fnLoad(){
   try{ return JSON.parse(localStorage.getItem('neo_funnel') || 'null'); }catch(e){ return null; }
@@ -8778,9 +8783,7 @@ async function funnelDeal(q, extra){
   if(window.neoGoal) neoGoal('funnel_spread_start', { spread: S.spread.id });
 
   const wait = new Promise(r => setTimeout(r, 3200));
-  let savedMail = '';
-  try{ savedMail = localStorage.getItem('neo_email') || ''; }catch(e){}
-  const body = { spread_type: S.spread.id, cards: picked, question: q, lang: lang || 'ru', guest_email: savedMail };
+  const body = { spread_type: S.spread.id, cards: picked, question: q, lang: lang || 'ru' };
   if(extra){ body.details = extra.details; body.subject_name = extra.subject || ''; if(extra.compat) body.compat = extra.compat; }
   body.req_id = fnReqId(q, picked);
 
@@ -8809,7 +8812,7 @@ async function funnelDeal(q, extra){
     S.spread.reqBase = null;
     FN.id = data.spread_id; FN.k = data.view_key; FN.q = shown; FN.picked = picked;
     FN.plans = data.plans || FN.plans || null;
-    FN.shownAt = Date.now(); FN.paidView = false; FN.up = null;
+    FN.shownAt = Date.now(); FN.paidView = false; FN.paymentPending = false; FN.up = null;
     fnSave();
     funnelRenderLocked(data.teaser || '');
     if(window.neoGoal) neoGoal('funnel_teaser_shown', { spread: S.spread.id });
@@ -8844,22 +8847,10 @@ async function funnelDeal(q, extra){
   }
 }
 
-/* Вернуть человека к его последнему (неоплаченному) раскладу — с тем же тизером и кассой. */
-async function fnResumeLast(){
-  const s = fnLoad();
-  if(!s || !s.id) return;
-  const d = await api('/funnel/status/' + s.id + '?k=' + encodeURIComponent(s.k || ''), 'GET', null, true);
-  if(!(d && d.success)){ try{ localStorage.removeItem('neo_funnel'); }catch(e){} toast(tt('err')); return; }
-  FN.id = s.id; FN.k = s.k;
-  FN.q = s.q || fnShortQ(d.question);
-  FN.picked = d.cards || s.picked || [];
-  FN.type = d.spread_type || s.type || '';
-  FN.matrixPts = d.matrix_points || s.matrixPts || null;
-  if(d.plans) FN.plans = d.plans;
-  if(d.paid){ funnelRenderPaid(d); return; }
-  fnShowTable(FN.q, FN.picked, FN.matrixPts);
-  funnelRenderLocked(d.teaser || '');
-  if(window.neoGoal) neoGoal('funnel_limit_resume');
+function fnResumeLast(){
+  if(!fnLoad()) return;
+  fnShowTable('', [], null);
+  funnelResume(true);
 }
 
 let FN_SELECTED_PLAN = 'tripwire';
@@ -8979,7 +8970,7 @@ function funnelFogHtml(errText){
                 <ul class="fn-tier-list">
                   <li>${esc(twItem1)}</li>
                   <li>${esc(twItem2)}</li>
-                  <li>${esc(ru ? '+ 3 дня полного VIP-доступа ПРО в подарок' : '+ 3 days of full PRO access included')}</li>
+                  <li>${esc(ru ? '+ 3 дня доступа ПРО' : '+ 3 days of full PRO access included')}</li>
                 </ul>
               </div>
               <div class="fn-tier-pwrap">
@@ -9013,9 +9004,9 @@ function funnelFogHtml(errText){
           <div class="fn-email-wrap" id="fn-email-wrap">
             <div class="fn-err-top${errText ? ' is-on' : ''}" id="fn-err">${esc(errText || '')}</div>
             <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email"
-              placeholder="${esc(ru ? 'Ваш email для открытия и копии расклада' : 'Your email for the reading copy')}"
+              aria-label="${esc(ru ? 'Email для чека и копии расклада' : 'Email for your receipt and reading copy')}"
+                placeholder="${esc(ru ? 'Email для чека и копии расклада' : 'Email for your receipt and reading copy')}"
               value="${esc(saved)}"
-              onblur="fnSaveEmailInput(this.value)"
               oninput="this.classList.remove('is-err');var e=document.getElementById('fn-err');if(e)e.classList.remove('is-on')">
           </div>
 
@@ -9024,7 +9015,7 @@ function funnelFogHtml(errText){
           </button>
 
           <label class="fn-agree"><input type="checkbox" id="fn-agree" checked>
-            <span>${ru ? 'Принимаю <a href="/oferta/" target="_blank" rel="noopener">оферту</a>, <a href="/privacy/" target="_blank" rel="noopener">политику</a> и условия автопродления (отмена в 1 клик в Профиле)' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/privacy/" target="_blank" rel="noopener">privacy policy</a> and auto-renewal terms'}</span>
+            <span>${ru ? 'Принимаю <a href="/oferta/" target="_blank" rel="noopener">оферту</a>, <a href="/politika/" target="_blank" rel="noopener">политику</a> и условия автопродления (отмена в 1 клик в Профиле)' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and auto-renewal terms'}</span>
           </label>
         </div>
       </div>
@@ -9077,6 +9068,7 @@ function fnShowError(msg, focusEmail){
 }
 
 async function funnelPay(plan){
+  if(FN.paymentPending || FN.polling) return;
   const ru = FN_RU();
   const err = document.getElementById('fn-err');
   const email = ((document.getElementById('fn-email') || {}).value || '').trim().toLowerCase();
@@ -9102,7 +9094,12 @@ async function funnelPay(plan){
   const d = await api('/funnel/checkout', 'POST', { spread_id: FN.id, view_key: FN.k, email: email, plan: plan, agree: agree, utm: fnUtm() }, true);
   ['fn-submit-btn','fn-pay-tw','fn-pay-plus','fn-pay-pro'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = false; });
 
-  if(d && d.success && d.already_paid){ funnelPoll(FN.id, FN.k); return; }
+  if(d && (d.already_paid || d.message === 'payment_pending')){
+    FN.paymentPending = true;
+    fnSave();
+    funnelPoll();
+    return;
+  }
   if(!(d && d.success && d.invoice_url)){
     const m = d && d.message;
     if(m === 'not_found'){ try{ localStorage.removeItem('neo_funnel'); }catch(e){} }
@@ -9124,105 +9121,111 @@ async function funnelPay(plan){
     bridge.token = d.neotaro_token;
     if(d.user) bridge.webUser = d.user;
   }
+  FN.paymentPending = true;
   fnSave();
   if(bridge.isWeb){
     location.href = d.invoice_url;
   } else {
     bridge.openLink(d.invoice_url);
     toast(tt('pay_wait'));
-    funnelPoll(FN.id, FN.k);
+    funnelPoll();
   }
 }
 
-function fnSaveEmailInput(val){
-  const email = (val || '').trim().toLowerCase();
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return;
-  try{ localStorage.setItem('neo_email', email); }catch(e){}
-  if(FN.id && FN.k){
-    api('/funnel/save-email', 'POST', { spread_id: FN.id, view_key: FN.k, email: email }, true);
-  }
+function fnClearPaymentReturn(){
+  const url = new URL(location.href);
+  if(!url.searchParams.has('paid_spread')) return;
+  url.searchParams.delete('paid_spread');
+  url.searchParams.delete('k');
+  history.replaceState(history.state, '', url.pathname + url.search + url.hash);
 }
 
-async function funnelResume(force){
+function fnPaymentNotice(teaser, message, checking){
+  const out = document.getElementById('tb-reading');
+  out.innerHTML = '<div class="daily-teaser-wrap"><div class="daily-teaser-text">' + clean(teaser || '') +
+    '</div><div class="fn-retry-box"><p role="status">' + esc(message) + '</p>' +
+    (checking ? '' : '<button type="button" class="btn btn-brass btn-wide" onclick="funnelPoll()">' +
+      esc(FN_RU() ? 'Проверить статус' : 'Check status') + '</button>') + '</div></div>';
+  fnActions(false);
+}
+
+async function funnelResume(manual){
   if(FN.polling) return;
   const p = new URLSearchParams(location.search);
   const paidId = parseInt(p.get('paid_spread') || '', 10);
   const resumeId = parseInt(p.get('resume_spread') || '', 10);
   const saved = fnLoad() || {};
-  const hasSaved = !!(saved && saved.id && saved.k);
-  const id = paidId || resumeId || (hasSaved ? parseInt(saved.id, 10) : 0);
-  if(!id) return;
-  if(!force && FN.resumed) return;
+  const id = paidId || resumeId || (saved.k && (manual || location.hash === '#table') ? Number(saved.id) : 0);
+  if(!id || (!manual && FN.resumed)) return;
   FN.resumed = true;
-  FN.id = id;
-  FN.k = p.get('k') || (saved.id === id ? saved.k : '');
-  FN.q = saved.id === id ? (saved.q || '') : '';
-  FN.picked = saved.id === id ? (saved.picked || []) : [];
-  FN.type = saved.id === id ? (saved.type || '') : '';
-  FN.matrixPts = saved.id === id ? (saved.matrixPts || null) : null;
-
-  if(!paidId){
-    const d = await api('/funnel/status/' + FN.id + '?k=' + encodeURIComponent(FN.k || ''), 'GET', null, true);
-    if(d && d.success){
-      if(d.email){ try{ localStorage.setItem('neo_email', d.email); }catch(e){} }
-      if(d.plans) FN.plans = d.plans;
-      if(d.paid){
-        funnelRenderPaid(d);
-        return;
-      }
-      if(resumeId){
-        FN.q = FN.q || fnShortQ(d.question);
-        FN.picked = d.cards || FN.picked;
-        FN.type = d.spread_type || FN.type || '';
-        if(d.matrix_points) FN.matrixPts = d.matrix_points;
-        fnSave();
-        fnShowTable(FN.q, FN.picked, FN.matrixPts);
-        funnelRenderLocked(d.teaser || '');
-        if(window.neoGoal) neoGoal('funnel_reminder_open');
-      }
-      return;
-    }
-  }
-
+  const same = Number(saved.id) === id;
+  Object.assign(FN, {
+    id, k: p.get('k') || (same ? saved.k : ''),
+    q: same ? saved.q : '', picked: same ? saved.picked || [] : [],
+    type: same ? saved.type : '', matrixPts: same ? saved.matrixPts : null,
+    paymentPending: !!paidId || (same && !!saved.paymentPending),
+    teaser: '', paidView: false
+  });
   fnShowTable(FN.q, FN.picked, FN.matrixPts);
-  funnelPoll(FN.id, FN.k);
+  await funnelPoll(FN.paymentPending);
 }
 
-window.addEventListener('pageshow', function(){
-  const s = fnLoad();
-  if(s && s.id && !FN.paidView) funnelResume(true);
-});
-document.addEventListener('visibilitychange', function(){
-  if(document.visibilityState === 'visible'){
-    const s = fnLoad();
-    if(s && s.id && !FN.paidView) funnelResume(true);
-  }
-});
-
-async function funnelPoll(id, k){
-  if(FN.polling) return;
+async function funnelPoll(waitForPayment = true){
+  if(FN.polling || !FN.id) return;
   FN.polling = true;
-  const out = document.getElementById('tb-reading');
-  out.innerHTML = `<div class="fn-wait">${IC.spark} ${esc(FN_RU() ? 'Проверяем оплату и рассеиваем туман…' : 'Checking payment…')}</div>`;
-  let last = null;
-  for(let i = 0; i < 72; i++){            /* ~3 минуты */
-    const d = await api('/funnel/status/' + id + '?k=' + encodeURIComponent(k || ''), 'GET', null, true);
-    last = d;
-    if(d && d.plans) FN.plans = d.plans;
-    if(d && d.success && d.paid){ FN.polling = false; funnelRenderPaid(d); return; }
-    if(d && d.success && d.canceled){ break; }
-    if(d && d.success === false && d.message === 'not_found'){ break; }
-    await new Promise(r => setTimeout(r, 2500));
+  const id = FN.id;
+  const k = FN.k;
+  const ru = FN_RU();
+  const checking = FN.paymentPending
+    ? (ru ? 'Проверяем оплату…' : 'Checking payment…')
+    : (ru ? 'Открываем сохранённый расклад…' : 'Opening your saved reading…');
+  fnPaymentNotice(FN.teaser, checking, true);
+  let data;
+  try{
+    for(let i = 0; i < (waitForPayment ? 8 : 1); i++){
+      data = await api('/funnel/status/' + id + '?k=' + encodeURIComponent(k || ''), 'GET', null, true);
+      if(FN.id !== id || S.view !== 'table') return;
+      if(data && (data.paid || data.canceled || data.message === 'not_found' ||
+          (data.success && data.payment_pending === false))) break;
+      if(i < 7 && waitForPayment) await new Promise(r => setTimeout(r, 2500));
+    }
+  }finally{
+    FN.polling = false;
   }
-  FN.polling = false;
-  if(last && last.spread_type) FN.type = last.spread_type;
-  if(last && last.matrix_points) FN.matrixPts = last.matrix_points;
-  if(last && last.cards && !FN.picked.length){ FN.picked = last.cards; fnShowTable(FN.q || fnShortQ(last.question), FN.picked, FN.matrixPts); }
-  funnelRenderLocked((last && last.teaser) || '', FN_RU()
-    ? ((last && last.canceled) ? 'Оплата не прошла — попробуйте ещё раз' : 'Оплата ещё не подтвердилась. Если вы оплатили — разбор придёт на почту в течение нескольких минут.')
-    : 'Payment not confirmed yet.');
-  /* Оплату отменили — один раз предлагаем тот же расклад дешевле. */
-  if(last && last.canceled) setTimeout(() => fnOfferSave('canceled'), 700);
+  if(data && data.success){
+    FN.q = FN.q || fnShortQ(data.question);
+    FN.picked = data.cards || FN.picked;
+    FN.type = data.spread_type || FN.type;
+    FN.matrixPts = data.matrix_points || FN.matrixPts;
+    FN.plans = data.plans || FN.plans;
+    FN.teaser = data.teaser || FN.teaser;
+    if(data.paid){
+      fnClearPaymentReturn();
+      funnelRenderPaid(data);
+      return;
+    }
+    if(data.canceled || data.payment_pending === false) FN.paymentPending = false;
+    if(data.payment_pending) FN.paymentPending = true;
+    fnSave();
+    fnShowTable(FN.q, FN.picked, FN.matrixPts);
+    if(!FN.paymentPending){
+      fnClearPaymentReturn();
+      funnelRenderLocked(FN.teaser, data.canceled
+        ? (ru ? 'Оплата отменена. Можно попробовать ещё раз.' : 'Payment was canceled. You can try again.')
+        : '');
+      return;
+    }
+  }else if(data && data.message === 'not_found' && !FN.paymentPending){
+    if(Number(fnLoad()?.id) === id){
+      try{ localStorage.removeItem('neo_funnel'); }catch(e){}
+    }
+    go('spreads');
+    toast(ru ? 'Сохранённый расклад недоступен.' : 'The saved reading is unavailable.');
+    return;
+  }
+  fnPaymentNotice(FN.teaser, FN.paymentPending
+    ? (ru ? 'Оплата пока не подтверждена. Если вы уже оплатили, дождитесь подтверждения и проверьте статус.' : 'Payment has not been confirmed yet. If you already paid, check the status again shortly.')
+    : (ru ? 'Не удалось загрузить расклад. Проверьте соединение и попробуйте снова.' : 'Could not load the reading. Check your connection and try again.'), false);
 }
 
 function funnelRenderPaid(d){
@@ -9299,7 +9302,7 @@ function funnelRenderPaid(d){
       if(window.neoPurchase) neoPurchase('purchase', paidPrice, { kind: 'funnel', item: d.plan || '' });
       if(window.neoPurchase) neoPurchase('first_purchase', paidPrice, { kind: 'funnel', item: d.plan || '' });
     }
-    localStorage.removeItem('neo_funnel');
+    if(Number(fnLoad()?.id) === Number(FN.id)) localStorage.removeItem('neo_funnel');
   }catch(e){}
   if(d.plan !== 'upsell') fnLoadUpsell();
 }
@@ -9684,7 +9687,7 @@ const FUNNEL_FORMS = {
       { id:'x_what', when: a => a.role === 'complicated', type:'chips', req:true, label:'Что происходит', q:'Что у вас происходит?',
         opts: a => [['onoff','Сходимся и расходимся'],['taken', qzG(a,'Он несвободен','Она несвободна')],['distance','Расстояние или пауза'],['status','Непонятный статус']] },
 
-      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Что вы больше всего хотите узнать?', hint:'Нажмите на вариант или напишите свой вопрос',
+      { id:'q', type:'ask', opt:true, display:true, max:200, label:'Главный вопрос к картам', q:'Что вы больше всего хотите узнать?', hint:'Нажмите на вариант или напишите свой вопрос',
         sugg: a => {
           const n = qzN(a), he = qzG(a,'он','она');
           if(a.role === 'ex') return [`Думает ли ${n} обо мне?`, `Вернётся ли ${he}?`, 'Есть ли у нас будущее?'];
@@ -9710,7 +9713,7 @@ const FUNNEL_FORMS = {
         opts:[['conflict','Конфликт или напряжение'],['distance','Отдалились друг от друга'],['worry','Тревожусь за близкого'],['decision','Нужно семейное решение']] },
       { id:'s_feel', when: a => a.sphere === 'self', type:'chips', req:true, label:'Состояние', q:'Что вы чувствуете последнее время?',
         opts:[['apathy','Апатия и усталость'],['anxiety','Тревога'],['lost','Потерянность, не знаю куда идти'],['change','Хочется перемен']] },
-      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Главный вопрос к картам', hint:'Нажмите на вариант или напишите свой',
+      { id:'q', type:'ask', opt:true, display:true, max:200, label:'Главный вопрос к картам', q:'Главный вопрос к картам', hint:'Нажмите на вариант или напишите свой',
         sugg: a => ({
           love: ['Что ждёт меня в любви в ближайшие месяцы?', 'Встречу ли я своего человека?', 'Есть ли будущее у этих отношений?'],
           work: ['Стоит ли мне менять работу?', 'Что ждёт меня в карьере?', 'Когда придёт рост?'],
@@ -9727,7 +9730,7 @@ const FUNNEL_FORMS = {
     steps: [
       { id:'topic', type:'chips', req:true, label:'Тема вопроса', q:'О чём ваш вопрос?',
         opts:[['love','Отношения'],['work','Работа'],['money','Деньги'],['move','Переезд или поездка'],['choice','Решение или выбор']] },
-      { id:'q', type:'ask', need:true, display:true, max:150, label:'Вопрос (да или нет)', q:'Выберите или напишите вопрос для ответа «да» или «нет»',
+      { id:'q', type:'ask', need:true, display:true, max:200, label:'Вопрос (да или нет)', q:'Выберите или напишите вопрос для ответа «да» или «нет»',
         hint:'Нажмите на подходящий или напишите свой',
         sugg: a => ({
           love: ['Будем ли мы вместе?', 'Стоит ли мне сделать первый шаг?', 'Есть ли у нас будущее?'],
@@ -9751,7 +9754,7 @@ const FUNNEL_FORMS = {
         q:'Как зовут этого человека?', ph:'Например: Дмитрий или Анна' },
       { id:'lg_when', type:'chips', req:true, label:'Как давно', q:'Как давно это держит вас?',
         opts:[['lt3','Меньше 3 месяцев'],['3to12','3–12 месяцев'],['1to3','1–3 года'],['gt3','Дольше 3 лет']] },
-      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Главный вопрос к картам', q:'Что вы хотите узнать?', hint:'Нажмите на вариант или напишите свой',
+      { id:'q', type:'ask', opt:true, display:true, max:200, label:'Главный вопрос к картам', q:'Что вы хотите узнать?', hint:'Нажмите на вариант или напишите свой',
         sugg:['Как мне наконец освободиться?', 'Почему я не могу отпустить?', 'Что ждёт меня, когда я отпущу?'] }
     ]
   },
@@ -9767,7 +9770,7 @@ const FUNNEL_FORMS = {
         q:'Как зовут этого человека?', ph:'Например: Олег, мама, Ольга' },
       { id:'cf_now', type:'chips', req:true, label:'Что между ними сейчас', q:'Что между вами сейчас?',
         opts:[['silent','Не разговариваем'],['cold','Холодно и вежливо'],['fight','Постоянно ссоримся'],['pretend','Делаем вид, что всё нормально']] },
-      { id:'q', type:'ask', opt:true, display:true, max:150, label:'Каким хочет видеть исход', q:'Каким вы хотите видеть исход?', hint:'Нажмите на вариант или напишите свой',
+      { id:'q', type:'ask', opt:true, display:true, max:200, label:'Каким хочет видеть исход', q:'Каким вы хотите видеть исход?', hint:'Нажмите на вариант или напишите свой',
         sugg:['Помириться и сохранить отношения', 'Чтобы меня наконец поняли', 'Спокойно отдалиться без войны', 'Понять, как себя вести'] }
     ]
   },
@@ -9832,7 +9835,9 @@ const FUNNEL_FORMS = {
             ['stay', 'Есть ли будущее у этих отношений']
           ];
         }
-      }
+      },
+      { id:'q', type:'ask', opt:true, display:true, max:200, when: a => Object.prototype.hasOwnProperty.call(a, 'q'),
+        label:'Главный вопрос к картам', q:'Ваш вопрос о совместимости', ph:'Напишите ваш вопрос' }
     ]
   },
 };
@@ -9850,35 +9855,20 @@ function fnFormKey(sp){
   if(/конфликт|conflict/.test(n)) return 'conflict';
   return null;
 }
-function qzSavedEmail(){
-  try{
-    const em = (localStorage.getItem('neo_email') || ((bridge.webUser && bridge.webUser.email) || '')).trim();
-    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em) ? em : '';
-  }catch(e){ return ''; }
+function fnFormFor(sp){
+  const key = fnFormKey(sp);
+  return (key && FUNNEL_FORMS[key]) || null;
 }
 
-function fnFormFor(sp){
-  const k = fnFormKey(sp);
-  if(!k || !FUNNEL_FORMS[k]) return null;
-  const f = FUNNEL_FORMS[k];
-  if(!f._hasEmailStep){
-    f._hasEmailStep = true;
-    f.steps.push({
-      id: '_email',
-      type: 'email',
-      need: true,
-      max: 120,
-      label: 'Email',
-      when: a => !qzSavedEmail() || !!a._email,
-      q: () => qzR('Куда сохранить ваш расклад?', 'Where should we save your reading?'),
-      hint: () => qzR(
-        'Пришлём персональную ссылку на расклад, чтобы вы не потеряли ответ Оракула',
-        'We will send a personal link to your reading so you do not lose the Oracle’s answer'
-      ),
-      ph: () => qzR('Ваш email (например: anna@mail.ru)', 'Your email address')
-    });
-  }
-  return f;
+function fnStartQuestion(id){
+  try{
+    const handoff = JSON.parse(sessionStorage.getItem('neo_start_question') || 'null');
+    if(handoff && handoff.id === id && typeof handoff.question === 'string'){
+      sessionStorage.removeItem('neo_start_question');
+      return handoff.question;
+    }
+  }catch(e){}
+  return '';
 }
 
 function fnDraftLoad(id){ try{ return JSON.parse(localStorage.getItem('neo_form_' + id) || '{}') || {}; }catch(e){ return {}; } }
@@ -10030,10 +10020,6 @@ function qzHuman(st, a){
 }
 function qzValid(st, a){
   if(st.type === 'echo') return true;
-  if(st.type === 'email'){
-    const em = String(a[st.id] || '').trim().toLowerCase();
-    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em);
-  }
   if(st.type === 'pair_dates'){
     if(!qzIsoOk(a.mydate)) return false;
     if(a._pdate_skip) return true;
@@ -10063,13 +10049,20 @@ function fnRenderForm(prefill){
   if(!form){ box.innerHTML = ''; free.style.display = ''; if(deal) deal.style.display = ''; fnSetDeal(null); return; }
   free.style.display = 'none';
   if(deal) deal.style.display = 'none';
-  const d = fnDraftLoad(S.spread.id);
+  const d = fnDraftLoad(S.spread.id) || {};
   const needVer = form.ver || 2;
   const ok = d && d.v === needVer && d.a && typeof d.a === 'object';
   QZ.a = ok ? d.a : {};
   QZ.hist = ok && Array.isArray(d.hist) ? d.hist.filter(n => typeof n === 'number') : [];
   QZ.i = ok && typeof d.i === 'number' ? d.i : -1;
-  if(prefill){ const ds = form.steps.find(s => s.display); if(ds && !QZ.a[ds.id]) QZ.a[ds.id] = prefill; }
+  const incoming = prefill || (!ok && (d.q || d.want || d.goal));
+  if(incoming){
+    const field = form.steps.find(s => s.id === 'q' && s.display);
+    if(field){
+      QZ.a[field.id] = String(incoming).trim().slice(0, field.max);
+      if(prefill){ QZ.i = -1; QZ.hist = []; }
+    }
+  }
   if(QZ.i < 0 || QZ.i >= form.steps.length || !qzOn(form.steps[QZ.i], QZ.a)){
     const f = qzFirstOpen(form.steps);
     QZ.i = f.i;
@@ -10117,6 +10110,9 @@ function qzRender(){
     : `<span></span>`) +
     `<span class="qz-count">${st.type === 'echo' ? '✦' : esc((ru ? 'Вопрос ' : 'Question ') + (pos + 1) + (ru ? ' из ' : ' of ') + asked.length)}</span></div>`;
   html += `<div class="qz-bar"><i style="width:${pct}%"></i></div>`;
+  if(a.q && st.id !== 'q'){
+    html += `<p class="qz-h">${esc(qzR('Ваш вопрос', 'Your question'))}: ${esc(a.q)}</p>`;
+  }
   html += `<div class="qz-card${st.type === 'echo' ? ' is-echo' : ''}">`;
 
   if(st.type === 'echo'){
@@ -10142,8 +10138,6 @@ function qzRender(){
       html += `<div class="qz-dlive${liveTx ? ' is-on' : ''}" id="qz-dlive">${liveTx}</div>`;
     } else if(st.type === 'area'){
       html += `<textarea class="field qz-in" id="qz-in" rows="4" maxlength="${st.max || 500}" placeholder="${esc(qzVal(st.ph, a))}" oninput="qzInput(this.value)">${esc(v || '')}</textarea>`;
-    } else if(st.type === 'email'){
-      html += `<input class="field qz-in" id="qz-in" type="email" inputmode="email" autocomplete="email" maxlength="${st.max || 120}" placeholder="${esc(qzVal(st.ph, a))}" value="${esc(v || qzSavedEmail() || '')}" oninput="qzInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();qzNext()}">`;
     } else {
       const sg = st.type === 'ask' ? qzList(st.sugg, a) : [];
       if(sg.length){
@@ -10208,25 +10202,15 @@ function qzShake(){
 }
 function qzNext(){
   const st = qzStep(); if(!st) return;
-  if(st.type === 'email' && !QZ.a._email){
-    const inp = document.getElementById('qz-in');
-    if(inp && inp.value) QZ.a._email = inp.value.trim();
-  }
   if(!qzValid(st, QZ.a)){
     qzShake();
     let msg = qzR('Ответьте, чтобы продолжить', 'Answer to continue');
-    if(st.type === 'email') msg = qzR('Введите корректный email, чтобы мы сохранили ваш расклад', 'Enter a valid email to save your reading');
-    else if(st.type === 'date') msg = qzR('Проверьте дату рождения (день, месяц и 4 цифры года)', 'Check the birth date');
+    if(st.type === 'date') msg = qzR('Проверьте дату рождения (день, месяц и 4 цифры года)', 'Check the birth date');
     else if(st.type === 'pair_dates') msg = !qzIsoOk(QZ.a.mydate)
       ? qzR('Проверьте вашу дату рождения (ДД, ММ и 4 цифры года)', 'Check your birth date')
       : qzR('Проверьте дату партнёра (или нажмите «Не знаю точную дату» ниже)', 'Check partner’s birth date');
     toast(msg);
     return;
-  }
-  if(st.type === 'email'){
-    const cleanEm = String(QZ.a._email || '').trim().toLowerCase();
-    try{ localStorage.setItem('neo_email', cleanEm); }catch(e){}
-    if(window.neoGoal) neoGoal('quiz_email_saved');
   }
   qzAdvance();
 }
@@ -10235,11 +10219,8 @@ function qzAdvance(){
   const form = qzForm(); if(!form) return;
   const curStep = form.steps[QZ.i];
   const j = qzNextIdx(form.steps, QZ.i);
-  const nextStep = j !== -1 ? form.steps[j] : null;
-  if(window.neoGoal && curStep && curStep.type !== 'echo' && curStep.id !== '_email'){
-    if((nextStep && nextStep.id === '_email') || !nextStep){
-      neoGoal('quiz_before_email', { spread: (S.spread && S.spread.id) || '', step: curStep.id });
-    }
+  if(j === -1 && window.neoGoal && curStep && curStep.type !== 'echo'){
+    neoGoal('quiz_completed', { spread: S.spread.id, step: curStep.id });
   }
   qzBlurInput();
   if(j === -1){ qzSave(); dealSpread(); return; }
@@ -10315,15 +10296,8 @@ function fnCollect(form){
     if(!qzValid(st, a)){
       if(QZ.i !== idx){ QZ.hist.push(QZ.i); QZ.i = idx; }
       qzSave(); qzRender(); qzShake();
-      toast(st.type === 'email'
-        ? qzR('Введите корректный email, чтобы мы сохранили ваш расклад', 'Enter a valid email to save your reading')
-        : qzR('Проверьте ответы на этом шаге', 'Please answer this question'));
+      toast(qzR('Проверьте ответы на этом шаге', 'Please answer this question'));
       return { ok: false };
-    }
-    if(st.id === '_email'){
-      const cleanEm = String(a._email || '').trim().toLowerCase();
-      if(cleanEm){ try{ localStorage.setItem('neo_email', cleanEm); }catch(e){} }
-      continue;
     }
     if(st.type === 'pair_dates'){
       if(qzIsoOk(a.mydate)) details.push({ label: 'Дата рождения клиента', value: formatDate(a.mydate) });
@@ -11353,8 +11327,7 @@ function fnMistWatch(){
     wrapFn('qzAdvance', function() {
       var st = (typeof qzStep === 'function') ? qzStep() : null;
       if (!st) return;
-      if (st.id === '_email') rec('quiz_email', 'ok');
-      else rec('quiz_step', st.id);
+      rec('quiz_step', st.id);
     });
 
     wrapFn('qzShake', function() {
