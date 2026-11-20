@@ -7947,18 +7947,22 @@ async function renderAstroPlans(force){ return renderShopPlans(force); }
 
 async function astroSubscribe(plan){
   if(requireAuth({ action: 'shop' })) return;
-  const per = (S.per === 'year') ? tt('per_year') : tt('per_month');
+  const selected = S.plansData?.plans?.find(p => p.code === plan);
+  if(!selected){ toast(tt('err')); return; }
+  const period = S.per === 'year' && selected.price_rub_year ? 'year' : 'month';
+  const expected = period === 'year' ? selected.price_rub_year : selected.price_rub;
+  const per = period === 'year' ? tt('per_year') : tt('per_month');
   if(S.recurring && !confirm(tt('sub_recurring_consent').replace('{per}', per))) return;
   toast(tt('wait'));
-  if(window.neoGoal) neoGoal('purchase_start', { kind: 'subscription', plan: plan, period: S.per });
-  const d = await api('/subscription/invoice-rub', 'POST', { plan: plan, period: S.per });
+  if(window.neoGoal) neoGoal('purchase_start', { kind: 'subscription', plan: plan, period: period });
+  const d = await api('/subscription/invoice-rub', 'POST', { plan: plan, period: period, expected_amount: expected });
   hideToast();
   if(d && d.success && d.url){
     try {
       localStorage.setItem('neo_pending_sub', JSON.stringify({
-        amount: d.amount || 499,
+        amount: d.amount,
         plan: plan,
-        period: S.per,
+        period: period,
         ts: Date.now()
       }));
     } catch(e){}
@@ -7966,10 +7970,11 @@ async function astroSubscribe(plan){
       location.href = d.url;
     } else {
       bridge.openLink ? bridge.openLink(d.url) : window.open(d.url, '_blank');
-      watchSubscription(d.amount, plan, S.per);
+      watchSubscription(d.amount, plan, period);
     }
     return;
   }
+  renderShopPlans(true);
   toast(tt('err'));
 }
 
@@ -7986,16 +7991,16 @@ async function checkPendingSubGoal(){
   for(let i = 0; i < 12; i++){
     const d = await api('/subscription/status', 'GET', {}, true);
     if(d && d.success && d.access && d.access.paid){
-      const amt = (pend && pend.amount) || (d.subscription && d.subscription.next_charge_amount) || 499;
+      const amt = pend && pend.amount;
       const pl = (pend && pend.plan) || d.access.plan || 'pro';
       const pr = (pend && pend.period) || 'month';
       try { localStorage.removeItem('neo_pending_sub'); } catch(e){}
-      if(window.neoPurchase) neoPurchase('purchase_sub', amt, { kind: 'subscription', plan: pl, period: pr });
+      if(amt > 0 && window.neoPurchase) neoPurchase('purchase_sub', amt, { kind: 'subscription', plan: pl, period: pr });
       try {
-        if(!localStorage.getItem('neo_first_paid_sent')){
+        if(amt > 0 && !localStorage.getItem('neo_first_paid_sent')){
           localStorage.setItem('neo_first_paid_sent', '1');
-          if(window.neoPurchase) neoPurchase('purchase', amt, { kind: 'subscription', plan: pl, period: pr });
-          if(window.neoPurchase) neoPurchase('first_purchase', amt, { kind: 'subscription', plan: pl, period: pr });
+          if(amt > 0 && window.neoPurchase) neoPurchase('purchase', amt, { kind: 'subscription', plan: pl, period: pr });
+          if(amt > 0 && window.neoPurchase) neoPurchase('first_purchase', amt, { kind: 'subscription', plan: pl, period: pr });
         }
       } catch(e){}
       if(typeof window.neoUxRec === 'function') window.neoUxRec('paid_ok', 'sub=' + pl + ' amt=' + amt);
@@ -9258,11 +9263,8 @@ function fnResumeLast(){
 let FN_SELECTED_PLAN = 'tripwire';
 let _fnHoldTimer = null;
 
-/* ---------- цены тарифов воронки (с сервера, с запасными числами) ---------- */
-const FN_PRICE_FALLBACK = { tripwire: 199, tripwire_save: 199, plus: 399, pro: 499, upsell: 149 };
 function fnPlanPrice(plan){
-  const p = FN.plans && FN.plans[plan] && FN.plans[plan].price;
-  return p || FN_PRICE_FALLBACK[plan] || 199;
+  return FN.plans?.[plan]?.price ?? null;
 }
 
 const FN_SAVE_MINUTES = 10;
@@ -9329,6 +9331,7 @@ function funnelFogHtml(errText){
   FN_SELECTED_PLAN = 'tripwire';
   const twPrice = fnPlanPrice('tripwire'), twOld = 390;
   const proPrice = fnPlanPrice('pro');
+  if(!twPrice || !proPrice) return '<p>' + esc(tt('err')) + '</p>';
   const pl = FN.plans || {};
   const twEn = (pl.tripwire && pl.tripwire.energy) || 5;
   const proEn = (pl.pro && pl.pro.energy) || 350;
@@ -9396,7 +9399,6 @@ function funnelFogHtml(errText){
                 </ul>
               </div>
               <div class="fn-tier-pwrap">
-                <span class="fn-tier-old">1190 ₽</span>
                 <span class="fn-tier-price">${proPrice} ₽</span>
                 <span class="fn-tier-per">${esc(ru ? 'за месяц' : '/ month')}</span>
               </div>
@@ -9491,9 +9493,9 @@ async function funnelPay(plan){
   try{ localStorage.setItem('neo_email', email); }catch(e){}
 
   const price = fnPlanPrice(plan);
-  S.payMeta = { goal: 'purchase_funnel', price: price, kind: 'funnel', item: plan };
 
-  const d = await api('/funnel/checkout', 'POST', { spread_id: FN.id, view_key: FN.k, email: email, plan: plan, agree: agree, utm: fnUtm() }, true);
+
+  const d = await api('/funnel/checkout', 'POST', { spread_id: FN.id, view_key: FN.k, email: email, plan: plan, expected_amount: price, agree: agree, utm: fnUtm() }, true);
   ['fn-submit-btn','fn-pay-tw','fn-pay-plus','fn-pay-pro'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = false; });
 
   if(d && (d.already_paid || d.message === 'payment_pending')){
@@ -9514,7 +9516,8 @@ async function funnelPay(plan){
     );
     return;
   }
-  if(window.neoGoal) neoGoal('purchase_start', { kind: 'funnel', item: plan, order_price: price });
+  S.payMeta = { goal: 'purchase_funnel', price: d.amount, kind: 'funnel', item: plan };
+  if(window.neoGoal) neoGoal('purchase_start', { kind: 'funnel', item: plan, order_price: d.amount });
   if(d.neotaro_token){
     try{
       localStorage.setItem('neotaro_token', d.neotaro_token);
@@ -9721,9 +9724,9 @@ function funnelRenderPaid(d){
   bridge.haptic('ok');
   try{
     const key = 'neo_funnel_goal_' + FN.id;
-    const paidPrice = fnPlanPrice(d.plan || 'tripwire');
+    const paidPrice = d.amount;
     const allowFirst = (d.track_first_purchase !== false);
-    if(allowFirst && !localStorage.getItem('neo_first_paid_sent') && !localStorage.getItem(key)){
+    if(paidPrice > 0 && allowFirst && !localStorage.getItem('neo_first_paid_sent') && !localStorage.getItem(key)){
       localStorage.setItem('neo_first_paid_sent', '1');
       localStorage.setItem(key, '1');
       if(window.neoPurchase) neoPurchase('purchase', paidPrice, { kind: 'funnel', item: d.plan || '' });
@@ -10147,8 +10150,11 @@ function funnelDiscuss(){
   }, 300);
 }
 
-/* Энергия в чате закончилась -> оффер ПЛЮС 299 ₽ */
-function funnelPlusOffer(){
+/* Подписка при исчерпании энергии */
+async function funnelPlusOffer(){
+  const catalog = await api('/subscription/plans', 'GET', {}, true);
+  const pro = catalog?.plans?.find(p => p.code === 'pro');
+  if(!pro?.price_rub){ toast(tt('err')); return; }
   const ru = FN_RU();
   const box = document.getElementById('chat-inner') || document.getElementById('chat-list') || document.querySelector('.chat-scroll');
   if(!box){ if(typeof goPlans === 'function') goPlans('pro'); else go('shop'); return; }
@@ -10159,25 +10165,25 @@ function funnelPlusOffer(){
   el.innerHTML = `
     <div class="fn-upsell-t">${esc(ru ? 'Энергия для вопросов закончилась' : 'Out of energy')}</div>
     <p>${esc(ru ? 'Активируйте полный месяц ПРО прямо сейчас: вам сразу начислится 350 ⚡ энергии для диалога с Оракулом, а также откроются Матрица Судьбы и все расклады.' : 'Activate full PRO month right now: get 350 ⚡ energy immediately plus Destiny Matrix and all spreads.')}</p>
-    <button class="btn btn-brass btn-wide" onclick="funnelBuyPlus()">${esc(ru ? 'Активировать ПРО (+350 ⚡ сразу) — 499 ₽' : 'Activate PRO (+350 ⚡ now) — 499 ₽')}</button>
+    <button class="btn btn-brass btn-wide" onclick="funnelBuyPlus(${Number(pro.price_rub)})">${esc(ru ? 'Активировать ПРО (+350 ⚡ сразу)' : 'Activate PRO (+350 ⚡ now)')} — ${Number(pro.price_rub)} ₽</button>
     <button class="btn btn-quiet btn-wide" style="margin-top:8px" onclick="go('shop')">${esc(ru ? 'Или докупить пакет энергии со скидкой →' : 'Or buy an energy pack →')}</button>`;
   box.appendChild(el);
   try{ el.scrollIntoView({ behavior: 'smooth', block: 'end' }); }catch(e){}
   if(window.neoGoal) neoGoal('plus_offer_shown', { src: 'chat_no_energy', plan: 'pro' });
 }
 
-async function funnelBuyPlus(){
+async function funnelBuyPlus(expected){
   if(requireAuth({ action: 'profile' })) return;
   toast(tt('wait'));
-  const meta = { goal: 'purchase_sub', price: 499, kind: 'sub', item: 'pro' };
-  S.payMeta = meta;
-  if(window.neoGoal) neoGoal('purchase_start', { kind: 'sub', item: 'pro', order_price: 499 });
-  const d = await api('/subscription/invoice-rub', 'POST', { plan: 'pro', period: 'month' });
+  const d = await api('/subscription/invoice-rub', 'POST', { plan: 'pro', period: 'month', expected_amount: expected });
   const payUrl = d && (d.url || d.invoice_url);
   if(d && d.success && payUrl){
+    const meta = { goal: 'purchase_sub', price: d.amount, kind: 'sub', item: 'pro' };
+    S.payMeta = meta;
+    if(window.neoGoal) neoGoal('purchase_start', { kind: 'sub', item: 'pro', order_price: d.amount });
     bridge.openLink(payUrl);
     toast(tt('pay_wait'));
-    if(typeof watchSubscription === 'function') watchSubscription(d.amount || 499, 'pro', 'month');
+    if(typeof watchSubscription === 'function') watchSubscription(d.amount, 'pro', 'month');
     else if(typeof watchPayment === 'function') watchPayment(function(){ try{ paintEnergy(); }catch(e){} }, meta);
   } else toast(tt('err'));
 }
