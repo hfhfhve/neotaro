@@ -9208,6 +9208,7 @@ async function funnelDeal(q, extra){
   })();
 
   [, data] = await Promise.all([wait, call]);
+  if(window.neoUxRec) window.neoUxRec('deal_result', data?.success ? 'ready' : (data?.message || 'unknown'));
   stopSpreadRitual();
 
   FN.type = S.spread.id;
@@ -9478,10 +9479,12 @@ async function funnelPay(plan){
   const email = ((document.getElementById('fn-email') || {}).value || '').trim().toLowerCase();
   const agree = !!(document.getElementById('fn-agree') || {}).checked;
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+    if(window.neoUxRec) window.neoUxRec('pay_blocked', 'email_invalid');
     fnShowError(ru ? '↑ Введите ваш email, чтобы мы открыли расклад и отправили вам копию' : '↑ Please enter a valid email address', true);
     return;
   }
   if(!agree){
+    if(window.neoUxRec) window.neoUxRec('pay_blocked', 'offer_missing');
     fnShowError(ru ? 'Поставьте галочку согласия с условиями ниже' : 'Please accept the offer terms', false);
     return;
   }
@@ -9528,6 +9531,7 @@ async function funnelPay(plan){
   }
   FN.paymentPending = true;
   fnSave();
+  if(window.neoUxRec) window.neoUxRec('checkout_handoff', 'id=' + FN.id + ' plan=' + plan);
   if(bridge.isWeb){
     location.href = d.invoice_url;
   } else {
@@ -11884,7 +11888,7 @@ function fnMistWatch(){
   var MAX_SEND = 135;
   var flushTimer = null;
   var clickHistory = [];
-  var seenFog = false;
+  var seenPrices = false;
 
   function sec() {
     return Math.max(0, Math.round((Date.now() - t0) / 1000));
@@ -11911,7 +11915,9 @@ function fnMistWatch(){
       e: String(event || '').slice(0, 32),
       d: String(detail == null ? '' : detail).replace(/\s+/g, ' ').trim().slice(0, 150)
     });
-    if (queue.length >= 8) {
+    if (event === 'checkout_handoff') {
+      flush(true);
+    } else if (queue.length >= 8) {
       flush(false);
     } else if (!flushTimer) {
       flushTimer = setTimeout(function(){ flush(false); }, 4000);
@@ -11929,8 +11935,8 @@ function fnMistWatch(){
 
     var payload = JSON.stringify({
       sid: sid,
-      uid: (window.S && S.refCode) || (window.bridge && bridge.userId) || null,
-      spread_id: (window.FN && FN.id) || null,
+      uid: (typeof S !== 'undefined' && S.refCode) || null,
+      spread_id: (typeof FN !== 'undefined' && FN.id) || null,
       meta: metaInfo(),
       events: batch
     });
@@ -11981,7 +11987,9 @@ function fnMistWatch(){
   function hookAll() {
     wrapFn('go', function(v) { rec('view', v); });
 
-    wrapFn('pickSpread', function(id) { rec('quiz_open', id); });
+    wrapFn('pickSpread', function(id) {
+      if (S.spreads.some(spread => spread.id === id)) rec('quiz_open', id);
+    });
 
     wrapFn('qzPick', function(k) {
       var st = (typeof qzStep === 'function') ? qzStep() : null;
@@ -12010,13 +12018,13 @@ function fnMistWatch(){
     });
 
     wrapFn('funnelDeal', function() {
-      rec('deal_start', (window.S && S.spread && S.spread.id) || '');
+      rec('deal_start', S.spread?.id || '');
       flush(false);
     });
 
     wrapFn('funnelRenderLocked', function(teaser, errText) {
-      seenFog = false;
-      rec('teaser_shown', 'id=' + ((window.FN && FN.id) || '') + (errText ? ' err=' + errText : ''));
+      seenPrices = false;
+      rec('teaser_shown', 'id=' + (FN.id || ''));
       flush(false);
     });
 
@@ -12030,14 +12038,13 @@ function fnMistWatch(){
     });
 
     wrapFn('funnelPay', function(plan) {
-      var em = document.getElementById('fn-email');
-      var hasEm = !!(em && em.value && em.value.indexOf('@') > 0);
-      rec('pay_click', plan + ' email=' + (hasEm ? 'yes' : 'no'));
+      if (FN.paymentPending || FN.polling) return;
+      rec('pay_click', 'id=' + (FN.id || '') + ' plan=' + plan);
       flush(false);
     });
 
     wrapFn('funnelRenderPaid', function(d) {
-      rec('paid_ok', 'id=' + ((window.FN && FN.id) || '') + ' plan=' + ((d && d.plan) || ''));
+      rec('paid_ok', 'id=' + (FN.id || '') + ' plan=' + ((d && d.plan) || ''));
       flush(false);
     });
 
@@ -12045,27 +12052,18 @@ function fnMistWatch(){
     wrapFn('drawDaily', function() { rec('daily_draw', ''); });
   }
 
-  /* 3. Отслеживание редиректа в ЮKassa и ошибок генерации */
+  /* Ответ API подтверждает создание ссылки. Передачу в ЮKassa отмечает funnelPay. */
   var origApi = window.api;
   if (typeof origApi === 'function' && !origApi.__uxWrapped) {
-    window.api = async function(ep, method, data, silent) {
-      var tStart = Date.now();
+    window.api = async function(ep) {
       var r = await origApi.apply(this, arguments);
-      var ms = Date.now() - tStart;
-      try {
-        if (ep === '/funnel/spread' && (!r || !r.success)) {
-          rec('deal_fail', ((r && r.message) || 'err') + ' ' + Math.round(ms / 1000) + 's');
-          flush(false);
-        } else if (ep === '/funnel/checkout') {
-          if (r && r.success && r.invoice_url) {
-            rec('checkout_redirect', (data && data.plan) || '');
-            flush(true);
-          } else {
-            rec('checkout_fail', (r && r.message) || 'err');
-            flush(false);
-          }
+      if (ep === '/funnel/checkout') {
+        if (r && r.success && r.invoice_url) {
+          rec('checkout_created', 'id=' + (FN.id || ''));
+        } else if (!r?.already_paid && r?.message !== 'payment_pending') {
+          rec('checkout_fail', r?.message || 'unknown');
         }
-      } catch(e){}
+      }
       return r;
     };
     window.api.__uxWrapped = true;
@@ -12091,17 +12089,21 @@ function fnMistWatch(){
     }
   }, true);
 
-  /* 5. Доскроллил ли пользователь до блока оплаты #fn-fog */
+  /* Фиксируем видимость самой цены, а не верхней границы блока. */
   setInterval(function() {
-    if (seenFog) return;
-    var fog = document.getElementById('fn-fog');
-    if (!fog) return;
-    var rect = fog.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 60 && rect.bottom > 40) {
-      seenFog = true;
-      rec('paywall_in_view', 'plan=' + (typeof FN_SELECTED_PLAN !== 'undefined' ? FN_SELECTED_PLAN : 'pro'));
-    }
-  }, 1000);
+    if (seenPrices || document.visibilityState !== 'visible' || S.view !== 'table') return;
+    var prices = document.querySelectorAll('#fn-fog .fn-tier-price');
+    var visible = Array.from(prices).some(function(price) {
+      var rect = price.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0 &&
+        rect.top >= 0 && rect.bottom <= window.innerHeight &&
+        rect.left >= 0 && rect.right <= window.innerWidth &&
+        getComputedStyle(price).visibility === 'visible';
+    });
+    if (!visible) return;
+    seenPrices = true;
+    rec('price_seen', 'id=' + (FN.id || '') + ' plan=' + FN_SELECTED_PLAN);
+  }, 500);
 
   /* 6. Выгрузка при сворачивании вкладки или уходе со страницы */
   document.addEventListener('visibilitychange', function() {
