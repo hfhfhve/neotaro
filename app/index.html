@@ -1007,7 +1007,6 @@ body.chat-mode .chat-head{padding-top:16px}
 .fn-unlock{margin:18px 0 12px;padding:16px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,rgba(217,174,95,.1),transparent 80%)}
 .fn-unlock .btn{min-height:48px;white-space:normal;line-height:1.35}
 .fn-offer-entry{margin-top:12px}
-.fn-offer-terms{margin:4px 0 0;font-size:12px;line-height:1.5;color:var(--mist)}
 .fn-checkout-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line-soft)}
 .fn-checkout-head h3{margin:0;font:400 22px/1.2 var(--serif);color:var(--ivory)}
 .fn-disclosure{display:inline-flex;align-items:center;gap:10px;min-height:42px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:rgba(217,174,95,.06);font:500 13px/1.35 var(--sans);color:var(--brass-pale);text-align:left;cursor:pointer}
@@ -1036,7 +1035,6 @@ body.chat-mode .chat-head{padding-top:16px}
 .fn-tier-total{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 7px;margin-top:auto;padding-top:8px;border-top:1px solid var(--line-soft)}
 .fn-tier-price{font:400 23px/1.2 var(--serif);white-space:nowrap;color:var(--brass-pale)}
 .fn-tier-period{font-size:12px;color:var(--mist)}
-.fn-agree-wrap .fn-offer-terms{padding-left:22px}
 .fn-email-wrap .fn-lbl{display:block;margin-bottom:5px}
 @media(max-width:520px){
   .fn-unlock{padding:12px}
@@ -9306,26 +9304,12 @@ function tbBack(){
   go('spreads');
 }
 
-function fnPlanTerms(plan){
-  const ru = FN_RU();
-  const price = fnPlanPrice(plan === 'tripwire' ? 'pro' : plan);
-  if(!price) return ru ? 'Условия продления и отмены действуют по оферте.' : 'The offer explains renewal and cancellation.';
-  const monthly = fmtNum(price) + ' ₽';
-  if(plan === 'tripwire'){
-    return ru ? `После 3 дней, если подключено автопродление, — ${monthly}/мес. Отмена в профиле.`
-      : `After 3 days, if auto-renewal is enabled, ${monthly}/month. Cancel in your profile.`;
-  }
-  return ru ? `При автопродлении — ${monthly}/мес. Отмена в профиле.`
-    : `If auto-renewal is enabled, ${monthly}/month. Cancel in your profile.`;
-}
-
 function fnPickTier(plan, record = true){
   const price = fnPlanPrice(plan);
   if(!price) return;
   FN_SELECTED_PLAN = plan;
   const ru = FN_RU();
   document.getElementById('fn-submit-btn').textContent = (ru ? 'Перейти к оплате · ' : 'Continue to payment · ') + fmtNum(price) + ' ₽';
-  document.getElementById('fn-checkout-terms').textContent = fnPlanTerms(plan);
   if(record && window.neoUxRec) window.neoUxRec('tier_pick', plan + ':' + price);
 }
 
@@ -9350,12 +9334,12 @@ function funnelCheckoutHtml(errText){
   let saved = NEO_QA ? QA_EMAIL : '';
   try{ saved = localStorage.getItem('neo_email') || bridge.webUser?.email || saved; }catch(e){}
   const twPrice = fnPlanPrice('tripwire');
-  const plusPrice = fnPlanPrice('plus');
+  const proPrice = fnPlanPrice('pro');
   if(!twPrice) return '<p role="status">' + esc(tt('err')) + '</p>';
   const compat = FN.type === 'compat';
   const complete = compat ? (ru ? 'Полный разбор пары' : 'Full couple reading') : (ru ? 'Полный расклад' : 'Full reading');
   const twEnergy = Number(FN.plans?.tripwire?.energy);
-  const plusEnergy = Number(FN.plans?.plus?.energy);
+  const proEnergy = Number(FN.plans?.pro?.energy);
   const tier = (plan, title, amount, benefits, monthly = false) => `
     <label class="fn-tier">
       <span class="fn-tier-head">
@@ -9381,10 +9365,10 @@ function funnelCheckoutHtml(errText){
           twEnergy > 0 && (ru ? fmtNum(twEnergy) + ' ⚡ для вопросов в чате' : fmtNum(twEnergy) + ' ⚡ for questions in chat'),
           ru ? '3 дня доступа ПРО' : '3 days of PRO access',
         ])}
-        ${plusPrice ? tier('plus', ru ? 'ПЛЮС' : 'PLUS', plusPrice, [
-          complete + (ru ? ' включён' : ' included'),
-          ru ? 'Большие расклады и Космо-паспорт' : 'Extended spreads and your cosmic profile',
-          plusEnergy > 0 && (ru ? fmtNum(plusEnergy) + ' ⚡ на месяц для раскладов и чата' : fmtNum(plusEnergy) + ' ⚡ each month for readings and chat'),
+        ${proPrice ? tier('pro', ru ? 'ПРО на месяц' : '1 month of PRO', proPrice, [
+          ru ? 'Этот разбор и доступ ко всем раскладам' : 'This reading and access to all spreads',
+          ru ? 'Матрица Судьбы и натальная карта целиком' : 'Full Destiny Matrix and natal chart',
+          proEnergy > 0 && (ru ? fmtNum(proEnergy) + ' ⚡ на месяц для раскладов и чата' : fmtNum(proEnergy) + ' ⚡ each month for readings and chat'),
         ], true) : ''}
       </fieldset>
       <div class="fn-offer-entry" id="fn-offer-entry" ${errText ? 'hidden' : ''}>
@@ -9406,12 +9390,9 @@ function funnelCheckoutHtml(errText){
               placeholder="you@example.com" value="${esc(saved)}" aria-describedby="fn-err"
               oninput="this.classList.remove('is-err');this.removeAttribute('aria-invalid');document.getElementById('fn-err').classList.remove('is-on')">
           </div>
-          <div class="fn-agree-wrap">
-            <label class="fn-agree"><input type="checkbox" id="fn-agree" required aria-describedby="fn-checkout-terms">
-              <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a>, <a href="/politika/" target="_blank" rel="noopener">политикой</a> и условиями автопродления.' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and renewal terms.'}</span>
-            </label>
-            <p class="fn-offer-terms" id="fn-checkout-terms"></p>
-          </div>
+          <label class="fn-agree"><input type="checkbox" id="fn-agree" required>
+            <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a>, <a href="/politika/" target="_blank" rel="noopener">политикой</a> и <a href="/soglashenie/#p6" target="_blank" rel="noopener">условиями автопродления</a>.' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and <a href="/soglashenie/#p6" target="_blank" rel="noopener">renewal terms</a>.'}</span>
+          </label>
           <button type="submit" class="btn btn-brass btn-wide" id="fn-submit-btn"></button>
         </form>
       </div>
