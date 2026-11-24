@@ -420,8 +420,12 @@ function safeNext(){
   return APP_URL;
 }
 
-const A = { email:'', screen:'register', busy:false, cool:0, timer:null, poll:null, fromYesNo:false, mode:'code', fromYnIntent:false };
-try { A.fromYesNo = (new URLSearchParams(location.search)).get('from') === 'yesno'; } catch(e){}
+const A = { email:'', screen:'register', busy:false, cool:0, timer:null, poll:null, fromYesNo:false, fromHistory:false, mode:'code', fromYnIntent:false };
+try {
+  const from = new URLSearchParams(location.search).get('from');
+  A.fromYesNo = from === 'yesno';
+  A.fromHistory = from === 'history';
+} catch(e){}
 /* Гость нажал «Узнать сроки» в пробном кабинете — напоминаем, зачем он здесь. */
 try {
   const gi = JSON.parse(sessionStorage.getItem('neo_guest_intent') || localStorage.getItem('neo_guest_intent') || 'null');
@@ -430,8 +434,12 @@ try {
 
 const TITLES = {
   register: [
-    A.fromYnIntent ? 'Ещё шаг — и оракул ответит' : (A.fromYesNo ? 'Ваш расклад готов ✨' : 'Вход за 10 секунд'),
-    A.fromYnIntent
+    A.fromHistory ? 'Войдите, чтобы открыть расклады'
+      : A.fromYnIntent ? 'Ещё шаг — и оракул ответит'
+      : A.fromYesNo ? 'Ваш расклад готов ✨' : 'Вход за 10 секунд',
+    A.fromHistory
+      ? 'Если вы покупали расклад, войдите с почтой, которую указали при оплате.'
+      : A.fromYnIntent
       ? 'Войдите, чтобы узнать <b>сроки</b> и задать уточняющий вопрос. В подарок <b>+5 энергии</b>.'
       : A.fromYesNo
       ? 'Войдите удобным способом, чтобы <b>открыть разбор</b> и получить <b>+5 энергии</b>.'

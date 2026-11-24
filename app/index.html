@@ -1004,30 +1004,35 @@ body.chat-mode .chat-head{padding-top:16px}
 .fn-khole-blur{filter:blur(5px);opacity:.48;user-select:none;pointer-events:none;transition:filter .3s}
 
 /* Деликатный таймер фиксации расклада и спеццены */
-.fn-hold-timer{display:inline-flex;align-items:center;gap:8px;margin:2px auto 12px;padding:6px 13px;border-radius:999px;background:rgba(217,174,95,.08);border:1px solid rgba(217,174,95,.25);font-size:12px;color:var(--brass-pale)}
-.fn-hold-dot{width:6px;height:6px;border-radius:50%;background:var(--brass);box-shadow:0 0 8px var(--brass);animation:hmPulse 1.8s ease-in-out infinite}
-.fn-hold-timer b{font-family:var(--mono);font-size:12px;color:var(--brass-bright);letter-spacing:.05em}
-
-.fn-tier-switch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 8px;align-items:stretch}
-@media(max-width:520px){.fn-tier-switch{grid-template-columns:1fr}}
-.fn-tier{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:15px 15px 14px;border-radius:14px;border:1px solid var(--line-soft);background:rgba(11,15,30,.68);text-align:left;cursor:pointer;transition:border-color .2s,background .2s,box-shadow .2s}
-.fn-tier:hover{border-color:var(--line)}
-.fn-tier.is-on{border-color:var(--brass);background:linear-gradient(160deg,rgba(217,174,95,.16),rgba(18,24,41,.94));box-shadow:0 10px 28px -12px rgba(217,174,95,.35),inset 0 0 0 1px rgba(217,174,95,.25)}
-.fn-tier-top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:7px}
-.fn-tier-badge{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:5px;background:rgba(217,174,95,.14);color:var(--brass-pale)}
-.fn-tier-badge.is-hot{background:linear-gradient(135deg,#F0DDB0,#C89845);color:#12151F;font-weight:700}
-.fn-tier-radio{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;flex:none}
-.fn-tier.is-on .fn-tier-radio{border-color:var(--brass);background:var(--brass)}
-.fn-tier.is-on .fn-tier-radio::after{content:"";width:6px;height:6px;border-radius:50%;background:#0B0F1E}
-.fn-tier-name{font-family:var(--serif);font-size:17.5px;color:var(--ivory);line-height:1.2;margin-bottom:8px}
-.fn-tier-list{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:5px;font-size:12px;line-height:1.4;color:var(--mist)}
-.fn-tier.is-on .fn-tier-list{color:rgba(242,237,224,.88)}
-.fn-tier-list li{padding-left:13px;position:relative}
-.fn-tier-list li::before{content:"✦";position:absolute;left:0;top:0;color:var(--brass);font-size:10px}
-.fn-tier-pwrap{display:flex;align-items:baseline;gap:8px;margin-top:auto;padding-top:9px;border-top:1px solid rgba(217,174,95,.12)}
-.fn-tier-old{font-family:var(--sans);font-size:13px;color:var(--mist);text-decoration:line-through;opacity:.65}
-.fn-tier-price{font-family:var(--serif);font-size:24px;color:var(--brass-bright);line-height:1}
-.fn-tier-per{font-size:11px;color:var(--mist);margin-left:auto}
+.fn-unlock{margin:18px 0 12px;padding:16px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,rgba(217,174,95,.1),transparent 80%)}
+.fn-unlock .btn{min-height:48px;white-space:normal;line-height:1.35}
+.fn-offer-terms{margin:8px 0 0;font-size:12.5px;line-height:1.5;color:var(--mist)}
+.fn-offer-entry .fn-offer-terms{text-align:center}
+.fn-checkout-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.fn-checkout-head h3{margin:0;font:400 22px/1.2 var(--serif);color:var(--ivory)}
+.fn-disclosure{font:inherit;color:var(--brass-pale);cursor:pointer;text-underline-offset:3px}
+button.fn-disclosure{border:0;padding:4px 0;background:none;text-decoration:underline;font-size:13px;line-height:1.5}
+.fn-pos-open>.fn-disclosure{margin-top:6px}
+.fn-disclosure:focus-visible,.fn-checkout-head h3:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:3px}
+.fn-reading-details{margin-top:12px}
+.fn-reading-details>summary{padding:7px 0;font-size:13px}
+.fn-reading-details>.fn-ind{margin:10px 0}
+.fn-tier-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0;margin:0;padding:0;border:0}
+.fn-tier-switch legend{margin-bottom:6px}
+.fn-tier{display:flex;align-items:center;gap:9px;min-width:0;padding:10px 11px;border-radius:10px;border:1px solid var(--line-soft);background:rgba(11,15,30,.4);cursor:pointer;color:var(--ivory)}
+.fn-tier:has(:checked){border-color:var(--brass);background:rgba(217,174,95,.1)}
+.fn-tier input{margin:0;accent-color:var(--brass);flex:none}
+.fn-tier-name,.fn-tier-price{display:block;line-height:1.3}
+.fn-tier-name{font-size:13px}
+.fn-tier-price{font-weight:600;font-size:14px;white-space:nowrap}
+.fn-form .fn-offer-terms{margin:0}
+.fn-email-wrap .fn-lbl{display:block;margin-bottom:5px}
+@media(max-width:520px){.fn-unlock{padding:12px}.fn-checkout-head h3{font-size:20px}.fn-tier{padding:9px 8px;gap:6px}}
+@media(max-width:520px){
+  #tb-result:has(.fn-unlock) #tb-cards-out{margin:14px 0}
+  #tb-result:has(.fn-unlock) #tb-cards-out img{width:65px}
+  #tb-result .fn-lpoints li{font-size:14px}
+}
 
 /* Заметная ошибка ПРЯМО НАД полем Email + тряска при пустом клике */
 .fn-email-wrap{position:relative;margin-top:4px}
@@ -1036,8 +1041,7 @@ body.chat-mode .chat-head{padding-top:16px}
 .fn-email.is-err{border-color:#ff7878!important;box-shadow:0 0 0 3px rgba(255,120,120,.18);animation:fnqShake .4s}
 html[data-theme="dawn"] .fn-khole,
 html[data-theme="dawn"] .fn-tier{background:#FFFFFF}
-html[data-theme="dawn"] .fn-tier.is-on{background:linear-gradient(160deg,rgba(154,108,28,.14),#FFFFFF)}
-html[data-theme="dawn"] .fn-tier.is-on .fn-tier-list{color:#2C261B}
+html[data-theme="dawn"] .fn-tier:has(:checked){background:rgba(154,108,28,.12)}
 
 /* ============ МОБИЛЬНАЯ НАВИГАЦИЯ v2 ============ */
 /* потянуть вниз = обновить (только телефон) */
@@ -1629,46 +1633,14 @@ html[data-theme="dawn"] .fn-cont-error{color:#8A3A1E}
 .fn-up-teaser{margin:4px 0 14px}
 .fn-up-note{font-size:12px;line-height:1.5;color:var(--mist);text-align:center;margin:10px 0 0}
 .fn-up-note a{text-decoration:underline;text-underline-offset:2px}
-.fn-hold-timer.is-save{background:rgba(214,120,90,.14);border-color:rgba(214,120,90,.5);color:#F0B49C}
-.fn-hold-timer.is-save b{color:#FFD2BF}
-.fn-tier.is-save{box-shadow:0 10px 30px -10px rgba(217,174,95,.55),inset 0 0 0 1px rgba(217,174,95,.4)}
 html[data-theme="dawn"] .fn-up-card{background:linear-gradient(160deg,rgba(217,174,95,.16),#FFFFFF)}
 html[data-theme="dawn"] .fn-up-title{color:#2A1E08}
-html[data-theme="dawn"] .fn-hold-timer.is-save{color:#8A3A1E}
-html[data-theme="dawn"] .fn-hold-timer.is-save b{color:#6B2A12}
 
 /* === NEOTARO: хук перед туманом === */
 .fn-hook{position:relative;margin:16px 0 4px;padding:13px 15px;border-radius:12px;border-left:3px solid #D9AE5F;
   background:linear-gradient(90deg,rgba(217,174,95,.14),rgba(217,174,95,.02));font-family:var(--serif);font-size:16px;line-height:1.5;color:#F2D49A}
 html[data-theme="dawn"] .fn-hook{color:#4A3208}
 
-/* === NEOTARO: живой туман ===
-   Только transform/opacity (считает GPU), без анимации filter:blur — иначе дешёвые Android лагают.
-   Вне экрана анимация ставится на паузу (IntersectionObserver), при reduced-motion — статика. */
-.daily-fog-box.fn-fogbox{contain:paint;isolation:isolate}
-.fn-fogbox .daily-fog-preview{max-height:110px;filter:blur(6px);opacity:.38}
-.fn-mist{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
-.fn-mist i{position:absolute;left:-50%;top:-50%;width:200%;height:200%;will-change:transform;backface-visibility:hidden}
-.fn-mist i:nth-child(1){
-  background:radial-gradient(28% 22% at 30% 40%,rgba(226,214,240,.30),transparent 70%),
-             radial-gradient(26% 20% at 70% 62%,rgba(210,190,235,.24),transparent 70%);
-  animation:fnMistA 19s ease-in-out infinite alternate}
-.fn-mist i:nth-child(2){
-  background:radial-gradient(30% 24% at 62% 36%,rgba(240,220,180,.20),transparent 70%),
-             radial-gradient(24% 18% at 38% 70%,rgba(200,210,240,.22),transparent 70%);
-  animation:fnMistB 26s ease-in-out infinite alternate}
-.fn-mist i:nth-child(3){
-  background:radial-gradient(34% 26% at 50% 52%,rgba(255,255,255,.14),transparent 72%);
-  animation:fnMistC 33s linear infinite}
-@keyframes fnMistA{0%{transform:translate3d(-8%,2%,0) scale(1)}100%{transform:translate3d(9%,-4%,0) scale(1.15)}}
-@keyframes fnMistB{0%{transform:translate3d(7%,5%,0) scale(1.1)}100%{transform:translate3d(-9%,-3%,0) scale(.95)}}
-@keyframes fnMistC{0%{transform:rotate(0) translate3d(4%,0,0)}100%{transform:rotate(360deg) translate3d(4%,0,0)}}
-.fn-mist.is-paused i{animation-play-state:paused}
-.fn-fogbox .daily-fog-card{z-index:2}
-.fn-fogbox .daily-fog-title{text-shadow:0 0 18px rgba(217,174,95,.45)}
-html[data-theme="dawn"] .fn-mist i{opacity:.55;mix-blend-mode:multiply}
-@media(max-width:640px){.fn-mist i:nth-child(3){display:none}}
-@media(prefers-reduced-motion:reduce){.fn-mist i{animation:none}}
 
 /* Рассеивание тумана после оплаты */
 .fn-lift{position:absolute;inset:-10px;z-index:5;pointer-events:none;overflow:hidden;border-radius:14px;
@@ -4289,6 +4261,11 @@ function requireAuth(intent){
       try{ localStorage.setItem('neo_guest_intent', JSON.stringify(intent)); }catch(e){}
     }
   } catch(e){}
+  if(intent?.action === 'history'){
+    const query = new URLSearchParams({from:'history', next:'/app/#spreads'});
+    location.assign(AUTH_REDIRECT_URL + '?' + query);
+    return true;
+  }
   bounceToAuth();
   return true;
 }
@@ -9048,6 +9025,12 @@ function openMatrixFunnel(prefillBirth){
 }
 function fnShowTable(q, picked, matrixPts){
   go('table');
+  const ru = FN_RU();
+  const spread = S.spreads.find(item => item.id === FN.type);
+  document.getElementById('tb-name').textContent = spread?.name || (ru ? 'Ваш расклад' : 'Your reading');
+  document.getElementById('tb-desc').textContent = spread?.description || '';
+  document.getElementById('tb-cards').textContent = picked?.length ? picked.length + ' ' + cardsWord(picked.length) : 'NEOTARO';
+  document.getElementById('tb-price').textContent = ru ? 'личный расклад' : 'personal reading';
   document.getElementById('tb-ask').style.display = 'none';
   document.getElementById('tb-shuffle').style.display = 'none';
   document.getElementById('tb-result').style.display = 'block';
@@ -9294,188 +9277,192 @@ function fnResumeLast(){
 }
 
 let FN_SELECTED_PLAN = 'tripwire';
-let _fnHoldTimer = null;
+let fnCheckoutRequest = false;
 
 function fnPlanPrice(plan){
-  return FN.plans?.[plan]?.price ?? null;
+  const price = Number(FN.plans?.[plan]?.price);
+  return Number.isFinite(price) && price > 0 ? price : null;
 }
-
-const FN_SAVE_MINUTES = 10;
-function fnSaveKey(){ return 'neo_save_' + (FN.id || ''); }
-function fnSaveEnd(){ return 0; }
-function fnSaveActive(){ return false; }
-function fnOfferSave(reason){ return false; }
 
 function tbBack(){
   go('spreads');
 }
 
-function fnStartHoldTimer(){
-  clearInterval(_fnHoldTimer);
-  const el = document.getElementById('fn-hold-clock');
-  if(!el) return;
-  const key = 'neo_hold_' + (FN.id || 'cur');
-  let end = 0;
-  try{
-    end = parseInt(sessionStorage.getItem(key) || '0', 10);
-    if(!end || end < Date.now()){
-      end = Date.now() + 15 * 60 * 1000;
-      sessionStorage.setItem(key, String(end));
-    }
-  }catch(e){ end = Date.now() + 15 * 60 * 1000; }
-
-  function tick(){
-    const node = document.getElementById('fn-hold-clock');
-    if(!node){ clearInterval(_fnHoldTimer); return; }
-    const left = Math.max(0, Math.floor((end - Date.now()) / 1000));
-    const m = String(Math.floor(left / 60)).padStart(2, '0');
-    const s = String(left % 60).padStart(2, '0');
-    node.textContent = m + ':' + s;
+function fnPlanTerms(plan){
+  const ru = FN_RU();
+  const pro = fnPlanPrice('pro');
+  const monthly = pro ? fmtNum(pro) + ' ₽' : '';
+  if(plan === 'pro'){
+    return ru ? `1 месяц ПРО. При автопродлении — ${monthly} в месяц.`
+      : `1 month of PRO. If auto-renewal is enabled — ${monthly} per month.`;
   }
-  tick();
-  _fnHoldTimer = setInterval(tick, 1000);
+  return ru
+    ? ('Включены 3 дня ПРО. ' + (monthly ? `При автопродлении затем ${monthly} в месяц.` : 'При автопродлении действует текущая цена ПРО.'))
+    : ('Includes 3 days of PRO. ' + (monthly ? `Then ${monthly} per month if auto-renewal is enabled.` : 'If auto-renewal is enabled, the current PRO price applies.'));
 }
 
-function fnPickTier(plan){
+function fnPickTier(plan, record = true){
+  const price = fnPlanPrice(plan);
+  if(!price) return;
   FN_SELECTED_PLAN = plan;
-  document.querySelectorAll('.fn-tier').forEach(el => {
-    el.classList.toggle('is-on', el.dataset.plan === plan);
-  });
-  const btn = document.getElementById('fn-submit-btn');
-  if(btn){
-    const ru = FN_RU();
-    const price = fnPlanPrice(plan);
-    if(plan === 'pro' || plan === 'plus'){
-      btn.textContent = ru
-        ? 'Открыть расклад + VIP-доступ на месяц · ' + price + ' ₽'
-        : 'Get full VIP access for 1 month · ' + price + ' ₽';
-    } else {
-      btn.textContent = ru
-        ? 'Снять туман и открыть расклад целиком · ' + price + ' ₽'
-        : 'Unlock this reading · ' + price + ' ₽';
-    }
+  const ru = FN_RU();
+  document.getElementById('fn-submit-btn').textContent = (ru ? 'Перейти к оплате · ' : 'Continue to payment · ') + fmtNum(price) + ' ₽';
+  document.getElementById('fn-checkout-terms').textContent = fnPlanTerms(plan);
+  document.getElementById('fn-plan-includes').textContent = plan === 'pro'
+    ? (ru ? 'Этот расклад, другие расклады, Матрица Судьбы и натальная карта.' : 'This reading, other readings, your Destiny Matrix and natal chart.')
+    : (ru ? 'Полный разбор этого расклада и вопросы Оракулу в чате.' : 'The complete reading and questions for the Oracle in chat.');
+  if(record && window.neoUxRec) window.neoUxRec('tier_pick', plan + ':' + price);
+}
+
+function fnToggleCheckout(open){
+  if(fnCheckoutRequest) return;
+  const entry = document.getElementById('fn-offer-entry');
+  const checkout = document.getElementById('fn-checkout');
+  const button = document.getElementById('fn-unlock-btn');
+  entry.hidden = open;
+  checkout.hidden = !open;
+  button.setAttribute('aria-expanded', String(open));
+  if(open){
+    document.getElementById('fn-checkout-title').focus();
+    if(window.neoUxRec) window.neoUxRec('checkout_open', 'id=' + (FN.id || '') + ' plan=' + FN_SELECTED_PLAN);
+  }else{
+    button.focus();
   }
 }
 
-function funnelFogHtml(errText){
+function funnelCheckoutHtml(errText){
   const ru = FN_RU();
   let saved = NEO_QA ? QA_EMAIL : '';
   try{ saved = localStorage.getItem('neo_email') || bridge.webUser?.email || saved; }catch(e){}
-  FN_SELECTED_PLAN = 'tripwire';
-  const twPrice = fnPlanPrice('tripwire'), twOld = 390;
+  const twPrice = fnPlanPrice('tripwire');
   const proPrice = fnPlanPrice('pro');
-  if(!twPrice || !proPrice) return '<p>' + esc(tt('err')) + '</p>';
-  const pl = FN.plans || {};
-  const twEn = (pl.tripwire && pl.tripwire.energy) || 5;
-  const proEn = (pl.pro && pl.pro.energy) || 350;
-  const isCompat = !!((S.spread && S.spread.id === 'compat') || FN.type === 'compat');
-
-  const badgeTx = isCompat
-    ? (ru ? 'Расчёт вашей пары готов' : 'Couple reading is ready')
-    : (ru ? 'Продолжение расклада готово' : 'Full reading is ready');
-  const titleTx = isCompat
-    ? (ru ? 'Откройте точный % совместимости и все 4 карты союза' : 'Unlock exact % compatibility & all 4 cards')
-    : (ru ? 'Снимите туман с остальных карт' : 'Read the complete spread');
-  const twItem1 = isCompat
-    ? (ru ? 'Точный % совместимости по 4 сферам (любовь, страсть, быт, карма)' : 'Exact % across 4 spheres (love, passion, life, karma)')
-    : (ru ? 'Расшифровка всех выпавших карт, сроки и итоговый совет' : 'Full interpretation of all drawn cards');
-  const twItem2 = isCompat
-    ? (ru ? ('Все 4 карты пары + ' + twEn + ' личных вопросов тарологу в чате') : ('All 4 cards + ' + twEn + ' chat questions'))
-    : (ru ? (twEn + ' личных вопросов тарологу в чате') : (twEn + ' personal questions to the AI Tarot reader'));
+  if(!twPrice) return '<p role="status">' + esc(tt('err')) + '</p>';
+  const price = fmtNum(twPrice) + ' ₽';
+  const compat = FN.type === 'compat';
+  const openLabel = compat ? (ru ? 'Открыть полный разбор пары' : 'Unlock the full couple reading')
+    : (ru ? 'Открыть полный расклад' : 'Unlock the full reading');
+  const tier = (plan, title, amount, checked = false) => `
+    <label class="fn-tier">
+      <input type="radio" name="fn-plan" value="${plan}" ${checked ? 'checked' : ''} onchange="fnPickTier(this.value)">
+      <span><span class="fn-tier-name">${esc(title)}</span>
+      <span class="fn-tier-price" data-fn-price="${plan}">${esc(fmtNum(amount))} ₽</span></span>
+    </label>`;
 
   return `
-    <div class="daily-fog-box fn-fogbox" id="fn-fog">
-      <div class="fn-mist" aria-hidden="true"><i></i><i></i><i></i></div>
-      <div class="daily-fog-card">
-        <span class="daily-fog-badge">${IC.spark} ${esc(badgeTx)}</span>
-        <div class="daily-fog-title">${esc(titleTx)}</div>
-        <p class="daily-fog-sub" style="margin-bottom:8px">${esc(ru ? 'Оракул уже связал ваши данные и все выпавшие карты в единый прогноз. Выберите формат доступа:' : 'All cards for your situation are drawn. Choose your access:')}</p>
-
-        <div class="fn-hold-timer">
-          <span class="fn-hold-dot"></span>
-          <span>${esc(ru ? 'Спеццена к вашему первому раскладу:' : 'Special offer held for:')} <b id="fn-hold-clock">15:00</b></span>
-        </div>
-
-        <div class="fn-form">
-          <div class="fn-tier-switch">
-            <button type="button" class="fn-tier is-on" data-plan="tripwire" onclick="fnPickTier('tripwire')">
-              <div>
-                <div class="fn-tier-top">
-                  <span class="fn-tier-badge is-hot">${esc(ru ? 'Выбор 85% · Выгода −50%' : 'Most popular · Save 50%')}</span>
-                  <span class="fn-tier-radio"></span>
-                </div>
-                <div class="fn-tier-name">${esc(isCompat ? (ru ? 'Открыть совместимость целиком' : 'Unlock full compatibility') : (ru ? 'Открыть этот расклад целиком' : 'Unlock full reading'))}</div>
-                <ul class="fn-tier-list">
-                  <li>${esc(twItem1)}</li>
-                  <li>${esc(twItem2)}</li>
-                  <li>${esc(ru ? '+ 3 дня доступа ПРО' : '+ 3 days of full PRO access included')}</li>
-                </ul>
-              </div>
-              <div class="fn-tier-pwrap">
-                <span class="fn-tier-old">${twOld} ₽</span>
-                <span class="fn-tier-price">${twPrice} ₽</span>
-                <span class="fn-tier-per">${esc(ru ? 'сейчас' : 'now')}</span>
-              </div>
-            </button>
-
-            <button type="button" class="fn-tier" data-plan="pro" onclick="fnPickTier('pro')">
-              <div>
-                <div class="fn-tier-top">
-                  <span class="fn-tier-badge">${esc(ru ? 'Безлимит на месяц · VIP' : 'Full month · VIP')}</span>
-                  <span class="fn-tier-radio"></span>
-                </div>
-                <div class="fn-tier-name">${esc(ru ? 'Полный доступ ПРО · 1 мес' : 'Full PRO access · 1 month')}</div>
-                <ul class="fn-tier-list">
-                  <li>${esc(ru ? 'Этот расклад + более 30 раскладов на любовь и будущее' : 'This spread + 30+ spreads for love & future')}</li>
-                  <li>${esc(ru ? 'Матрица Судьбы целиком (22 аркана) + Натальная карта' : 'Full Destiny Matrix (22 arcana) + Natal chart')}</li>
-                  <li>${esc(ru ? ('Личный таролог в чате на весь месяц (до ' + proEn + ' ответов)') : ('Personal AI Tarot chat all month (' + proEn + ' answers)'))}</li>
-                </ul>
-              </div>
-              <div class="fn-tier-pwrap">
-                <span class="fn-tier-price">${proPrice} ₽</span>
-                <span class="fn-tier-per">${esc(ru ? 'за месяц' : '/ month')}</span>
-              </div>
-            </button>
-          </div>
-
-          <div class="fn-email-wrap" id="fn-email-wrap">
-            <div class="fn-err-top${errText ? ' is-on' : ''}" id="fn-err">${esc(errText || '')}</div>
-            <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email"
-              aria-label="${esc(ru ? 'Email для чека и копии расклада' : 'Email for your receipt and reading copy')}"
-                placeholder="${esc(ru ? 'Email для чека и копии расклада' : 'Email for your receipt and reading copy')}"
-              value="${esc(saved)}"
-              oninput="this.classList.remove('is-err');var e=document.getElementById('fn-err');if(e)e.classList.remove('is-on')">
-          </div>
-
-          <button type="button" class="btn btn-brass btn-wide" id="fn-submit-btn" style="margin-top:4px;min-height:50px;font-size:15.5px" onclick="funnelPay(FN_SELECTED_PLAN)">
-            ${esc(ru ? ('Снять туман и открыть расклад целиком · ' + twPrice + ' ₽') : ('Unlock this reading · ' + twPrice + ' ₽'))}
-          </button>
-
-          <label class="fn-agree"><input type="checkbox" id="fn-agree" checked>
-            <span>${ru ? 'Принимаю <a href="/oferta/" target="_blank" rel="noopener">оферту</a>, <a href="/politika/" target="_blank" rel="noopener">политику</a> и условия автопродления (отмена в 1 клик в Профиле)' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and auto-renewal terms'}</span>
-          </label>
-        </div>
+    <section class="fn-unlock" id="fn-fog" aria-label="${esc(ru ? 'Доступ к полному раскладу' : 'Access to the full reading')}">
+      <div class="fn-offer-entry" id="fn-offer-entry" ${errText ? 'hidden' : ''}>
+        <button type="button" class="btn btn-brass btn-wide" id="fn-unlock-btn" aria-controls="fn-checkout"
+          aria-expanded="${!!errText}" onclick="fnToggleCheckout(true)">
+          ${esc(openLabel)} · <span data-fn-price="tripwire">${esc(price)}</span>
+        </button>
+        <p class="fn-offer-terms">${esc(fnPlanTerms('tripwire'))}</p>
       </div>
-    </div>`;
+      <div id="fn-checkout" ${errText ? '' : 'hidden'}>
+        <div class="fn-checkout-head">
+          <h3 id="fn-checkout-title" tabindex="-1">${esc(ru ? 'Оформление доступа' : 'Get full access')}</h3>
+          <button type="button" class="fn-disclosure" onclick="fnToggleCheckout(false)">${esc(ru ? 'Свернуть' : 'Close')}</button>
+        </div>
+        <form class="fn-form" id="fn-checkout-form" novalidate onsubmit="event.preventDefault(); funnelPay(FN_SELECTED_PLAN)">
+          ${proPrice ? `<fieldset class="fn-tier-switch">
+            <legend class="fn-lbl">${esc(ru ? 'Вариант доступа' : 'Access option')}</legend>
+            ${tier('tripwire', ru ? 'Расклад + 3 дня ПРО' : 'Reading + 3 days of PRO', twPrice, true)}
+            ${tier('pro', ru ? 'ПРО на месяц' : '1 month of PRO', proPrice)}
+          </fieldset>` : ''}
+          <div>
+            <p class="fn-offer-terms" id="fn-plan-includes"></p>
+            <p class="fn-offer-terms" id="fn-checkout-terms"></p>
+          </div>
+          <div class="fn-email-wrap" id="fn-email-wrap">
+            <div class="fn-err-top${errText ? ' is-on' : ''}" id="fn-err" role="status">${esc(errText || '')}</div>
+            <label class="fn-lbl" for="fn-email">${esc(ru ? 'Почта для чека и ссылки на расклад' : 'Email for your receipt and reading link')}</label>
+            <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email" required
+              placeholder="you@example.com" value="${esc(saved)}" aria-describedby="fn-err"
+              oninput="this.classList.remove('is-err');this.removeAttribute('aria-invalid');document.getElementById('fn-err').classList.remove('is-on')">
+          </div>
+          <label class="fn-agree"><input type="checkbox" id="fn-agree" required aria-describedby="fn-checkout-terms">
+            <span>${ru ? 'Принимаю <a href="/oferta/" target="_blank" rel="noopener">оферту</a>, <a href="/politika/" target="_blank" rel="noopener">политику</a> и условия автопродления. Отмена доступна в профиле.' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and renewal terms. You can cancel in your profile.'}</span>
+          </label>
+          <button type="submit" class="btn btn-brass btn-wide" id="fn-submit-btn"></button>
+        </form>
+      </div>
+    </section>`;
+}
+
+function fnShortenPreview(body){
+  if(!body) return;
+  const previewText = body.cloneNode(true);
+  previewText.querySelectorAll('br').forEach(br => br.replaceWith(' '));
+  const full = previewText.textContent.replace(/\s+/g, ' ').trim();
+  if(full.length <= 310) return;
+  const sentences = typeof Intl.Segmenter === 'function'
+    ? Array.from(new Intl.Segmenter(FN_RU() ? 'ru' : 'en', {granularity:'sentence'}).segment(full), part => part.segment)
+    : full.match(/[^.!?]+[.!?]+\s*/g) || [];
+  const firstTwo = sentences.slice(0, 2).join('').trim();
+  const lead = firstTwo.length <= 310 ? firstTwo : sentences[0]?.trim();
+  if(!lead || lead.length > 360 || full.length - lead.length < 45) return;
+
+  const excerpt = document.createElement('div');
+  excerpt.className = 'fn-pos-body';
+  excerpt.textContent = lead;
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'fn-disclosure';
+  body.id = 'fn-full-preview';
+  body.before(excerpt);
+  body.after(toggle);
+  toggle.setAttribute('aria-controls', body.id);
+  function showFull(open){
+    body.hidden = !open;
+    excerpt.hidden = open;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.textContent = FN_RU()
+      ? (open ? 'Свернуть текст' : 'Прочитать первую карту целиком')
+      : (open ? 'Show less' : 'Read the first card in full');
+  }
+  toggle.onclick = () => showFull(body.hidden);
+  showFull(false);
 }
 
 function funnelRenderLocked(teaser, errText){
+  const ru = FN_RU();
   const out = document.getElementById('tb-reading');
-  FN.teaser = teaser || FN.teaser || '';
-  out.innerHTML = `<div class="daily-teaser-wrap"><div class="daily-teaser-text">${clean(teaser || '')}</div>${funnelFogHtml(errText)}</div>`;
-  /* Делаем все закрытые блоки .fn-khole кликабельными — клик плавно скроллит к форме оплаты */
-  out.querySelectorAll('.fn-khole').forEach(el => {
-    el.style.cursor = 'pointer';
-    el.onclick = () => {
-      const fog = document.getElementById('fn-fog');
-      if(fog){
-        try{ fog.scrollIntoView({ behavior: 'smooth', block: 'center' }); }catch(e){}
-      }
-    };
-  });
+  FN.teaser = teaser || '';
+  out.innerHTML = `<div class="daily-teaser-wrap"><div class="daily-teaser-text">${clean(FN.teaser)}</div></div>`;
+  const content = out.querySelector('.daily-teaser-text');
+  const indicator = content.querySelector(':scope > .fn-ind');
+  const locked = content.querySelector(':scope > .fn-khole-list');
+  let points = content.querySelector(':scope > .fn-lpoints');
+  fnShortenPreview(content.querySelector('.fn-pos-open .fn-pos-body'));
+
+  if(!points && locked){
+    const titles = Array.from(locked.querySelectorAll('.fn-khole-sub')).slice(0, 2);
+    if(titles.length){
+      points = document.createElement('div');
+      points.className = 'fn-lpoints';
+      points.innerHTML = '<div class="fn-lpoints-t"></div><ul>' +
+        titles.map(title => '<li>' + esc(title.textContent) + '</li>').join('') + '</ul>';
+      content.append(points);
+    }
+  }
+  const pointTitle = points?.querySelector('.fn-lpoints-t');
+  if(pointTitle) pointTitle.textContent = ru ? 'Что откроется в полном раскладе' : 'In the full reading';
+
+  const wrap = content.parentElement;
+  wrap.insertAdjacentHTML('beforeend', funnelCheckoutHtml(errText));
+  FN_SELECTED_PLAN = 'tripwire';
+  if(document.getElementById('fn-submit-btn')) fnPickTier('tripwire', false);
+  if(indicator || locked?.children.length){
+    const details = document.createElement('details');
+    details.className = 'fn-reading-details';
+    const summary = document.createElement('summary');
+    summary.className = 'fn-disclosure';
+    summary.textContent = ru ? 'Посмотреть все части расклада' : 'See all parts of the reading';
+    details.append(summary);
+    if(indicator) details.append(indicator);
+    if(locked?.children.length) details.append(locked);
+    wrap.append(details);
+  }
   fnActions(false);
-  fnMistWatch();
-  fnStartHoldTimer();
 }
 
 function fnUtm(){
@@ -9498,6 +9485,7 @@ function fnShowError(msg, focusEmail){
     inp.classList.remove('is-err');
     void inp.offsetWidth;
     inp.classList.add('is-err');
+    inp.setAttribute('aria-invalid', 'true');
     try{ inp.scrollIntoView({ behavior: 'smooth', block: 'center' }); }catch(e){}
     setTimeout(() => { try{ inp.focus(); }catch(e){} }, 250);
   }
@@ -9505,33 +9493,47 @@ function fnShowError(msg, focusEmail){
 }
 
 async function funnelPay(plan){
-  if(FN.paymentPending || FN.polling) return;
+  if(FN.paymentPending || FN.polling || fnCheckoutRequest) return;
   const ru = FN_RU();
+  const form = document.getElementById('fn-checkout-form');
+  const price = fnPlanPrice(plan);
+  if(!form || !price) return;
   const err = document.getElementById('fn-err');
   const email = ((document.getElementById('fn-email') || {}).value || '').trim().toLowerCase();
   const agree = !!(document.getElementById('fn-agree') || {}).checked;
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
     if(window.neoUxRec) window.neoUxRec('pay_blocked', 'email_invalid');
-    fnShowError(ru ? '↑ Введите ваш email, чтобы мы открыли расклад и отправили вам копию' : '↑ Please enter a valid email address', true);
+    fnShowError(ru ? 'Введите почту, чтобы получить чек и ссылку на расклад' : 'Enter a valid email address for your receipt and reading link', true);
     return;
   }
   if(!agree){
     if(window.neoUxRec) window.neoUxRec('pay_blocked', 'offer_missing');
-    fnShowError(ru ? 'Поставьте галочку согласия с условиями ниже' : 'Please accept the offer terms', false);
+    fnShowError(ru ? 'Подтвердите согласие с условиями перед оплатой' : 'Please accept the terms before paying', false);
+    document.getElementById('fn-agree').focus();
     return;
   }
   if(!FN.id){ const s = fnLoad(); if(s){ FN.id = s.id; FN.k = s.k; } }
   if(!FN.id){ fnShowError(tt('err'), false); return; }
   if(err){ err.textContent = ''; err.classList.remove('is-on'); }
 
-  ['fn-submit-btn','fn-pay-tw','fn-pay-plus','fn-pay-pro'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = true; });
+  const id = FN.id;
+  const controls = form.querySelectorAll('input, button');
+  fnCheckoutRequest = true;
+  controls.forEach(control => { control.disabled = true; });
+  form.setAttribute('aria-busy', 'true');
   try{ localStorage.setItem('neo_email', email); }catch(e){}
 
-  const price = fnPlanPrice(plan);
-
-
-  const d = await api('/funnel/checkout', 'POST', { spread_id: FN.id, view_key: FN.k, email: email, plan: plan, expected_amount: price, agree: agree, utm: fnUtm() }, true);
-  ['fn-submit-btn','fn-pay-tw','fn-pay-plus','fn-pay-pro'].forEach(id => { const b = document.getElementById(id); if(b) b.disabled = false; });
+  let d;
+  try{
+    d = await api('/funnel/checkout', 'POST', { spread_id: id, view_key: FN.k, email, plan, expected_amount: price, agree, utm: fnUtm() }, true);
+  }catch(e){
+    d = null;
+  }finally{
+    fnCheckoutRequest = false;
+    controls.forEach(control => { control.disabled = false; });
+    form.removeAttribute('aria-busy');
+  }
+  if(FN.id !== id || S.view !== 'table' || !form.isConnected) return;
 
   if(d && (d.already_paid || d.message === 'payment_pending')){
     FN.paymentPending = true;
@@ -9543,9 +9545,10 @@ async function funnelPay(plan){
     const m = d && d.message;
     if(m === 'not_found'){ try{ localStorage.removeItem('neo_funnel'); }catch(e){} }
     fnShowError(
-      m === 'email_invalid' ? (ru ? '↑ Проверьте правильность email' : 'Check your email')
+      m === 'email_invalid' ? (ru ? 'Проверьте адрес своей почты' : 'Check your email')
       : m === 'need_agree' ? (ru ? 'Поставьте галочку согласия с условиями' : 'Please accept the offer')
       : m === 'not_found' ? (ru ? 'Расклад устарел — обновите страницу и разложите карты заново' : 'Reading expired — please refresh and draw cards again')
+      : m === 'price_changed' ? (ru ? 'Цена обновилась. Перезагрузите страницу, чтобы увидеть актуальную цену.' : 'The price changed. Refresh the page to see the current price.')
       : (ru ? 'Не удалось создать оплату, попробуйте ещё раз' : 'Could not create payment, try again'),
       m === 'email_invalid'
     );
@@ -11037,14 +11040,6 @@ function fnActions(show){
 }
 function tbDiscuss(){ if(FN.paidView) return funnelDiscuss(); discussSpread(); }
 
-/* Туман анимируется только когда виден на экране — экономим батарею и FPS */
-function fnMistWatch(){
-  const m = document.querySelector('#tb-reading .fn-mist');
-  if(!m || !('IntersectionObserver' in window)) return;
-  const io = new IntersectionObserver(es => es.forEach(e => m.classList.toggle('is-paused', !e.isIntersecting)), { threshold: 0 });
-  io.observe(m);
-}
-
 </script>
 <!-- ==================== DESKTOP NIGHT ATLAS & LIVING CONSTELLATIONS ==================== -->
 <style id="neo-desktop-atlas">
@@ -12060,17 +12055,13 @@ function fnMistWatch(){
       flush(false);
     });
 
-    wrapFn('fnPickTier', function(plan) {
-      rec('tier_pick', plan + ':' + (typeof fnPlanPrice === 'function' ? fnPlanPrice(plan) : ''));
-    });
-
     wrapFn('fnShowError', function(msg) {
       rec('pay_err', msg);
       flush(false);
     });
 
     wrapFn('funnelPay', function(plan) {
-      if (FN.paymentPending || FN.polling) return;
+      if (FN.paymentPending || FN.polling || fnCheckoutRequest) return;
       rec('pay_click', 'id=' + (FN.id || '') + ' plan=' + plan);
       flush(false);
     });
@@ -12124,17 +12115,18 @@ function fnMistWatch(){
   /* Фиксируем видимость самой цены, а не верхней границы блока. */
   setInterval(function() {
     if (seenPrices || document.visibilityState !== 'visible' || S.view !== 'table') return;
-    var prices = document.querySelectorAll('#fn-fog .fn-tier-price');
-    var visible = Array.from(prices).some(function(price) {
+    var prices = document.querySelectorAll('#fn-fog [data-fn-price]');
+    var visible = Array.from(prices).find(function(price) {
       var rect = price.getBoundingClientRect();
-      return rect.width > 0 && rect.height > 0 &&
+      if(!(rect.width > 0 && rect.height > 0 &&
         rect.top >= 0 && rect.bottom <= window.innerHeight &&
         rect.left >= 0 && rect.right <= window.innerWidth &&
-        getComputedStyle(price).visibility === 'visible';
+        getComputedStyle(price).visibility === 'visible')) return false;
+      return price.contains(document.elementFromPoint((rect.left + rect.right) / 2, (rect.top + rect.bottom) / 2));
     });
     if (!visible) return;
     seenPrices = true;
-    rec('price_seen', 'id=' + (FN.id || '') + ' plan=' + FN_SELECTED_PLAN);
+    rec('price_seen', 'id=' + (FN.id || '') + ' plan=' + visible.dataset.fnPrice);
   }, 500);
 
   /* 6. Выгрузка при сворачивании вкладки или уходе со страницы */
