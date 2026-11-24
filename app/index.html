@@ -1003,36 +1003,54 @@ body.chat-mode .chat-head{padding-top:16px}
 .fn-khole-vis{color:var(--ivory);opacity:.92}
 .fn-khole-blur{filter:blur(5px);opacity:.48;user-select:none;pointer-events:none;transition:filter .3s}
 
-/* Деликатный таймер фиксации расклада и спеццены */
+/* Выбор доступа и оформление расклада */
 .fn-unlock{margin:18px 0 12px;padding:16px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,rgba(217,174,95,.1),transparent 80%)}
 .fn-unlock .btn{min-height:48px;white-space:normal;line-height:1.35}
-.fn-offer-terms{margin:8px 0 0;font-size:12.5px;line-height:1.5;color:var(--mist)}
-.fn-offer-entry .fn-offer-terms{text-align:center}
-.fn-checkout-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.fn-offer-entry{margin-top:12px}
+.fn-offer-terms{margin:4px 0 0;font-size:12px;line-height:1.5;color:var(--mist)}
+.fn-checkout-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line-soft)}
 .fn-checkout-head h3{margin:0;font:400 22px/1.2 var(--serif);color:var(--ivory)}
-.fn-disclosure{font:inherit;color:var(--brass-pale);cursor:pointer;text-underline-offset:3px}
-button.fn-disclosure{border:0;padding:4px 0;background:none;text-decoration:underline;font-size:13px;line-height:1.5}
-.fn-pos-open>.fn-disclosure{margin-top:6px}
+.fn-disclosure{display:inline-flex;align-items:center;gap:10px;min-height:42px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:rgba(217,174,95,.06);font:500 13px/1.35 var(--sans);color:var(--brass-pale);text-align:left;cursor:pointer}
+.fn-disclosure:hover{border-color:var(--brass);background:rgba(217,174,95,.13)}
+.fn-disclosure--expand::after{content:"";width:6px;height:6px;margin:0 2px 3px 0;flex:none;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.fn-disclosure--expand[aria-expanded="true"]::after,.fn-reading-details[open]>summary::after{transform:rotate(225deg);margin-bottom:0;margin-top:3px}
+.fn-pos-open>.fn-disclosure{margin-top:10px}
 .fn-disclosure:focus-visible,.fn-checkout-head h3:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:3px}
 .fn-reading-details{margin-top:12px}
-.fn-reading-details>summary{padding:7px 0;font-size:13px}
+.fn-reading-details>summary{list-style:none}
+.fn-reading-details>summary::-webkit-details-marker{display:none}
 .fn-reading-details>.fn-ind{margin:10px 0}
-.fn-tier-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0;margin:0;padding:0;border:0}
-.fn-tier-switch legend{margin-bottom:6px}
-.fn-tier{display:flex;align-items:center;gap:9px;min-width:0;padding:10px 11px;border-radius:10px;border:1px solid var(--line-soft);background:rgba(11,15,30,.4);cursor:pointer;color:var(--ivory)}
-.fn-tier:has(:checked){border-color:var(--brass);background:rgba(217,174,95,.1)}
-.fn-tier input{margin:0;accent-color:var(--brass);flex:none}
-.fn-tier-name,.fn-tier-price{display:block;line-height:1.3}
-.fn-tier-name{font-size:13px}
-.fn-tier-price{font-weight:600;font-size:14px;white-space:nowrap}
-.fn-form .fn-offer-terms{margin:0}
+.fn-tier-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;min-width:0;margin:0;padding:0;border:0}
+.fn-tier-switch legend{margin-bottom:9px;color:var(--ivory);font:400 20px/1.3 var(--serif)}
+.fn-tier{display:flex;flex-direction:column;gap:10px;min-width:0;padding:13px;border-radius:11px;border:1px solid var(--line-soft);background:rgba(11,15,30,.4);cursor:pointer;color:var(--ivory)}
+.fn-tier:only-of-type{grid-column:1/-1}
+.fn-tier:hover{border-color:var(--line)}
+.fn-tier:has(:checked){border-color:var(--brass);background:rgba(217,174,95,.11)}
+.fn-tier:focus-within{outline:2px solid var(--brass);outline-offset:2px}
+.fn-tier-head{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
+.fn-tier input{margin:3px 0 0;accent-color:var(--brass);flex:none}
+.fn-tier-name{font:400 18px/1.25 var(--serif)}
+.fn-tier-benefits{display:grid;gap:5px;font-size:13px;line-height:1.4;color:var(--mist)}
+.fn-tier-benefit{display:block;position:relative;padding-left:12px}
+.fn-tier-benefit::before{content:"";position:absolute;left:0;top:.52em;width:4px;height:4px;border-radius:50%;background:var(--brass)}
+.fn-tier-total{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 7px;margin-top:auto;padding-top:8px;border-top:1px solid var(--line-soft)}
+.fn-tier-price{font:400 23px/1.2 var(--serif);white-space:nowrap;color:var(--brass-pale)}
+.fn-tier-period{font-size:12px;color:var(--mist)}
+.fn-agree-wrap .fn-offer-terms{padding-left:22px}
 .fn-email-wrap .fn-lbl{display:block;margin-bottom:5px}
-@media(max-width:520px){.fn-unlock{padding:12px}.fn-checkout-head h3{font-size:20px}.fn-tier{padding:9px 8px;gap:6px}}
 @media(max-width:520px){
+  .fn-unlock{padding:12px}
+  .fn-checkout-head h3{font-size:20px}
+  .fn-disclosure{min-height:44px}
+  .fn-tier{padding:10px;gap:8px}
+  .fn-tier-name{font-size:16px}
+  .fn-tier-benefits{font-size:12px}
+  .fn-tier-price{font-size:20px}
   #tb-result:has(.fn-unlock) #tb-cards-out{margin:14px 0}
   #tb-result:has(.fn-unlock) #tb-cards-out img{width:65px}
   #tb-result .fn-lpoints li{font-size:14px}
 }
+@media(max-width:355px){.fn-tier-switch{grid-template-columns:minmax(0,1fr)}}
 
 /* Заметная ошибка ПРЯМО НАД полем Email + тряска при пустом клике */
 .fn-email-wrap{position:relative;margin-top:4px}
@@ -9290,15 +9308,15 @@ function tbBack(){
 
 function fnPlanTerms(plan){
   const ru = FN_RU();
-  const pro = fnPlanPrice('pro');
-  const monthly = pro ? fmtNum(pro) + ' ₽' : '';
-  if(plan === 'pro'){
-    return ru ? `1 месяц ПРО. При автопродлении — ${monthly} в месяц.`
-      : `1 month of PRO. If auto-renewal is enabled — ${monthly} per month.`;
+  const price = fnPlanPrice(plan === 'tripwire' ? 'pro' : plan);
+  if(!price) return ru ? 'Условия продления и отмены действуют по оферте.' : 'The offer explains renewal and cancellation.';
+  const monthly = fmtNum(price) + ' ₽';
+  if(plan === 'tripwire'){
+    return ru ? `После 3 дней, если подключено автопродление, — ${monthly}/мес. Отмена в профиле.`
+      : `After 3 days, if auto-renewal is enabled, ${monthly}/month. Cancel in your profile.`;
   }
-  return ru
-    ? ('Включены 3 дня ПРО. ' + (monthly ? `При автопродлении затем ${monthly} в месяц.` : 'При автопродлении действует текущая цена ПРО.'))
-    : ('Includes 3 days of PRO. ' + (monthly ? `Then ${monthly} per month if auto-renewal is enabled.` : 'If auto-renewal is enabled, the current PRO price applies.'));
+  return ru ? `При автопродлении — ${monthly}/мес. Отмена в профиле.`
+    : `If auto-renewal is enabled, ${monthly}/month. Cancel in your profile.`;
 }
 
 function fnPickTier(plan, record = true){
@@ -9308,9 +9326,6 @@ function fnPickTier(plan, record = true){
   const ru = FN_RU();
   document.getElementById('fn-submit-btn').textContent = (ru ? 'Перейти к оплате · ' : 'Continue to payment · ') + fmtNum(price) + ' ₽';
   document.getElementById('fn-checkout-terms').textContent = fnPlanTerms(plan);
-  document.getElementById('fn-plan-includes').textContent = plan === 'pro'
-    ? (ru ? 'Этот расклад, другие расклады, Матрица Судьбы и натальная карта.' : 'This reading, other readings, your Destiny Matrix and natal chart.')
-    : (ru ? 'Полный разбор этого расклада и вопросы Оракулу в чате.' : 'The complete reading and questions for the Oracle in chat.');
   if(record && window.neoUxRec) window.neoUxRec('tier_pick', plan + ':' + price);
 }
 
@@ -9335,27 +9350,48 @@ function funnelCheckoutHtml(errText){
   let saved = NEO_QA ? QA_EMAIL : '';
   try{ saved = localStorage.getItem('neo_email') || bridge.webUser?.email || saved; }catch(e){}
   const twPrice = fnPlanPrice('tripwire');
-  const proPrice = fnPlanPrice('pro');
+  const plusPrice = fnPlanPrice('plus');
   if(!twPrice) return '<p role="status">' + esc(tt('err')) + '</p>';
-  const price = fmtNum(twPrice) + ' ₽';
   const compat = FN.type === 'compat';
-  const openLabel = compat ? (ru ? 'Открыть полный разбор пары' : 'Unlock the full couple reading')
-    : (ru ? 'Открыть полный расклад' : 'Unlock the full reading');
-  const tier = (plan, title, amount, checked = false) => `
+  const complete = compat ? (ru ? 'Полный разбор пары' : 'Full couple reading') : (ru ? 'Полный расклад' : 'Full reading');
+  const twEnergy = Number(FN.plans?.tripwire?.energy);
+  const plusEnergy = Number(FN.plans?.plus?.energy);
+  const tier = (plan, title, amount, benefits, monthly = false) => `
     <label class="fn-tier">
-      <input type="radio" name="fn-plan" value="${plan}" ${checked ? 'checked' : ''} onchange="fnPickTier(this.value)">
-      <span><span class="fn-tier-name">${esc(title)}</span>
-      <span class="fn-tier-price" data-fn-price="${plan}">${esc(fmtNum(amount))} ₽</span></span>
+      <span class="fn-tier-head">
+        <span class="fn-tier-name" id="fn-tier-name-${plan}">${esc(title)}</span>
+        <input type="radio" name="fn-plan" value="${plan}" ${plan === 'tripwire' ? 'checked' : ''} onchange="fnPickTier(this.value)"
+          aria-labelledby="fn-tier-name-${plan} fn-tier-total-${plan}" aria-describedby="fn-tier-benefits-${plan}">
+      </span>
+      <span class="fn-tier-benefits" id="fn-tier-benefits-${plan}" role="list">
+        ${benefits.filter(Boolean).map(benefit => `<span class="fn-tier-benefit" role="listitem">${esc(benefit)}</span>`).join('')}
+      </span>
+      <span class="fn-tier-total" id="fn-tier-total-${plan}">
+        <span class="fn-tier-price" data-fn-price="${plan}">${esc(fmtNum(amount))} ₽</span>
+        ${monthly ? `<span class="fn-tier-period">${ru ? 'в месяц' : 'per month'}</span>` : ''}
+      </span>
     </label>`;
 
   return `
     <section class="fn-unlock" id="fn-fog" aria-label="${esc(ru ? 'Доступ к полному раскладу' : 'Access to the full reading')}">
+      <fieldset class="fn-tier-switch">
+        <legend>${ru ? 'Выберите вариант доступа' : 'Choose an access option'}</legend>
+        ${tier('tripwire', complete, twPrice, [
+          ru ? 'Все карты, сроки и итоговый совет' : 'Every card, timing and practical advice',
+          twEnergy > 0 && (ru ? fmtNum(twEnergy) + ' ⚡ для вопросов в чате' : fmtNum(twEnergy) + ' ⚡ for questions in chat'),
+          ru ? '3 дня доступа ПРО' : '3 days of PRO access',
+        ])}
+        ${plusPrice ? tier('plus', ru ? 'ПЛЮС' : 'PLUS', plusPrice, [
+          complete + (ru ? ' включён' : ' included'),
+          ru ? 'Большие расклады и Космо-паспорт' : 'Extended spreads and your cosmic profile',
+          plusEnergy > 0 && (ru ? fmtNum(plusEnergy) + ' ⚡ на месяц для раскладов и чата' : fmtNum(plusEnergy) + ' ⚡ each month for readings and chat'),
+        ], true) : ''}
+      </fieldset>
       <div class="fn-offer-entry" id="fn-offer-entry" ${errText ? 'hidden' : ''}>
         <button type="button" class="btn btn-brass btn-wide" id="fn-unlock-btn" aria-controls="fn-checkout"
           aria-expanded="${!!errText}" onclick="fnToggleCheckout(true)">
-          ${esc(openLabel)} · <span data-fn-price="tripwire">${esc(price)}</span>
+          ${ru ? 'Продолжить' : 'Continue'}
         </button>
-        <p class="fn-offer-terms">${esc(fnPlanTerms('tripwire'))}</p>
       </div>
       <div id="fn-checkout" ${errText ? '' : 'hidden'}>
         <div class="fn-checkout-head">
@@ -9363,15 +9399,6 @@ function funnelCheckoutHtml(errText){
           <button type="button" class="fn-disclosure" onclick="fnToggleCheckout(false)">${esc(ru ? 'Свернуть' : 'Close')}</button>
         </div>
         <form class="fn-form" id="fn-checkout-form" novalidate onsubmit="event.preventDefault(); funnelPay(FN_SELECTED_PLAN)">
-          ${proPrice ? `<fieldset class="fn-tier-switch">
-            <legend class="fn-lbl">${esc(ru ? 'Вариант доступа' : 'Access option')}</legend>
-            ${tier('tripwire', ru ? 'Расклад + 3 дня ПРО' : 'Reading + 3 days of PRO', twPrice, true)}
-            ${tier('pro', ru ? 'ПРО на месяц' : '1 month of PRO', proPrice)}
-          </fieldset>` : ''}
-          <div>
-            <p class="fn-offer-terms" id="fn-plan-includes"></p>
-            <p class="fn-offer-terms" id="fn-checkout-terms"></p>
-          </div>
           <div class="fn-email-wrap" id="fn-email-wrap">
             <div class="fn-err-top${errText ? ' is-on' : ''}" id="fn-err" role="status">${esc(errText || '')}</div>
             <label class="fn-lbl" for="fn-email">${esc(ru ? 'Почта для чека и ссылки на расклад' : 'Email for your receipt and reading link')}</label>
@@ -9379,9 +9406,12 @@ function funnelCheckoutHtml(errText){
               placeholder="you@example.com" value="${esc(saved)}" aria-describedby="fn-err"
               oninput="this.classList.remove('is-err');this.removeAttribute('aria-invalid');document.getElementById('fn-err').classList.remove('is-on')">
           </div>
-          <label class="fn-agree"><input type="checkbox" id="fn-agree" required aria-describedby="fn-checkout-terms">
-            <span>${ru ? 'Принимаю <a href="/oferta/" target="_blank" rel="noopener">оферту</a>, <a href="/politika/" target="_blank" rel="noopener">политику</a> и условия автопродления. Отмена доступна в профиле.' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and renewal terms. You can cancel in your profile.'}</span>
-          </label>
+          <div class="fn-agree-wrap">
+            <label class="fn-agree"><input type="checkbox" id="fn-agree" required aria-describedby="fn-checkout-terms">
+              <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a>, <a href="/politika/" target="_blank" rel="noopener">политикой</a> и условиями автопродления.' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and renewal terms.'}</span>
+            </label>
+            <p class="fn-offer-terms" id="fn-checkout-terms"></p>
+          </div>
           <button type="submit" class="btn btn-brass btn-wide" id="fn-submit-btn"></button>
         </form>
       </div>
@@ -9406,7 +9436,7 @@ function fnShortenPreview(body){
   excerpt.textContent = lead;
   const toggle = document.createElement('button');
   toggle.type = 'button';
-  toggle.className = 'fn-disclosure';
+  toggle.className = 'fn-disclosure fn-disclosure--expand';
   body.id = 'fn-full-preview';
   body.before(excerpt);
   body.after(toggle);
@@ -9448,20 +9478,20 @@ function funnelRenderLocked(teaser, errText){
   if(pointTitle) pointTitle.textContent = ru ? 'Что откроется в полном раскладе' : 'In the full reading';
 
   const wrap = content.parentElement;
-  wrap.insertAdjacentHTML('beforeend', funnelCheckoutHtml(errText));
-  FN_SELECTED_PLAN = 'tripwire';
-  if(document.getElementById('fn-submit-btn')) fnPickTier('tripwire', false);
   if(indicator || locked?.children.length){
     const details = document.createElement('details');
     details.className = 'fn-reading-details';
     const summary = document.createElement('summary');
-    summary.className = 'fn-disclosure';
+    summary.className = 'fn-disclosure fn-disclosure--expand';
     summary.textContent = ru ? 'Посмотреть все части расклада' : 'See all parts of the reading';
     details.append(summary);
     if(indicator) details.append(indicator);
     if(locked?.children.length) details.append(locked);
     wrap.append(details);
   }
+  wrap.insertAdjacentHTML('beforeend', funnelCheckoutHtml(errText));
+  FN_SELECTED_PLAN = 'tripwire';
+  if(document.getElementById('fn-submit-btn')) fnPickTier('tripwire', false);
   fnActions(false);
 }
 
@@ -9517,7 +9547,7 @@ async function funnelPay(plan){
   if(err){ err.textContent = ''; err.classList.remove('is-on'); }
 
   const id = FN.id;
-  const controls = form.querySelectorAll('input, button');
+  const controls = document.querySelectorAll('#fn-fog input, #fn-fog button');
   fnCheckoutRequest = true;
   controls.forEach(control => { control.disabled = true; });
   form.setAttribute('aria-busy', 'true');
