@@ -1053,6 +1053,7 @@ body.nav-open{overflow:hidden}
   <button type="button" id="cookie-ok">Принять</button>
 </div>
 
+<script src="/tarot-cards.js"></script>
 <script>
 (function(){
 'use strict';
@@ -1376,9 +1377,10 @@ if(go) go.addEventListener('click',function(){
     }
     if(verd)  verd.textContent = d.verdict || '';
     if(cname) cname.textContent = d.card ? ('Аркан: ' + d.card) : '';
+    var image = CARD_IMG(d.card_id) || d.image || '';
     if(imgEl){
-      if(d.image || d.card_id){
-        imgEl.src = d.image || ('https://api.neotaro.ru/static/cards/' + d.card_id + '.webp');
+      if(image){
+        imgEl.src = image;
         imgEl.alt = d.card || 'Карта Таро';
         imgEl.hidden = false;
       } else {
@@ -1395,7 +1397,7 @@ if(go) go.addEventListener('click',function(){
         verdict: d.verdict || '',
         card: d.card || '',
         card_id: d.card_id || null,
-        image: d.image || (d.card_id ? ('https://api.neotaro.ru/static/cards/' + d.card_id + '.webp') : ''),
+        image: image,
         teaser: d.teaser || '',
         more: d.more || '',
         ts: Date.now()

@@ -3473,6 +3473,7 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
 <div class="toast" id="toast"><span class="dotmark"></span><span id="toast-text"></span></div>
 
 
+<script src="/tarot-cards.js"></script>
 <script>
 /* ============================================================
    NEOTARO — кабинет. Ядро: связь с бэкендом, языки, навигация.
@@ -3482,7 +3483,6 @@ const API_URL = "https://api.neotaro.ru/api";
 const SITE_URL = "/";
 const BOT_LINK = "https://t.me/tarot_neurobot";
 const SUPPORT_LINK = "https://t.me/neurotarot_supportbot";
-const CARD_IMG = id => "https://api.neotaro.ru/static/cards/" + id + '.webp';
 const ADMIN_IDS = [6546116205, 7672744848];
 
 /* ---------- словарь интерфейса ---------- */
@@ -4246,7 +4246,9 @@ function showYnReading(){
   $id('yn-s-title').textContent = YN.verdict;
   $id('yn-s-cardname').textContent = YN.card ? ('Аркан: ' + YN.card) : '';
   const img = $id('yn-s-img');
-  if(YN.image){ img.src = YN.image; img.alt = YN.card || 'Карта Таро'; img.hidden = false; img.onerror = () => { img.hidden = true; }; }
+  const image = CARD_IMG(YN.card_id) || YN.image;
+  img.hidden = !image;
+  if(image){ img.src = image; img.alt = YN.card || 'Карта Таро'; img.onerror = () => { img.hidden = true; }; }
   $id('yn-s-text').innerHTML = ynFormat(YN.more || YN.teaser);
   if(!isGuest()){
     $id('yn-s-lock-s').textContent = 'Сроки по вашему вопросу и уточняющий вопрос — в чате с оракулом.';
@@ -6588,8 +6590,8 @@ function histName(h){
 /* Картинки карт: в истории карты приходят объектами {id, image}, а не числами. */
 function histCards(h){
   return (h.cards || []).map(c => {
-    const src = (c && typeof c === 'object') ? (c.image || CARD_IMG(c.id)) : CARD_IMG(c);
-    return `<img src="${src}" alt="">`;
+    const src = (c && typeof c === 'object') ? (CARD_IMG(c.id) || c.image) : CARD_IMG(c);
+    return src ? `<img src="${src}" alt="">` : '';
   }).join('');
 }
 async function resetHistory(){
