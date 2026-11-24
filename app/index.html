@@ -828,6 +828,7 @@ textarea.field{resize:none;line-height:1.55}
 @keyframes tbLogIn{to{opacity:1;transform:none}}
 .fn-retry-box{text-align:center;padding:18px 10px}
 .fn-retry-box p{margin:0 0 14px;color:var(--ivory);font-size:15px;line-height:1.55}
+.fn-retry-box .btn + .btn{margin-top:8px}
   
 /* ---------- ритуал расклада ---------- */
 .ritual{max-width:720px;margin:0 auto}
@@ -9504,7 +9505,11 @@ function fnShowError(msg, focusEmail){
 }
 
 async function funnelPay(plan){
-  if(FN.paymentPending || FN.polling || fnCheckoutRequest) return;
+  if(FN.polling || fnCheckoutRequest) return;
+  if(FN.paymentPending){
+    await funnelPoll(false);
+    return;
+  }
   const ru = FN_RU();
   const form = document.getElementById('fn-checkout-form');
   const price = fnPlanPrice(plan);
@@ -9549,7 +9554,7 @@ async function funnelPay(plan){
   if(d && (d.already_paid || d.message === 'payment_pending')){
     FN.paymentPending = true;
     fnSave();
-    funnelPoll();
+    funnelPoll(!!d.already_paid && !NEO_QA);
     return;
   }
   if(!(d && d.success && d.invoice_url)){
@@ -9595,12 +9600,23 @@ function fnClearPaymentReturn(){
   history.replaceState(history.state, '', url.pathname + url.search + url.hash);
 }
 
-function fnPaymentNotice(teaser, message, checking){
+function fnPaymentNotice(teaser, message, checking, invoiceUrl){
   const out = document.getElementById('tb-reading');
+  const ru = FN_RU();
   out.innerHTML = '<div class="daily-teaser-wrap"><div class="daily-teaser-text">' + clean(teaser || '') +
     '</div><div class="fn-retry-box"><p role="status">' + esc(message) + '</p>' +
-    (checking ? '' : '<button type="button" class="btn btn-brass btn-wide" onclick="funnelPoll()">' +
-      esc(FN_RU() ? 'Проверить статус' : 'Check status') + '</button>') + '</div></div>';
+    (invoiceUrl ? '<a id="fn-resume-payment" class="btn btn-brass btn-wide" href="' + esc(invoiceUrl) +
+      '" rel="noreferrer">' + esc(ru ? 'Продолжить оплату в ЮKassa' : 'Continue to YooKassa') + '</a>' : '') +
+    (checking ? '' : '<button type="button" class="btn ' + (invoiceUrl ? 'btn-line' : 'btn-brass') +
+      ' btn-wide" onclick="funnelPoll()">' + esc(ru ? 'Проверить статус' : 'Check status') +
+      '</button>') + '</div></div>';
+  const resumeLink = out.querySelector('#fn-resume-payment');
+  if(resumeLink && !bridge.isWeb){
+    resumeLink.addEventListener('click', event => {
+      event.preventDefault();
+      bridge.openLink(invoiceUrl);
+    });
+  }
   fnActions(false);
 }
 
@@ -9626,6 +9642,10 @@ async function funnelResume(manual, fromHistory = false){
   await funnelPoll(FN.paymentPending && !NEO_QA);
 }
 
+window.addEventListener('pageshow', event => {
+  if(event.persisted && S.view === 'table' && FN.paymentPending && !FN.paidView) funnelPoll(false);
+});
+
 async function funnelPoll(waitForPayment = !NEO_QA){
   if(FN.polling || !FN.id) return;
   FN.polling = true;
@@ -9637,12 +9657,15 @@ async function funnelPoll(waitForPayment = !NEO_QA){
     : (ru ? 'Открываем сохранённый расклад…' : 'Opening your saved reading…');
   fnPaymentNotice(FN.teaser, checking, true);
   let data;
+  let invoiceUrl = '';
   try{
     for(let i = 0; i < (waitForPayment ? 8 : 1); i++){
       data = await api('/funnel/status/' + id + '?k=' + encodeURIComponent(k || ''), 'GET', null, true);
       if(FN.id !== id || S.view !== 'table') return;
+      if(data?.success && data.payment_pending && typeof data.invoice_url === 'string' &&
+          /^https:\/\//i.test(data.invoice_url)) invoiceUrl = data.invoice_url;
       if(data && (data.paid || data.canceled || data.message === 'not_found' ||
-          (data.success && data.payment_pending === false))) break;
+          invoiceUrl || (data.success && data.payment_pending === false))) break;
       if(i < 7 && waitForPayment) await new Promise(r => setTimeout(r, 2500));
     }
   }finally{
@@ -9688,6 +9711,11 @@ async function funnelPoll(waitForPayment = !NEO_QA){
     }
     go('spreads');
     toast(ru ? 'Сохранённый расклад недоступен.' : 'The saved reading is unavailable.');
+    return;
+  }
+  if(invoiceUrl){
+    fnPaymentNotice(FN.teaser, ru ? 'Можно вернуться к начатой оплате. Если вы уже оплатили, проверьте статус.'
+      : 'You can resume your payment. If you already paid, check the status.', false, invoiceUrl);
     return;
   }
   fnPaymentNotice(FN.teaser, FN.paymentPending
