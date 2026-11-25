@@ -5646,6 +5646,8 @@ async function authResend(){
 function logout(){
   localStorage.removeItem('neotaro_token');
   localStorage.removeItem('neotaro_user');
+  localStorage.removeItem(FN_PENDING_CHECKOUTS);
+  localStorage.removeItem(FN_LAST_READING);
   bridge.token = null;
   bridge.webUser = null;
   /* В Telegram и VK выходить некуда — там просто перезапускаем приложение.
@@ -9007,13 +9009,51 @@ function neoDeviceId(){
 
 const FN = { id: null, k: null, q: '', picked: [], type: '', matrixPts: null, polling: false, resumed: false };
 const FN_RU = () => (typeof lang === 'undefined' || lang === 'ru');
+const FN_LAST_READING = NEO_QA ? 'neo_qa_funnel' : 'neo_funnel';
+const FN_PENDING_CHECKOUTS = NEO_QA ? 'neo_qa_pending_checkouts' : 'neo_pending_checkouts';
 
 function fnSave(){
-  try{ localStorage.setItem('neo_funnel', JSON.stringify({ id: FN.id, k: FN.k, q: FN.q, picked: FN.picked, type: FN.type || (S.spread && S.spread.id), matrixPts: FN.matrixPts, paymentPending: !!FN.paymentPending })); }catch(e){}
+  try{ localStorage.setItem(FN_LAST_READING, JSON.stringify({ id: FN.id, k: FN.k, q: FN.q, picked: FN.picked, type: FN.type || (S.spread && S.spread.id), matrixPts: FN.matrixPts, paymentPending: !!FN.paymentPending })); }catch(e){}
 }
 function fnLoad(){
-  try{ return JSON.parse(localStorage.getItem('neo_funnel') || 'null'); }catch(e){ return null; }
+  try{ return JSON.parse(localStorage.getItem(FN_LAST_READING) || 'null'); }catch(e){ return null; }
 }
+function fnPendingCheckouts(){
+  let stored;
+  try{ stored = JSON.parse(localStorage.getItem(FN_PENDING_CHECKOUTS) || '[]'); }catch(e){}
+  const checkouts = Array.isArray(stored)
+    ? stored.filter(item => Number.isSafeInteger(item?.id) && item.id > 0 && typeof item.k === 'string' && item.k)
+    : [];
+  const saved = fnLoad();
+  const id = Number(saved?.id);
+  if(saved?.paymentPending && Number.isSafeInteger(id) && id > 0 && typeof saved.k === 'string' && saved.k &&
+      !checkouts.some(item => item.id === id)){
+    checkouts.unshift({id, k: saved.k});
+  }
+  return checkouts;
+}
+
+function fnRememberCheckout(id, k){
+  id = Number(id);
+  if(!Number.isSafeInteger(id) || id <= 0 || typeof k !== 'string' || !k) return;
+  try{
+    const checkouts = fnPendingCheckouts().filter(item => item.id !== id);
+    localStorage.setItem(FN_PENDING_CHECKOUTS, JSON.stringify([{id, k}, ...checkouts]));
+  }catch(e){}
+}
+
+function fnForgetCheckout(id){
+  id = Number(id);
+  try{
+    const checkouts = fnPendingCheckouts().filter(item => item.id !== id);
+    localStorage.setItem(FN_PENDING_CHECKOUTS, JSON.stringify(checkouts));
+    const saved = fnLoad();
+    if(Number(saved?.id) === id && saved.paymentPending){
+      localStorage.setItem(FN_LAST_READING, JSON.stringify({...saved, paymentPending: false}));
+    }
+  }catch(e){}
+}
+
 function fnMatrixSvg(p){
   if(!p) return '';
   const POS = { b:[160,40], c:[280,160], d:[160,280], a:[40,160], f:[75,75], g:[245,75], h:[245,245], i:[75,245] };
@@ -9253,6 +9293,8 @@ async function funnelDeal(q, extra){
     FN.id = data.spread_id; FN.k = data.view_key; FN.q = shown; FN.picked = picked;
     FN.plans = data.plans || FN.plans || null;
     FN.shownAt = Date.now(); FN.paidView = false; FN.paymentPending = false; FN.up = null;
+    const previous = fnLoad();
+    if(previous?.paymentPending) fnRememberCheckout(previous.id, previous.k);
     fnSave();
     funnelRenderLocked(data.teaser || '');
     if(window.neoGoal) neoGoal('funnel_teaser_shown', { spread: S.spread.id });
@@ -9533,6 +9575,7 @@ async function funnelPay(plan){
   if(err){ err.textContent = ''; err.classList.remove('is-on'); }
 
   const id = FN.id;
+  const key = FN.k;
   const controls = document.querySelectorAll('#fn-fog input, #fn-fog button');
   fnCheckoutRequest = true;
   controls.forEach(control => { control.disabled = true; });
@@ -9541,13 +9584,16 @@ async function funnelPay(plan){
 
   let d;
   try{
-    d = await api('/funnel/checkout', 'POST', { spread_id: id, view_key: FN.k, email, plan, expected_amount: price, agree, utm: fnUtm() }, true);
+    d = await api('/funnel/checkout', 'POST', { spread_id: id, view_key: key, email, plan, expected_amount: price, agree, utm: fnUtm() }, true);
   }catch(e){
     d = null;
   }finally{
     fnCheckoutRequest = false;
     controls.forEach(control => { control.disabled = false; });
     form.removeAttribute('aria-busy');
+  }
+  if(d?.already_paid || d?.message === 'payment_pending' || (d?.success && d.invoice_url)){
+    fnRememberCheckout(id, key);
   }
   if(FN.id !== id || S.view !== 'table' || !form.isConnected) return;
 
@@ -9559,7 +9605,7 @@ async function funnelPay(plan){
   }
   if(!(d && d.success && d.invoice_url)){
     const m = d && d.message;
-    if(m === 'not_found'){ try{ localStorage.removeItem('neo_funnel'); }catch(e){} }
+    if(m === 'not_found'){ try{ localStorage.removeItem(FN_LAST_READING); }catch(e){} }
     fnShowError(
       m === 'email_invalid' ? (ru ? 'Проверьте адрес своей почты' : 'Check your email')
       : m === 'need_agree' ? (ru ? 'Поставьте галочку согласия с условиями' : 'Please accept the offer')
@@ -9609,7 +9655,11 @@ function fnPaymentNotice(teaser, message, checking, invoiceUrl){
       '" rel="noreferrer">' + esc(ru ? 'Продолжить оплату в ЮKassa' : 'Continue to YooKassa') + '</a>' : '') +
     (checking ? '' : '<button type="button" class="btn ' + (invoiceUrl ? 'btn-line' : 'btn-brass') +
       ' btn-wide" onclick="funnelPoll()">' + esc(ru ? 'Проверить статус' : 'Check status') +
-      '</button>') + '</div></div>';
+      '</button>') +
+    (!checking && FN.paymentPending
+      ? '<button type="button" class="btn btn-line btn-wide" onclick="openSheet(\'history\')">' +
+        esc(ru ? 'Мои расклады' : 'My readings') + '</button>'
+      : '') + '</div></div>';
   const resumeLink = out.querySelector('#fn-resume-payment');
   if(resumeLink && !bridge.isWeb){
     resumeLink.addEventListener('click', event => {
@@ -9620,33 +9670,96 @@ function fnPaymentNotice(teaser, message, checking, invoiceUrl){
   fnActions(false);
 }
 
-async function funnelResume(manual, fromHistory = false){
-  if(FN.polling) return;
-  const p = new URLSearchParams(location.search);
-  const paidId = parseInt(p.get('paid_spread') || '', 10);
-  const resumeId = parseInt(p.get('resume_spread') || '', 10);
+async function fnResumeReading(id, k, {paymentPending = false, focus = false, status = null} = {}){
   const saved = fnLoad() || {};
-  const id = paidId || resumeId || (saved.k && (manual || location.hash === '#table') ? Number(saved.id) : 0);
-  if(!id || (!manual && FN.resumed)) return;
-  FN.resumed = true;
   const same = Number(saved.id) === id;
+  FN.resumed = true;
   Object.assign(FN, {
-    id, k: p.get('k') || (same ? saved.k : ''),
+    id, k,
     q: same ? saved.q : '', picked: same ? saved.picked || [] : [],
     type: same ? saved.type : '', matrixPts: same ? saved.matrixPts : null,
-    paymentPending: (!fromHistory && !!paidId) || (same && !!saved.paymentPending),
-    focusPaidReading: !!paidId,
+    paymentPending, focusPaidReading: focus,
     teaser: '', paidView: false, continuation: null, up: null
   });
   fnShowTable(FN.q, FN.picked, FN.matrixPts);
-  await funnelPoll(FN.paymentPending && !NEO_QA);
+  if(status?.paid){
+    funnelRenderPaid(status);
+    return;
+  }
+  await funnelPoll(paymentPending && !NEO_QA, status);
+}
+
+async function fnRecoverCheckout(){
+  if(FN.recovering || FN.polling || (S.view !== 'home' && S.view !== 'table')) return false;
+  const checkouts = fnPendingCheckouts();
+  if(!checkouts.length) return false;
+
+  const url = location.href;
+  const currentId = FN.id;
+  const view = S.view;
+  FN.recovering = true;
+  let paid, waiting, unavailable;
+  try{
+    for(const checkout of checkouts){
+      const status = await api('/funnel/status/' + checkout.id + '?k=' + encodeURIComponent(checkout.k), 'GET', null, true);
+      // The customer may have started another reading while this request was in flight.
+      if(location.href !== url || S.view !== view || FN.id !== currentId || FN.polling) return true;
+      if(status?.success && status.paid){
+        paid = {...checkout, status};
+        break;
+      }
+      if(status?.canceled || status?.payment_pending === false || status?.message === 'not_found'){
+        fnForgetCheckout(checkout.id);
+      }else if(status?.success && status.payment_pending){
+        waiting ||= {...checkout, status};
+      }else if(!status?.success){
+        unavailable ||= {...checkout, status};
+      }
+    }
+  }finally{
+    FN.recovering = false;
+  }
+
+  const checkout = paid || waiting || unavailable;
+  if(!checkout) return false;
+
+  await fnResumeReading(checkout.id, checkout.k, {
+    paymentPending: true,
+    focus: true,
+    status: checkout.status
+  });
+  return true;
+}
+
+async function funnelResume(manual, fromHistory = false){
+  if(FN.polling || (!manual && FN.resumed)) return;
+  const p = new URLSearchParams(location.search);
+  const paidId = parseInt(p.get('paid_spread') || '', 10);
+  const explicitId = paidId || parseInt(p.get('resume_spread') || '', 10);
+  if(!explicitId && !manual && await fnRecoverCheckout()) return;
+  const saved = fnLoad() || {};
+  const pending = fnPendingCheckouts();
+  const id = explicitId || (saved.k && (manual || location.hash === '#table') ? Number(saved.id) : 0);
+  if(!id) return;
+
+  const same = Number(saved.id) === id;
+  const checkout = pending.find(item => item.id === id);
+  const key = p.get('k') || checkout?.k || (same ? saved.k : '');
+  const paymentPending = !fromHistory && (!!paidId || !!checkout || (same && !!saved.paymentPending));
+  if(paymentPending) fnRememberCheckout(id, key);
+  await fnResumeReading(id, key, {paymentPending, focus: !!paidId});
 }
 
 window.addEventListener('pageshow', event => {
-  if(event.persisted && S.view === 'table' && FN.paymentPending && !FN.paidView) funnelPoll(false);
+  if(!event.persisted) return;
+  if(S.view === 'table' && FN.paymentPending && !FN.paidView){
+    funnelPoll(false);
+  }else if(S.view === 'home'){
+    fnRecoverCheckout();
+  }
 });
 
-async function funnelPoll(waitForPayment = !NEO_QA){
+async function funnelPoll(waitForPayment = !NEO_QA, initialStatus = null){
   if(FN.polling || !FN.id) return;
   FN.polling = true;
   const id = FN.id;
@@ -9660,12 +9773,13 @@ async function funnelPoll(waitForPayment = !NEO_QA){
   let invoiceUrl = '';
   try{
     for(let i = 0; i < (waitForPayment ? 8 : 1); i++){
-      data = await api('/funnel/status/' + id + '?k=' + encodeURIComponent(k || ''), 'GET', null, true);
+      data = (i === 0 && initialStatus) ||
+        await api('/funnel/status/' + id + '?k=' + encodeURIComponent(k || ''), 'GET', null, true);
       if(FN.id !== id || S.view !== 'table') return;
       if(data?.success && data.payment_pending && typeof data.invoice_url === 'string' &&
           /^https:\/\//i.test(data.invoice_url)) invoiceUrl = data.invoice_url;
       if(data && (data.paid || data.canceled || data.message === 'not_found' ||
-          invoiceUrl || (data.success && data.payment_pending === false))) break;
+          (data.success && data.payment_pending === false))) break;
       if(i < 7 && waitForPayment) await new Promise(r => setTimeout(r, 2500));
     }
   }finally{
@@ -9680,12 +9794,16 @@ async function funnelPoll(waitForPayment = !NEO_QA){
     FN.plans = data.plans || FN.plans;
     FN.teaser = data.teaser || FN.teaser;
     if(data.paid){
-      fnClearPaymentReturn();
       funnelRenderPaid(data);
       return;
     }
-    if(data.canceled || data.payment_pending === false) FN.paymentPending = false;
-    if(data.payment_pending) FN.paymentPending = true;
+    if(data.canceled || data.payment_pending === false){
+      FN.paymentPending = false;
+      fnForgetCheckout(id);
+    }else if(data.payment_pending){
+      FN.paymentPending = true;
+      fnRememberCheckout(id, k);
+    }
     fnSave();
     fnShowTable(FN.q, FN.picked, FN.matrixPts);
     if(!FN.paymentPending){
@@ -9705,12 +9823,19 @@ async function funnelPoll(waitForPayment = !NEO_QA){
         : '');
       return;
     }
-  }else if(data && data.message === 'not_found' && !FN.paymentPending){
+  }else if(data?.message === 'not_found'){
+    fnForgetCheckout(id);
     if(Number(fnLoad()?.id) === id){
-      try{ localStorage.removeItem('neo_funnel'); }catch(e){}
+      try{ localStorage.removeItem(FN_LAST_READING); }catch(e){}
     }
-    go('spreads');
-    toast(ru ? 'Сохранённый расклад недоступен.' : 'The saved reading is unavailable.');
+    if(FN.paymentPending){
+      fnPaymentNotice('', ru
+        ? 'Не удалось открыть расклад по этой ссылке. Если оплата прошла, откройте письмо с разбором или войдите по почте оплаты и проверьте «Мои расклады».'
+        : 'This link could not open the reading. If you paid, open the reading email or sign in with your checkout email and check My readings.', false);
+    }else{
+      go('spreads');
+      toast(ru ? 'Сохранённый расклад недоступен.' : 'The saved reading is unavailable.');
+    }
     return;
   }
   if(invoiceUrl){
@@ -9719,7 +9844,7 @@ async function funnelPoll(waitForPayment = !NEO_QA){
     return;
   }
   fnPaymentNotice(FN.teaser, FN.paymentPending
-    ? (ru ? 'Оплата пока не подтверждена. Если вы уже оплатили, дождитесь подтверждения и проверьте статус.' : 'Payment has not been confirmed yet. If you already paid, check the status again shortly.')
+    ? (ru ? 'Ждём подтверждения оплаты. Если деньги уже списались, проверьте статус или откройте письмо с разбором.' : 'We are waiting for payment confirmation. If you were charged, check the status or open your reading email.')
     : (ru ? 'Не удалось загрузить расклад. Проверьте соединение и попробуйте снова.' : 'Could not load the reading. Check your connection and try again.'), false);
 }
 
@@ -9775,6 +9900,8 @@ function funnelRenderPaid(d){
   document.getElementById('fn-reading-state').textContent = ru ? 'Полный разбор открыт' : 'Full reading unlocked';
   document.getElementById('tb-reading-label').hidden = true;
   document.getElementById('tb-reading').innerHTML = '<div class="fn-reveal">' + clean(FN.full) + '</div>';
+  fnForgetCheckout(FN.id);
+  if(window.neoUxRec) window.neoUxRec('paid_ok', 'id=' + (FN.id || '') + ' plan=' + (d.plan || ''));
   const parentId = Number(d.parent_id);
   const back = document.getElementById('tb-parent-reading');
   back.hidden = !parentId;
@@ -9810,7 +9937,7 @@ function funnelRenderPaid(d){
       if(window.neoPurchase) neoPurchase('purchase', paidPrice, { kind: 'funnel', item: d.plan || '' });
       if(window.neoPurchase) neoPurchase('first_purchase', paidPrice, { kind: 'funnel', item: d.plan || '' });
     }
-    if(Number(fnLoad()?.id) === Number(FN.id)) localStorage.removeItem('neo_funnel');
+    if(Number(fnLoad()?.id) === Number(FN.id)) localStorage.removeItem(FN_LAST_READING);
   }catch(e){}
   if(FN.kind === 'reading') fnLoadUpsell();
 }
@@ -9997,6 +10124,9 @@ async function fnContinuationCheckout(){
     spread_id: result.id, view_key: result.view_key, email: result.email, plan: 'upsell', agree: true, utm: fnUtm()
   }, true);
   ctx.busy = false;
+  if(data?.invoice_url || data?.already_paid || data?.message === 'payment_pending'){
+    fnRememberCheckout(result.id, result.view_key);
+  }
   if(!fnContinuationCurrent(ctx)) return;
   if(data?.invoice_url){
     if(bridge.isWeb){
@@ -10097,6 +10227,7 @@ function fnUpsellPaid(o){
   if(!o) return;
   o.paid = true;
   o.payment_pending = false;
+  fnForgetCheckout(o.spread_id);
   if(S.view === 'table' && FN.up === o) fnRenderUpsell();
   try{ bridge.haptic('ok'); }catch(e){}
   try{
@@ -10118,7 +10249,10 @@ async function fnBuyUpsell(){
     o.busy = false;
     if(FN.up !== o || S.view !== 'table') return;
     if(status?.paid){ fnUpsellPaid(o); return; }
-    if(status?.canceled || status?.payment_pending === false) o.payment_pending = false;
+    if(status?.canceled || status?.payment_pending === false){
+      o.payment_pending = false;
+      fnForgetCheckout(o.spread_id);
+    }
     fnRenderUpsell(o.payment_pending ? 'Ждём подтверждения оплаты.' : 'Оплата отменена. Можно попробовать ещё раз.');
     return;
   }
@@ -10139,12 +10273,17 @@ async function fnBuyUpsell(){
     if(r && r.success && r.paid){ o.busy = false; fnUpsellPaid(o); return; }
     if(r && r.success && r.pending){
       o.payment_pending = true;
+      fnRememberCheckout(o.spread_id, o.view_key);
       for(let i = 0; i < 24; i++){
         await new Promise(res => setTimeout(res, 2500));
         const s = await api('/funnel/status/' + o.spread_id + '?k=' + encodeURIComponent(o.view_key), 'GET', null, true);
         if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(o); return; }
         if(FN.up !== o || S.view !== 'table'){ o.busy = false; return; }
-        if(s?.canceled){ o.payment_pending = false; break; }
+        if(s?.canceled){
+          o.payment_pending = false;
+          fnForgetCheckout(o.spread_id);
+          break;
+        }
       }
       if(o.payment_pending){
         o.busy = false;
@@ -10160,6 +10299,9 @@ async function fnBuyUpsell(){
   try{ email = email || localStorage.getItem('neo_email') || ''; }catch(e){}
   if(!email){ fail('Не нашли ваш email — обновите страницу и попробуйте ещё раз'); return; }
   const d = await api('/funnel/checkout', 'POST', { spread_id: o.spread_id, view_key: o.view_key, email: email, plan: 'upsell', agree: true, utm: fnUtm() }, true);
+  if(d?.already_paid || d?.message === 'payment_pending' || (d?.success && d.invoice_url)){
+    fnRememberCheckout(o.spread_id, o.view_key);
+  }
   if(d && d.success && d.already_paid){
     const s = await api('/funnel/status/' + o.spread_id + '?k=' + encodeURIComponent(o.view_key), 'GET', null, true);
     if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(o); return; }
@@ -10187,9 +10329,12 @@ async function fnBuyUpsell(){
     await new Promise(res => setTimeout(res, 2500));
     const s = await api('/funnel/status/' + o.spread_id + '?k=' + encodeURIComponent(o.view_key), 'GET', null, true);
     if(s && s.success && s.paid){ o.busy = false; fnUpsellPaid(o); return; }
-    if(s && s.success && s.canceled) break;
+    if(s && s.success && s.canceled){
+      fnForgetCheckout(o.spread_id);
+      break;
+    }
   }
-  fail('Оплата не подтвердилась. Если вы оплатили — расклад придёт на почту.');
+  fail('Оплата пока не подтверждена. Если деньги списались, проверьте почту с разбором.');
 }
 
 /* Купил месяц: открываем квиз нужного расклада с уже вписанным именем — расклад за энергию. */
@@ -11983,7 +12128,7 @@ function tbDiscuss(){ if(FN.paidView) return funnelDiscuss(); discussSpread(); }
     });
     if (event === 'checkout_handoff') {
       flush(true);
-    } else if (queue.length >= 8) {
+    } else if (event === 'paid_ok' || queue.length >= 8) {
       flush(false);
     } else if (!flushTimer) {
       flushTimer = setTimeout(function(){ flush(false); }, 4000);
@@ -12102,11 +12247,6 @@ function tbDiscuss(){ if(FN.paidView) return funnelDiscuss(); discussSpread(); }
     wrapFn('funnelPay', function(plan) {
       if (FN.paymentPending || FN.polling || fnCheckoutRequest) return;
       rec('pay_click', 'id=' + (FN.id || '') + ' plan=' + plan);
-      flush(false);
-    });
-
-    wrapFn('funnelRenderPaid', function(d) {
-      rec('paid_ok', 'id=' + (FN.id || '') + ' plan=' + ((d && d.plan) || ''));
       flush(false);
     });
 
