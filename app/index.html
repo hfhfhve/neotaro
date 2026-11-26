@@ -3693,6 +3693,12 @@ const STR = {
   pm_none:{ru:'Карта не привязана',en:'No card saved',es:'Sin tarjeta guardada',fr:'Aucune carte enregistrée',de:'Keine Karte gespeichert'},
   pm_none_note:{ru:'При следующей оплате можно сохранить карту для автопродления и отвязать её здесь в любой момент',en:'On your next payment you can save the card for auto-renewal and unbind it here anytime',es:'En el próximo pago puede guardar la tarjeta para la renovación automática y desvincularla aquí cuando quiera',fr:'Lors du prochain paiement, vous pouvez enregistrer la carte pour le renouvellement automatique et la délier ici à tout moment',de:'Bei der nächsten Zahlung kannst du die Karte für die automatische Verlängerung speichern und hier jederzeit entfernen'},
   pm_autopay_cb:{ru:'Автоматически продлевать подписку',en:'Renew the subscription automatically',es:'Renovar la suscripción automáticamente',fr:'Renouveler l’abonnement automatiquement',de:'Abo automatisch verlängern'},
+  pm_pause_done:{ru:'Автопродление на паузе',en:'Auto-renewal paused',es:'Renovación automática pausada',fr:'Renouvellement automatique en pause',de:'Automatische Verlängerung pausiert'},
+  pm_pause_note:{ru:'Способ оплаты сохранён. Нажмите на галочку, чтобы возобновить автопродление.',en:'Your payment method is saved. Check the box to resume auto-renewal.',es:'Tu método de pago sigue guardado. Marca la casilla para reactivar la renovación automática.',fr:'Votre moyen de paiement est conservé. Cochez la case pour réactiver le renouvellement automatique.',de:'Deine Zahlungsmethode bleibt gespeichert. Aktiviere das Kästchen, um das Abo wieder automatisch zu verlängern.'},
+  pm_due:{ru:'Подписка возобновится после успешной оплаты.',en:'Your subscription will resume after a successful payment.',es:'Tu suscripción se reactivará cuando se complete el pago.',fr:'Votre abonnement reprendra après un paiement réussi.',de:'Dein Abo wird nach erfolgreicher Zahlung fortgesetzt.'},
+  sub_expired_on:{ru:'Подписка закончилась {date}',en:'Subscription ended on {date}',es:'La suscripción terminó el {date}',fr:'Abonnement terminé le {date}',de:'Abo endete am {date}'},
+  pm_resume_confirm:{ru:'Включить автопродление за {sum} ₽ раз в {per}? Ближайшее списание может пройти за 6 часов до окончания подписки.',en:'Resume auto-renewal for {sum} ₽ per {per}? The next charge may occur up to 6 hours before your subscription ends.',es:'¿Reactivar la renovación automática por {sum} ₽ al {per}? El próximo cobro puede realizarse hasta 6 horas antes de que termine la suscripción.',fr:'Réactiver le renouvellement automatique pour {sum} ₽ par {per} ? Le prochain prélèvement peut avoir lieu jusqu’à 6 heures avant la fin de votre abonnement.',de:'Automatische Verlängerung für {sum} ₽ pro {per} aktivieren? Die nächste Abbuchung kann bis zu 6 Stunden vor Ablauf des Abos erfolgen.'},
+  pm_resume_expired:{ru:'Включить автопродление за {sum} ₽ раз в {per}? Срок подписки истёк, поэтому списание может пройти сразу после включения.',en:'Resume auto-renewal for {sum} ₽ per {per}? Your subscription has ended, so the charge may go through as soon as you resume.',es:'¿Reactivar la renovación automática por {sum} ₽ al {per}? Tu suscripción ha terminado y el cobro puede realizarse en cuanto la reactives.',fr:'Réactiver le renouvellement automatique pour {sum} ₽ par {per} ? Votre abonnement a expiré. Le prélèvement peut avoir lieu dès la réactivation.',de:'Automatische Verlängerung für {sum} ₽ pro {per} aktivieren? Dein Abo ist abgelaufen. Die Abbuchung kann direkt nach der Aktivierung erfolgen.'},
   pm_resume_done:{ru:'Автопродление включено',en:'Auto-renewal enabled',es:'Renovación automática activada',fr:'Renouvellement automatique activé',de:'Automatische Verlängerung aktiviert'},
   sub_autopay_note:{ru:'Подписка продлевается автоматически. Отменить и отвязать карту можно в любой момент в Профиле.',en:'The subscription renews automatically. You can cancel and unbind your card anytime in Profile.',es:'La suscripción se renueva automáticamente. Puede cancelar y desvincular su tarjeta cuando quiera en Perfil.',fr:'L’abonnement se renouvelle automatiquement. Vous pouvez résilier et délier votre carte à tout moment dans Profil.',de:'Das Abo verlängert sich automatisch. Kündigen und Karte entfernen jederzeit im Profil möglich.'},
   sub_free_title:{ru:'Бесплатный тариф',en:'Free plan',es:'Plan gratis',fr:'Offre gratuite',de:'Gratis-Tarif'},
@@ -4750,8 +4756,8 @@ async function loadProfileSub(){
    нужны раз в несколько месяцев — им не место на главном экране. */
 function subRowHtml(d){
   const acc = d.access, sub = d.subscription;
-  if(!(acc.paid && sub)){
-    return `<button class="rowcard" onclick="goPlans()">
+  if(!acc.paid || !sub){
+    return `<button class="rowcard" onclick="${sub?.has_payment_method ? "openSheet('sub')" : "goPlans()"}">
       <span class="idx"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.4 5.2 5.6.7-4.1 3.9 1.1 5.6L12 15.7 7 18.4l1.1-5.6L4 8.9l5.6-.7z"/></svg></span>
       <span class="mid"><strong>${esc(tt('sub_free_title'))}</strong><span>${esc(tt('sub_free_note'))}</span></span>
       <span class="end">${lockTag('astro.reading')}</span>
@@ -4776,7 +4782,7 @@ function renderSubSheet(){
   const box = document.getElementById('sub-body');
   if(!box) return;
   const d = SUB;
-  if(!d || !d.access || !d.access.paid || !d.subscription){
+  if(!d || !d.access || !d.subscription || (!d.access.paid && !d.subscription.has_payment_method)){
     box.innerHTML = `<p class="sheet-sub">${esc(tt('sub_free_note'))}</p>
       <div class="sheet-acts"><button class="btn btn-brass btn-wide" onclick="closeSheets();goPlans()">${esc(tt('sub_manage_btn'))}</button></div>`;
     return;
@@ -4786,15 +4792,21 @@ function renderSubSheet(){
     ? new Date(sub.expires_at).toLocaleDateString(S.lang || 'ru', { day:'numeric', month:'long', year:'numeric' })
     : '\u2014';
   const cancelled = !!sub.cancel_at_period_end;
+  const paused = !!sub.autopay_paused;
+  const ended = !sub.expires_at || new Date(sub.expires_at).getTime() <= Date.now();
 
   let pmHtml = '';
   if(sub.has_payment_method || S.recurring){
     const hasPm = !!sub.has_payment_method;
+    const canToggle = hasPm && typeof sub.autopay_paused === 'boolean'
+      && (!paused || sub.next_charge_amount > 0);
     const nextStr = sub.next_charge_at
       ? new Date(sub.next_charge_at).toLocaleDateString(S.lang || 'ru', { day:'numeric', month:'long' })
       : '';
     const nextLine = !hasPm
       ? esc(tt('pm_none_note'))
+      : paused ? esc(tt('pm_pause_note'))
+      : ended && sub.autopay && sub.next_charge_amount > 0 ? esc(tt('pm_due'))
       : ((sub.next_charge_at && sub.next_charge_amount)
           ? esc(tt('pm_next').replace('{date}', nextStr).replace('{sum}', Math.round(sub.next_charge_amount)))
           : esc(tt('pm_unbind_note')));
@@ -4804,7 +4816,7 @@ function renderSubSheet(){
       <div class="label" style="margin-top:5px">${nextLine}</div>
       ${sub.failed_charges ? `<div class="label" style="margin-top:5px;opacity:.9">${esc(tt('pm_failed'))}</div>` : ''}
       <label style="display:flex;gap:9px;align-items:center;margin-top:12px;cursor:pointer">
-        <input type="checkbox" id="sub-autopay-cb" ${cancelled || !hasPm ? '' : 'checked'} ${hasPm ? '' : 'disabled'} onchange="toggleAutopay(this.checked)">
+        <input type="checkbox" id="sub-autopay-cb" ${sub.autopay ? 'checked' : ''} ${canToggle ? '' : 'disabled'} onchange="toggleAutopay(this.checked)">
         <span class="label">${esc(tt('pm_autopay_cb'))}</span>
       </label>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
@@ -4817,7 +4829,7 @@ function renderSubSheet(){
   box.innerHTML = `<div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap">
       <div>
         <div class="h3">${esc(acc.plan_title || sub.plan)}</div>
-        <div class="label" style="margin-top:6px">${esc(tt('sub_until').replace('{date}', dateStr))}</div>
+        <div class="label" style="margin-top:6px">${esc(tt(ended ? 'sub_expired_on' : 'sub_until').replace('{date}', dateStr))}</div>
       </div>
       ${cancelled ? `<span class="tag tag-cold">${esc(tt('sub_canceled'))}</span>` : ''}
     </div>
@@ -4972,16 +4984,36 @@ function cancelSub(){
 }
 
 async function toggleAutopay(on){
+  const cb = document.getElementById('sub-autopay-cb');
+  const sub = SUB?.subscription;
+  if(!cb || !sub) return;
   if(bridge.haptic) bridge.haptic();
-  if(!on){
-    const cb = document.getElementById('sub-autopay-cb');
-    if(cb) cb.checked = true;
-    openSubRetention('cancel');
-    return;
+
+  const payload = {};
+  if(on){
+    const amount = sub.next_charge_amount;
+    const period = sub.period;
+    const ended = new Date(sub.expires_at).getTime() <= Date.now();
+    if(!window.confirm(tt(ended ? 'pm_resume_expired' : 'pm_resume_confirm')
+      .replace('{sum}', amount.toLocaleString(S.lang || 'ru'))
+      .replace('{per}', tt(period === 'year' ? 'per_year' : 'per_month')))){
+      cb.checked = false;
+      return;
+    }
+    payload.expected_amount = amount;
+    payload.period = period;
   }
-  const d = await api('/subscription/resume', 'POST', {}, true);
-  if(d && d.success){ toast(tt('pm_resume_done')); loadProfileSub(); refreshAccess(); }
-  else { toast(tt('err')); loadProfileSub(); }
+  cb.disabled = true;
+  const d = await api(on ? '/subscription/resume' : '/subscription/pause', 'POST', payload, true);
+  if(d?.success){
+    toast(tt(on ? 'pm_resume_done' : 'pm_pause_done'));
+    refreshAccess();
+  } else {
+    cb.checked = !on;
+    toast(tt('err'));
+  }
+  await loadProfileSub();
+  cb.disabled = false;
 }
 
 function unbindPaymentMethod(){
