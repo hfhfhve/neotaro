@@ -420,11 +420,12 @@ function safeNext(){
   return APP_URL;
 }
 
-const A = { email:'', screen:'register', busy:false, cool:0, timer:null, poll:null, fromYesNo:false, fromHistory:false, mode:'code', fromYnIntent:false };
+const A = { email:'', screen:'register', busy:false, cool:0, timer:null, poll:null, fromYesNo:false, fromHistory:false, fromShop:false, mode:'code', fromYnIntent:false };
 try {
   const from = new URLSearchParams(location.search).get('from');
   A.fromYesNo = from === 'yesno';
   A.fromHistory = from === 'history';
+  A.fromShop = from === 'shop';
 } catch(e){}
 /* Гость нажал «Узнать сроки» в пробном кабинете — напоминаем, зачем он здесь. */
 try {
@@ -434,10 +435,13 @@ try {
 
 const TITLES = {
   register: [
-    A.fromHistory ? 'Войдите, чтобы открыть расклады'
+    A.fromShop ? 'Создайте аккаунт'
+      : A.fromHistory ? 'Войдите, чтобы открыть расклады'
       : A.fromYnIntent ? 'Ещё шаг — и оракул ответит'
       : A.fromYesNo ? 'Ваш расклад готов ✨' : 'Вход за 10 секунд',
-    A.fromHistory
+    A.fromShop
+      ? 'После регистрации вернём вас к тарифам и энергии. Если аккаунт уже есть, войдите удобным способом.'
+      : A.fromHistory
       ? 'Если вы покупали расклад, войдите с почтой, которую указали при оплате.'
       : A.fromYnIntent
       ? 'Войдите, чтобы узнать <b>сроки</b> и задать уточняющий вопрос. В подарок <b>+5 энергии</b>.'

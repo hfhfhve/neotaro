@@ -3711,6 +3711,8 @@ const STR = {
   shop_lead:{ru:'Пакеты не сгорают и подходят, если подписка пока не нужна.',en:'Packs never expire and work well if you do not need a subscription yet.',es:'Los paquetes no caducan si aún no necesitas una suscripción.',fr:'Les packs n’expirent pas si vous ne souhaitez pas encore vous abonner.',de:'Pakete verfallen nicht, wenn du noch kein Abo brauchst.'},
   shop_note:{ru:'Оплата банковской картой. Энергия зачисляется сразу после подтверждения.',en:'Card payment. Energy arrives right after confirmation.'},
   shop_pick:{ru:'Выбрать',en:'Choose',es:'Elegir',fr:'Choisir',de:'Wählen'},
+  shop_guest_note:{ru:'Для покупки энергии нужен аккаунт.',en:'You need an account to buy energy.',es:'Necesitas una cuenta para comprar energía.',fr:'Vous avez besoin d’un compte pour acheter de l’énergie.',de:'Du brauchst ein Konto, um Energie zu kaufen.'},
+  shop_guest_signup:{ru:'Создать аккаунт',en:'Create an account',es:'Crear una cuenta',fr:'Créer un compte',de:'Konto erstellen'},
   shop_offer:{ru:'Стартовое предложение',en:'Starter offer',es:'Oferta inicial',fr:'Offre de départ',de:'Startangebot'},
   shop_offer_text:{ru:'Действует один раз и только сейчас.',en:'Available once, and only now.'},
   shop_offer_left:{ru:'осталось',en:'left',es:'queda',fr:'restant',de:'übrig'},
@@ -4284,8 +4286,9 @@ function requireAuth(intent){
       try{ localStorage.setItem('neo_guest_intent', JSON.stringify(intent)); }catch(e){}
     }
   } catch(e){}
-  if(intent?.action === 'history'){
-    const query = new URLSearchParams({from:'history', next:'/app/#spreads'});
+  if(intent?.action === 'history' || intent?.action === 'shop'){
+    const next = intent.action === 'history' ? '/app/#spreads' : '/app/#shop';
+    const query = new URLSearchParams({from: intent.action, next});
     location.assign(AUTH_REDIRECT_URL + '?' + query);
     return true;
   }
@@ -5373,7 +5376,13 @@ async function refreshCurrent(){
   else setup();
 })();
 
-function go(view, fromPop){
+function readingNav(spreadType){
+  if(spreadType === 'compat') return 'syn';
+  if(spreadType === 'matrix') return 'matrix';
+  return 'spreads';
+}
+
+function go(view, fromPop, spreadType){
   const prevView = S.view;
   S.view = view;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('is-on'));
@@ -5384,7 +5393,10 @@ function go(view, fromPop){
   document.getElementById('scroll').style.display = isChat ? 'none' : 'block';
   const vc = document.getElementById('v-chat');
   if(vc) vc.style.display = isChat ? 'flex' : 'none';
-  const navKey = (view === 'table') ? 'spreads' : ((view === 'memory' || view === 'settings') ? 'profile' : view);
+  const state = history.state;
+  const tableType = spreadType ?? (state?.v === 'table' ? state.tableType || '' : '');
+  if(view === 'table') S.tableType = tableType;
+  const navKey = view === 'table' ? readingNav(tableType) : ((view === 'memory' || view === 'settings') ? 'profile' : view);
   const groupKey = BACKABLE.indexOf(navKey) !== -1 ? 'practices' : navKey;
   document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('is-on', b.dataset.nav === navKey || b.dataset.nav === groupKey));
   if(!isChat) document.getElementById('scroll').scrollTop = 0;
@@ -5392,15 +5404,27 @@ function go(view, fromPop){
   else if(BACKABLE.indexOf(view) === -1) BACK_TO = null;
   const vb = document.getElementById('vback');
   if(vb) vb.classList.toggle('is-on', !!BACK_TO);
-  if(!fromPop && (!history.state || history.state.v !== view)){
+  if(!fromPop){
     try{
-      const url = new URL(location.href);
-      if(prevView === 'table' && view !== 'table' && url.searchParams.has('paid_spread')){
-        url.searchParams.delete('paid_spread');
-        url.searchParams.delete('k');
+      if(state?.v !== view){
+        const url = new URL(location.href);
+        if(prevView === 'table' && view !== 'table' && url.searchParams.has('paid_spread')){
+          url.searchParams.delete('paid_spread');
+          url.searchParams.delete('k');
+        }
+        url.hash = view;
+        const nextState = view === 'table' ? {v: view, tableType} : {v: view};
+        const nextUrl = url.pathname + url.search + url.hash;
+        // Guest compatibility and matrix routes hand off to the shared table.
+        if(view === 'table' && navKey === prevView && state?.v === prevView
+            && (prevView === 'syn' || prevView === 'matrix') && isGuest()){
+          history.replaceState(nextState, '', nextUrl);
+        }else{
+          history.pushState(nextState, '', nextUrl);
+        }
+      }else if(view === 'table' && state.tableType !== tableType){
+        history.replaceState({...state, tableType}, '', location.href);
       }
-      url.hash = view;
-      history.pushState({ v: view }, '', url.pathname + url.search + url.hash);
     }catch(e){}
   }
   if(window.neoHit) neoHit('/app/#' + view, { title: 'app: ' + view }); /* neotaro-goal */
@@ -5416,6 +5440,12 @@ window.addEventListener('popstate', function(e){
   const reading = new URLSearchParams(location.search).get('paid_spread');
   if(v === 'table' && reading && Number(reading) !== FN.id){
     funnelResume(true, true);
+    return;
+  }
+  const tableType = e.state?.tableType;
+  if(v === 'table' && !reading && tableType && tableType !== S.tableType
+      && S.spreads.some(spread => spread.id === tableType)){
+    pickSpread(tableType, true);
     return;
   }
   go(v, true);
@@ -6482,7 +6512,7 @@ async function renderSpreads(){
   box.innerHTML = resume + pendingQHtml() + html;
 }
 function lockedSpread(){ toast(tt('premium_note')); go('shop'); }
-function pickSpread(id){
+function pickSpread(id, fromPop = false){
   const s = S.spreads.find(x => x.id === id);
   if(!s) return;
   S.spread = { id, cards: s.cards_count, price: s.price, name: s.name, question: '', picked: [] };
@@ -6503,7 +6533,7 @@ function pickSpread(id){
   document.getElementById('tb-shuffle').style.display = 'none';
   document.getElementById('tb-result').style.display = 'none';
   fnActions(false);
-  go('table');
+  go('table', fromPop, id);
 }
 function countQ(){
   const v = document.getElementById('tb-q').value;
@@ -6897,6 +6927,15 @@ async function loadShop(){
   renderShopPlans();
   const box = document.getElementById('shop-list');
 
+  if(isGuest()){
+    document.getElementById('shop-offer').innerHTML = '';
+    box.innerHTML = `<div class="panel panel-pad" style="grid-column:1/-1;text-align:center;padding:30px 22px">
+      <p class="sub" style="margin-bottom:20px">${esc(tt('shop_guest_note'))}</p>
+      <button class="btn btn-brass" onclick="requireAuth({action:'shop'})">${esc(tt('shop_guest_signup'))}</button>
+    </div>`;
+    return;
+  }
+
   // Бесплатный тариф: энергия не продаётся — только ежедневное восстановление.
   // Показываем это красиво, а не ошибкой после оплаты.
   if(!featOk('shop.energy')){
@@ -6911,7 +6950,8 @@ async function loadShop(){
   }
 
   box.innerHTML = '<div class="shimmer" style="height:150px;border-radius:14px"></div>'.repeat(3);
-  const data = await api('/shop/items', 'GET');
+  const data = await api('/shop/items', 'GET', {}, true);
+  if(data?.unauthorized){ loadShop(); return; }
   if(!data || !data.success || !data.items){ box.innerHTML = `<div class="empty"><div class="g">${IC.bolt}</div><p>${esc(tt('err'))}</p></div>`; return; }
   S.shop = data.items;
   /* Скидка по тарифу должна быть ВИДНА. Раньше бэк её считал, а экран показывал
@@ -6973,6 +7013,7 @@ function paintOffer(offer){
   S.offerTimer = setInterval(tick, 1000);
 }
 function pickPack(id){
+  if(requireAuth({ action: 'shop' })) return;
   if(!featOk('shop.energy')){ goPlans('shop.energy'); return; }
   const it = S.shop.find(x => x.id === id);
   if(!it) return;
@@ -6983,6 +7024,7 @@ function pickPack(id){
   openSheet('buy');
 }
 function pickOffer(stars, rub){
+  if(requireAuth({ action: 'shop' })) return;
   if(!featOk('shop.energy')){ goPlans('shop.energy'); return; }
   const first = S.shop[0];
   S.shopPick = first ? Object.assign({}, first, { price_stars: stars, price_rub: rub }) : { id:'offer', price_stars: stars, price_rub: rub };
@@ -7010,7 +7052,8 @@ async function payRub(){
   const _meta = { goal: 'purchase_energy', price: _price, kind: 'energy', item: (S.shopPick && S.shopPick.id) || '' };
   S.payMeta = _meta;
   if(window.neoGoal) neoGoal('purchase_start', { kind: 'energy', item: _meta.item, order_price: _price || undefined }); /* neotaro-goal */
-  const data = await api('/shop/invoice-rub', 'POST', { item_id: S.shopPick.id });
+  const data = await api('/shop/invoice-rub', 'POST', { item_id: S.shopPick.id }, true);
+  if(data?.unauthorized){ closeSheets(); requireAuth({ action: 'shop' }); return; }
   if(handleGate(data)){ closeSheets(); return; }
   if(data && data.success && data.invoice_url){
     closeSheets();
@@ -8307,6 +8350,7 @@ async function renderSyn(){
       const d = await api('/spreads?lang=' + encodeURIComponent(lang || 'ru'), 'GET', {}, true);
       if(d && d.success && d.spreads) S.spreads = d.spreads;
     }
+    if(S.view !== 'syn') return;
     if((S.spreads || []).some(x => x.id === 'compat')){
       pickSpread('compat');
       return;
@@ -9113,7 +9157,7 @@ function openMatrixFunnel(prefillBirth){
   pickSpread('matrix');
 }
 function fnShowTable(q, picked, matrixPts){
-  go('table');
+  go('table', false, FN.type || undefined);
   const ru = FN_RU();
   const spread = S.spreads.find(item => item.id === FN.type);
   document.getElementById('tb-name').textContent = spread?.name || (ru ? 'Ваш расклад' : 'Your reading');
@@ -9159,7 +9203,7 @@ async function funnelFromQuestion(q){
       : (pick.price === 0 ? tt('free') : (pick.price + ' ' + energyWord(pick.price)));
   }
   if(!S.spread){ go('spreads'); return; }
-  go('table');
+  go('table', false, S.spread.id);
   const inp = document.getElementById('tb-q');
   document.getElementById('tb-ask').style.display = 'block';
   document.getElementById('tb-result').style.display = 'none';
@@ -9363,7 +9407,6 @@ async function funnelDeal(q, extra){
 
 function fnResumeLast(){
   if(!fnLoad()) return;
-  fnShowTable('', [], null);
   funnelResume(true);
 }
 
@@ -9914,7 +9957,7 @@ function funnelRenderPaid(d){
       url.searchParams.delete('resume_spread');
       if(FN.k) url.searchParams.set('k', FN.k); else url.searchParams.delete('k');
       url.hash = 'table';
-      history.replaceState({ v:'table' }, '', url.pathname + url.search + url.hash);
+      history.replaceState({v: 'table', tableType: FN.type}, '', url.pathname + url.search + url.hash);
     }
   }catch(e){}
   if(typeof d.energy === 'number'){ S.energy = d.energy; S.purchased = true; try{ paintEnergy(); }catch(e){} }
@@ -10478,12 +10521,10 @@ function fnDeepLink(raw){
   try { fromQuery = new URLSearchParams(location.search).get('spread') || new URLSearchParams(location.search).get('view') || ''; } catch(e){}
   let hsh = decodeURIComponent(String(raw || fromQuery || '')).split(/[?&]/)[0].trim().toLowerCase();
   if(DEEP_SKIP.indexOf(hsh) !== -1) return false;
-  if(hsh === 'matrix' && isGuest()){
-    openMatrixFunnel();
-    return true;
-  }
   if(document.getElementById('v-' + hsh)){
-    try{ history.replaceState({ v: hsh }, '', '#' + hsh); }catch(e){}
+    if(history.state?.v !== hsh || location.hash !== '#' + hsh){
+      try{ history.replaceState({ v: hsh }, '', '#' + hsh); }catch(e){}
+    }
     go(hsh, true);
     return true;
   }
