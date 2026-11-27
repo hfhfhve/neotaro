@@ -9412,10 +9412,28 @@ function fnResumeLast(){
 
 let FN_SELECTED_PLAN = 'tripwire';
 let fnCheckoutRequest = false;
+const fnPaidOfferSeen = new Set();
 
 function fnPlanPrice(plan){
   const price = Number(FN.plans?.[plan]?.price);
   return Number.isFinite(price) && price > 0 ? price : null;
+}
+
+function fnTrackPaidOffer(event, plan){
+  const price = fnPlanPrice(plan);
+  if(NEO_QA || !FN.id || !price) return;
+  const key = event + ':' + FN.id;
+  if(fnPaidOfferSeen.has(key)) return;
+  fnPaidOfferSeen.add(key);
+  try{
+    const storageKey = 'neo_paid_offer_events';
+    const stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    const recent = Array.isArray(stored) ? stored : [];
+    if(recent.includes(key)) return;
+    localStorage.setItem(storageKey, JSON.stringify([key, ...recent].slice(0, 80)));
+  }catch(e){}
+  window.neoGoal?.(event, { plan, offer_price: price, spread: FN.type });
+  window.neoUxRec?.(event, 'id=' + FN.id + ' plan=' + plan);
 }
 
 function tbBack(){
@@ -9428,6 +9446,11 @@ function fnPickTier(plan, record = true){
   FN_SELECTED_PLAN = plan;
   const ru = FN_RU();
   document.getElementById('fn-submit-btn').textContent = (ru ? 'Перейти к оплате · ' : 'Continue to payment · ') + fmtNum(price) + ' ₽';
+  const button = document.getElementById('fn-unlock-btn');
+  const amount = fmtNum(price) + ' ₽';
+  button.textContent = plan === 'pro'
+    ? (ru ? 'Оформить ПРО за ' + amount + '/мес.' : 'Get PRO for ' + amount + '/mo')
+    : (ru ? 'Оформить полный разбор за ' + amount : 'Get the full reading for ' + amount);
   if(record && window.neoUxRec) window.neoUxRec('tier_pick', plan + ':' + price);
 }
 
@@ -9442,6 +9465,7 @@ function fnToggleCheckout(open){
   if(open){
     document.getElementById('fn-checkout-title').focus();
     if(window.neoUxRec) window.neoUxRec('checkout_open', 'id=' + (FN.id || '') + ' plan=' + FN_SELECTED_PLAN);
+    fnTrackPaidOffer('funnel_paid_offer_checkout', FN_SELECTED_PLAN);
   }else{
     button.focus();
   }
@@ -9491,9 +9515,7 @@ function funnelCheckoutHtml(errText){
       </fieldset>
       <div class="fn-offer-entry" id="fn-offer-entry" ${errText ? 'hidden' : ''}>
         <button type="button" class="btn btn-brass btn-wide" id="fn-unlock-btn" aria-controls="fn-checkout"
-          aria-expanded="${!!errText}" onclick="fnToggleCheckout(true)">
-          ${ru ? 'Продолжить' : 'Continue'}
-        </button>
+          aria-expanded="${!!errText}" onclick="fnToggleCheckout(true)"></button>
       </div>
       <div id="fn-checkout" ${errText ? '' : 'hidden'}>
         <div class="fn-checkout-head">
@@ -9582,7 +9604,16 @@ function funnelRenderLocked(teaser, errText){
     details.className = 'fn-reading-details';
     const summary = document.createElement('summary');
     summary.className = 'fn-disclosure fn-disclosure--expand';
-    summary.textContent = ru ? 'Посмотреть все части расклада' : 'See all parts of the reading';
+    const price = fnPlanPrice('tripwire');
+    if(price){
+      const amount = fmtNum(price) + ' ₽';
+      summary.textContent = ru ? 'Что входит в полный разбор за ' + amount + '?' : 'What’s included for ' + amount + '?';
+      summary.addEventListener('click', () => {
+        if(!details.open) fnTrackPaidOffer('funnel_paid_offer_details', 'tripwire');
+      });
+    }else{
+      summary.textContent = ru ? 'Посмотреть все части расклада' : 'See all parts of the reading';
+    }
     details.append(summary);
     if(indicator) details.append(indicator);
     if(locked?.children.length) details.append(locked);
