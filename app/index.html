@@ -2280,13 +2280,11 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
 #tb-reading .fn-pos-badge{text-transform:none;font-size:12px;letter-spacing:.03em}
 #tb-reading .fn-lpoints-t{font:600 17px/1.4 var(--sans);text-transform:none;letter-spacing:0}
 .fn-alternatives{margin:8px 0}.fn-alternatives summary{cursor:pointer;padding:9px 0;color:var(--ivory)}.fn-alternatives fieldset{margin-top:10px}
-#fn-terms-note{font:400 14px/1.5 var(--sans);color:var(--ivory);margin:10px 0}
 .fn-result-summary{border-inline-start:2px solid var(--gold);padding-inline-start:14px;margin-bottom:18px}
 #v-table:has(.fn-unlock) #tb-preview-head:has(+ #tb-ask) #tb-desc,#v-table:has(.fn-unlock) #tb-reading-label{display:none}
 #v-table:has(.fn-unlock) #tb-name{font-size:20px}
 #v-table:has(.fn-unlock) #tb-qshow:not(:empty){font:500 clamp(24px,3vw,36px)/1.18 var(--serif)!important;margin:6px 0}
 #v-table:has(.fn-unlock) #tb-cards-out{margin-block:12px}#v-table:has(.fn-unlock) #tb-cards-out img{max-height:85px;width:auto}
-#fn-terms-note{white-space:pre-line}
 .fn-alternatives summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;padding:8px 15px;border:1px solid var(--line);border-radius:12px;color:var(--ivory);font:600 14px/1.45 var(--sans);background:var(--ink-800)}
 .fn-alternatives summary::-webkit-details-marker{display:none}
 .fn-alternatives summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg)}
@@ -2304,7 +2302,6 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
 #fn-offer-description{margin:10px 0 6px;color:var(--ivory);font:500 15px/1.48 var(--sans);max-width:50ch}
 #fn-offer-extras{margin:0;color:var(--brass-pale);font:500 13px/1.5 var(--sans)}
 #fn-offer-extras:empty{display:none}
-#fn-fog #fn-terms-note{margin:14px 0 12px;padding-top:11px;border-top:1px solid var(--line);white-space:normal;color:var(--ivory);font:400 13px/1.5 var(--sans)}
 #fn-fog .fn-offer-entry{margin:14px 0 0}
 #fn-fog :is(#fn-unlock-btn,#fn-submit-btn){min-height:48px;border-radius:12px;font:700 15px/1.35 var(--sans)}
 #fn-fog .fn-alternatives{margin:10px 0 0}
@@ -9509,10 +9506,12 @@ function fnPickTier(plan, record = true){
   if(!pro) extras.push(ru ? '3 дня ПРО' : '3 days of PRO');
   if(energy > 0) extras.push(ru ? 'Энергия для чата: ' + fmtNum(energy) : 'Chat energy: ' + fmtNum(energy));
   document.getElementById('fn-offer-extras').textContent = extras.join('  ·  ');
-  document.getElementById('fn-terms-note').textContent = pro
-    ? (ru ? 'При автопродлении — ' + amount + ' в месяц. Отключить можно в профиле.' : 'Renews at ' + amount + ' per month with auto-renewal. Cancel in your profile.')
-    : monthly ? (ru ? 'Сегодня ' + amount + '. Через 3 дня ПРО продлевается за ' + fmtNum(monthly) + ' ₽/мес. Отключить можно в профиле.' : 'Today ' + amount + '. After 3 days PRO renews at ' + fmtNum(monthly) + ' ₽/month. Cancel auto-renewal in your profile.')
-    : (ru ? 'Автопродлением можно управлять в профиле.' : 'Manage auto-renewal in your profile.');
+  const renewalLink = document.getElementById('fn-renewal-link');
+  const renewalPrice = monthly ? fmtNum(monthly) + ' ₽' : '';
+  renewalLink.textContent = renewalPrice
+    ? (ru ? 'автопродлением ПРО за ' + renewalPrice + '/мес.' + (pro ? '' : ' после 3 дней')
+          : 'PRO auto-renewal at ' + renewalPrice + '/month' + (pro ? '' : ' after 3 days'))
+    : (ru ? 'условиями автопродления' : 'renewal terms');
   document.getElementById('fn-checkout-title').textContent = ru ? 'Оформление' : 'Checkout';
   if(record && window.neoUxRec) window.neoUxRec('tier_pick', plan + ':' + price);
 }
@@ -9588,9 +9587,8 @@ function funnelCheckoutHtml(errText){
               placeholder="you@example.com" value="${esc(saved)}" aria-describedby="fn-err"
               oninput="this.classList.remove('is-err');this.removeAttribute('aria-invalid');document.getElementById('fn-err').classList.remove('is-on')">
           </div>
-          <p id="fn-terms-note"></p>
-          <label class="fn-agree"><input type="checkbox" id="fn-agree" aria-describedby="fn-terms-note" required>
-            <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a>, <a href="/politika/" target="_blank" rel="noopener">политикой</a> и <a href="/soglashenie/#p6" target="_blank" rel="noopener">условиями автопродления</a>.' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and <a href="/soglashenie/#p6" target="_blank" rel="noopener">renewal terms</a>.'}</span>
+          <label class="fn-agree"><input type="checkbox" id="fn-agree" required>
+            <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a>, <a href="/politika/" target="_blank" rel="noopener">политикой</a> и <a id="fn-renewal-link" href="/soglashenie/#p6" target="_blank" rel="noopener">условиями автопродления</a>.' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and <a id="fn-renewal-link" href="/soglashenie/#p6" target="_blank" rel="noopener">renewal terms</a>.'}</span>
           </label>
           <button type="submit" class="btn btn-brass btn-wide" id="fn-submit-btn"></button>
         </form>
