@@ -2286,6 +2286,14 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
 #v-table:has(.fn-unlock) #tb-name{font-size:20px}
 #v-table:has(.fn-unlock) #tb-qshow:not(:empty){font:500 clamp(24px,3vw,36px)/1.18 var(--serif)!important;margin:6px 0}
 #v-table:has(.fn-unlock) #tb-cards-out{margin-block:12px}#v-table:has(.fn-unlock) #tb-cards-out img{max-height:85px;width:auto}
+#fn-terms-note{white-space:pre-line}
+.fn-alternatives summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;padding:8px 15px;border:1px solid var(--line);border-radius:12px;color:var(--ivory);font:600 14px/1.45 var(--sans);background:var(--ink-800)}
+.fn-alternatives summary::-webkit-details-marker{display:none}
+.fn-alternatives summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg)}
+.fn-alternatives[open] summary::after{transform:rotate(225deg)}
+.fn-alternatives summary:hover,.fn-alternatives summary:focus-visible{border-color:var(--gold)}
+.fn-pair-dates,.fn-pair-strength{font:500 15px/1.5 var(--sans);margin:4px 0}
+@media(max-width:640px){#v-table:has(.fn-unlock) #tb-preview-head .eyebrow{display:none}#v-table:has(.fn-unlock) .fn-pos-badge{letter-spacing:0;font-family:var(--sans)}}
 </style></head>
 <body class="bg-space-900 min-h-screen">
   <aside class="qa-tools" id="qa-tools" aria-label="Тестовый режим" hidden>
@@ -9384,7 +9392,7 @@ async function funnelDeal(q, extra){
     const previous = fnLoad();
     if(previous?.paymentPending) fnRememberCheckout(previous.id, previous.k);
     fnSave();
-    funnelRenderLocked(data.teaser || '');
+    funnelRenderLocked(data.teaser || '', '', extra?.compat);
     if(window.neoGoal) neoGoal('funnel_teaser_shown', { spread: S.spread.id });
   } else if(data && data.message === 'limit'){
     /* Упёрся в лимит — самый горячий лид. Не тупик: ведём к его уже готовому раскладу. */
@@ -9466,15 +9474,13 @@ function fnPickTier(plan, record = true){
     ? (ru ? 'ПРО за ' + amount + '/мес.' : 'PRO for ' + amount + '/mo')
     : (ru ? 'Полный разбор за ' + amount : 'Full reading for ' + amount);
   const monthly = fnPlanPrice('pro');
+  const energy = Number(FN.plans?.tripwire?.energy) || 0;
+  const energyLabel = energy > 0 ? (ru ? ' + энергия для чата (' + fmtNum(energy) + ')' : ' + chat energy (' + fmtNum(energy) + ')') : '';
   document.getElementById('fn-terms-note').textContent = plan === 'pro'
     ? (ru ? 'ПРО · ' + amount + ' в месяц при автопродлении.' : 'PRO · ' + amount + ' per month with auto-renewal.')
-    : (ru ? 'Сегодня ' + amount + ' · разбор, 5 ⚡ и 3 дня ПРО.' : 'Today ' + amount + ' · reading, 5 ⚡ and 3 days of PRO.') +
-      (monthly ? (ru ? ' При включённом автопродлении далее ' + fmtNum(monthly) + ' ₽/мес. Отключить можно в профиле.' : ' With auto-renewal, then ' + fmtNum(monthly) + ' ₽/month. Cancel in your profile.') : '');
+    : (ru ? 'Сегодня ' + amount + ' · полный разбор' + energyLabel + ' и 3 дня ПРО.' : 'Today ' + amount + ' · full reading' + energyLabel + ' and 3 days of PRO.') +
+      (monthly ? (ru ? '\nПосле 3 дней при включённом автопродлении — ' + fmtNum(monthly) + ' ₽/мес. Отключить можно в профиле.' : '\nAfter 3 days with auto-renewal: ' + fmtNum(monthly) + ' ₽/month. Cancel in your profile.') : '');
   document.getElementById('fn-unlock-btn').dataset.fnPrice = plan;
-  const benefits = document.getElementById('fn-tier-benefits-' + plan);
-  document.getElementById('fn-checkout-benefits').replaceChildren(
-    ...Array.from(benefits.children, item => item.cloneNode(true))
-  );
   if(record && window.neoUxRec) window.neoUxRec('tier_pick', plan + ':' + price);
 }
 
@@ -9524,19 +9530,7 @@ function funnelCheckoutHtml(errText){
 
   return `
     <section class="fn-unlock" id="fn-fog" aria-label="${esc(ru ? 'Доступ к полному раскладу' : 'Access to the full reading')}">
-      <details class="fn-alternatives"><summary>${ru ? 'Варианты доступа и состав' : 'Access options and benefits'}</summary><fieldset class="fn-tier-switch">
-        <legend>${ru ? 'Выберите вариант доступа' : 'Choose an access option'}</legend>
-        ${tier('tripwire', complete, twPrice, [
-          ru ? 'Все карты, сроки и итоговый совет' : 'Every card, timing and practical advice',
-          twEnergy > 0 && (ru ? fmtNum(twEnergy) + ' ⚡ для вопросов в чате' : fmtNum(twEnergy) + ' ⚡ for questions in chat'),
-          ru ? '3 дня доступа ПРО' : '3 days of PRO access',
-        ])}
-        ${proPrice ? tier('pro', ru ? 'ПРО на месяц' : '1 month of PRO', proPrice, [
-          ru ? 'Этот разбор и доступ ко всем раскладам' : 'This reading and access to all spreads',
-          ru ? 'Матрица Судьбы и натальная карта целиком' : 'Full Destiny Matrix and natal chart',
-          proEnergy > 0 && (ru ? fmtNum(proEnergy) + ' ⚡ на месяц для раскладов и чата' : fmtNum(proEnergy) + ' ⚡ each month for readings and chat'),
-        ], true) : ''}
-      </fieldset></details>
+
       <p id="fn-terms-note"></p>
       <div class="fn-offer-entry" id="fn-offer-entry" ${errText ? 'hidden' : ''}>
         <button type="button" class="btn btn-brass btn-wide" id="fn-unlock-btn" aria-controls="fn-checkout"
@@ -9547,7 +9541,6 @@ function funnelCheckoutHtml(errText){
           <h3 id="fn-checkout-title" tabindex="-1"></h3>
           <button type="button" class="fn-disclosure" onclick="fnToggleCheckout(false)">${esc(ru ? 'Свернуть' : 'Close')}</button>
         </div>
-        <div class="fn-tier-benefits fn-checkout-benefits" id="fn-checkout-benefits" role="list"></div>
         <form class="fn-form" id="fn-checkout-form" novalidate onsubmit="event.preventDefault(); funnelPay(FN_SELECTED_PLAN)">
           <div class="fn-email-wrap" id="fn-email-wrap">
             <div class="fn-err-top${errText ? ' is-on' : ''}" id="fn-err" role="status">${esc(errText || '')}</div>
@@ -9562,6 +9555,19 @@ function funnelCheckoutHtml(errText){
           <button type="submit" class="btn btn-brass btn-wide" id="fn-submit-btn"></button>
         </form>
       </div>
+      <details class="fn-alternatives" ${proPrice ? '' : 'hidden'}><summary>${ru ? 'Сравнить с ПРО на месяц' : 'Compare monthly PRO'}</summary><fieldset class="fn-tier-switch">
+        <legend>${ru ? 'Выберите вариант доступа' : 'Choose an access option'}</legend>
+        ${tier('tripwire', complete, twPrice, [
+          ru ? 'Все карты, сроки и итоговый совет' : 'Every card, timing and practical advice',
+          twEnergy > 0 && (ru ? fmtNum(twEnergy) + ' ⚡ для вопросов в чате' : fmtNum(twEnergy) + ' ⚡ for questions in chat'),
+          ru ? '3 дня доступа ПРО' : '3 days of PRO access',
+        ])}
+        ${proPrice ? tier('pro', ru ? 'ПРО на месяц' : '1 month of PRO', proPrice, [
+          ru ? 'Этот разбор и доступ ко всем раскладам' : 'This reading and access to all spreads',
+          ru ? 'Матрица Судьбы и натальная карта целиком' : 'Full Destiny Matrix and natal chart',
+          proEnergy > 0 && (ru ? fmtNum(proEnergy) + ' ⚡ на месяц для раскладов и чата' : fmtNum(proEnergy) + ' ⚡ each month for readings and chat'),
+        ], true) : ''}
+      </fieldset></details>
     </section>`;
 }
 
@@ -9592,7 +9598,7 @@ function fnTeaserMarkup(teaser, type = FN.type){
   return preview.innerHTML;
 }
 
-function funnelRenderLocked(teaser, errText){
+function funnelRenderLocked(teaser, errText, pair){
   const ru = FN_RU();
   const out = document.getElementById('tb-reading');
   FN.teaser = teaser || '';
@@ -9601,6 +9607,18 @@ function funnelRenderLocked(teaser, errText){
   const indicator = FN.type === 'feelings' ? null : content.querySelector(':scope > .fn-ind');
   const locked = content.querySelector(':scope > .fn-khole-list');
   let points = content.querySelector(':scope > .fn-lpoints');
+  if(FN.type === 'compat'){
+    const panel = content.querySelector('.fn-compat.is-locked');
+    if(panel && !panel.querySelector('.fn-compat-arc')) panel.querySelector('.fn-compat-lock')?.remove();
+    if(panel && pair?.my_date && pair?.partner_date && !panel.querySelector('.fn-pair-dates')){
+      const dates = document.createElement('div');
+      dates.className = 'fn-pair-dates';
+      dates.textContent = [pair.my_date, pair.partner_date].map(formatDate).join(' · ');
+      panel.prepend(dates);
+    }
+  }
+  const badge = content.querySelector('.fn-pos-open .fn-pos-badge');
+  if(badge) badge.textContent = badge.textContent.replace(/^(Позиция №?\s*1|Position #?1)\s*·\s*/i, '');
   fnShortenPreview(content.querySelector('.fn-pos-open .fn-pos-body'));
 
   if(!points && locked){
@@ -9636,7 +9654,7 @@ function funnelRenderLocked(teaser, errText){
 
   wrap.insertAdjacentHTML('beforeend', funnelCheckoutHtml(errText));
   const readingDetails = wrap.querySelector('.fn-reading-details');
-  if(readingDetails) wrap.append(readingDetails);
+  if(readingDetails) wrap.insertBefore(readingDetails, out.querySelector('#fn-fog'));
   FN_SELECTED_PLAN = 'tripwire';
   if(document.getElementById('fn-submit-btn')) fnPickTier('tripwire', false);
   const options = out.querySelector('.fn-alternatives');
@@ -11180,7 +11198,7 @@ function qzRender(){
       const askPh = sg.length ? qzR('Или напишите свой вопрос…', 'Or write your own question…') : qzVal(st.ph, a);
       html += `<input class="field qz-in" id="qz-in" type="text" maxlength="${st.max || 150}" placeholder="${esc(askPh)}" value="${esc(v || '')}" oninput="qzInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();qzNext()}">`;
     }
-    if(st.type !== 'chips' || last){
+    if(st.type !== 'chips' || (last && !(form.compat && st.id === 'pain'))){
       html += `<button type="button" class="btn btn-brass btn-wide qz-next" onclick="qzNext()">${esc(st.type === 'pair_dates' ? qzR('Продолжить расчёт →', 'Continue →') : nextTx)}</button>`;
     }
     if(st.type === 'pair_dates'){
@@ -11196,9 +11214,10 @@ function qzRender(){
   if(inp && st.type !== 'ask' && !('ontouchstart' in window)){ setTimeout(() => { try{ inp.focus(); }catch(e){} }, 60); }
 }
 
+const qzDealing = new WeakSet();
 function qzPick(k){
   const form = qzForm(), st = qzStep();
-  if(!form || !st) return;
+  if(!form || !st || qzDealing.has(S.spread)) return;
   const o = qzOpts(st, QZ.a)[k];
   if(!o) return;
   try{ bridge.haptic(); }catch(e){}
@@ -11212,6 +11231,10 @@ function qzPick(k){
   QZ.a[st.id] = o.v;
   if(typeof st.after === 'function'){ try{ st.after(QZ.a); }catch(e){} }
   qzSave(); qzRender();
+  if(form.compat && st.id === 'pain'){
+    qzNext();
+    return;
+  }
   if(qzNextIdx(form.steps, QZ.i) !== -1){
     const at = QZ.i;
     setTimeout(() => { if(QZ.i === at) qzAdvance(); }, 220);
@@ -11252,12 +11275,19 @@ function qzSkip(){ const st = qzStep(); if(!st) return; QZ.a[st.id] = ''; qzAdva
 function qzAdvance(){
   const form = qzForm(); if(!form) return;
   const curStep = form.steps[QZ.i];
-  const j = qzNextIdx(form.steps, QZ.i);
+  const j = form.compat && curStep?.id === 'pain' ? -1 : qzNextIdx(form.steps, QZ.i);
+  const spread = S.spread;
+  if(j === -1 && qzDealing.has(spread)) return;
   if(j === -1 && window.neoGoal && curStep && curStep.type !== 'echo'){
     neoGoal('quiz_completed', { spread: S.spread.id, step: curStep.id });
   }
   qzBlurInput();
-  if(j === -1){ qzSave(); dealSpread(); return; }
+  if(j === -1){
+    qzSave();
+    qzDealing.add(spread);
+    dealSpread().finally(() => qzDealing.delete(spread));
+    return;
+  }
   QZ.hist.push(QZ.i); QZ.i = j;
   qzSave(); qzRender();
   if(window.neoGoal) neoGoal('quiz_step', { spread: (S.spread && S.spread.id) || '', step: form.steps[j].id });
