@@ -2275,7 +2275,18 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
 .hm-daily .hm-pill:hover .v{color:var(--brass-bright)}
 @media(max-width:420px){.hm-daily .hm-pill{padding:2px 6px!important}.hm-daily .hm-pill .k{font-size:7.5px;letter-spacing:.06em}.hm-daily .hm-pill .v{font-size:12.5px}}
 </style>
-</head>
+<style>
+#tb-reading .fn-pos-body{font:400 17px/1.6 var(--sans);max-width:66ch}
+#tb-reading .fn-pos-badge{text-transform:none;font-size:12px;letter-spacing:.03em}
+#tb-reading .fn-lpoints-t{font:600 17px/1.4 var(--sans);text-transform:none;letter-spacing:0}
+.fn-alternatives{margin:8px 0}.fn-alternatives summary{cursor:pointer;padding:9px 0;color:var(--ivory)}.fn-alternatives fieldset{margin-top:10px}
+#fn-terms-note{font:400 14px/1.5 var(--sans);color:var(--ivory);margin:10px 0}
+.fn-result-summary{border-inline-start:2px solid var(--gold);padding-inline-start:14px;margin-bottom:18px}
+#v-table:has(.fn-unlock) #tb-preview-head:has(+ #tb-ask) #tb-desc,#v-table:has(.fn-unlock) #tb-reading-label{display:none}
+#v-table:has(.fn-unlock) #tb-name{font-size:20px}
+#v-table:has(.fn-unlock) #tb-qshow:not(:empty){font:500 clamp(24px,3vw,36px)/1.18 var(--serif)!important;margin:6px 0}
+#v-table:has(.fn-unlock) #tb-cards-out{margin-block:12px}#v-table:has(.fn-unlock) #tb-cards-out img{max-height:85px;width:auto}
+</style></head>
 <body class="bg-space-900 min-h-screen">
   <aside class="qa-tools" id="qa-tools" aria-label="Тестовый режим" hidden>
     <span id="qa-tools-message" role="status"></span>
@@ -9449,11 +9460,17 @@ function fnPickTier(plan, record = true){
   const amount = fmtNum(price) + ' ₽';
   document.getElementById('fn-submit-btn').textContent = (ru ? 'Перейти к оплате · ' : 'Continue to payment · ') + amount;
   document.getElementById('fn-unlock-btn').textContent = plan === 'pro'
-    ? (ru ? 'Что входит в ПРО за ' + amount + '/мес.?' : 'What’s included in PRO for ' + amount + '/mo?')
-    : (ru ? 'Что входит в полный разбор за ' + amount + '?' : 'What’s included in the full reading for ' + amount + '?');
+    ? (ru ? 'Оформить ПРО за ' + amount + '/мес.' : 'Get PRO for ' + amount + '/mo')
+    : (ru ? 'Открыть мой разбор за ' + amount : 'Unlock my reading for ' + amount);
   document.getElementById('fn-checkout-title').textContent = plan === 'pro'
     ? (ru ? 'ПРО за ' + amount + '/мес.' : 'PRO for ' + amount + '/mo')
     : (ru ? 'Полный разбор за ' + amount : 'Full reading for ' + amount);
+  const monthly = fnPlanPrice('pro');
+  document.getElementById('fn-terms-note').textContent = plan === 'pro'
+    ? (ru ? 'ПРО · ' + amount + ' в месяц при автопродлении.' : 'PRO · ' + amount + ' per month with auto-renewal.')
+    : (ru ? 'Сегодня ' + amount + ' · разбор, 5 ⚡ и 3 дня ПРО.' : 'Today ' + amount + ' · reading, 5 ⚡ and 3 days of PRO.') +
+      (monthly ? (ru ? ' При включённом автопродлении далее ' + fmtNum(monthly) + ' ₽/мес. Отключить можно в профиле.' : ' With auto-renewal, then ' + fmtNum(monthly) + ' ₽/month. Cancel in your profile.') : '');
+  document.getElementById('fn-unlock-btn').dataset.fnPrice = plan;
   const benefits = document.getElementById('fn-tier-benefits-' + plan);
   document.getElementById('fn-checkout-benefits').replaceChildren(
     ...Array.from(benefits.children, item => item.cloneNode(true))
@@ -9472,7 +9489,7 @@ function fnToggleCheckout(open){
   if(open){
     document.getElementById('fn-checkout-title').focus();
     if(window.neoUxRec) window.neoUxRec('checkout_open', 'id=' + (FN.id || '') + ' plan=' + FN_SELECTED_PLAN);
-    fnTrackPaidOffer('funnel_paid_offer_details', FN_SELECTED_PLAN);
+
   }else{
     button.focus();
   }
@@ -9507,7 +9524,7 @@ function funnelCheckoutHtml(errText){
 
   return `
     <section class="fn-unlock" id="fn-fog" aria-label="${esc(ru ? 'Доступ к полному раскладу' : 'Access to the full reading')}">
-      <fieldset class="fn-tier-switch">
+      <details class="fn-alternatives"><summary>${ru ? 'Варианты доступа и состав' : 'Access options and benefits'}</summary><fieldset class="fn-tier-switch">
         <legend>${ru ? 'Выберите вариант доступа' : 'Choose an access option'}</legend>
         ${tier('tripwire', complete, twPrice, [
           ru ? 'Все карты, сроки и итоговый совет' : 'Every card, timing and practical advice',
@@ -9519,7 +9536,8 @@ function funnelCheckoutHtml(errText){
           ru ? 'Матрица Судьбы и натальная карта целиком' : 'Full Destiny Matrix and natal chart',
           proEnergy > 0 && (ru ? fmtNum(proEnergy) + ' ⚡ на месяц для раскладов и чата' : fmtNum(proEnergy) + ' ⚡ each month for readings and chat'),
         ], true) : ''}
-      </fieldset>
+      </fieldset></details>
+      <p id="fn-terms-note"></p>
       <div class="fn-offer-entry" id="fn-offer-entry" ${errText ? 'hidden' : ''}>
         <button type="button" class="btn btn-brass btn-wide" id="fn-unlock-btn" aria-controls="fn-checkout"
           aria-expanded="${!!errText}" onclick="fnToggleCheckout(true)"></button>
@@ -9549,37 +9567,15 @@ function funnelCheckoutHtml(errText){
 
 function fnShortenPreview(body){
   if(!body) return;
-  const previewText = body.cloneNode(true);
-  previewText.querySelectorAll('br').forEach(br => br.replaceWith(' '));
-  const full = previewText.textContent.replace(/\s+/g, ' ').trim();
-  if(full.length <= 310) return;
-  const sentences = typeof Intl.Segmenter === 'function'
-    ? Array.from(new Intl.Segmenter(FN_RU() ? 'ru' : 'en', {granularity:'sentence'}).segment(full), part => part.segment)
-    : full.match(/[^.!?]+[.!?]+\s*/g) || [];
-  const firstTwo = sentences.slice(0, 2).join('').trim();
-  const lead = firstTwo.length <= 310 ? firstTwo : sentences[0]?.trim();
-  if(!lead || lead.length > 360 || full.length - lead.length < 45) return;
-
-  const excerpt = document.createElement('div');
-  excerpt.className = 'fn-pos-body';
-  excerpt.textContent = lead;
-  const toggle = document.createElement('button');
-  toggle.type = 'button';
-  toggle.className = 'fn-disclosure fn-disclosure--expand';
-  body.id = 'fn-full-preview';
-  body.before(excerpt);
-  body.after(toggle);
-  toggle.setAttribute('aria-controls', body.id);
-  function showFull(open){
-    body.hidden = !open;
-    excerpt.hidden = open;
-    toggle.setAttribute('aria-expanded', String(open));
-    toggle.textContent = FN_RU()
-      ? (open ? 'Свернуть текст' : 'Прочитать первую карту целиком')
-      : (open ? 'Show less' : 'Read the first card in full');
+  const full = body.textContent.trim();
+  if(full.split(/\s+/).length <= 65) return;
+  const sentences = full.match(/[^.!?…]+(?:[.!?…]+[»”]?|$)/g) || [];
+  let lead = '';
+  for(const sentence of sentences){
+    if(lead && (lead + sentence).trim().split(/\s+/).length > 60) break;
+    lead += sentence;
   }
-  toggle.onclick = () => showFull(body.hidden);
-  showFull(false);
+  if(lead.trim()) body.textContent = lead.trim();
 }
 
 function fnTeaserMarkup(teaser, type = FN.type){
@@ -9621,6 +9617,11 @@ function funnelRenderLocked(teaser, errText){
   if(pointTitle) pointTitle.textContent = ru ? 'Что откроется в полном раскладе' : 'In the full reading';
 
   const wrap = content.parentElement;
+  if(FN.type === 'feelings') content.querySelector(':scope > .fn-ind')?.remove();
+  if(points){
+    const heading = points.querySelector('.fn-lpoints-t');
+    if(heading) heading.textContent = ru ? 'В вашем полном разборе' : 'Inside your full reading';
+  }
   if(indicator || locked?.children.length){
     const details = document.createElement('details');
     details.className = 'fn-reading-details';
@@ -9632,9 +9633,14 @@ function funnelRenderLocked(teaser, errText){
     if(locked?.children.length) details.append(locked);
     wrap.append(details);
   }
+
   wrap.insertAdjacentHTML('beforeend', funnelCheckoutHtml(errText));
+  const readingDetails = wrap.querySelector('.fn-reading-details');
+  if(readingDetails) wrap.append(readingDetails);
   FN_SELECTED_PLAN = 'tripwire';
   if(document.getElementById('fn-submit-btn')) fnPickTier('tripwire', false);
+  const options = out.querySelector('.fn-alternatives');
+  if(options) options.ontoggle = () => { if(options.open) fnTrackPaidOffer('funnel_paid_offer_details', FN_SELECTED_PLAN); };
   fnActions(false);
 }
 
@@ -10020,6 +10026,36 @@ function funnelRenderPaid(d){
   document.getElementById('fn-reading-state').textContent = ru ? 'Полный разбор открыт' : 'Full reading unlocked';
   document.getElementById('tb-reading-label').hidden = true;
   document.getElementById('tb-reading').innerHTML = '<div class="fn-reveal">' + clean(FN.full) + '</div>';
+  const reveal = document.querySelector('#tb-reading .fn-reveal');
+  const outcome = Array.from(reveal.querySelectorAll('b')).find(el => /^(Итог|Summary|Outcome)$/i.test(el.textContent.trim()));
+  if(outcome && outcome.parentNode === reveal){
+    const summary = document.createElement('section');
+    summary.className = 'fn-result-summary';
+    let node = outcome;
+    while(node){
+      const next = node.nextSibling;
+      if(node !== outcome && node.nodeName === 'B') break;
+      summary.append(node);
+      node = next;
+    }
+    reveal.prepend(summary);
+    const headings = Array.from(reveal.children).filter(el => el.tagName === 'B');
+    const first = headings.find(el => /^1\.\s/.test(el.textContent));
+    const second = headings.find(el => /^2\.\s/.test(el.textContent));
+    if(first && second && first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING){
+      const recap = document.createElement('details');
+      const label = document.createElement('summary');
+      label.textContent = ru ? 'Вернуться к первой карте' : 'Revisit the first card';
+      recap.append(label);
+      let item = first;
+      while(item && item !== second){
+        const next = item.nextSibling;
+        recap.append(item);
+        item = next;
+      }
+      reveal.append(recap);
+    }
+  }
   fnForgetCheckout(FN.id);
   if(window.neoUxRec) window.neoUxRec('paid_ok', 'id=' + (FN.id || '') + ' plan=' + (d.plan || ''));
   const parentId = Number(d.parent_id);
