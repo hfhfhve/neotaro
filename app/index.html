@@ -1010,6 +1010,7 @@ body.chat-mode .chat-head{padding-top:16px}
 .fn-offer-entry{margin-top:12px}
 .fn-checkout-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line-soft)}
 .fn-checkout-head h3{margin:0;font:400 22px/1.2 var(--serif);color:var(--ivory)}
+.fn-checkout-benefits{margin:8px 0 14px}
 .fn-disclosure{display:inline-flex;align-items:center;gap:10px;min-height:42px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:rgba(217,174,95,.06);font:500 13px/1.35 var(--sans);color:var(--brass-pale);text-align:left;cursor:pointer}
 .fn-disclosure:hover{border-color:var(--brass);background:rgba(217,174,95,.13)}
 .fn-disclosure--expand::after{content:"";width:6px;height:6px;margin:0 2px 3px 0;flex:none;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
@@ -9450,6 +9451,13 @@ function fnPickTier(plan, record = true){
   document.getElementById('fn-unlock-btn').textContent = plan === 'pro'
     ? (ru ? 'Что входит в ПРО за ' + amount + '/мес.?' : 'What’s included in PRO for ' + amount + '/mo?')
     : (ru ? 'Что входит в полный разбор за ' + amount + '?' : 'What’s included in the full reading for ' + amount + '?');
+  document.getElementById('fn-checkout-title').textContent = plan === 'pro'
+    ? (ru ? 'ПРО за ' + amount + '/мес.' : 'PRO for ' + amount + '/mo')
+    : (ru ? 'Полный разбор за ' + amount : 'Full reading for ' + amount);
+  const benefits = document.getElementById('fn-tier-benefits-' + plan);
+  document.getElementById('fn-checkout-benefits').replaceChildren(
+    ...Array.from(benefits.children, item => item.cloneNode(true))
+  );
   if(record && window.neoUxRec) window.neoUxRec('tier_pick', plan + ':' + price);
 }
 
@@ -9518,9 +9526,10 @@ function funnelCheckoutHtml(errText){
       </div>
       <div id="fn-checkout" ${errText ? '' : 'hidden'}>
         <div class="fn-checkout-head">
-          <h3 id="fn-checkout-title" tabindex="-1">${esc(ru ? 'Оформление доступа' : 'Get full access')}</h3>
+          <h3 id="fn-checkout-title" tabindex="-1"></h3>
           <button type="button" class="fn-disclosure" onclick="fnToggleCheckout(false)">${esc(ru ? 'Свернуть' : 'Close')}</button>
         </div>
+        <div class="fn-tier-benefits fn-checkout-benefits" id="fn-checkout-benefits" role="list"></div>
         <form class="fn-form" id="fn-checkout-form" novalidate onsubmit="event.preventDefault(); funnelPay(FN_SELECTED_PLAN)">
           <div class="fn-email-wrap" id="fn-email-wrap">
             <div class="fn-err-top${errText ? ' is-on' : ''}" id="fn-err" role="status">${esc(errText || '')}</div>
