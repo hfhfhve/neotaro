@@ -2305,7 +2305,7 @@ html[data-theme="dawn"] .hm-card .glyph{color:#E3B963}
 #fn-offer-extras{margin:0;color:var(--brass-pale);font:500 13px/1.5 var(--sans)}
 #fn-offer-extras:empty{display:none}
 #fn-fog #fn-terms-note{margin:14px 0 12px;padding-top:11px;border-top:1px solid var(--line);white-space:normal;color:var(--ivory);font:400 13px/1.5 var(--sans)}
-#fn-fog .fn-offer-entry{margin:0}
+#fn-fog .fn-offer-entry{margin:14px 0 0}
 #fn-fog :is(#fn-unlock-btn,#fn-submit-btn){min-height:48px;border-radius:12px;font:700 15px/1.35 var(--sans)}
 #fn-fog .fn-alternatives{margin:10px 0 0}
 #fn-fog .fn-alternatives summary{min-height:44px;box-sizing:border-box;border-radius:10px;background:transparent;padding:10px 14px;color:var(--brass-pale);font:500 14px/1.4 var(--sans)}
@@ -9481,6 +9481,7 @@ function tbBack(){
 function fnPickTier(plan, record = true){
   const price = fnPlanPrice(plan);
   if(!price) return;
+  if(plan !== FN_SELECTED_PLAN) document.getElementById('fn-agree').checked = false;
   FN_SELECTED_PLAN = plan;
   const ru = FN_RU();
   const amount = fmtNum(price) + ' ₽';
@@ -9510,7 +9511,7 @@ function fnPickTier(plan, record = true){
   document.getElementById('fn-offer-extras').textContent = extras.join('  ·  ');
   document.getElementById('fn-terms-note').textContent = pro
     ? (ru ? 'При автопродлении — ' + amount + ' в месяц. Отключить можно в профиле.' : 'Renews at ' + amount + ' per month with auto-renewal. Cancel in your profile.')
-    : monthly ? (ru ? 'При автопродлении через 3 дня — ' + fmtNum(monthly) + ' ₽/мес. Отключить можно в профиле.' : 'With auto-renewal, ' + fmtNum(monthly) + ' ₽/month after 3 days. Cancel in your profile.')
+    : monthly ? (ru ? 'Сегодня ' + amount + '. Через 3 дня ПРО продлевается за ' + fmtNum(monthly) + ' ₽/мес. Отключить можно в профиле.' : 'Today ' + amount + '. After 3 days PRO renews at ' + fmtNum(monthly) + ' ₽/month. Cancel auto-renewal in your profile.')
     : (ru ? 'Автопродлением можно управлять в профиле.' : 'Manage auto-renewal in your profile.');
   document.getElementById('fn-checkout-title').textContent = ru ? 'Оформление' : 'Checkout';
   if(record && window.neoUxRec) window.neoUxRec('tier_pick', plan + ':' + price);
@@ -9526,6 +9527,7 @@ function fnToggleCheckout(open){
   button.setAttribute('aria-expanded', String(open));
   if(open){
     document.getElementById('fn-checkout-title').focus();
+    if(FN_SELECTED_PLAN === 'tripwire') fnTrackPaidOffer('funnel_paid_offer_details', FN_SELECTED_PLAN);
     if(window.neoUxRec) window.neoUxRec('checkout_open', 'id=' + (FN.id || '') + ' plan=' + FN_SELECTED_PLAN);
 
   }else{
@@ -9569,7 +9571,6 @@ function funnelCheckoutHtml(errText){
       </div>
       <p id="fn-offer-description"></p>
       <p id="fn-offer-extras"></p>
-      <p id="fn-terms-note"></p>
       <div class="fn-offer-entry" id="fn-offer-entry" ${errText ? 'hidden' : ''}>
         <button type="button" class="btn btn-brass btn-wide" id="fn-unlock-btn" aria-controls="fn-checkout"
           aria-expanded="${!!errText}" onclick="fnToggleCheckout(true)"></button>
@@ -9587,7 +9588,8 @@ function funnelCheckoutHtml(errText){
               placeholder="you@example.com" value="${esc(saved)}" aria-describedby="fn-err"
               oninput="this.classList.remove('is-err');this.removeAttribute('aria-invalid');document.getElementById('fn-err').classList.remove('is-on')">
           </div>
-          <label class="fn-agree"><input type="checkbox" id="fn-agree" required>
+          <p id="fn-terms-note"></p>
+          <label class="fn-agree"><input type="checkbox" id="fn-agree" aria-describedby="fn-terms-note" required>
             <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a>, <a href="/politika/" target="_blank" rel="noopener">политикой</a> и <a href="/soglashenie/#p6" target="_blank" rel="noopener">условиями автопродления</a>.' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and <a href="/soglashenie/#p6" target="_blank" rel="noopener">renewal terms</a>.'}</span>
           </label>
           <button type="submit" class="btn btn-brass btn-wide" id="fn-submit-btn"></button>
@@ -9695,8 +9697,6 @@ function funnelRenderLocked(teaser, errText, pair){
   if(readingDetails) wrap.insertBefore(readingDetails, out.querySelector('#fn-fog'));
   FN_SELECTED_PLAN = 'tripwire';
   if(document.getElementById('fn-submit-btn')) fnPickTier('tripwire', false);
-  const options = out.querySelector('.fn-alternatives');
-  if(options) options.ontoggle = () => { if(options.open) fnTrackPaidOffer('funnel_paid_offer_details', FN_SELECTED_PLAN); };
   fnActions(false);
 }
 
