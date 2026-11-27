@@ -1015,12 +1015,11 @@ body.chat-mode .chat-head{padding-top:16px}
 .fn-disclosure--expand::after{content:"";width:6px;height:6px;margin:0 2px 3px 0;flex:none;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
 .fn-disclosure--expand[aria-expanded="true"]::after,.fn-reading-details[open]>summary::after{transform:rotate(225deg);margin-bottom:0;margin-top:3px}
 .fn-pos-open>.fn-disclosure{margin-top:10px}
-.fn-disclosure:focus-visible,.fn-reading-details>summary:focus-visible,.fn-checkout-head h3:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:3px}
+.fn-disclosure:focus-visible,.fn-checkout-head h3:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:3px}
 .fn-reading-details{margin-top:12px}
 .fn-reading-details>summary{list-style:none}
 .fn-reading-details>summary::-webkit-details-marker{display:none}
-.fn-offer-chapters{margin-top:12px}
-.fn-offer-chapters>.fn-ind{margin:10px 0}
+.fn-reading-details>.fn-ind{margin:10px 0}
 .fn-tier-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;min-width:0;margin:0;padding:0;border:0}
 .fn-tier-switch legend{margin-bottom:9px;color:var(--ivory);font:400 20px/1.3 var(--serif)}
 .fn-tier{display:flex;flex-direction:column;gap:10px;min-width:0;padding:13px;border-radius:11px;border:1px solid var(--line-soft);background:rgba(11,15,30,.4);cursor:pointer;color:var(--ivory)}
@@ -9446,10 +9445,9 @@ function fnPickTier(plan, record = true){
   if(!price) return;
   FN_SELECTED_PLAN = plan;
   const ru = FN_RU();
-  document.getElementById('fn-submit-btn').textContent = (ru ? 'Перейти к оплате · ' : 'Continue to payment · ') + fmtNum(price) + ' ₽';
-  const summary = document.getElementById('fn-offer-summary');
   const amount = fmtNum(price) + ' ₽';
-  summary.textContent = plan === 'pro'
+  document.getElementById('fn-submit-btn').textContent = (ru ? 'Перейти к оплате · ' : 'Continue to payment · ') + amount;
+  document.getElementById('fn-unlock-btn').textContent = plan === 'pro'
     ? (ru ? 'Что входит в ПРО за ' + amount + '/мес.?' : 'What’s included in PRO for ' + amount + '/mo?')
     : (ru ? 'Что входит в полный разбор за ' + amount + '?' : 'What’s included in the full reading for ' + amount + '?');
   if(record && window.neoUxRec) window.neoUxRec('tier_pick', plan + ':' + price);
@@ -9466,7 +9464,7 @@ function fnToggleCheckout(open){
   if(open){
     document.getElementById('fn-checkout-title').focus();
     if(window.neoUxRec) window.neoUxRec('checkout_open', 'id=' + (FN.id || '') + ' plan=' + FN_SELECTED_PLAN);
-    fnTrackPaidOffer('funnel_paid_offer_checkout', FN_SELECTED_PLAN);
+    fnTrackPaidOffer('funnel_paid_offer_details', FN_SELECTED_PLAN);
   }else{
     button.focus();
   }
@@ -9514,33 +9512,29 @@ function funnelCheckoutHtml(errText){
           proEnergy > 0 && (ru ? fmtNum(proEnergy) + ' ⚡ на месяц для раскладов и чата' : fmtNum(proEnergy) + ' ⚡ each month for readings and chat'),
         ], true) : ''}
       </fieldset>
-      <details class="fn-reading-details" id="fn-offer-details"${errText ? ' open' : ''}>
-        <summary class="btn btn-brass btn-wide fn-disclosure--expand" id="fn-offer-summary"></summary>
-        <div class="fn-offer-chapters" id="fn-offer-chapters"></div>
-        <div class="fn-offer-entry" id="fn-offer-entry" ${errText ? 'hidden' : ''}>
-          <button type="button" class="btn btn-brass btn-wide" id="fn-unlock-btn" aria-controls="fn-checkout"
-            aria-expanded="${!!errText}" onclick="fnToggleCheckout(true)">${ru ? 'Перейти к оформлению' : 'Continue to checkout'}</button>
+      <div class="fn-offer-entry" id="fn-offer-entry" ${errText ? 'hidden' : ''}>
+        <button type="button" class="btn btn-brass btn-wide" id="fn-unlock-btn" aria-controls="fn-checkout"
+          aria-expanded="${!!errText}" onclick="fnToggleCheckout(true)"></button>
+      </div>
+      <div id="fn-checkout" ${errText ? '' : 'hidden'}>
+        <div class="fn-checkout-head">
+          <h3 id="fn-checkout-title" tabindex="-1">${esc(ru ? 'Оформление доступа' : 'Get full access')}</h3>
+          <button type="button" class="fn-disclosure" onclick="fnToggleCheckout(false)">${esc(ru ? 'Свернуть' : 'Close')}</button>
         </div>
-        <div id="fn-checkout" ${errText ? '' : 'hidden'}>
-          <div class="fn-checkout-head">
-            <h3 id="fn-checkout-title" tabindex="-1">${esc(ru ? 'Оформление доступа' : 'Get full access')}</h3>
-            <button type="button" class="fn-disclosure" onclick="fnToggleCheckout(false)">${esc(ru ? 'Свернуть' : 'Close')}</button>
+        <form class="fn-form" id="fn-checkout-form" novalidate onsubmit="event.preventDefault(); funnelPay(FN_SELECTED_PLAN)">
+          <div class="fn-email-wrap" id="fn-email-wrap">
+            <div class="fn-err-top${errText ? ' is-on' : ''}" id="fn-err" role="status">${esc(errText || '')}</div>
+            <label class="fn-lbl" for="fn-email">${esc(ru ? 'Почта для чека и ссылки на расклад' : 'Email for your receipt and reading link')}</label>
+            <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email" required
+              placeholder="you@example.com" value="${esc(saved)}" aria-describedby="fn-err"
+              oninput="this.classList.remove('is-err');this.removeAttribute('aria-invalid');document.getElementById('fn-err').classList.remove('is-on')">
           </div>
-          <form class="fn-form" id="fn-checkout-form" novalidate onsubmit="event.preventDefault(); funnelPay(FN_SELECTED_PLAN)">
-            <div class="fn-email-wrap" id="fn-email-wrap">
-              <div class="fn-err-top${errText ? ' is-on' : ''}" id="fn-err" role="status">${esc(errText || '')}</div>
-              <label class="fn-lbl" for="fn-email">${esc(ru ? 'Почта для чека и ссылки на расклад' : 'Email for your receipt and reading link')}</label>
-              <input class="fn-email" id="fn-email" type="email" inputmode="email" autocomplete="email" required
-                placeholder="you@example.com" value="${esc(saved)}" aria-describedby="fn-err"
-                oninput="this.classList.remove('is-err');this.removeAttribute('aria-invalid');document.getElementById('fn-err').classList.remove('is-on')">
-            </div>
-            <label class="fn-agree"><input type="checkbox" id="fn-agree" required>
-              <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a>, <a href="/politika/" target="_blank" rel="noopener">политикой</a> и <a href="/soglashenie/#p6" target="_blank" rel="noopener">условиями автопродления</a>.' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and <a href="/soglashenie/#p6" target="_blank" rel="noopener">renewal terms</a>.'}</span>
-            </label>
-            <button type="submit" class="btn btn-brass btn-wide" id="fn-submit-btn"></button>
-          </form>
-        </div>
-      </details>
+          <label class="fn-agree"><input type="checkbox" id="fn-agree" required>
+            <span>${ru ? 'Соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a>, <a href="/politika/" target="_blank" rel="noopener">политикой</a> и <a href="/soglashenie/#p6" target="_blank" rel="noopener">условиями автопродления</a>.' : 'I accept the <a href="/oferta/" target="_blank" rel="noopener">offer</a>, <a href="/politika/" target="_blank" rel="noopener">privacy policy</a> and <a href="/soglashenie/#p6" target="_blank" rel="noopener">renewal terms</a>.'}</span>
+          </label>
+          <button type="submit" class="btn btn-brass btn-wide" id="fn-submit-btn"></button>
+        </form>
+      </div>
     </section>`;
 }
 
@@ -9579,13 +9573,27 @@ function fnShortenPreview(body){
   showFull(false);
 }
 
+function fnTeaserMarkup(teaser, type = FN.type){
+  const html = clean(teaser || '');
+  if(type !== 'feelings') return html;
+  const preview = document.createElement('template');
+  preview.innerHTML = html;
+  const outcome = FN_RU() ? 'Итог откроется в полном разборе' : 'The outcome unlocks in the full reading';
+  preview.content.querySelectorAll('.fn-ind').forEach(indicator => {
+    indicator.innerHTML = '<div class="fn-compat-lock">' +
+      '<span class="fn-compat-blur" aria-hidden="true">••%</span>' +
+      '<span class="fn-compat-ltxt">🔒 ' + outcome + '</span></div>';
+  });
+  return preview.innerHTML;
+}
+
 function funnelRenderLocked(teaser, errText){
   const ru = FN_RU();
   const out = document.getElementById('tb-reading');
   FN.teaser = teaser || '';
-  out.innerHTML = `<div class="daily-teaser-wrap"><div class="daily-teaser-text">${clean(FN.teaser)}</div></div>`;
+  out.innerHTML = `<div class="daily-teaser-wrap"><div class="daily-teaser-text">${fnTeaserMarkup(FN.teaser)}</div></div>`;
   const content = out.querySelector('.daily-teaser-text');
-  const indicator = content.querySelector(':scope > .fn-ind');
+  const indicator = FN.type === 'feelings' ? null : content.querySelector(':scope > .fn-ind');
   const locked = content.querySelector(':scope > .fn-khole-list');
   let points = content.querySelector(':scope > .fn-lpoints');
   fnShortenPreview(content.querySelector('.fn-pos-open .fn-pos-body'));
@@ -9604,26 +9612,20 @@ function funnelRenderLocked(teaser, errText){
   if(pointTitle) pointTitle.textContent = ru ? 'Что откроется в полном раскладе' : 'In the full reading';
 
   const wrap = content.parentElement;
+  if(indicator || locked?.children.length){
+    const details = document.createElement('details');
+    details.className = 'fn-reading-details';
+    const summary = document.createElement('summary');
+    summary.className = 'fn-disclosure fn-disclosure--expand';
+    summary.textContent = ru ? 'Посмотреть все части расклада' : 'See all parts of the reading';
+    details.append(summary);
+    if(indicator) details.append(indicator);
+    if(locked?.children.length) details.append(locked);
+    wrap.append(details);
+  }
   wrap.insertAdjacentHTML('beforeend', funnelCheckoutHtml(errText));
   FN_SELECTED_PLAN = 'tripwire';
-  const details = wrap.querySelector('#fn-offer-details');
-  if(details){
-    const chapters = details.querySelector('#fn-offer-chapters');
-    if(indicator) chapters.append(indicator);
-    if(locked?.children.length) chapters.append(locked);
-    if(!chapters.children.length){
-      const note = document.createElement('p');
-      note.className = 'sub';
-      note.textContent = ru ? 'Полный разбор открывает все разделы этого расклада.'
-        : 'The full reading unlocks all sections of this reading.';
-      chapters.append(note);
-    }
-    details.querySelector('#fn-offer-summary').addEventListener('click', event => {
-      if(fnCheckoutRequest){ event.preventDefault(); return; }
-      if(!details.open) fnTrackPaidOffer('funnel_paid_offer_details', FN_SELECTED_PLAN);
-    });
-    fnPickTier('tripwire', false);
-  }
+  if(document.getElementById('fn-submit-btn')) fnPickTier('tripwire', false);
   fnActions(false);
 }
 
@@ -9684,6 +9686,7 @@ async function funnelPay(plan){
 
   const id = FN.id;
   const key = FN.k;
+  fnTrackPaidOffer('funnel_paid_offer_checkout', plan);
   const controls = document.querySelectorAll('#fn-fog input, #fn-fog button');
   fnCheckoutRequest = true;
   controls.forEach(control => { control.disabled = true; });
@@ -9757,7 +9760,7 @@ function fnClearPaymentReturn(){
 function fnPaymentNotice(teaser, message, checking, invoiceUrl){
   const out = document.getElementById('tb-reading');
   const ru = FN_RU();
-  out.innerHTML = '<div class="daily-teaser-wrap"><div class="daily-teaser-text">' + clean(teaser || '') +
+  out.innerHTML = '<div class="daily-teaser-wrap"><div class="daily-teaser-text">' + fnTeaserMarkup(teaser) +
     '</div><div class="fn-retry-box"><p role="status">' + esc(message) + '</p>' +
     (invoiceUrl ? '<a id="fn-resume-payment" class="btn btn-brass btn-wide" href="' + esc(invoiceUrl) +
       '" rel="noreferrer">' + esc(ru ? 'Продолжить оплату в ЮKassa' : 'Continue to YooKassa') + '</a>' : '') +
@@ -10321,7 +10324,7 @@ function fnRenderUpsell(errText){
     <p class="fn-up-sub">${esc(T.s)}</p>
     <details class="fn-up-preview"><summary>Посмотреть карты и отрывок</summary>
       <div class="spread-out fn-up-cards">${(o.cards || []).map(id => `<img src="${CARD_IMG(id)}" alt="">`).join('')}</div>
-      <div class="daily-teaser-text fn-up-teaser">${clean(o.teaser || '')}</div>
+      <div class="daily-teaser-text fn-up-teaser">${fnTeaserMarkup(o.teaser, o.kind)}</div>
     </details>
     <div role="status" class="fn-err-top${errText ? ' is-on' : ''}" id="fn-up-err">${esc(errText || '')}</div>
     <button type="button" class="btn btn-line btn-wide" id="fn-up-btn" style="min-height:44px" onclick="fnBuyUpsell()">
